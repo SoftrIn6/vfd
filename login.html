@@ -177,33 +177,35 @@
         </div>
     </div>
 
+    <!-- Include the configuration and API functions -->
+    <script src="config.js"></script>
+    
     <script>
         // Check if user is already logged in
-        window.onload = function() {
+        window.onload = async function() {
             const email = sessionStorage.getItem("userEmail");
             const token = sessionStorage.getItem("sessionToken");
             
             if (email && token) {
-                // Verify if session is still valid
-                google.script.run
-                    .withSuccessHandler(function(response) {
-                        if (response.status === "success") {
-                            window.location.href = "index.html";
-                        } else {
-                            // Clear invalid session
-                            sessionStorage.clear();
-                        }
-                    })
-                    .withFailureHandler(function(error) {
-                        console.error("Error verifying session:", error);
+                try {
+                    // Verify if session is still valid
+                    const response = await verifyUserSession(email, token);
+                    
+                    if (response.status === "success") {
+                        window.location.href = "index.html";
+                    } else {
+                        // Clear invalid session
                         sessionStorage.clear();
-                    })
-                    .verifySession(email, token);
+                    }
+                } catch (error) {
+                    console.error("Error verifying session:", error);
+                    sessionStorage.clear();
+                }
             }
         };
 
         // Handle login form submission
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
             
             const email = document.getElementById("email").value;
@@ -217,11 +219,13 @@
             // Hide any previous error messages
             document.getElementById("error-message").style.display = "none";
             
-            // Call the server-side function
-            google.script.run
-                .withSuccessHandler(handleLoginResponse)
-                .withFailureHandler(handleLoginError)
-                .handleLogin(email, password);
+            try {
+                // Call the login function
+                const response = await loginUser(email, password);
+                handleLoginResponse(response);
+            } catch (error) {
+                handleLoginError(error);
+            }
         }
         
         // Handle login response
@@ -256,7 +260,7 @@
             
             // Show error message
             const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "An error occurred: " + error;
+            errorMessage.textContent = "An error occurred: " + error.message;
             errorMessage.style.display = "block";
             
             console.error("Login error:", error);
