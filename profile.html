@@ -576,125 +576,144 @@
         </a>
     </nav>
 
-    <!-- Include the configuration and API functions -->
-    <script src="config.js"></script>
-    <script src="auth-check.js"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Check if user is logged in
-            const isLoggedIn = await requireAuth();
-            if (!isLoggedIn) return;
-            
-            // Fetch user profile data
+   <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-Cf81Deipb5gfpgUZHZpPUDnLppyKgtkCIztkqSI7qdYXeq_dgC6NfUNfkxmX9u8juA/exec"; // Replace with your actual Google Apps Script URL
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Check if user is logged in
+        const isLoggedIn = await requireAuth();
+        if (!isLoggedIn) return;
+
+        // Fetch and update user profile data
+        try {
             const userData = await fetchUserProfile();
             if (userData) {
                 updateUIWithUserData(userData);
             }
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+        }
 
-            // Back to top functionality
-            document.querySelector('.back-to-top').addEventListener('click', function() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-
-            // Button event listeners
-            document.getElementById('recharge-btn').addEventListener('click', function() {
-                window.location.href = 'recharge.html';
-            });
-
-            document.getElementById('withdraw-btn').addEventListener('click', function() {
-                window.location.href = 'withdraw.html';
-            });
-
-            document.getElementById('logout-btn').addEventListener('click', async function() {
-                await handleLogout();
-            });
-
-            // Service item event listeners
-            const serviceItems = document.querySelectorAll('.service-item');
-            serviceItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const serviceId = this.id;
-                    handleServiceClick(serviceId);
-                });
+        // Event Listeners
+        document.querySelector('.back-to-top').addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
 
-        // Update UI with user data
-        function updateUIWithUserData(userData) {
-            // Update user info
-            document.getElementById("username").innerText = userData.Username || "User";
-            document.getElementById("email").innerText = userData.Email || "";
-            
-            // Format currency values
-            const formatCurrency = (value) => {
-                return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            };
-            
-            // Update financial data
-            document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
-            document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
-            document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
-            document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
-            document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
-            document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
-            document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
-            document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
+        document.getElementById('recharge-btn').addEventListener('click', function () {
+            window.location.href = 'recharge.html';
+        });
+
+        document.getElementById('withdraw-btn').addEventListener('click', function () {
+            window.location.href = 'withdraw.html';
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async function () {
+            await handleLogout();
+        });
+
+        const serviceItems = document.querySelectorAll('.service-item');
+        serviceItems.forEach(item => {
+            item.addEventListener('click', function () {
+                handleServiceClick(this.id);
+            });
+        });
+    });
+
+    // Fetch user profile data from Google Apps Script
+    async function fetchUserProfile() {
+        const email = sessionStorage.getItem("userEmail");
+        const token = sessionStorage.getItem("sessionToken");
+
+        if (!email || !token) {
+            console.error("User email or token missing.");
+            return null;
         }
 
-        // Handle logout
-        async function handleLogout() {
-            const email = sessionStorage.getItem("userEmail");
-            const token = sessionStorage.getItem("sessionToken");
-            
-            if (email && token) {
-                try {
-                    await logoutUser(email, token);
-                    sessionStorage.clear();
-                    window.location.href = "login.html";
-                } catch (error) {
-                    console.error("Logout error:", error);
-                    sessionStorage.clear();
-                    window.location.href = "login.html";
-                }
-            } else {
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+
+            const data = await response.json();
+            if (data.status !== "success") {
+                throw new Error(data.message || "Error fetching user data");
+            }
+
+            return data.userData;
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            return null;
+        }
+    }
+
+    // Update UI with user data
+    function updateUIWithUserData(userData) {
+        if (!userData) return;
+
+        document.getElementById("username").innerText = userData.Username || "User";
+        document.getElementById("email").innerText = userData.Email || "";
+
+        // Format currency values
+        const formatCurrency = (value) => {
+            return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        };
+
+        // Update financial data
+        document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
+        document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
+        document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
+        document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
+        document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
+        document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
+        document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
+        document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
+    }
+
+    // Handle logout
+    async function handleLogout() {
+        const email = sessionStorage.getItem("userEmail");
+        const token = sessionStorage.getItem("sessionToken");
+
+        if (email && token) {
+            try {
+                await logoutUser(email, token);
+                sessionStorage.clear();
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Logout error:", error);
                 sessionStorage.clear();
                 window.location.href = "login.html";
             }
+        } else {
+            sessionStorage.clear();
+            window.location.href = "login.html";
         }
+    }
 
-        // Handle service item clicks
-        function handleServiceClick(serviceId) {
-            switch(serviceId) {
-                case 'detail-service':
-                    window.location.href = 'detail.html';
-                    break;
-                case 'transfer-service':
-                    window.location.href = 'transfer.html';
-                    break;
-                case 'news-service':
-                    window.location.href = 'news.html';
-                    break;
-                case 'security-service':
-                    window.location.href = 'security.html';
-                    break;
-                case 'tutorial-service':
-                    window.location.href = 'tutorial.html';
-                    break;
-                case 'problem-service':
-                    window.location.href = 'faq.html';
-                    break;
-                case 'about-service':
-                    window.location.href = 'about.html';
-                    break;
-                default:
-                    alert('This feature is coming soon.');
-            }
+    // Handle service item clicks
+    function handleServiceClick(serviceId) {
+        const serviceRoutes = {
+            "detail-service": "detail.html",
+            "transfer-service": "transfer.html",
+            "news-service": "news.html",
+            "security-service": "security.html",
+            "tutorial-service": "tutorial.html",
+            "problem-service": "faq.html",
+            "about-service": "about.html"
+        };
+
+        if (serviceRoutes[serviceId]) {
+            window.location.href = serviceRoutes[serviceId];
+        } else {
+            alert("This feature is coming soon.");
         }
-    </script>
+    }
+</script>
 </body>
 </html>
 
