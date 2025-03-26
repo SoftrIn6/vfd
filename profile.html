@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet Dashboard</title>
     <style>
-        /* Include your CSS here */
+        /* Your existing CSS */
     </style>
 </head>
 <body>
@@ -58,17 +58,23 @@
                 </div>
             </div>
         </div>
+        
+        <button onclick="logout()">Logout</button>
+
     </div>
 
     <script>
         function fetchUserData() {
             const email = sessionStorage.getItem("userEmail");
-            if (!email) {
-                alert("No user session found");
+            const token = sessionStorage.getItem("sessionToken");
+
+            if (!email || !token) {
+                alert("No user session found. Redirecting to login.");
+                window.location.href = "login.html"; // Redirect to login page
                 return;
             }
 
-            google.script.run.withSuccessHandler(updateUI).getUserData(email);
+            google.script.run.withSuccessHandler(updateUI).getUserData(email, token);
         }
 
         function updateUI(response) {
@@ -86,6 +92,12 @@
             } else {
                 alert(response.message);
             }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            alert("Logged out successfully.");
+            window.location.href = "login.html"; // Redirect to login
         }
 
         window.onload = fetchUserData;
