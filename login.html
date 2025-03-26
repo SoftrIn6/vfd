@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Crypto Trading Platform</title>
+    <title>Login - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -18,53 +18,52 @@
             background-color: #f8f9fa;
             color: #333;
             line-height: 1.5;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         /* Container */
         .container {
             width: 470px;
             margin: 0 auto;
-            padding: 0;
-            position: relative;
-            min-width: 470px;
+            padding: 20px;
             background-color: #fff;
-            min-height: 100vh;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Header Styles */
-        .header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: inline-flex;
             align-items: center;
-            background-color: #fff;
-            position: relative;
+            gap: 10px;
         }
 
-        .back-btn {
-            font-size: 20px;
-            color: #333;
-            cursor: pointer;
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
         }
 
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* Login Form */
-        .login-section {
-            padding: 30px 20px;
-        }
-
-        .login-title {
+        .logo-text {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Form */
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
             text-align: center;
         }
 
@@ -72,299 +71,197 @@
             margin-bottom: 20px;
         }
 
-        .form-label {
+        .form-group label {
             display: block;
-            font-size: 16px;
             margin-bottom: 8px;
-            color: #666;
+            font-weight: 500;
         }
 
-        .form-input {
+        .form-group input {
             width: 100%;
-            padding: 15px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 16px;
         }
 
-        .form-input:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #ffa500;
         }
 
-        .password-input-container {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            cursor: pointer;
-        }
-
-        .login-btn {
+        .btn-login {
             width: 100%;
-            padding: 15px;
             background-color: #ffa500;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .forgot-password {
-            text-align: right;
             margin-top: 10px;
         }
 
-        .forgot-password a {
-            color: #ffa500;
-            text-decoration: none;
-            font-size: 14px;
+        .btn-login:hover {
+            background-color: #ff9000;
         }
 
-        .register-link {
+        .form-footer {
+            margin-top: 20px;
             text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: #666;
         }
 
-        .register-link a {
+        .form-footer a {
             color: #ffa500;
             text-decoration: none;
-            font-weight: bold;
         }
 
-        /* Error Message */
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
         .error-message {
-            color: #ff3b30;
-            font-size: 14px;
-            margin-top: 5px;
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
             display: none;
         }
 
-        /* Loading Spinner */
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .login-btn-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 470px) {
+        /* Media Queries */
+        @media (max-width: 500px) {
             .container {
                 width: 100%;
-                min-width: 320px;
-            }
-        }
-
-        @media (min-width: 471px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f0f0f0;
-            }
-            
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                border-radius: 0;
+                box-shadow: none;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="back-btn">
-                <i class="fas fa-chevron-left"></i>
+        <div class="logo-container">
+            <div class="logo">
+                <div class="logo-img"></div>
+                <div class="logo-text">AI ROBOT</div>
             </div>
-            <div class="header-title">Login</div>
         </div>
 
-        <!-- Login Form -->
-        <div class="login-section">
-            <div class="login-title">Welcome Back</div>
-            
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
-                    <div class="error-message" id="email-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="password" class="form-input" placeholder="Enter your password">
-                        <div class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                    <div class="error-message" id="password-error"></div>
-                </div>
-                
-                <div class="forgot-password">
-                    <a href="reset-password.html">Forgot Password?</a>
-                </div>
-                
-                <button type="submit" class="login-btn">
-                    <div class="login-btn-content">
-                        <span>Login</span>
-                        <div class="spinner" id="login-spinner"></div>
-                    </div>
-                </button>
-            </form>
-            
-            <div class="register-link">
-                Don't have an account? <a href="register.html">Register</a>
+        <div class="form-title">Login to Your Account</div>
+        
+        <div id="error-message" class="error-message"></div>
+        
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
             </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn-login" id="login-button">
+                <span id="login-text">Login</span>
+                <span id="login-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                </span>
+            </button>
+        </form>
+        
+        <div class="form-footer">
+            Don't have an account? <a href="register.html">Register</a>
         </div>
     </div>
 
-   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3sj18OahWa9KcUf0QUOrdChp3HblPqiS_DX6Jh--W0ZLbIHNDXYcVnVwMJ83JJbnH3g/exec";
-
-    document.addEventListener('DOMContentLoaded', function () {
-        checkExistingSession();
-        setupEventListeners();
-    });
-
-    function checkExistingSession() {
-        const sessionToken = sessionStorage.getItem('sessionToken');
-        const userEmail = sessionStorage.getItem('userEmail');
-
-        if (sessionToken && userEmail) {
-            fetch(`${GOOGLE_SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        window.location.href = 'profile.html'; // Redirect to profile page if session is valid
-                    }
-                })
-                .catch(error => {
-                    console.error("Session verification error:", error);
-                });
-        }
-    }
-
-    function setupEventListeners() {
-        // Back button functionality
-        document.querySelector('.back-btn')?.addEventListener('click', function () {
-            window.history.back();
-        });
-
-        // Toggle password visibility
-        document.querySelector('.toggle-password')?.addEventListener('click', function () {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = this.querySelector('i');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    <script>
+        // Check if user is already logged in
+        window.onload = function() {
+            const email = sessionStorage.getItem("userEmail");
+            const token = sessionStorage.getItem("sessionToken");
+            
+            if (email && token) {
+                // Verify if session is still valid
+                google.script.run
+                    .withSuccessHandler(function(response) {
+                        if (response.status === "success") {
+                            window.location.href = "index.html";
+                        } else {
+                            // Clear invalid session
+                            sessionStorage.clear();
+                        }
+                    })
+                    .withFailureHandler(function(error) {
+                        console.error("Error verifying session:", error);
+                        sessionStorage.clear();
+                    })
+                    .verifySession(email, token);
             }
-        });
+        };
 
-        // Login form submission
-        const loginForm = document.getElementById('login-form');
-        if (loginForm) {
-            loginForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                loginUser();
-            });
+        // Handle login form submission
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            
+            // Show loading state
+            document.getElementById("login-text").style.display = "none";
+            document.getElementById("login-spinner").style.display = "inline";
+            document.getElementById("login-button").disabled = true;
+            
+            // Hide any previous error messages
+            document.getElementById("error-message").style.display = "none";
+            
+            // Call the server-side function
+            google.script.run
+                .withSuccessHandler(handleLoginResponse)
+                .withFailureHandler(handleLoginError)
+                .handleLogin(email, password);
         }
-    }
-
-    function loginUser() {
-        // Reset error messages
-        document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-
-        // Get form values
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-
-        // Validate input fields
-        if (!validateForm(email, password)) return;
-
-        // Show loading spinner
-        document.getElementById('login-spinner').style.display = 'block';
-
-        // Send login request
-        fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('login-spinner').style.display = 'none';
-
-                if (data.status === "success") {
-                    sessionStorage.setItem('sessionToken', data.sessionToken);
-                    sessionStorage.setItem('userEmail', data.email);
-                    sessionStorage.setItem('username', data.username);
-
-                    window.location.href = 'profile.html'; // Redirect to profile
-                } else {
-                    displayError('password-error', data.message || 'Invalid email or password');
-                }
-            })
-            .catch(error => {
-                document.getElementById('login-spinner').style.display = 'none';
-                displayError('password-error', 'An error occurred. Please try again.');
-                console.error('Login error:', error);
-            });
-    }
-
-    function validateForm(email, password) {
-        let isValid = true;
-
-        if (!email) {
-            displayError('email-error', 'Email is required');
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            displayError('email-error', 'Please enter a valid email');
-            isValid = false;
+        
+        // Handle login response
+        function handleLoginResponse(response) {
+            // Reset button state
+            document.getElementById("login-text").style.display = "inline";
+            document.getElementById("login-spinner").style.display = "none";
+            document.getElementById("login-button").disabled = false;
+            
+            if (response.status === "success") {
+                // Store session data
+                sessionStorage.setItem("userEmail", response.email);
+                sessionStorage.setItem("sessionToken", response.sessionToken);
+                sessionStorage.setItem("username", response.username);
+                
+                // Redirect to dashboard
+                window.location.href = "index.html";
+            } else {
+                // Show error message
+                const errorMessage = document.getElementById("error-message");
+                errorMessage.textContent = response.message || "Login failed. Please try again.";
+                errorMessage.style.display = "block";
+            }
         }
-
-        if (!password) {
-            displayError('password-error', 'Password is required');
-            isValid = false;
+        
+        // Handle login error
+        function handleLoginError(error) {
+            // Reset button state
+            document.getElementById("login-text").style.display = "inline";
+            document.getElementById("login-spinner").style.display = "none";
+            document.getElementById("login-button").disabled = false;
+            
+            // Show error message
+            const errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = "An error occurred: " + error;
+            errorMessage.style.display = "block";
+            
+            console.error("Login error:", error);
         }
-
-        return isValid;
-    }
-
-    function displayError(elementId, message) {
-        const errorElement = document.getElementById(elementId);
-        if (errorElement) {
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
 
