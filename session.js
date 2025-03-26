@@ -2,7 +2,7 @@
 
 // Define GOOGLE_SCRIPT_URL
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec" // Replace with your actual Google Script URL
+  "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec" // Replace with your actual Google Script URL
 
 // Generate a random session token
 function generateSessionToken(length = 32) {
