@@ -3,738 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Crypto Trading Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Wallet Dashboard</title>
     <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
-
-        /* Container */
-        .container {
-            width: 470px;
-            margin: 0 auto;
-            padding: 0;
-            position: relative;
-            min-width: 470px;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        /* Header Styles */
-        .header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .header-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .header-btn {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 12px;
-            color: #ffa500;
-            border: 1px solid #ffa500;
-        }
-
-        .header-btn.app {
-            background-color: #ffa500;
-            color: #fff;
-        }
-
-        .header-btn i {
-            margin-right: 5px;
-        }
-
-        /* User Profile */
-        .user-profile {
-            padding: 20px;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .user-avatar i {
-            font-size: 30px;
-            color: #ccc;
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-copy {
-            margin-left: 10px;
-            color: #999;
-        }
-
-        /* Assets Section */
-        .assets-section {
-            margin: 15px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .refresh-btn {
-            font-size: 14px;
-            color: #ffa500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .refresh-btn i {
-            margin-right: 5px;
-        }
-
-        .last-updated {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-            text-align: right;
-        }
-
-        .total-assets {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffa500;
-            margin-bottom: 20px;
-        }
-
-        .assets-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .asset-item {
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-        }
-
-        .asset-label {
-            font-size: 16px;
-            color: #999;
-            margin-bottom: 10px;
-        }
-
-        .asset-value {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 15px;
-        }
-
-        .action-btn {
-            padding: 15px;
-            background-color: #ffa500;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        /* Revenue Section */
-        .revenue-section {
-            margin: 15px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-
-        .revenue-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .revenue-item {
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-        }
-
-        /* App Services */
-        .services-section {
-            margin: 15px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-
-        .service-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .service-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .service-list {
-            margin-top: 20px;
-        }
-
-        .service-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-        }
-
-        .service-item:last-child {
-            border-bottom: none;
-        }
-
-        .service-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #fff8e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: #ffa500;
-        }
-
-        .service-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .service-name {
-            font-size: 16px;
-        }
-
-        .service-arrow {
-            color: #ccc;
-        }
-
-        /* Sign Out Button */
-        .sign-out-btn {
-            margin: 15px;
-            padding: 15px;
-            background-color: #ffa500;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            width: calc(100% - 30px);
-            cursor: pointer;
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        /* Debug Section */
-        .debug-section {
-            margin: 15px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .debug-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #ff3b30;
-        }
-
-        .debug-content {
-            font-family: monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
-            background-color: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .debug-btn {
-            margin-top: 10px;
-            padding: 8px 15px;
-            background-color: #ff3b30;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 165, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffa500;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 5px;
-            display: none;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Float button */
-        .float-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: #ffa500;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-            cursor: pointer;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 470px;
-            min-width: 470px;
-            background-color: #fff;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .nav-item.active {
-            color: #ffa500;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 470px) {
-            .container {
-                width: 100%;
-                min-width: 320px;
-            }
-            
-            .bottom-nav {
-                width: 100%;
-                min-width: 320px;
-            }
-        }
-
-        @media (min-width: 471px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f0f0f0;
-            }
-            
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
-        }
+        /* Include your CSS here */
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <div class="logo">
-                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
-                <div class="logo-text">AI ROBOT</div>
-            </div>
-            <div class="header-btns">
-                <div class="header-btn app">
-                    <i class="fas fa-mobile-alt"></i> App
-                </div>
-                <div class="header-btn">
-                    <i class="fas fa-globe"></i> English
-                </div>
+                <img src="logo.png" alt="Logo" class="logo-img">
+                <span class="logo-text">Dashboard</span>
             </div>
         </div>
 
-        <!-- User Profile -->
         <div class="user-profile">
-            <div class="user-avatar">
-                <i class="fas fa-user"></i>
-            </div>
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
             <div class="user-info">
-                <div id="username" style="font-size: 18px; font-weight: bold;">Loading...</div>
-                <div id="user-email" style="color: #666; margin-top: 5px;">Loading...</div>
-            </div>
-            <div class="user-copy">
-                <i class="fas fa-copy"></i>
+                <div class="username" id="username"></div>
+                <div class="user-email" id="email"></div>
             </div>
         </div>
 
-        <!-- Assets Section -->
         <div class="assets-section">
             <div class="section-title">
-                Total Assets
-                <div class="refresh-btn" id="refresh-data-btn">
-                    <div class="spinner" id="refresh-spinner"></div>
-                    <i class="fas fa-sync-alt"></i> Refresh Data
-                </div>
+                <span>Wallet Balance</span>
+                <span class="refresh-btn" onclick="fetchUserData()">Refresh</span>
             </div>
-            <div class="total-assets" id="total-assets">$0.00</div>
-            <div class="last-updated" id="last-updated">Last updated: Never</div>
+            <div class="total-assets" id="accountBalance">$0.00</div>
             <div class="assets-grid">
                 <div class="asset-item">
                     <div class="asset-label">Quantitative Account</div>
-                    <div class="asset-value" id="quantitative-account">$0.00</div>
+                    <div class="asset-value" id="quantitativeAccount">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Smart Account</div>
-                    <div class="asset-value" id="smart-account">$0.00</div>
+                    <div class="asset-value" id="smartAccount">$0.00</div>
                 </div>
                 <div class="asset-item">
-                    <div class="asset-label">Profit Assets</div>
-                    <div class="asset-value" id="profit-assets">$0.00</div>
+                    <div class="asset-label">Total Revenue</div>
+                    <div class="asset-value" id="totalRevenue">$0.00</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <div class="action-btn" id="recharge-btn">Recharge</div>
-            <div class="action-btn" id="withdraw-btn">Withdraw</div>
-        </div>
-
-        <!-- Revenue Section -->
-        <div class="revenue-section">
-            <div class="section-title">Total Revenue</div>
-            <div class="total-assets" id="total-revenue">$0.00</div>
-            <div class="revenue-grid">
                 <div class="asset-item">
                     <div class="asset-label">Yesterday's Earnings</div>
-                    <div class="asset-value" id="yesterday-earnings">$0.00</div>
+                    <div class="asset-value" id="yesterdayEarnings">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Today's Earnings</div>
-                    <div class="asset-value" id="today-earnings">$0.00</div>
+                    <div class="asset-value" id="todaysEarnings">$0.00</div>
                 </div>
                 <div class="asset-item">
-                    <div class="asset-label">Commission Today</div>
+                    <div class="asset-label">Commission</div>
                     <div class="asset-value" id="commission">$0.00</div>
                 </div>
             </div>
         </div>
-
-        <!-- Debug Section (hidden by default) -->
-        <div class="debug-section" id="debug-section">
-            <div class="debug-title">Debug Information</div>
-            <div class="debug-content" id="debug-content">No debug info available</div>
-            <button class="debug-btn" id="run-debug-btn">Run Debug</button>
-            <button class="debug-btn" id="clear-cache-btn" style="margin-left: 10px; background-color: #007aff;">Clear Cache</button>
-        </div>
-
-        <!-- App Services -->
-        <div class="services-section">
-            <div class="service-title">App Services</div>
-            <div class="service-list">
-                <div class="service-item" id="detail-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="service-name">Detail</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="transfer-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-exchange-alt"></i>
-                        </div>
-                        <div class="service-name">Transfer</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="news-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-newspaper"></i>
-                        </div>
-                        <div class="service-name">News</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="security-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="service-name">Security Center</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="tutorial-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="service-name">Quantization Tutorial</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="problem-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-question-circle"></i>
-                        </div>
-                        <div class="service-name">Common Problem</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <div class="service-item" id="about-service">
-                    <div class="service-info">
-                        <div class="service-icon">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <div class="service-name">About Us</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-                <!-- Debug Mode Toggle (hidden in production) -->
-                <div class="service-item" id="debug-mode-toggle">
-                    <div class="service-info">
-                        <div class="service-icon" style="background-color: #ffecec; color: #ff3b30;">
-                            <i class="fas fa-bug"></i>
-                        </div>
-                        <div class="service-name">Debug Mode</div>
-                    </div>
-                    <div class="service-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sign Out Button -->
-        <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
-
-        <!-- Float Button -->
-        <div class="float-btn">
-            <i class="fas fa-arrow-up"></i>
-        </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="quantify.html" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Quantify</span>
-        </a>
-        <a href="invest.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
-        </a>
-        <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
-        </a>
-        <a href="profile.html" class="nav-item active">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
-        </a>
-    </nav>
-
-    <!-- Include Auth Check Script -->
-    <script src="auth/auth-check.js"></script>
-    <script src="auth/session.js"></script>
-    
     <script>
-       const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuw-95QUHOG_CzfCzflK4eFsriWs3QXhcRn7icM4EwRDGOUXkFInwPtwSihoj3vJQVhg/exec";
+        function fetchUserData() {
+            const email = sessionStorage.getItem("userEmail");
+            if (!email) {
+                alert("No user session found");
+                return;
+            }
 
-// Function to fetch user data from Google Sheets
-async function fetchUserProfile() {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    if (!userData || !userData.email) {
-        window.location.href = "login.html"; // Redirect if not logged in
-        return;
-    }
-
-    try {
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(userData.email)}&nocache=${new Date().getTime()}`);
-        const data = await response.json();
-
-        if (data.status === "success") {
-            updateUIWithUserData(data.userData);
-        } else {
-            alert("Error: " + data.message);
+            google.script.run.withSuccessHandler(updateUI).getUserData(email);
         }
-    } catch (error) {
-        console.error("Error fetching profile:", error);
-        alert("Failed to load profile.");
-    }
-}
 
-// Function to update the UI with user data
-function updateUIWithUserData(userData) {
-    if (!userData) {
-        console.error("No user data available to update UI");
-        return;
-    }
+        function updateUI(response) {
+            if (response.status === "success") {
+                const userData = response.userData;
+                document.getElementById("username").innerText = userData.Username;
+                document.getElementById("email").innerText = userData.Email;
+                document.getElementById("accountBalance").innerText = `$${userData["Account Balance"]}`;
+                document.getElementById("quantitativeAccount").innerText = `$${userData["Quantitative Account"]}`;
+                document.getElementById("smartAccount").innerText = `$${userData["Smart Account"]}`;
+                document.getElementById("totalRevenue").innerText = `$${userData["Total Revenue"]}`;
+                document.getElementById("yesterdayEarnings").innerText = `$${userData["Yesterday's Earnings"]}`;
+                document.getElementById("todaysEarnings").innerText = `$${userData["Today's Earnings"]}`;
+                document.getElementById("commission").innerText = `$${userData["Commission"]}`;
+            } else {
+                alert(response.message);
+            }
+        }
 
-    console.log("Updating UI with user data:", userData);
-
-    // Update financial data
-    document.getElementById('total-assets').textContent = `$${formatValue(userData["Account Balance"])}`;
-    document.getElementById('quantitative-account').textContent = `$${formatValue(userData["Quantitative Account"])}`;
-    document.getElementById('smart-account').textContent = `$${formatValue(userData["Smart Account"])}`;
-    document.getElementById('profit-assets').textContent = `$${formatValue(userData["Total Revenue"])}`;
-
-    document.getElementById('total-revenue').textContent = `$${formatValue(userData["Total Revenue"])}`;
-    document.getElementById('yesterday-earnings').textContent = `$${formatValue(userData["Yesterday's Earnings"])}`;
-    document.getElementById('today-earnings').textContent = `$${formatValue(userData["Today's Earnings"])}`;
-    document.getElementById('commission').textContent = `$${formatValue(userData["Commission"])}`;
-
-    // Update last refreshed time
-    updateLastRefreshedDisplay();
-}
-
-// Function to format numbers as currency
-function formatValue(value) {
-    if (!value || isNaN(value)) return "0.00";
-    return parseFloat(value).toFixed(2);
-}
-
-// Function to update the last refreshed timestamp
-function updateLastRefreshedDisplay() {
-    const now = new Date();
-    const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    document.getElementById('last-updated').textContent = `Last updated: ${now.toLocaleDateString('en-US', options)}`;
-}
-
-// Run this when the page loads to update automatically
-document.addEventListener("DOMContentLoaded", fetchUserProfile);
-
+        window.onload = fetchUserData;
     </script>
 </body>
 </html>
-
