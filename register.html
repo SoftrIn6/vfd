@@ -197,9 +197,12 @@
         </div>
     </div>
 
+    <!-- Include the configuration and API functions -->
+    <script src="config.js"></script>
+    
     <script>
         // Handle registration form submission
-        function handleRegister(event) {
+        async function handleRegister(event) {
             event.preventDefault();
             
             const username = document.getElementById("username").value;
@@ -224,11 +227,13 @@
             document.getElementById("register-spinner").style.display = "inline";
             document.getElementById("register-button").disabled = true;
             
-            // Call the server-side function
-            google.script.run
-                .withSuccessHandler(handleRegisterResponse)
-                .withFailureHandler(handleRegisterError)
-                .handleRegister(username, email, password);
+            try {
+                // Call the registration function
+                const response = await registerUser(username, email, password);
+                handleRegisterResponse(response);
+            } catch (error) {
+                handleRegisterError(error);
+            }
         }
         
         // Handle registration response
@@ -268,7 +273,7 @@
             
             // Show error message
             const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "An error occurred: " + error;
+            errorMessage.textContent = "An error occurred: " + error.message;
             errorMessage.style.display = "block";
             
             console.error("Registration error:", error);
