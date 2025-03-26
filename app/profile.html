@@ -128,6 +128,21 @@
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .refresh-btn {
+            font-size: 14px;
+            color: #ffa500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .refresh-btn i {
+            margin-right: 5px;
         }
 
         .total-assets {
@@ -303,6 +318,23 @@
             cursor: pointer;
         }
 
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 165, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffa500;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 5px;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -399,7 +431,13 @@
 
         <!-- Assets Section -->
         <div class="assets-section">
-            <div class="section-title">Total Assets</div>
+            <div class="section-title">
+                Total Assets
+                <div class="refresh-btn" id="refresh-data-btn">
+                    <div class="spinner" id="refresh-spinner"></div>
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </div>
+            </div>
             <div class="total-assets" id="total-assets">$0.00</div>
             <div class="assets-grid">
                 <div class="asset-item">
@@ -565,7 +603,27 @@
     <script src="auth/session.js"></script>
     
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc6aTiRDEc8D9WsgEIgOwVvBxswRnzUnKmJZOS05cfn_jHHpfRnnKI8vdYuppYkzNn1g/exec";
+        
+        // Function to update UI with user data
+        function updateUIWithUserData(userData) {
+            if (!userData) return;
+            
+            // Update user info
+            document.getElementById('username').textContent = userData.username || 'User';
+            document.getElementById('user-email').textContent = userData.email;
+            
+            // Update financial data
+            document.getElementById('total-assets').textContent = `$${userData.totalAssets || '0.00'}`;
+            document.getElementById('quantitative-account').textContent = `$${userData.quantitativeAccount || '0.00'}`;
+            document.getElementById('smart-account').textContent = `$${userData.smartAccount || '0.00'}`;
+            document.getElementById('profit-assets').textContent = `$${userData.profitAssets || '0.00'}`;
+            
+            document.getElementById('total-revenue').textContent = `$${userData.totalRevenue || '0.00'}`;
+            document.getElementById('yesterday-earnings').textContent = `$${userData.yesterdayEarnings || '0.00'}`;
+            document.getElementById('today-earnings').textContent = `$${userData.todayEarnings || '0.00'}`;
+            document.getElementById('commission').textContent = `$${userData.commission || '0.00'}`;
+        }
         
         document.addEventListener('DOMContentLoaded', async function() {
             // Check if user is logged in
@@ -574,22 +632,29 @@
             
             // Fetch user profile data
             const userData = await fetchUserProfile();
-            if (userData) {
-                // Update UI with user data
-                document.getElementById('username').textContent = userData.username || 'User';
-                document.getElementById('user-email').textContent = userData.email;
+            updateUIWithUserData(userData);
+            
+            // Set up refresh button
+            document.getElementById('refresh-data-btn').addEventListener('click', async function() {
+                // Show spinner
+                const spinner = document.getElementById('refresh-spinner');
+                spinner.style.display = 'inline-block';
                 
-                // Update financial data
-                document.getElementById('total-assets').textContent = `$${userData.totalAssets || '0.00'}`;
-                document.getElementById('quantitative-account').textContent = `$${userData.quantitativeAccount || '0.00'}`;
-                document.getElementById('smart-account').textContent = `$${userData.smartAccount || '0.00'}`;
-                document.getElementById('profit-assets').textContent = `$${userData.profitAssets || '0.00'}`;
-                
-                document.getElementById('total-revenue').textContent = `$${userData.totalRevenue || '0.00'}`;
-                document.getElementById('yesterday-earnings').textContent = `$${userData.yesterdayEarnings || '0.00'}`;
-                document.getElementById('today-earnings').textContent = `$${userData.todayEarnings || '0.00'}`;
-                document.getElementById('commission').textContent = `$${userData.commission || '0.00'}`;
-            }
+                try {
+                    // Force refresh user data
+                    const refreshedData = await refreshUserData();
+                    updateUIWithUserData(refreshedData);
+                    
+                    // Show success message
+                    alert('Profile data refreshed successfully!');
+                } catch (error) {
+                    console.error('Error refreshing data:', error);
+                    alert('Failed to refresh data. Please try again.');
+                } finally {
+                    // Hide spinner
+                    spinner.style.display = 'none';
+                }
+            });
             
             // Set up event listeners
             document.getElementById('sign-out-btn').addEventListener('click', logoutUser);
