@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Crypto Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Register Form */
+        .register-section {
+            padding: 30px 20px;
+        }
+
+        .register-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ffa500;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #ffa500;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #ff3b30;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .register-btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Register</div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="register-section">
+            <div class="register-title">Create Account</div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter your username">
+                    <div class="error-message" id="username-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                    <div class="error-message" id="email-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password">
+                        <div class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="password-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">Confirm Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password">
+                        <div class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="confirm-password-error"></div>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <div class="register-btn-content">
+                        <span>Register</span>
+                        <div class="spinner" id="register-spinner"></div>
+                    </div>
+                </button>
+            </form>
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec";
+        
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+        
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(function(toggle, index) {
+            toggle.addEventListener('click', function() {
+                const passwordInput = index === 0 ? document.getElementById('password') : document.getElementById('confirm-password');
+                const eyeIcon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Form validation and submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!username) {
+                document.getElementById('username-error').textContent = 'Username is required';
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Email is required';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            } else if (!/\S+@\S+\.\S+/.test(email)) {
+                document.getElementById('email-error').textContent = 'Please enter a valid email';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                document.getElementById('password-error').textContent = 'Password is required';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
+                document.getElementById('confirm-password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show loading spinner
+                document.getElementById('register-spinner').style.display = 'block';
+                
+                // Send registration request
+                fetch(`${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading spinner
+                        document.getElementById('register-spinner').style.display = 'none';
+                        
+                        if (data.status === "success") {
+                            alert('Registration successful! Please log in.');
+                            window.location.href = 'login.html';
+                        } else {
+                            // Show error message
+                            document.getElementById('email-error').textContent = data.message || 'Registration failed';
+                            document.getElementById('email-error').style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading spinner
+                        document.getElementById('register-spinner').style.display = 'none';
+                        
+                        // Show error message
+                        document.getElementById('email-error').textContent = 'An error occurred. Please try again.';
+                        document.getElementById('email-error').style.display = 'block';
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
+
