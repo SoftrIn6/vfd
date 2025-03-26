@@ -201,84 +201,107 @@
     <script src="config.js"></script>
     
     <script>
-        // Handle registration form submission
-        async function handleRegister(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm-password").value;
-            
-            // Hide any previous messages
-            document.getElementById("error-message").style.display = "none";
-            document.getElementById("success-message").style.display = "none";
-            
-            // Validate passwords match
-            if (password !== confirmPassword) {
-                const errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = "Passwords do not match";
-                errorMessage.style.display = "block";
-                return;
-            }
-            
-            // Show loading state
-            document.getElementById("register-text").style.display = "none";
-            document.getElementById("register-spinner").style.display = "inline";
-            document.getElementById("register-button").disabled = true;
-            
-            try {
-                // Call the registration function
-                const response = await registerUser(username, email, password);
-                handleRegisterResponse(response);
-            } catch (error) {
-                handleRegisterError(error);
-            }
-        }
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec"; // Replace with your actual Google Apps Script URL
+
+    // Handle registration form submission
+    async function handleRegister(event) {
+        event.preventDefault();
         
-        // Handle registration response
-        function handleRegisterResponse(response) {
-            // Reset button state
-            document.getElementById("register-text").style.display = "inline";
-            document.getElementById("register-spinner").style.display = "none";
-            document.getElementById("register-button").disabled = false;
-            
-            if (response.status === "success") {
-                // Show success message
-                const successMessage = document.getElementById("success-message");
-                successMessage.textContent = "Registration successful! Redirecting to login...";
-                successMessage.style.display = "block";
-                
-                // Reset form
-                document.getElementById("register-form").reset();
-                
-                // Redirect to login page after a delay
-                setTimeout(function() {
-                    window.location.href = "login.html";
-                }, 2000);
-            } else {
-                // Show error message
-                const errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = response.message || "Registration failed. Please try again.";
-                errorMessage.style.display = "block";
-            }
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirm-password").value.trim();
+
+        // Hide previous messages
+        document.getElementById("error-message").style.display = "none";
+        document.getElementById("success-message").style.display = "none";
+
+        // Validate passwords match
+        if (password !== confirmPassword) {
+            const errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = "Passwords do not match";
+            errorMessage.style.display = "block";
+            return;
         }
-        
-        // Handle registration error
-        function handleRegisterError(error) {
-            // Reset button state
-            document.getElementById("register-text").style.display = "inline";
-            document.getElementById("register-spinner").style.display = "none";
-            document.getElementById("register-button").disabled = false;
-            
+
+        // Show loading state
+        document.getElementById("register-text").style.display = "none";
+        document.getElementById("register-spinner").style.display = "inline";
+        document.getElementById("register-button").disabled = true;
+
+        try {
+            // Call the register function
+            const response = await registerUser(username, email, password);
+            handleRegisterResponse(response);
+        } catch (error) {
+            handleRegisterError(error);
+        }
+    }
+
+    // Function to register user by calling the Google Apps Script API
+    async function registerUser(username, email, password) {
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to connect to server");
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Registration API error:", error);
+            throw error;
+        }
+    }
+
+    // Handle registration response
+    function handleRegisterResponse(response) {
+        // Reset button state
+        document.getElementById("register-text").style.display = "inline";
+        document.getElementById("register-spinner").style.display = "none";
+        document.getElementById("register-button").disabled = false;
+
+        if (response.status === "success") {
+            // Show success message
+            const successMessage = document.getElementById("success-message");
+            successMessage.textContent = "Registration successful! Redirecting to login...";
+            successMessage.style.display = "block";
+
+            // Reset form
+            document.getElementById("register-form").reset();
+
+            // Redirect to login page after 2 seconds
+            setTimeout(function() {
+                window.location.href = "login.html";
+            }, 2000);
+        } else {
             // Show error message
             const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "An error occurred: " + error.message;
+            errorMessage.textContent = response.message || "Registration failed. Please try again.";
             errorMessage.style.display = "block";
-            
-            console.error("Registration error:", error);
         }
-    </script>
+    }
+
+    // Handle registration error
+    function handleRegisterError(error) {
+        // Reset button state
+        document.getElementById("register-text").style.display = "inline";
+        document.getElementById("register-spinner").style.display = "none";
+        document.getElementById("register-button").disabled = false;
+
+        // Show error message
+        const errorMessage = document.getElementById("error-message");
+        errorMessage.textContent = "An error occurred: " + error.message;
+        errorMessage.style.display = "block";
+
+        console.error("Registration error:", error);
+    }
+</script>
 </body>
 </html>
 
