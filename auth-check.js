@@ -1,7 +1,7 @@
 // Auth check script to be included in all protected pages
 document.addEventListener("DOMContentLoaded", async () => {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwc6aTiRDEc8D9WsgEIgOwVvBxswRnzUnKmJZOS05cfn_jHHpfRnnKI8vdYuppYkzNn1g/exec"
+    "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec"
 
   // Check if this is a public page (login or register)
   const currentPage = window.location.pathname.split("/").pop()
@@ -20,38 +20,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     return
   }
 
-  // Function to fetch user profile
-  async function fetchUserProfile() {
-    try {
-      const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(userEmail)}`)
-      const data = await response.json()
-      if (data.status === "success") {
-        localStorage.setItem("userData", JSON.stringify(data.user))
-      } else {
-        console.error("Failed to fetch user profile:", data.message)
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error)
-    }
-  }
-
   // Verify session with server
   try {
+    console.log("Verifying session for:", userEmail)
     const response = await fetch(
       `${GOOGLE_SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`,
     )
     const data = await response.json()
 
     if (data.status !== "success") {
+      console.error("Session verification failed:", data.message)
       // Session invalid, redirect to login
       localStorage.removeItem("sessionToken")
       localStorage.removeItem("userEmail")
       localStorage.removeItem("userData")
       window.location.href = "login.html"
     } else {
+      console.log("Session verified successfully")
       // Session valid, update user data if needed
       if (!localStorage.getItem("userData")) {
-        fetchUserProfile()
+        console.log("No cached user data, fetching profile...")
+        try {
+          const profileResponse = await fetch(
+            `${GOOGLE_SCRIPT_URL}?action=getUserProfile&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`,
+          )
+          const profileData = await profileResponse.json()
+
+          if (profileData.status === "success") {
+            console.log("Profile data fetched successfully:", profileData.userData)
+            localStorage.setItem("userData", JSON.stringify(profileData.userData))
+          } else {
+            console.error("Failed to fetch user profile:", profileData.message)
+          }
+        } catch (profileError) {
+          console.error("Error fetching user profile:", profileError)
+        }
       }
     }
   } catch (error) {
