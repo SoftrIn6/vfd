@@ -2,7 +2,7 @@
 
 // Define GOOGLE_SCRIPT_URL
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec" // Replace with your actual Google Script URL
+  "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec" // Replace with your actual Google Script URL
 
 // Generate a random session token
 function generateSessionToken(length = 32) {
@@ -75,7 +75,7 @@ function logoutUser() {
   window.location.href = "login.html"
 }
 
-// Fetch user profile data - always get fresh data by default
+// Update the fetchUserProfile function to use getUserData
 async function fetchUserProfile(useCache = false) {
   const userEmail = localStorage.getItem("userEmail")
   const sessionToken = localStorage.getItem("sessionToken")
@@ -94,15 +94,15 @@ async function fetchUserProfile(useCache = false) {
 
   try {
     console.log("Fetching fresh user profile for:", userEmail)
-    const response = await fetch(
-      `${GOOGLE_SCRIPT_URL}?action=getUserProfile&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`,
-    )
+    // Use getUserData instead of getUserProfile to get the raw data directly
+    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(userEmail)}`)
     const data = await response.json()
 
     console.log("User profile response:", data)
 
     if (data.status === "success") {
       localStorage.setItem("userData", JSON.stringify(data.userData))
+      localStorage.setItem("lastDataRefresh", new Date().toISOString())
       return data.userData
     } else {
       console.error("Error fetching profile:", data.message)
