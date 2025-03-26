@@ -576,10 +576,21 @@
         </a>
     </nav>
 
+    <!-- Include the configuration and API functions -->
+    <script src="config.js"></script>
+    <script src="auth-check.js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             // Check if user is logged in
-            checkSession();
+            const isLoggedIn = await requireAuth();
+            if (!isLoggedIn) return;
+            
+            // Fetch user profile data
+            const userData = await fetchUserProfile();
+            if (userData) {
+                updateUIWithUserData(userData);
+            }
 
             // Back to top functionality
             document.querySelector('.back-to-top').addEventListener('click', function() {
@@ -598,8 +609,8 @@
                 window.location.href = 'withdraw.html';
             });
 
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                logout();
+            document.getElementById('logout-btn').addEventListener('click', async function() {
+                await handleLogout();
             });
 
             // Service item event listeners
@@ -612,83 +623,47 @@
             });
         });
 
-        // Check user session
-        function checkSession() {
-            const email = sessionStorage.getItem("userEmail");
-            const token = sessionStorage.getItem("sessionToken");
-
-            if (!email || !token) {
-                window.location.href = "login.html";
-                return;
-            }
-
-            // Verify session with server
-            google.script.run
-                .withSuccessHandler(function(response) {
-                    if (response.status === "success") {
-                        fetchUserData();
-                    } else {
-                        sessionStorage.clear();
-                        window.location.href = "login.html";
-                    }
-                })
-                .withFailureHandler(handleError)
-                .verifySession(email, token);
-        }
-
-        // Fetch user data from Google Sheets
-        function fetchUserData() {
-            const email = sessionStorage.getItem("userEmail");
-            const token = sessionStorage.getItem("sessionToken");
-
-            if (!email || !token) {
-                alert("No user session found. Redirecting to login.");
-                window.location.href = "login.html";
-                return;
-            }
-
-            google.script.run
-                .withSuccessHandler(updateUI)
-                .withFailureHandler(handleError)
-                .getUserData(email, token);
-        }
-
         // Update UI with user data
-        function updateUI(response) {
-            if (response.status === "success") {
-                const userData = response.userData;
-                
-                // Update user info
-                document.getElementById("username").innerText = userData.Username || "User";
-                document.getElementById("email").innerText = userData.Email || "";
-                
-                // Format currency values
-                const formatCurrency = (value) => {
-                    return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                };
-                
-                // Update financial data
-                document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
-                document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
-                document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
-                document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
-                document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
-                document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
-                document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
-                document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
-            } else {
-                alert(response.message || "Failed to load user data");
-                if (response.message === "Session expired" || response.message === "Invalid session") {
+        function updateUIWithUserData(userData) {
+            // Update user info
+            document.getElementById("username").innerText = userData.Username || "User";
+            document.getElementById("email").innerText = userData.Email || "";
+            
+            // Format currency values
+            const formatCurrency = (value) => {
+                return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            };
+            
+            // Update financial data
+            document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
+            document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
+            document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
+            document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
+            document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
+            document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
+            document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
+            document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
+        }
+
+        // Handle logout
+        async function handleLogout() {
+            const email = sessionStorage.getItem("userEmail");
+            const token = sessionStorage.getItem("sessionToken");
+            
+            if (email && token) {
+                try {
+                    await logoutUser(email, token);
+                    sessionStorage.clear();
+                    window.location.href = "login.html";
+                } catch (error) {
+                    console.error("Logout error:", error);
                     sessionStorage.clear();
                     window.location.href = "login.html";
                 }
+            } else {
+                sessionStorage.clear();
+                window.location.href = "login.html";
             }
-        }
-
-        // Handle errors
-        function handleError(error) {
-            console.error("Error:", error);
-            alert("An error occurred: " + error);
         }
 
         // Handle service item clicks
@@ -717,25 +692,6 @@
                     break;
                 default:
                     alert('This feature is coming soon.');
-            }
-        }
-
-        // Logout function
-        function logout() {
-            const email = sessionStorage.getItem("userEmail");
-            const token = sessionStorage.getItem("sessionToken");
-
-            if (email && token) {
-                google.script.run
-                    .withSuccessHandler(function() {
-                        sessionStorage.clear();
-                        window.location.href = "login.html";
-                    })
-                    .withFailureHandler(handleError)
-                    .handleLogout(email, token);
-            } else {
-                sessionStorage.clear();
-                window.location.href = "login.html";
             }
         }
     </script>
