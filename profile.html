@@ -145,6 +145,13 @@
             margin-right: 5px;
         }
 
+        .last-updated {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+
         .total-assets {
             font-size: 28px;
             font-weight: bold;
@@ -477,6 +484,7 @@
                 </div>
             </div>
             <div class="total-assets" id="total-assets">$0.00</div>
+            <div class="last-updated" id="last-updated">Last updated: Never</div>
             <div class="assets-grid">
                 <div class="asset-item">
                     <div class="asset-label">Quantitative Account</div>
@@ -524,6 +532,7 @@
             <div class="debug-title">Debug Information</div>
             <div class="debug-content" id="debug-content">No debug info available</div>
             <button class="debug-btn" id="run-debug-btn">Run Debug</button>
+            <button class="debug-btn" id="clear-cache-btn" style="margin-left: 10px; background-color: #007aff;">Clear Cache</button>
         </div>
 
         <!-- App Services -->
@@ -660,7 +669,7 @@
     <script src="auth/session.js"></script>
     
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec";
         
         // Function to update UI with user data
         function updateUIWithUserData(userData) {
@@ -685,6 +694,49 @@
             document.getElementById('yesterday-earnings').textContent = `$${userData.yesterdayEarnings || '0.00'}`;
             document.getElementById('today-earnings').textContent = `$${userData.todayEarnings || '0.00'}`;
             document.getElementById('commission').textContent = `$${userData.commission || '0.00'}`;
+            
+            // Update last refreshed time
+            updateLastRefreshTime();
+            updateLastRefreshedDisplay();
+        }
+        
+        // Update the last refreshed display
+        function updateLastRefreshedDisplay() {
+            const lastRefresh = getLastRefreshTime();
+            if (lastRefresh) {
+                const lastRefreshDate = new Date(lastRefresh);
+                const now = new Date();
+                
+                // Format the date and time
+                const options = { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                };
+                const formattedDate = lastRefreshDate.toLocaleDateString('en-US', options);
+                
+                // Calculate time difference
+                const diffMs = now - lastRefreshDate;
+                const diffMins = Math.floor(diffMs / 60000);
+                
+                let timeAgo;
+                if (diffMins < 1) {
+                    timeAgo = 'just now';
+                } else if (diffMins === 1) {
+                    timeAgo = '1 minute ago';
+                } else if (diffMins < 60) {
+                    timeAgo = `${diffMins} minutes ago`;
+                } else if (diffMins < 120) {
+                    timeAgo = '1 hour ago';
+                } else {
+                    timeAgo = `${Math.floor(diffMins / 60)} hours ago`;
+                }
+                
+                document.getElementById('last-updated').textContent = `Last updated: ${formattedDate} (${timeAgo})`;
+            } else {
+                document.getElementById('last-updated').textContent = 'Last updated: Never';
+            }
         }
         
         // Enable debug mode with 5 taps on logo
@@ -702,37 +754,31 @@
             const isLoggedIn = await requireAuth();
             if (!isLoggedIn) return;
             
-            // Fetch user profile data with retry mechanism
-            async function fetchUserDataWithRetry(maxRetries = 3) {
-                for (let i = 0; i < maxRetries; i++) {
-                    try {
-                        const userData = await fetchUserProfile(i > 0); // Force refresh after first attempt
-                        if (userData) {
-                            console.log(`Successfully fetched user data on attempt ${i+1}:`, userData);
-                            updateUIWithUserData(userData);
-                            return userData;
-                        } else {
-                            console.warn(`Attempt ${i+1}: No user data returned`);
-                        }
-                    } catch (error) {
-                        console.error(`Attempt ${i+1} failed:`, error);
-                    }
-                    
-                    // Wait before retrying (exponential backoff)
-                    if (i < maxRetries - 1) {
-                        const delay = Math.pow(2, i) * 1000;
-                        console.log(`Retrying in ${delay}ms...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
-                }
+            // Always fetch fresh data on page load
+            async function loadFreshUserData() {
+                const spinner = document.getElementById('refresh-spinner');
+                spinner.style.display = 'inline-block';
                 
-                console.error("Failed to fetch user data after multiple attempts");
-                alert("Failed to load your profile data. Please try refreshing the page.");
-                return null;
+                try {
+                    // Force refresh user data
+                    const userData = await fetchUserProfile(false); // false = don't use cache
+                    if (userData) {
+                        updateUIWithUserData(userData);
+                        console.log("Fresh data loaded successfully");
+                    } else {
+                        console.error("Failed to load fresh user data");
+                        alert('Failed to load profile data. Please try refreshing the page.');
+                    }
+                } catch (error) {
+                    console.error('Error loading fresh data:', error);
+                } finally {
+                    // Hide spinner
+                    spinner.style.display = 'none';
+                }
             }
             
-            // Initial data fetch
-            await fetchUserDataWithRetry();
+            // Load fresh data on page load
+            await loadFreshUserData();
             
             // Set up refresh button
             document.getElementById('refresh-data-btn').addEventListener('click', async function() {
@@ -775,6 +821,14 @@
                 } catch (error) {
                     debugContent.textContent = 'Error fetching debug info: ' + error.message;
                 }
+            });
+            
+            // Clear cache button
+            document.getElementById('clear-cache-btn').addEventListener('click', function() {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('lastDataRefresh');
+                alert('Cache cleared! Reloading fresh data...');
+                loadFreshUserData();
             });
             
             // Set up event listeners
@@ -820,6 +874,9 @@
             
             // Hide debug mode toggle by default
             document.getElementById('debug-mode-toggle').style.display = 'none';
+            
+            // Update last refreshed display every minute
+            setInterval(updateLastRefreshedDisplay, 60000);
         });
     </script>
 </body>
