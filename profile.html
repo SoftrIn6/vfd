@@ -300,21 +300,41 @@
             margin-bottom: 80px;
         }
 
-        /* Float button */
-        .float-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: #ffa500;
+        /* Debug Section */
+        .debug-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .debug-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ff3b30;
+        }
+
+        .debug-content {
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .debug-btn {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #ff3b30;
             color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
             cursor: pointer;
         }
 
@@ -333,6 +353,24 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
         }
 
         /* Bottom Navigation */
@@ -481,6 +519,13 @@
             </div>
         </div>
 
+        <!-- Debug Section (hidden by default) -->
+        <div class="debug-section" id="debug-section">
+            <div class="debug-title">Debug Information</div>
+            <div class="debug-content" id="debug-content">No debug info available</div>
+            <button class="debug-btn" id="run-debug-btn">Run Debug</button>
+        </div>
+
         <!-- App Services -->
         <div class="services-section">
             <div class="service-title">App Services</div>
@@ -562,6 +607,18 @@
                         <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
+                <!-- Debug Mode Toggle (hidden in production) -->
+                <div class="service-item" id="debug-mode-toggle">
+                    <div class="service-info">
+                        <div class="service-icon" style="background-color: #ffecec; color: #ff3b30;">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="service-name">Debug Mode</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -603,11 +660,16 @@
     <script src="auth/session.js"></script>
     
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc6aTiRDEc8D9WsgEIgOwVvBxswRnzUnKmJZOS05cfn_jHHpfRnnKI8vdYuppYkzNn1g/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec";
         
         // Function to update UI with user data
         function updateUIWithUserData(userData) {
-            if (!userData) return;
+            if (!userData) {
+                console.error("No user data available to update UI");
+                return;
+            }
+            
+            console.log("Updating UI with user data:", userData);
             
             // Update user info
             document.getElementById('username').textContent = userData.username || 'User';
@@ -625,14 +687,52 @@
             document.getElementById('commission').textContent = `$${userData.commission || '0.00'}`;
         }
         
+        // Enable debug mode with 5 taps on logo
+        let tapCount = 0;
+        document.querySelector('.logo').addEventListener('click', function() {
+            tapCount++;
+            if (tapCount >= 5) {
+                document.getElementById('debug-mode-toggle').style.display = 'flex';
+                tapCount = 0;
+            }
+        });
+        
         document.addEventListener('DOMContentLoaded', async function() {
             // Check if user is logged in
             const isLoggedIn = await requireAuth();
             if (!isLoggedIn) return;
             
-            // Fetch user profile data
-            const userData = await fetchUserProfile();
-            updateUIWithUserData(userData);
+            // Fetch user profile data with retry mechanism
+            async function fetchUserDataWithRetry(maxRetries = 3) {
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        const userData = await fetchUserProfile(i > 0); // Force refresh after first attempt
+                        if (userData) {
+                            console.log(`Successfully fetched user data on attempt ${i+1}:`, userData);
+                            updateUIWithUserData(userData);
+                            return userData;
+                        } else {
+                            console.warn(`Attempt ${i+1}: No user data returned`);
+                        }
+                    } catch (error) {
+                        console.error(`Attempt ${i+1} failed:`, error);
+                    }
+                    
+                    // Wait before retrying (exponential backoff)
+                    if (i < maxRetries - 1) {
+                        const delay = Math.pow(2, i) * 1000;
+                        console.log(`Retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
+                }
+                
+                console.error("Failed to fetch user data after multiple attempts");
+                alert("Failed to load your profile data. Please try refreshing the page.");
+                return null;
+            }
+            
+            // Initial data fetch
+            await fetchUserDataWithRetry();
             
             // Set up refresh button
             document.getElementById('refresh-data-btn').addEventListener('click', async function() {
@@ -643,16 +743,37 @@
                 try {
                     // Force refresh user data
                     const refreshedData = await refreshUserData();
-                    updateUIWithUserData(refreshedData);
-                    
-                    // Show success message
-                    alert('Profile data refreshed successfully!');
+                    if (refreshedData) {
+                        updateUIWithUserData(refreshedData);
+                        alert('Profile data refreshed successfully!');
+                    } else {
+                        alert('Failed to refresh data. Please try again.');
+                    }
                 } catch (error) {
                     console.error('Error refreshing data:', error);
                     alert('Failed to refresh data. Please try again.');
                 } finally {
                     // Hide spinner
                     spinner.style.display = 'none';
+                }
+            });
+            
+            // Debug mode toggle
+            document.getElementById('debug-mode-toggle').addEventListener('click', function() {
+                const debugSection = document.getElementById('debug-section');
+                debugSection.style.display = debugSection.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            // Run debug button
+            document.getElementById('run-debug-btn').addEventListener('click', async function() {
+                const debugContent = document.getElementById('debug-content');
+                debugContent.textContent = 'Loading debug information...';
+                
+                try {
+                    const debugInfo = await debugUserInfo();
+                    debugContent.textContent = JSON.stringify(debugInfo, null, 2);
+                } catch (error) {
+                    debugContent.textContent = 'Error fetching debug info: ' + error.message;
                 }
             });
             
@@ -689,11 +810,16 @@
             
             // Service item clicks
             document.querySelectorAll('.service-item').forEach(function(item) {
+                if (item.id === 'debug-mode-toggle') return; // Skip debug toggle
+                
                 item.addEventListener('click', function() {
                     const serviceId = this.id;
                     alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service coming soon!`);
                 });
             });
+            
+            // Hide debug mode toggle by default
+            document.getElementById('debug-mode-toggle').style.display = 'none';
         });
     </script>
 </body>
