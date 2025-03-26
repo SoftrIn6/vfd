@@ -1,7 +1,7 @@
 // Configuration file for the application
 const CONFIG = {
   // Replace with your deployed Google Apps Script Web App URL
-  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyiuSbK5Cw_QWp8G18gX40oaCIvVJ_kGjSc3zVth3wp1gB5tPNpGbE4F6fqgdEKmD1MBA/exec",
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzWFsg0z8ik0XNkQm6X5yWD0xUHWjlZDgAhiuMZvJiredoMCmYF0j3GBceehGoxOR5nnA/exec",
 
   // Set to true if running within Google Apps Script environment, false if hosted elsewhere
   IS_GOOGLE_ENVIRONMENT: false,
