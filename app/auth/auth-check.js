@@ -1,7 +1,7 @@
 // Auth check script to be included in all protected pages
 document.addEventListener("DOMContentLoaded", async () => {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec"
+    "https://script.google.com/macros/s/AKfycbwc6aTiRDEc8D9WsgEIgOwVvBxswRnzUnKmJZOS05cfn_jHHpfRnnKI8vdYuppYkzNn1g/exec"
 
   // Check if this is a public page (login or register)
   const currentPage = window.location.pathname.split("/").pop()
