@@ -669,7 +669,7 @@
     <script src="auth/session.js"></script>
     
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwynxWJOwiV9o8ckzfo3vKocAwL4EveCABswlsB6yE1iPuQw7Thv6EkPXFyyihW1mvfXw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSMVYhaLrxzWV2C-qUgkS42b82syOp5gk5MaepbL-9aFXHsl48qMz-eNW2Tto1VqHo/exec";
         
         // Function to update UI with user data
         function updateUIWithUserData(userData) {
@@ -684,20 +684,48 @@
             document.getElementById('username').textContent = userData.username || 'User';
             document.getElementById('user-email').textContent = userData.email;
             
-            // Update financial data
-            document.getElementById('total-assets').textContent = `$${userData.totalAssets || '0.00'}`;
-            document.getElementById('quantitative-account').textContent = `$${userData.quantitativeAccount || '0.00'}`;
-            document.getElementById('smart-account').textContent = `$${userData.smartAccount || '0.00'}`;
-            document.getElementById('profit-assets').textContent = `$${userData.profitAssets || '0.00'}`;
+            // Update financial data with proper handling of different data types
+            document.getElementById('total-assets').textContent = `$${formatValue(userData.totalAssets)}`;
+            document.getElementById('quantitative-account').textContent = `$${formatValue(userData.quantitativeAccount)}`;
+            document.getElementById('smart-account').textContent = `$${formatValue(userData.smartAccount)}`;
+            document.getElementById('profit-assets').textContent = `$${formatValue(userData.profitAssets)}`;
             
-            document.getElementById('total-revenue').textContent = `$${userData.totalRevenue || '0.00'}`;
-            document.getElementById('yesterday-earnings').textContent = `$${userData.yesterdayEarnings || '0.00'}`;
-            document.getElementById('today-earnings').textContent = `$${userData.todayEarnings || '0.00'}`;
-            document.getElementById('commission').textContent = `$${userData.commission || '0.00'}`;
+            document.getElementById('total-revenue').textContent = `$${formatValue(userData.totalRevenue)}`;
+            document.getElementById('yesterday-earnings').textContent = `$${formatValue(userData.yesterdayEarnings)}`;
+            document.getElementById('today-earnings').textContent = `$${formatValue(userData.todayEarnings)}`;
+            document.getElementById('commission').textContent = `$${formatValue(userData.commission)}`;
             
             // Update last refreshed time
             updateLastRefreshTime();
             updateLastRefreshedDisplay();
+        }
+
+        // Add a helper function to format values properly
+        function formatValue(value) {
+            if (value === undefined || value === null) return '0.00';
+            
+            // If it's already a string, check if it's a number
+            if (typeof value === 'string') {
+                // Remove any existing dollar signs
+                value = value.replace('$', '').trim();
+                
+                // If it's an empty string, return 0.00
+                if (value === '') return '0.00';
+                
+                // Try to parse it as a number
+                const num = parseFloat(value);
+                if (!isNaN(num)) {
+                    return num.toFixed(2);
+                }
+                return '0.00';
+            }
+            
+            // If it's a number, format it
+            if (typeof value === 'number') {
+                return value.toFixed(2);
+            }
+            
+            return '0.00';
         }
         
         // Update the last refreshed display
@@ -817,7 +845,30 @@
                 
                 try {
                     const debugInfo = await debugUserInfo();
-                    debugContent.textContent = JSON.stringify(debugInfo, null, 2);
+                    
+                    // Add more detailed information
+                    const userEmail = localStorage.getItem('userEmail');
+                    const sessionToken = localStorage.getItem('sessionToken');
+                    
+                    // Try to get raw profile data directly
+                    const rawProfileResponse = await fetch(
+                        `${GOOGLE_SCRIPT_URL}?action=getUserProfile&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`
+                    );
+                    const rawProfileData = await rawProfileResponse.json();
+                    
+                    // Combine all debug info
+                    const fullDebugInfo = {
+                        debugInfo: debugInfo,
+                        localStorage: {
+                            userEmail: userEmail,
+                            sessionToken: sessionToken ? "EXISTS" : "MISSING",
+                            userData: localStorage.getItem('userData'),
+                            lastDataRefresh: localStorage.getItem('lastDataRefresh')
+                        },
+                        rawProfileData: rawProfileData
+                    };
+                    
+                    debugContent.textContent = JSON.stringify(fullDebugInfo, null, 2);
                 } catch (error) {
                     debugContent.textContent = 'Error fetching debug info: ' + error.message;
                 }
