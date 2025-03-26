@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - AI ROBOT</title>
+    <title>Profile - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -18,260 +18,725 @@
             background-color: #f8f9fa;
             color: #333;
             line-height: 1.5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Container */
         .container {
             width: 470px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
         }
 
-        /* Logo */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
         }
 
         .logo {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 10px;
         }
 
         .logo-img {
             width: 40px;
             height: 40px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            border-radius: 50%;
+            margin-right: 10px;
         }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: #333;
         }
 
-        /* Form */
-        .form-title {
-            font-size: 24px;
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 14px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+            cursor: pointer;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #ccc;
+            position: relative;
+        }
+
+        .edit-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #eee;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .username {
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
+            margin-bottom: 5px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .user-email {
+            font-size: 14px;
+            color: #666;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+        /* Assets Section */
+        .assets-section {
+            padding: 20px;
+            background-color: #fff;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .section-label {
             font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #ffa500;
+        .total-assets {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 20px;
         }
 
-        .btn-register {
-            width: 100%;
+        .assets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .asset-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .asset-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .asset-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 20px 20px;
+        }
+
+        .action-btn {
             background-color: #ffa500;
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 12px 0;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-register:hover {
-            background-color: #ff9000;
-        }
-
-        .form-footer {
-            margin-top: 20px;
             text-align: center;
         }
 
-        .form-footer a {
+        /* Revenue Section */
+        .revenue-section {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .revenue-total {
+            font-size: 32px;
+            font-weight: bold;
             color: #ffa500;
+            margin-bottom: 20px;
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* App Services */
+        .app-services {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .services-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .services-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffa500, #ff6b6b);
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .service-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f9f9f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffa500;
+            font-size: 18px;
+        }
+
+        .service-name {
+            font-size: 16px;
+        }
+
+        .service-right {
+            color: #ccc;
+        }
+
+        /* Sign Out Button */
+        .sign-out-btn {
+            margin: 20px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            width: calc(100% - 40px);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-decoration: none;
+            color: #999;
+            font-size: 12px;
         }
 
-        .form-footer a:hover {
-            text-decoration: underline;
+        .nav-item.active {
+            color: #ffa500;
         }
 
-        .error-message {
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
         }
 
-        .success-message {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Media Queries */
-        @media (max-width: 500px) {
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
             .container {
                 width: 100%;
-                border-radius: 0;
-                box-shadow: none;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
+        <!-- Header -->
+        <div class="header">
             <div class="logo">
-                <div class="logo-img"></div>
+                <img src="https://via.placeholder.com/40x40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
                 <div class="logo-text">AI ROBOT</div>
+            </div>
+            <div class="header-btns">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
             </div>
         </div>
 
-        <div class="form-title">Create an Account</div>
-        
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
-        
-        <form id="register-form" onsubmit="handleRegister(event)">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+                <div class="edit-icon">
+                    <i class="fas fa-pen"></i>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="username" id="username">Loading...</div>
+                <div class="user-email" id="email">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="section-label">Total Assets</div>
+            <div class="total-assets" id="accountBalance">$0</div>
+            <div class="assets-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Quantitative Account</div>
+                    <div class="asset-value" id="quantitativeAccount">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Smart Account</div>
+                    <div class="asset-value" id="smartAccount">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Profit Assets</div>
+                    <div class="asset-value" id="profitAssets">$</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <div class="action-btn" id="recharge-btn">Recharge</div>
+            <div class="action-btn" id="withdraw-btn">Withdraw</div>
+        </div>
+
+        <!-- Revenue Section -->
+        <div class="revenue-section">
+            <div class="section-label">Total Revenue</div>
+            <div class="revenue-total" id="totalRevenue">$</div>
+            <div class="revenue-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Yesterday's Earnings</div>
+                    <div class="asset-value" id="yesterdayEarnings">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Today's Earnings</div>
+                    <div class="asset-value" id="todaysEarnings">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Commission Today</div>
+                    <div class="asset-value" id="commission">$</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Services -->
+        <div class="app-services">
+            <div class="services-title">App Services</div>
+            
+            <div class="service-item" id="detail-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="service-name">Detail</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+            <div class="service-item" id="transfer-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="service-name">Transfer</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required minlength="6">
+            <div class="service-item" id="news-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="service-name">News</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password" required minlength="6">
+            <div class="service-item" id="security-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="service-name">Security Center</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
             
-            <button type="submit" class="btn-register" id="register-button">
-                <span id="register-text">Register</span>
-                <span id="register-spinner" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i> Processing...
-                </span>
-            </button>
-        </form>
-        
-        <div class="form-footer">
-            Already have an account? <a href="login.html">Login</a>
+            <div class="service-item" id="tutorial-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="service-name">Quantization Tutorial</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="service-item" id="problem-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="service-name">Common Problem</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="service-item" id="about-service">
+                <div class="service-left">
+                    <div class="service-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="service-name">About Us</div>
+                </div>
+                <div class="service-right">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Out Button -->
+        <div class="sign-out-btn" id="logout-btn">Sign Out</div>
+
+        <!-- Back to Top Button -->
+        <div class="back-to-top">
+            <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
     <script>
-        // Handle registration form submission
-        function handleRegister(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm-password").value;
-            
-            // Hide any previous messages
-            document.getElementById("error-message").style.display = "none";
-            document.getElementById("success-message").style.display = "none";
-            
-            // Validate passwords match
-            if (password !== confirmPassword) {
-                const errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = "Passwords do not match";
-                errorMessage.style.display = "block";
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            checkSession();
+
+            // Back to top functionality
+            document.querySelector('.back-to-top').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Button event listeners
+            document.getElementById('recharge-btn').addEventListener('click', function() {
+                window.location.href = 'recharge.html';
+            });
+
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                window.location.href = 'withdraw.html';
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                logout();
+            });
+
+            // Service item event listeners
+            const serviceItems = document.querySelectorAll('.service-item');
+            serviceItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.id;
+                    handleServiceClick(serviceId);
+                });
+            });
+        });
+
+        // Check user session
+        function checkSession() {
+            const email = sessionStorage.getItem("userEmail");
+            const token = sessionStorage.getItem("sessionToken");
+
+            if (!email || !token) {
+                window.location.href = "login.html";
                 return;
             }
-            
-            // Show loading state
-            document.getElementById("register-text").style.display = "none";
-            document.getElementById("register-spinner").style.display = "inline";
-            document.getElementById("register-button").disabled = true;
-            
-            // Call the server-side function
+
+            // Verify session with server
             google.script.run
-                .withSuccessHandler(handleRegisterResponse)
-                .withFailureHandler(handleRegisterError)
-                .handleRegister(username, email, password);
+                .withSuccessHandler(function(response) {
+                    if (response.status === "success") {
+                        fetchUserData();
+                    } else {
+                        sessionStorage.clear();
+                        window.location.href = "login.html";
+                    }
+                })
+                .withFailureHandler(handleError)
+                .verifySession(email, token);
         }
-        
-        // Handle registration response
-        function handleRegisterResponse(response) {
-            // Reset button state
-            document.getElementById("register-text").style.display = "inline";
-            document.getElementById("register-spinner").style.display = "none";
-            document.getElementById("register-button").disabled = false;
-            
+
+        // Fetch user data from Google Sheets
+        function fetchUserData() {
+            const email = sessionStorage.getItem("userEmail");
+            const token = sessionStorage.getItem("sessionToken");
+
+            if (!email || !token) {
+                alert("No user session found. Redirecting to login.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            google.script.run
+                .withSuccessHandler(updateUI)
+                .withFailureHandler(handleError)
+                .getUserData(email, token);
+        }
+
+        // Update UI with user data
+        function updateUI(response) {
             if (response.status === "success") {
-                // Show success message
-                const successMessage = document.getElementById("success-message");
-                successMessage.textContent = "Registration successful! Redirecting to login...";
-                successMessage.style.display = "block";
+                const userData = response.userData;
                 
-                // Reset form
-                document.getElementById("register-form").reset();
+                // Update user info
+                document.getElementById("username").innerText = userData.Username || "User";
+                document.getElementById("email").innerText = userData.Email || "";
                 
-                // Redirect to login page after a delay
-                setTimeout(function() {
-                    window.location.href = "login.html";
-                }, 2000);
+                // Format currency values
+                const formatCurrency = (value) => {
+                    return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                };
+                
+                // Update financial data
+                document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
+                document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
+                document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
+                document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
+                document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
+                document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
+                document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
+                document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
             } else {
-                // Show error message
-                const errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = response.message || "Registration failed. Please try again.";
-                errorMessage.style.display = "block";
+                alert(response.message || "Failed to load user data");
+                if (response.message === "Session expired" || response.message === "Invalid session") {
+                    sessionStorage.clear();
+                    window.location.href = "login.html";
+                }
             }
         }
-        
-        // Handle registration error
-        function handleRegisterError(error) {
-            // Reset button state
-            document.getElementById("register-text").style.display = "inline";
-            document.getElementById("register-spinner").style.display = "none";
-            document.getElementById("register-button").disabled = false;
-            
-            // Show error message
-            const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "An error occurred: " + error;
-            errorMessage.style.display = "block";
-            
-            console.error("Registration error:", error);
+
+        // Handle errors
+        function handleError(error) {
+            console.error("Error:", error);
+            alert("An error occurred: " + error);
+        }
+
+        // Handle service item clicks
+        function handleServiceClick(serviceId) {
+            switch(serviceId) {
+                case 'detail-service':
+                    window.location.href = 'detail.html';
+                    break;
+                case 'transfer-service':
+                    window.location.href = 'transfer.html';
+                    break;
+                case 'news-service':
+                    window.location.href = 'news.html';
+                    break;
+                case 'security-service':
+                    window.location.href = 'security.html';
+                    break;
+                case 'tutorial-service':
+                    window.location.href = 'tutorial.html';
+                    break;
+                case 'problem-service':
+                    window.location.href = 'faq.html';
+                    break;
+                case 'about-service':
+                    window.location.href = 'about.html';
+                    break;
+                default:
+                    alert('This feature is coming soon.');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            const email = sessionStorage.getItem("userEmail");
+            const token = sessionStorage.getItem("sessionToken");
+
+            if (email && token) {
+                google.script.run
+                    .withSuccessHandler(function() {
+                        sessionStorage.clear();
+                        window.location.href = "login.html";
+                    })
+                    .withFailureHandler(handleError)
+                    .handleLogout(email, token);
+            } else {
+                sessionStorage.clear();
+                window.location.href = "login.html";
+            }
         }
     </script>
 </body>
