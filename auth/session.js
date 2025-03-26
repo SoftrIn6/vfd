@@ -1,7 +1,7 @@
 // Session management for Google Apps Script website
 
 // Define GOOGLE_SCRIPT_URL
-const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL" // Replace with your actual Google Script URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFqdmyeW33Gs2FMJPxWjT4_ZAdYOg91zDmbrlw9EzLVVwOpefbOEwug2LSosA4lAp2rA/exec" // Replace with your actual Google Script URL
 
 // Generate a random session token
 function generateSessionToken(length = 32) {
