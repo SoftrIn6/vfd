@@ -675,7 +675,7 @@
 async function fetchUserProfile() {
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (!userData || !userData.email) {
-        window.location.href = "login.html";
+        window.location.href = "login.html"; // Redirect if not logged in
         return;
     }
 
@@ -731,24 +731,9 @@ function updateLastRefreshedDisplay() {
     document.getElementById('last-updated').textContent = `Last updated: ${now.toLocaleDateString('en-US', options)}`;
 }
 
-// Event Listener for Refresh Button
-document.getElementById("refresh-data-btn").addEventListener("click", async function () {
-    const spinner = document.getElementById("refresh-spinner");
-    spinner.style.display = "inline-block";
-
-    try {
-        await fetchUserProfile();
-        alert("Profile updated successfully!");
-    } catch (error) {
-        console.error("Error refreshing data:", error);
-        alert("Failed to refresh data.");
-    } finally {
-        spinner.style.display = "none";
-    }
-});
-
-// Load profile data when the page is loaded
+// Run this when the page loads to update automatically
 document.addEventListener("DOMContentLoaded", fetchUserProfile);
+
     </script>
 </body>
 </html>
