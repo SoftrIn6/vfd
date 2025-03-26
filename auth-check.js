@@ -1,78 +1,54 @@
-// Auth check script to be included in all protected pages
-document.addEventListener("DOMContentLoaded", async () => {
-    const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbxuw-95QUHOG_CzfCzflK4eFsriWs3QXhcRn7icM4EwRDGOUXkFInwPtwSihoj3vJQVhg/exec"; // Replace with your actual script ID
+import { verifyUserSession, getUserProfileData } from "./api-client"
 
-    const currentPage = window.location.pathname.split("/").pop();
-    const publicPages = ["login.html", "register.html", "reset-password.html"];
+// Check if user is logged in and redirect if not
+async function requireAuth() {
+  const email = sessionStorage.getItem("userEmail")
+  const token = sessionStorage.getItem("sessionToken")
 
-    // Skip authentication check for public pages
-    if (publicPages.includes(currentPage)) return;
+  if (!email || !token) {
+    window.location.href = "login.html"
+    return false
+  }
 
-    const sessionToken = localStorage.getItem("sessionToken");
-    const userEmail = localStorage.getItem("userEmail");
+  try {
+    const response = await verifyUserSession(email, token)
 
-    // Redirect to login if no session
-    if (!sessionToken || !userEmail) {
-        window.location.href = "login.html";
-        return;
+    if (response.status !== "success") {
+      sessionStorage.clear()
+      window.location.href = "login.html"
+      return false
     }
 
-    try {
-        console.log("Verifying session for:", userEmail);
-        const response = await fetch(
-            `${GOOGLE_SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(sessionToken)}`
-        );
-        const data = await response.json();
-
-        if (data.status !== "success") {
-            console.error("Session verification failed:", data.message);
-            clearSessionAndRedirect();
-        } else {
-            console.log("Session verified successfully");
-            await fetchAndUpdateUserProfile(userEmail, currentPage);
-        }
-    } catch (error) {
-        console.error("Auth check error:", error);
-    }
-});
-
-// Function to fetch and update user profile
-async function fetchAndUpdateUserProfile(userEmail, currentPage) {
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuw-95QUHOG_CzfCzflK4eFsriWs3QXhcRn7icM4EwRDGOUXkFInwPtwSihoj3vJQVhg/exec";
-
-    try {
-        console.log("Fetching fresh user profile for:", userEmail);
-        const profileResponse = await fetch(
-            `${GOOGLE_SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(userEmail)}&nocache=${new Date().getTime()}`
-        );
-        const profileData = await profileResponse.json();
-
-        if (profileData.status === "success") {
-            console.log("Profile data fetched successfully:", profileData.userData);
-            localStorage.setItem("userData", JSON.stringify(profileData.userData));
-            localStorage.setItem("lastDataRefresh", new Date().toISOString());
-
-            // Auto-update profile UI if on profile page
-            if (currentPage === "profile.html" && typeof updateUIWithUserData === "function") {
-                try {
-                    updateUIWithUserData(profileData.userData);
-                } catch (e) {
-                    console.error("Error calling updateUIWithUserData:", e);
-                }
-            }
-        } else {
-            console.error("Failed to fetch user profile:", profileData.message);
-        }
-    } catch (profileError) {
-        console.error("Error fetching user profile:", profileError);
-    }
+    return true
+  } catch (error) {
+    console.error("Auth check error:", error)
+    sessionStorage.clear()
+    window.location.href = "login.html"
+    return false
+  }
 }
 
-// Function to clear session and redirect to login
-function clearSessionAndRedirect() {
-    localStorage.removeItem("sessionToken");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userData");
-    window.location.href = "login.html";
+// Fetch user profile data
+async function fetchUserProfile() {
+  const email = sessionStorage.getItem("userEmail")
+  const token = sessionStorage.getItem("sessionToken")
+
+  if (!email || !token) {
+    return null
+  }
+
+  try {
+    const response = await getUserProfileData(email, token)
+
+    if (response.status === "success") {
+      return response.userData
+    } else {
+      console.error("Failed to fetch profile:", response.message)
+      return null
+    }
+  } catch (error) {
+    console.error("Profile fetch error:", error)
+    return null
+  }
 }
+
