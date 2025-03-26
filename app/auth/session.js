@@ -1,7 +1,8 @@
 // Session management for Google Apps Script website
 
 // Define GOOGLE_SCRIPT_URL
-const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL" // Replace with your actual Google Script URL
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwM3gE9lR2jZNVsrOo20bLHgMdTjMorxnIFE2ZVaJJ-SXycO_tTjCaP8FjRWfZa3cp1Iw/exec" // Replace with your actual Google Script URL
 
 // Generate a random session token
 function generateSessionToken(length = 32) {
@@ -75,12 +76,18 @@ function logoutUser() {
 }
 
 // Fetch user profile data
-async function fetchUserProfile() {
+async function fetchUserProfile(forceRefresh = false) {
   const userEmail = localStorage.getItem("userEmail")
   const sessionToken = localStorage.getItem("sessionToken")
 
   if (!userEmail || !sessionToken) {
     return null
+  }
+
+  // If we have cached user data and don't need to force refresh, return it
+  const cachedUserData = localStorage.getItem("userData")
+  if (cachedUserData && !forceRefresh) {
+    return JSON.parse(cachedUserData)
   }
 
   try {
@@ -100,5 +107,10 @@ async function fetchUserProfile() {
     console.error("Profile fetch error:", error)
     return null
   }
+}
+
+// Force refresh user data from server
+async function refreshUserData() {
+  return await fetchUserProfile(true)
 }
 
