@@ -181,91 +181,134 @@
     <script src="config.js"></script>
     
     <script>
-        // Check if user is already logged in
-        window.onload = async function() {
-            const email = sessionStorage.getItem("userEmail");
-            const token = sessionStorage.getItem("sessionToken");
-            
-            if (email && token) {
-                try {
-                    // Verify if session is still valid
-                    const response = await verifyUserSession(email, token);
-                    
-                    if (response.status === "success") {
-                        window.location.href = "index.html";
-                    } else {
-                        // Clear invalid session
-                        sessionStorage.clear();
-                    }
-                } catch (error) {
-                    console.error("Error verifying session:", error);
-                    sessionStorage.clear();
-                }
-            }
-        };
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec"; // Replace with your actual Google Apps Script URL
 
-        // Handle login form submission
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            
-            // Show loading state
-            document.getElementById("login-text").style.display = "none";
-            document.getElementById("login-spinner").style.display = "inline";
-            document.getElementById("login-button").disabled = true;
-            
-            // Hide any previous error messages
-            document.getElementById("error-message").style.display = "none";
-            
+    // Check if user is already logged in
+    window.onload = async function() {
+        const email = sessionStorage.getItem("userEmail");
+        const token = sessionStorage.getItem("sessionToken");
+
+        if (email && token) {
             try {
-                // Call the login function
-                const response = await loginUser(email, password);
-                handleLoginResponse(response);
+                // Verify if session is still valid
+                const response = await verifyUserSession(email, token);
+
+                if (response.status === "success") {
+                    window.location.href = "index.html";
+                } else {
+                    sessionStorage.clear(); // Clear session if invalid
+                }
             } catch (error) {
-                handleLoginError(error);
+                console.error("Error verifying session:", error);
+                sessionStorage.clear();
             }
         }
-        
-        // Handle login response
-        function handleLoginResponse(response) {
-            // Reset button state
-            document.getElementById("login-text").style.display = "inline";
-            document.getElementById("login-spinner").style.display = "none";
-            document.getElementById("login-button").disabled = false;
-            
-            if (response.status === "success") {
-                // Store session data
-                sessionStorage.setItem("userEmail", response.email);
-                sessionStorage.setItem("sessionToken", response.sessionToken);
-                sessionStorage.setItem("username", response.username);
-                
-                // Redirect to dashboard
-                window.location.href = "index.html";
-            } else {
-                // Show error message
-                const errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = response.message || "Login failed. Please try again.";
-                errorMessage.style.display = "block";
-            }
+    };
+
+    // Handle login form submission
+    async function handleLogin(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        // Show loading state
+        document.getElementById("login-text").style.display = "none";
+        document.getElementById("login-spinner").style.display = "inline";
+        document.getElementById("login-button").disabled = true;
+
+        // Hide any previous error messages
+        document.getElementById("error-message").style.display = "none";
+
+        try {
+            // Call the login function
+            const response = await loginUser(email, password);
+            handleLoginResponse(response);
+        } catch (error) {
+            handleLoginError(error);
         }
-        
-        // Handle login error
-        function handleLoginError(error) {
-            // Reset button state
-            document.getElementById("login-text").style.display = "inline";
-            document.getElementById("login-spinner").style.display = "none";
-            document.getElementById("login-button").disabled = false;
-            
+    }
+
+    // Function to login user by calling the Google Apps Script API
+    async function loginUser(email, password) {
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to connect to server");
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Login API error:", error);
+            throw error;
+        }
+    }
+
+    // Function to verify session validity
+    async function verifyUserSession(email, token) {
+        try {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to verify session");
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Session verification error:", error);
+            throw error;
+        }
+    }
+
+    // Handle login response
+    function handleLoginResponse(response) {
+        // Reset button state
+        document.getElementById("login-text").style.display = "inline";
+        document.getElementById("login-spinner").style.display = "none";
+        document.getElementById("login-button").disabled = false;
+
+        if (response.status === "success") {
+            // Store session data
+            sessionStorage.setItem("userEmail", response.email);
+            sessionStorage.setItem("sessionToken", response.sessionToken);
+            sessionStorage.setItem("username", response.username);
+
+            // Redirect to dashboard
+            window.location.href = "index.html";
+        } else {
             // Show error message
             const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "An error occurred: " + error.message;
+            errorMessage.textContent = response.message || "Login failed. Please try again.";
             errorMessage.style.display = "block";
-            
-            console.error("Login error:", error);
         }
-    </script>
+    }
+
+    // Handle login error
+    function handleLoginError(error) {
+        // Reset button state
+        document.getElementById("login-text").style.display = "inline";
+        document.getElementById("login-spinner").style.display = "none";
+        document.getElementById("login-button").disabled = false;
+
+        // Show error message
+        const errorMessage = document.getElementById("error-message");
+        errorMessage.textContent = "An error occurred: " + error.message;
+        errorMessage.style.display = "block";
+
+        console.error("Login error:", error);
+    }
+</script>
 </body>
 </html>
 
