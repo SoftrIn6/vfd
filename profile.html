@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - AI ROBOT</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-      /* Reset & Base Styles */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Crypto Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Your existing styles remain the same -->
+    <style>
+         /* Reset & Base Styles */
       * {
           margin: 0;
           padding: 0;
@@ -19,6 +24,7 @@
           color: #333;
           line-height: 1.5;
           overflow-x: hidden;
+          
       }
 
       /* Container */
@@ -186,6 +192,7 @@
           grid-template-columns: 1fr 1fr;
           gap: 15px;
           padding: 0 20px 20px;
+          
       }
 
       .action-btn {
@@ -224,6 +231,7 @@
       .app-services {
           padding: 20px;
           background-color: #fff;
+          align-items: center;
       }
 
       .services-title {
@@ -233,6 +241,7 @@
           position: relative;
           display: flex;
           align-items: center;
+          
       }
 
       .services-title::after {
@@ -244,6 +253,7 @@
           position: absolute;
           bottom: -5px;
           left: 0;
+          
       }
 
       .service-item {
@@ -253,6 +263,8 @@
           padding: 15px 0;
           border-bottom: 1px solid #f0f0f0;
           cursor: pointer;
+        margin-left: 15px;
+
       }
 
       .service-left {
@@ -271,6 +283,7 @@
           justify-content: center;
           color: #ffa500;
           font-size: 18px;
+          
       }
 
       .service-name {
@@ -279,6 +292,7 @@
 
       .service-right {
           color: #ccc;
+          
       }
 
       /* Sign Out Button */
@@ -310,6 +324,7 @@
           padding: 10px 0;
           border-top: 1px solid #eee;
           z-index: 100;
+          
       }
 
       .nav-item {
@@ -374,383 +389,295 @@
               box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
           }
       }
-  </style>
+    </style>
 </head>
 <body>
-  <div class="container">
-      <!-- Header -->
-      <div class="header">
-          <div class="logo">
-              <img src="https://via.placeholder.com/40x40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
-              <div class="logo-text">AI ROBOT</div>
-          </div>
-          <div class="header-btns">
-              <div class="header-btn app">
-                  <i class="fas fa-mobile-alt"></i> App
-              </div>
-              <div class="header-btn">
-                  <i class="fas fa-globe"></i> English
-              </div>
-          </div>
-      </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
+            </div>
+            <div class="header-btns">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
+            </div>
+        </div>
 
-      <!-- User Profile -->
-      <div class="user-profile">
-          <div class="user-avatar">
-              <i class="fas fa-user"></i>
-              <div class="edit-icon">
-                  <i class="fas fa-pen"></i>
-              </div>
-          </div>
-          <div class="user-info">
-              <div class="username" id="username">Loading...</div>
-              <div class="user-email" id="email">Loading...</div>
-          </div>
-      </div>
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div id="username">Loading...</div>
+                <div id="email" style="color: #666; font-size: 14px;">Loading...</div>
+                <i class="fas fa-copy user-copy" id="copy-email"></i>
+            </div>
+        </div>
 
-      <!-- Assets Section -->
-      <div class="assets-section">
-          <div class="section-label">Total Assets</div>
-          <div class="total-assets" id="accountBalance">$0</div>
-          <div class="assets-grid">
-              <div class="asset-item">
-                  <div class="asset-label">Quantitative Account</div>
-                  <div class="asset-value" id="quantitativeAccount">$</div>
-              </div>
-              <div class="asset-item">
-                  <div class="asset-label">Smart Account</div>
-                  <div class="asset-value" id="smartAccount">$0</div>
-              </div>
-              <div class="asset-item">
-                  <div class="asset-label">Profit Assets</div>
-                  <div class="asset-value" id="profitAssets">$</div>
-              </div>
-          </div>
-      </div>
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="section-title">Total Assets</div>
+            <div class="total-assets" id="account-balance">$0</div>
+            <div class="assets-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Quantitative Account</div>
+                    <div class="asset-value" id="quantitative-account">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Smart Account</div>
+                    <div class="asset-value" id="smart-account">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Profit Assets</div>
+                    <div class="asset-value" id="profit-assets">$0</div>
+                </div>
+            </div>
+        </div>
 
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-          <div class="action-btn" id="recharge-btn">Recharge</div>
-          <div class="action-btn" id="withdraw-btn">  id="recharge-btn">Recharge</div>
-          <div class="action-btn" id="withdraw-btn">Withdraw</div>
-      </div>
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <div class="action-btn" id="recharge-btn">Recharge</div>
+            <div class="action-btn" id="withdraw-btn">Withdraw</div>
+        </div>
 
-      <!-- Revenue Section -->
-      <div class="revenue-section">
-          <div class="section-label">Total Revenue</div>
-          <div class="revenue-total" id="totalRevenue">$</div>
-          <div class="revenue-grid">
-              <div class="asset-item">
-                  <div class="asset-label">Yesterday's Earnings</div>
-                  <div class="asset-value" id="yesterdayEarnings">$</div>
-              </div>
-              <div class="asset-item">
-                  <div class="asset-label">Today's Earnings</div>
-                  <div class="asset-value" id="todaysEarnings">$</div>
-              </div>
-              <div class="asset-item">
-                  <div class="asset-label">Commission Today</div>
-                  <div class="asset-value" id="commission">$</div>
-              </div>
-          </div>
-      </div>
+        <!-- Revenue Section -->
+        <div class="revenue-section">
+            <div class="section-title">Total Revenue</div>
+            <div class="total-assets" id="total-revenue">$0</div>
+            <div class="revenue-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Yesterday's Earnings</div>
+                    <div class="asset-value" id="yesterday-earnings">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Today's Earnings</div>
+                    <div class="asset-value" id="today-earnings">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Commission Today</div>
+                    <div class="asset-value" id="commission">$0</div>
+                </div>
+            </div>
+        </div>
 
-      <!-- App Services -->
-      <div class="app-services">
-          <div class="services-title">App Services</div>
-          
-          <div class="service-item" id="detail-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-chart-line"></i>
-                  </div>
-                  <div class="service-name">Detail</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="transfer-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-exchange-alt"></i>
-                  </div>
-                  <div class="service-name">Transfer</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="news-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-newspaper"></i>
-                  </div>
-                  <div class="service-name">News</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="security-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-shield-alt"></i>
-                  </div>
-                  <div class="service-name">Security Center</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="tutorial-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-graduation-cap"></i>
-                  </div>
-                  <div class="service-name">Quantization Tutorial</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="problem-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-question-circle"></i>
-                  </div>
-                  <div class="service-name">Common Problem</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-          
-          <div class="service-item" id="about-service">
-              <div class="service-left">
-                  <div class="service-icon">
-                      <i class="fas fa-info-circle"></i>
-                  </div>
-                  <div class="service-name">About Us</div>
-              </div>
-              <div class="service-right">
-                  <i class="fas fa-chevron-right"></i>
-              </div>
-          </div>
-      </div>
+        <!-- App Services -->
+        <div class="services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <div class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Detail</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">Transfer</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">News</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Security Center</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Quantization Tutorial</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Common Problem</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      <!-- Sign Out Button -->
-      <div class="sign-out-btn" id="logout-btn">Sign Out</div>
+        <!-- Sign Out Button -->
+        <div class="sign-out-btn" id="logout-btn">Sign Out</div>
 
-      <!-- Back to Top Button -->
-      <div class="back-to-top">
-          <i class="fas fa-arrow-up"></i>
-      </div>
-  </div>
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
 
-  <!-- Bottom Navigation -->
-  <nav class="bottom-nav">
-      <a href="index.html" class="nav-item">
-          <i class="fas fa-home"></i>
-          <span>Home</span>
-      </a>
-      <a href="quantify.html" class="nav-item">
-          <i class="fas fa-chart-pie"></i>
-          <span>Quantify</span>
-      </a>
-      <a href="invest.html" class="nav-item">
-          <i class="fas fa-gift"></i>
-          <span>Invest</span>
-      </a>
-      <a href="invite-friends.html" class="nav-item">
-          <i class="fas fa-user-plus"></i>
-          <span>Invite Friends</span>
-      </a>
-      <a href="profile.html" class="nav-item active">
-          <i class="fas fa-user"></i>
-          <span>Me</span>
-      </a>
-  </nav>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
 
-  <script>
-      // Google Apps Script Web App URL - Replace with your deployed web app URL
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA3nviyIFRz0niS1A-dC8GUvLS8L6phi7sDsv-niaUiWhDakghEkGtNOqA-0FjqDEShg/exec";
-      
-      document.addEventListener('DOMContentLoaded', function() {
-          // Check if user is logged in
-          checkSession();
+    <!-- Load your Firebase configuration and auth/firestore functions -->
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="firestore.js"></script>
+    
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthState(async function(user) {
+                if (!user) {
+                    // User is not signed in, redirect to login page
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // User is signed in, load profile data
+                const profileResult = await getUserProfile(user.uid);
+                
+                if (profileResult.success) {
+                    const userData = profileResult.data;
+                    
+                    // Update UI with user data
+                    document.getElementById('username').textContent = userData.username || 'User';
+                    document.getElementById('email').textContent = userData.email || '';
+                    
+                    // Format currency values
+                    const formatCurrency = (value) => {
+                        return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    };
+                    
+                    // Update financial data
+                    document.getElementById('account-balance').textContent = `$${formatCurrency(userData.accountBalance)}`;
+                    document.getElementById('quantitative-account').textContent = `$${formatCurrency(userData.quantitativeAccount)}`;
+                    document.getElementById('smart-account').textContent = `$${formatCurrency(userData.smartAccount)}`;
+                    document.getElementById('profit-assets').textContent = `$${formatCurrency(userData.profitAssets || 0)}`;
+                    document.getElementById('total-revenue').textContent = `$${formatCurrency(userData.totalRevenue)}`;
+                    document.getElementById('yesterday-earnings').textContent = `$${formatCurrency(userData.yesterdayEarnings)}`;
+                    document.getElementById('today-earnings').textContent = `$${formatCurrency(userData.todayEarnings)}`;
+                    document.getElementById('commission').textContent = `$${formatCurrency(userData.commission)}`;
+                } else {
+                    console.error("Failed to load user data:", profileResult.error);
+                }
+            });
+        });
 
-          // Back to top functionality
-          document.querySelector('.back-to-top').addEventListener('click', function() {
-              window.scrollTo({
-                  top: 0,
-                  behavior: 'smooth'
-              });
-          });
+        // Copy email to clipboard
+        document.getElementById('copy-email').addEventListener('click', function() {
+            const email = document.getElementById('email').textContent;
+            navigator.clipboard.writeText(email)
+                .then(() => {
+                    alert('Email copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy email: ', err);
+                });
+        });
 
-          // Button event listeners
-          document.getElementById('recharge-btn').addEventListener('click', function() {
-              window.location.href = 'recharge.html';
-          });
+        // Action buttons functionality
+        document.getElementById('recharge-btn').addEventListener('click', function() {
+            window.location.href = 'recharge.html';
+        });
 
-          document.getElementById('withdraw-btn').addEventListener('click', function() {
-              window.location.href = 'withdraw.html';
-          });
+        document.getElementById('withdraw-btn').addEventListener('click', function() {
+            window.location.href = 'withdraw.html';
+        });
 
-          document.getElementById('logout-btn').addEventListener('click', function() {
-              logout();
-          });
+        // Service items functionality
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const serviceId = this.id;
+                alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+            });
+        });
 
-          // Service item event listeners
-          const serviceItems = document.querySelectorAll('.service-item');
-          serviceItems.forEach(item => {
-              item.addEventListener('click', function() {
-                  const serviceId = this.id;
-                  handleServiceClick(serviceId);
-              });
-          });
-      });
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', async function() {
+            if (confirm('Are you sure you want to sign out?')) {
+                const result = await logoutUser();
+                if (result.success) {
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Error signing out: ' + result.error);
+                }
+            }
+        });
 
-      // Check user session
-      function checkSession() {
-          const email = sessionStorage.getItem("userEmail");
-          const token = sessionStorage.getItem("sessionToken");
-
-          if (!email || !token) {
-              window.location.href = "login.html";
-              return;
-          }
-
-          // Verify session with server
-          fetch(`${SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
-              .then(response => response.json())
-              .then(function(response) {
-                  if (response.status === "success") {
-                      fetchUserData();
-                  } else {
-                      sessionStorage.clear();
-                      window.location.href = "login.html";
-                  }
-              })
-              .catch(function(error) {
-                  handleError(error);
-                  sessionStorage.clear();
-                  window.location.href = "login.html";
-              });
-      }
-
-      // Fetch user data from Google Sheets
-      function fetchUserData() {
-          const email = sessionStorage.getItem("userEmail");
-          const token = sessionStorage.getItem("sessionToken");
-
-          if (!email || !token) {
-              alert("No user session found. Redirecting to login.");
-              window.location.href = "login.html";
-              return;
-          }
-
-          fetch(`${SCRIPT_URL}?action=getUserData&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
-              .then(response => response.json())
-              .then(updateUI)
-              .catch(handleError);
-      }
-
-      // Update UI with user data
-      function updateUI(response) {
-          if (response.status === "success") {
-              const userData = response.userData;
-              
-              // Update user info
-              document.getElementById("username").innerText = userData.Username || "User";
-              document.getElementById("email").innerText = userData.Email || "";
-              
-              // Format currency values
-              const formatCurrency = (value) => {
-                  return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-              };
-              
-              // Update financial data
-              document.getElementById("accountBalance").innerText = `$${formatCurrency(userData["Account Balance"])}`;
-              document.getElementById("quantitativeAccount").innerText = `$${formatCurrency(userData["Quantitative Account"])}`;
-              document.getElementById("smartAccount").innerText = `$${formatCurrency(userData["Smart Account"])}`;
-              document.getElementById("profitAssets").innerText = `$${formatCurrency(userData["Profit Assets"] || 0)}`;
-              document.getElementById("totalRevenue").innerText = `$${formatCurrency(userData["Total Revenue"])}`;
-              document.getElementById("yesterdayEarnings").innerText = `$${formatCurrency(userData["Yesterday's Earnings"])}`;
-              document.getElementById("todaysEarnings").innerText = `$${formatCurrency(userData["Today's Earnings"])}`;
-              document.getElementById("commission").innerText = `$${formatCurrency(userData["Commission"])}`;
-          } else {
-              alert(response.message || "Failed to load user data");
-              if (response.message === "Session expired" || response.message === "Invalid session") {
-                  sessionStorage.clear();
-                  window.location.href = "login.html";
-              }
-          }
-      }
-
-      // Handle errors
-      function handleError(error) {
-          console.error("Error:", error);
-          alert("An error occurred: " + error);
-      }
-
-      // Handle service item clicks
-      function handleServiceClick(serviceId) {
-          switch(serviceId) {
-              case 'detail-service':
-                  window.location.href = 'detail.html';
-                  break;
-              case 'transfer-service':
-                  window.location.href = 'transfer.html';
-                  break;
-              case 'news-service':
-                  window.location.href = 'news.html';
-                  break;
-              case 'security-service':
-                  window.location.href = 'security.html';
-                  break;
-              case 'tutorial-service':
-                  window.location.href = 'tutorial.html';
-                  break;
-              case 'problem-service':
-                  window.location.href = 'faq.html';
-                  break;
-              case 'about-service':
-                  window.location.href = 'about.html';
-                  break;
-              default:
-                  alert('This feature is coming soon.');
-          }
-      }
-
-      // Logout function
-      function logout() {
-          const email = sessionStorage.getItem("userEmail");
-          const token = sessionStorage.getItem("sessionToken");
-
-          if (email && token) {
-              fetch(`${SCRIPT_URL}?action=logout&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
-                  .then(response => response.json())
-                  .then(function() {
-                      sessionStorage.clear();
-                      window.location.href = "login.html";
-                  })
-                  .catch(function(error) {
-                      handleError(error);
-                      sessionStorage.clear();
-                      window.location.href = "login.html";
-                  });
-          } else {
-              sessionStorage.clear();
-              window.location.href = "login.html";
-          }
-      }
-  </script>
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>
 
