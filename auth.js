@@ -5,39 +5,44 @@ const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
 function checkAuth() {
     const authToken = localStorage.getItem('authToken');
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-
-    // If no auth token or no email, redirect to login
-    if (!authToken || !userData.email) {
-        console.log('No authentication found, redirecting to login');
+    
+    // Get current page
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // If we're on profile.html and not logged in, redirect to login
+    if (currentPage === 'profile.html' && (!authToken || !userData.email)) {
+        console.log('Not authenticated, redirecting to login');
         window.location.href = 'login.html';
         return false;
     }
-
-    // Verify token validity by fetching user data
-    fetchUserData(userData.email)
-        .then(data => {
-            if (data) {
-                // Update user data with latest from server
-                localStorage.setItem('userData', JSON.stringify(data));
-                // Update UI if updateUI function exists on this page
-                if (typeof updateUI === 'function') {
-                    updateUI(data);
+    
+    // If we're on profile.html and logged in, fetch fresh user data
+    if (currentPage === 'profile.html' && authToken && userData.email) {
+        fetchUserData(userData.email)
+            .then(data => {
+                if (data) {
+                    // Update user data with latest from server
+                    localStorage.setItem('userData', JSON.stringify(data));
+                    // Update UI if updateUI function exists on this page
+                    if (typeof updateUI === 'function') {
+                        updateUI(data);
+                    }
+                } else {
+                    // User not found or token invalid
+                    console.log('User data not found, redirecting to login');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
                 }
-            } else {
-                // User not found or token invalid
-                console.log('User data not found, redirecting to login');
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                window.location.href = 'login.html';
-            }
-        })
-        .catch(error => {
-            console.error('Error verifying authentication:', error);
-            // Use existing data if server request fails
-            if (typeof updateUI === 'function') {
-                updateUI(userData);
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error verifying authentication:', error);
+                // Use existing data if server request fails
+                if (typeof updateUI === 'function') {
+                    updateUI(userData);
+                }
+            });
+    }
 
     return true;
 }
