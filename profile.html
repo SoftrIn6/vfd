@@ -492,184 +492,183 @@
 </div>
 
 <!-- Sign Out Button -->
-        <div class="sign-out-btn" id="logout-btn">Sign Out</div>
+<div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
 
-        <!-- Float Button -->
-        <div class="float-btn">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-    </div>
+<!-- Float Button -->
+<div class="float-btn">
+    <i class="fas fa-arrow-up"></i>
+</div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="quantify.html" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Quantify</span>
-        </a>
-        <a href="invest.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
-        </a>
-        <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
-        </a>
-        <a href="profile.html" class="nav-item active">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
-        </a>
-    </nav>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="quantify.html" class="nav-item">
+        <i class="fas fa-chart-pie"></i>
+        <span>Quantify</span>
+    </a>
+    <a href="invest.html" class="nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Invest</span>
+    </a>
+    <a href="invite-friends.html" class="nav-item">
+        <i class="fas fa-user-plus"></i>
+        <span>Invite Friends</span>
+    </a>
+    <a href="profile.html" class="nav-item active">
+        <i class="fas fa-user"></i>
+        <span>Me</span>
+    </a>
+</nav>
 
 <script>
-    // SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
-    const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
+// SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
+const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
 
-    // Check if user is logged in when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        const authToken = localStorage.getItem('authToken');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+// Check if user is logged in when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const authToken = localStorage.getItem('authToken');
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
-        if (!authToken || !userData.email) {
-            // Redirect to login page if not logged in
-            window.location.href = 'login.html';
-            return;
+    if (!authToken || !userData.email) {
+        // Redirect to login page if not logged in
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Initialize UI with cached data first
+    if (userData) {
+        updateUI(userData);
+    }
+
+    // Fetch fresh user data from SheetDB
+    fetchUserData(userData.email);
+
+    // Set up more frequent refresh interval (every 5 seconds)
+    setInterval(() => {
+        const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+        if (currentUserData.email) {
+            fetchUserData(currentUserData.email);
         }
+    }, 5000); // Check for updates every 5 seconds
 
-        // Initialize UI with cached data first
-        if (userData) {
-            updateUI(userData);
-        }
-
-        // Fetch fresh user data from SheetDB
-        fetchUserData(userData.email);
-
-        // Set up more frequent refresh interval (every 5 seconds)
-        setInterval(() => {
-            const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
-            if (currentUserData.email) {
-                fetchUserData(currentUserData.email);
-            }
-        }, 5000); // Check for updates every 5 seconds
-
-        // Copy email functionality
-        document.getElementById('copy-email').addEventListener('click', function() {
-            const email = document.getElementById('user-email').textContent.replace('Email: ', '');
-            navigator.clipboard.writeText(email)
-                .then(() => {
-                    alert('Email copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-        });
-
-        // Sign out functionality
-        document.getElementById('sign-out-btn').addEventListener('click', function() {
-            if (confirm('Are you sure you want to sign out?')) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                window.location.href = 'login.html';
-            }
-        });
-
-        // Action buttons functionality
-        document.getElementById('recharge-btn').addEventListener('click', function() {
-            window.location.href = 'recharge.html';
-        });
-
-        document.getElementById('withdraw-btn').addEventListener('click', function() {
-            window.location.href = 'withdraw.html';
-        });
+    // Copy email functionality
+    document.getElementById('copy-email').addEventListener('click', function() {
+        const email = document.getElementById('user-email').textContent.replace('Email: ', '');
+        navigator.clipboard.writeText(email)
+            .then(() => {
+                alert('Email copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
     });
 
-    // Fetch user data from SheetDB
-    async function fetchUserData(email) {
-        try {
-            // Add a random parameter to prevent caching
-            const timestamp = new Date().getTime();
-            const url = `${SHEETDB_API}/search?email=${encodeURIComponent(email)}&_=${timestamp}`;
+    // Sign out functionality
+    document.getElementById('sign-out-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to sign out?')) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        }
+    });
 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
+    // Action buttons functionality
+    document.getElementById('recharge-btn').addEventListener('click', function() {
+        window.location.href = 'recharge.html';
+    });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+    document.getElementById('withdraw-btn').addEventListener('click', function() {
+        window.location.href = 'withdraw.html';
+    });
+});
+
+// Fetch user data from SheetDB
+async function fetchUserData(email) {
+    try {
+        // Add a random parameter to prevent caching
+        const timestamp = new Date().getTime();
+        const url = `${SHEETDB_API}/search?email=${encodeURIComponent(email)}&_=${timestamp}`;
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
+        });
 
-            const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-            if (data && data.length > 0) {
-                const userData = data[0];
+        const data = await response.json();
 
-                // Log the data for debugging
-                console.log('Fetched user data:', userData);
+        if (data && data.length > 0) {
+            const userData = data[0];
 
-                // Save to localStorage
-                localStorage.setItem('userData', JSON.stringify(userData));
+            // Log the data for debugging
+            console.log('Fetched user data:', userData);
 
-                // Update UI with user data
-                updateUI(userData);
+            // Save to localStorage
+            localStorage.setItem('userData', JSON.stringify(userData));
 
-                return userData;
-            } else {
-                console.error('No user data found for email:', email);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+            // Update UI with user data
+            updateUI(userData);
+
+            return userData;
+        } else {
+            console.error('No user data found for email:', email);
             return null;
         }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        return null;
     }
+}
 
-    // Update UI with user data
-    function updateUI(userData) {
-        // Update user info
-        document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
-        document.getElementById('user-email').textContent = 'Email: ' + userData.email;
-        document.getElementById('user-id').textContent = userData.id || 'N/A'; // Display ID
-        document.getElementById('referral-code').textContent = userData.referralCode || 'N/A'; // Display Referral Code
+// Update UI with user data
+function updateUI(userData) {
+    // Update user info
+    document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+    document.getElementById('user-email').textContent = 'Email: ' + userData.email;
+    document.getElementById('user-id').textContent = userData.id || 'N/A'; // Display ID
+    document.getElementById('referral-code').textContent = userData.referralCode || 'N/A'; // Display Referral Code
 
-        // Update financial data
-        updateFinancialValue('total-assets', userData.total_assets);
-        updateFinancialValue('quantitative-account', userData.quantitative_account);
-        updateFinancialValue('smart-account', userData.smart_account);
-        updateFinancialValue('profit-assets', userData.profit_assets);
+    // Update financial data
+    updateFinancialValue('total-assets', userData.total_assets);
+    updateFinancialValue('quantitative-account', userData.quantitative_account);
+    updateFinancialValue('smart-account', userData.smart_account);
+    updateFinancialValue('profit-assets', userData.profit_assets);
 
-        updateFinancialValue('total-revenue', userData.total_revenue);
-        updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
-        updateFinancialValue('commission-today', userData.commission_today);
-    }
+    updateFinancialValue('total-revenue', userData.total_revenue);
+    updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+    updateFinancialValue('commission-today', userData.commission_today);
+}
 
-    // Helper function to update financial values
-    function updateFinancialValue(elementId, value) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            let formattedValue = '0.00';
+// Helper function to update financial values
+function updateFinancialValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        let formattedValue = '0.00';
 
-            if (value !== undefined && value !== null && value !== '') {
-                if (!isNaN(parseFloat(value))) {
-                    formattedValue = parseFloat(value).toFixed(2);
-                } else {
-                    formattedValue = value;
-                    if (!formattedValue.includes('.')) {
-                        formattedValue += '.00';
-                    }
+        if (value !== undefined && value !== null && value !== '') {
+            if (!isNaN(parseFloat(value))) {
+                formattedValue = parseFloat(value).toFixed(2);
+            } else {
+                formattedValue = value;
+                if (!formattedValue.includes('.')) {
+                    formattedValue += '.00';
                 }
             }
-
-            element.textContent = '$' + formattedValue;
         }
+
+        element.textContent = '$' + formattedValue;
     }
+}
 </script>
 </body>
 </html>
