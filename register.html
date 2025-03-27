@@ -303,102 +303,101 @@
         });
         
         // Form validation and submission
-        document.getElementById('register-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(function(el) {
-                el.style.display = 'none';
-            });
-            
-            // Get form values
-            const username = document.getElementById('username').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const confirmPassword = document.getElementById('confirm-password').value.trim();
-            const referralCode = document.getElementById('referral-code').value.trim();
-            const termsChecked = document.getElementById('terms-checkbox').checked;
-            
-            // Validate form
-            let isValid = true;
-            
-            if (!username) {
-                document.getElementById('username-error').textContent = 'Username is required';
-                document.getElementById('username-error').style.display = 'block';
-                isValid = false;
-            } else if (username.length < 3) {
-                document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
-                document.getElementById('username-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!email) {
-                document.getElementById('email-error').textContent = 'Email is required';
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
-            } else if (!isValidEmail(email)) {
-                document.getElementById('email-error').textContent = 'Please enter a valid email address';
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!password) {
-                document.getElementById('password-error').textContent = 'Password is required';
-                document.getElementById('password-error').style.display = 'block';
-                isValid = false;
-            } else if (password.length < 6) {
-                document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
-                document.getElementById('password-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (password !== confirmPassword) {
-                document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
-                document.getElementById('confirm-password-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!termsChecked) {
-                document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
-                document.getElementById('terms-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (isValid) {
-                // Show loading spinner
-                document.getElementById('register-spinner').style.display = 'block';
-                
-                // Prepare user data
-                const userData = {
-                    username,
-                    email,
-                    password,
-                    referred_by: referralCode
-                };
-                
-                // Call register function from auth.js
-                const result = await register(userData);
-                
-                // Hide loading spinner
-                document.getElementById('register-spinner').style.display = 'none';
-                
-                if (result.status === 'success') {
-                    // Show success message and redirect to login
-                    alert('Registration successful! Please login with your new account.');
-                    window.location.href = 'login.html';
-                } else {
-                    // Show error message
-                    if (result.message.includes('already registered')) {
-                        document.getElementById('email-error').textContent = result.message;
-                        document.getElementById('email-error').style.display = 'block';
-                    } else {
-                        document.getElementById('password-error').textContent = result.message;
-                        document.getElementById('password-error').style.display = 'block';
-                    }
-                }
-            }
-        });
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Reset error messages
+    document.querySelectorAll('.error-message').forEach(function(el) {
+        el.style.display = 'none';
+    });
+    
+    // Get form values
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+    const referralCode = document.getElementById('referral-code').value.trim();
+    const termsChecked = document.getElementById('terms-checkbox').checked;
+    
+    // Validate form
+    let isValid = true;
+    
+    if (!username) {
+        document.getElementById('username-error').textContent = 'Username is required';
+        document.getElementById('username-error').style.display = 'block';
+        isValid = false;
+    } else if (username.length < 3) {
+        document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
+        document.getElementById('username-error').style.display = 'block';
+        isValid = false;
+    }
+    
+    if (!email) {
+        document.getElementById('email-error').textContent = 'Email is required';
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        document.getElementById('email-error').textContent = 'Please enter a valid email address';
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+    }
+    
+    if (!password) {
+        document.getElementById('password-error').textContent = 'Password is required';
+        document.getElementById('password-error').style.display = 'block';
+        isValid = false;
+    } else if (password.length < 6) {
+        document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
+        document.getElementById('password-error').style.display = 'block';
+        isValid = false;
+    }
+    
+    if (password !== confirmPassword) {
+        document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
+        document.getElementById('confirm-password-error').style.display = 'block';
+        isValid = false;
+    }
+    
+    if (!termsChecked) {
+        document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
+        document.getElementById('terms-error').style.display = 'block';
+        isValid = false;
+    }
+    
+    if (isValid) {
+        // Show loading spinner
+        document.getElementById('register-spinner').style.display = 'block';
         
+        // Prepare user data
+        const userData = {
+            username,
+            email,
+            password,
+            referred_by: referralCode
+        };
+        
+        // Call register function from auth.js
+        const result = await register(userData);
+        
+        // Hide loading spinner
+        document.getElementById('register-spinner').style.display = 'none';
+        
+        if (result.status === 'success') {
+            // Show success message and redirect to login
+            alert('Registration successful! Please login with your new account.');
+            window.location.href = 'login.html';
+        } else {
+            // Show error message
+            if (result.message.includes('already registered')) {
+                document.getElementById('email-error').textContent = result.message;
+                document.getElementById('email-error').style.display = 'block';
+            } else {
+                document.getElementById('password-error').textContent = result.message;
+                document.getElementById('password-error').style.display = 'block';
+            }
+        }
+    }
+});     
         // Terms and Conditions links
         document.querySelectorAll('.terms-link').forEach(function(link) {
             link.addEventListener('click', function(e) {
