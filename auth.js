@@ -1,26 +1,31 @@
 // SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
 const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
 
-// Check if user is logged in
+// Check if user is logged in - MUST be called on every page
 function checkAuth() {
     const authToken = localStorage.getItem('authToken');
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
-    if (!authToken) {
-        // Redirect to login page if not logged in
+    // If no auth token or no email, redirect to login
+    if (!authToken || !userData.email) {
+        console.log('No authentication found, redirecting to login');
         window.location.href = 'login.html';
         return false;
     }
 
-    // Always fetch fresh data from the server to reflect any changes made in Google Sheet
+    // Verify token validity by fetching user data
     fetchUserData(userData.email)
         .then(data => {
             if (data) {
                 // Update user data with latest from server
                 localStorage.setItem('userData', JSON.stringify(data));
-                updateUI(data);
+                // Update UI if updateUI function exists on this page
+                if (typeof updateUI === 'function') {
+                    updateUI(data);
+                }
             } else {
-                // Token is invalid or expired
+                // User not found or token invalid
+                console.log('User data not found, redirecting to login');
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userData');
                 window.location.href = 'login.html';
@@ -29,127 +34,30 @@ function checkAuth() {
         .catch(error => {
             console.error('Error verifying authentication:', error);
             // Use existing data if server request fails
-            updateUI(userData);
+            if (typeof updateUI === 'function') {
+                updateUI(userData);
+            }
         });
 
     return true;
 }
 
-// Fetch user data from SheetDB
+// Fetch user data from SheetDB based on email
 async function fetchUserData(email) {
     try {
+        console.log('Fetching data for:', email);
         const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`);
         const data = await response.json();
         
         if (data && data.length > 0) {
+            console.log('User data found');
             return data[0]; // Return the first matching user
         }
+        console.log('No user data found for this email');
         return null;
     } catch (error) {
         console.error('Error fetching user data:', error);
         return null;
-    }
-}
-
-// Update UI with user data
-function updateUI(userData) {
-    // Update user profile info
-    if (document.querySelector('.user-info')) {
-        document.querySelector('.user-info').innerHTML = `
-            <div style="font-size: 18px; font-weight: bold;">${userData.username || userData.email.split('@')[0]}</div>
-            <div style="color: #666; margin-top: 5px;">${userData.email}</div>
-            <i class="fas fa-copy user-copy"></i>
-        `;
-    }
-
-    // Update total assets
-    if (document.querySelector('.total-assets')) {
-        const totalAssetsElements = document.querySelectorAll('.total-assets');
-        totalAssetsElements.forEach(element => {
-            element.textContent = `$${userData.total_assets || '0.00'}`;
-        });
-    }
-
-    // Update account cards on index page
-    const cardAmounts = document.querySelectorAll('.card-amount');
-    if (cardAmounts.length > 0) {
-        cardAmounts[0].textContent = `${userData.total_assets || '0.00'} USDT`;
-        if (cardAmounts.length > 1) {
-            cardAmounts[1].textContent = `${userData.quantitative_account || '0.00'} USDT`;
-        }
-    }
-
-    // Update card values
-    const cardValues = document.querySelectorAll('.card-value');
-    if (cardValues.length > 0) {
-        cardValues[0].textContent = `= $${userData.total_assets || '0.00'}`;
-        if (cardValues.length > 1) {
-            cardValues[1].textContent = `= $${userData.quantitative_account || '0.00'}`;
-        }
-    }
-
-    // Update asset values in profile page
-    const assetItems = document.querySelectorAll('.asset-item');
-    if (assetItems.length > 0) {
-        // Update Quantitative Account
-        const quantValue = assetItems[0].querySelector('.asset-value');
-        if (quantValue) {
-            quantValue.textContent = `$${userData.quantitative_account || '0.00'}`;
-        }
-        
-        // Update Smart Account
-        if (assetItems.length > 1) {
-            const smartValue = assetItems[1].querySelector('.asset-value');
-            if (smartValue) {
-                smartValue.textContent = `$${userData.smart_account || '0.00'}`;
-            }
-        }
-        
-        // Update Profit Assets
-        if (assetItems.length > 2) {
-            const profitValue = assetItems[2].querySelector('.asset-value');
-            if (profitValue) {
-                profitValue.textContent = `$${userData.profit_assets || '0.00'}`;
-            }
-        }
-    }
-
-    // Update revenue section in profile page
-    if (document.querySelector('.revenue-section')) {
-        const totalRevenue = document.querySelector('.revenue-section .total-assets');
-        if (totalRevenue) {
-            totalRevenue.textContent = `$${userData.total_revenue || '0.00'}`;
-        }
-
-        const revenueItems = document.querySelectorAll('.revenue-grid .asset-item');
-        if (revenueItems.length > 0) {
-            // Update Yesterday's Earnings
-            const yesterdayValue = revenueItems[0].querySelector('.asset-value');
-            if (yesterdayValue) {
-                yesterdayValue.textContent = `$${userData.yesterday_earnings || '0.00'}`;
-            }
-            
-            // Update Today's Earnings
-            if (revenueItems.length > 1) {
-                const todayValue = revenueItems[1].querySelector('.asset-value');
-                if (todayValue) {
-                    todayValue.textContent = `$${userData.today_earnings || '0.00'}`;
-                }
-            }
-            
-            // Update Commission Today
-            if (revenueItems.length > 2) {
-                const commissionValue = revenueItems[2].querySelector('.asset-value');
-                if (commissionValue) {
-                    commissionValue.textContent = `$${userData.commission_today || '0.00'}`;
-                }
-            }
-        }
-    }
-
-    // Update referral code if element exists
-    if (document.querySelector('.code-value')) {
-        document.querySelector('.code-value').textContent = userData.referral_code || '';
     }
 }
 
@@ -249,7 +157,7 @@ function addClickProtection() {
     }
 }
 
-// Function to refresh user data periodically (every 30 seconds)
+// Function to refresh user data periodically
 function startDataRefreshInterval() {
     setInterval(() => {
         const authToken = localStorage.getItem('authToken');
@@ -261,7 +169,10 @@ function startDataRefreshInterval() {
                     if (data) {
                         // Update user data with latest from server
                         localStorage.setItem('userData', JSON.stringify(data));
-                        updateUI(data);
+                        // Update UI if updateUI function exists on this page
+                        if (typeof updateUI === 'function') {
+                            updateUI(data);
+                        }
                     }
                 })
                 .catch(error => {
@@ -273,5 +184,12 @@ function startDataRefreshInterval() {
 
 // Start the data refresh interval when the script loads
 document.addEventListener('DOMContentLoaded', function() {
-    startDataRefreshInterval();
+    // Check if we're not on login or register page
+    const currentPage = window.location.pathname.split('/').pop();
+    if (currentPage !== 'login.html' && currentPage !== 'register.html') {
+        // Check authentication first
+        checkAuth();
+        // Start refresh interval
+        startDataRefreshInterval();
+    }
 });
