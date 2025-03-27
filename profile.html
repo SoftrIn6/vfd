@@ -328,6 +328,34 @@
             margin-bottom: 5px;
         }
 
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ffa500;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
@@ -370,6 +398,7 @@
             }
         })();
     </script>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -393,30 +422,31 @@
                 <i class="fas fa-user"></i>
             </div>
             <div class="user-info">
-                <!-- User info will be populated by JavaScript -->
-                <i class="fas fa-copy copy-icon"></i>
+                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
+                <div style="color: #666; margin-top: 5px;" id="user-email">Email:</div>
+                <i class="fas fa-copy copy-icon" id="copy-email"></i>
             </div>
         </div>
 
         <!-- Total Assets Section -->
         <div class="content-section">
             <div class="section-title">Total Assets</div>
-            <div class="total-amount" id="total-assets">$0</div>
+            <div class="total-amount" id="total-assets">$0.00</div>
             
             <div class="account-grid">
                 <div class="account-item">
                     <div class="account-label">Quantitative Account</div>
-                    <div class="account-value" id="quantitative-account">$</div>
+                    <div class="account-value" id="quantitative-account">$0.00</div>
                 </div>
                 <div class="account-item">
                     <div class="account-label">Smart Account</div>
-                    <div class="account-value" id="smart-account">$0</div>
+                    <div class="account-value" id="smart-account">$0.00</div>
                 </div>
             </div>
             
             <div class="account-item">
                 <div class="account-label">Profit Assets</div>
-                <div class="account-value" id="profit-assets">$</div>
+                <div class="account-value" id="profit-assets">$0.00</div>
             </div>
             
             <!-- Action Buttons -->
@@ -429,22 +459,22 @@
         <!-- Total Revenue Section -->
         <div class="content-section">
             <div class="section-title">Total Revenue</div>
-            <div class="total-amount" id="total-revenue">$</div>
+            <div class="total-amount" id="total-revenue">$0.00</div>
             
             <div class="account-grid">
                 <div class="account-item">
                     <div class="account-label">Yesterday's Earnings</div>
-                    <div class="account-value" id="yesterday-earnings">$</div>
+                    <div class="account-value" id="yesterday-earnings">$0.00</div>
                 </div>
                 <div class="account-item">
                     <div class="account-label">Today's Earnings</div>
-                    <div class="account-value" id="today-earnings">$</div>
+                    <div class="account-value" id="today-earnings">$0.00</div>
                 </div>
             </div>
             
             <div class="account-item">
                 <div class="account-label">Commission Today</div>
-                <div class="account-value" id="commission-today">$</div>
+                <div class="account-value" id="commission-today">$0.00</div>
             </div>
         </div>
         
@@ -570,47 +600,139 @@
         // SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
         const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
         
+        // Track the last data hash to detect changes
+        let lastDataHash = '';
+        
         // Check if user is logged in when page loads
         document.addEventListener('DOMContentLoaded', function() {
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
-            if (!authToken) {
+            if (!authToken || !userData.email) {
                 // Redirect to login page if not logged in
                 window.location.href = 'login.html';
                 return;
             }
             
+            // Initialize UI with cached data first
+            if (userData) {
+                updateUI(userData);
+            }
+            
             // Fetch fresh user data from SheetDB
             fetchUserData(userData.email);
             
-            // Set up refresh interval (every 30 seconds)
+            // Set up more frequent refresh interval (every 10 seconds)
             setInterval(() => {
-                fetchUserData(userData.email);
-            }, 30000);
+                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (currentUserData.email) {
+                    fetchUserData(currentUserData.email, true);
+                }
+            }, 10000); // Check for updates every 10 seconds
+            
+            // Copy email functionality
+            document.getElementById('copy-email').addEventListener('click', function() {
+                const email = document.getElementById('user-email').textContent.replace('Email: ', '');
+                navigator.clipboard.writeText(email)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            });
+            
+            // Sign out functionality
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            // Action buttons functionality
+            document.getElementById('recharge-btn').addEventListener('click', function() {
+                window.location.href = 'recharge.html';
+            });
+            
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                window.location.href = 'withdraw.html';
+            });
+            
+            // Service items functionality
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.id;
+                    alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+                });
+            });
+            
+            // Refresh button functionality - now just scrolls to top
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Silently refresh data
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    fetchUserData(userData.email, true);
+                }
+            });
         });
         
+        // Generate a simple hash for data comparison
+        function generateDataHash(data) {
+            return JSON.stringify(data);
+        }
+        
         // Fetch user data from SheetDB
-        async function fetchUserData(email) {
+        async function fetchUserData(email, silent = false) {
             try {
-                const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`);
+                const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`, {
+                    // Add cache busting to ensure fresh data
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data && data.length > 0) {
                     const userData = data[0];
                     
-                    // Save to localStorage
-                    localStorage.setItem('userData', JSON.stringify(userData));
+                    // Check if data has changed
+                    const currentHash = generateDataHash(userData);
+                    const hasChanged = currentHash !== lastDataHash;
                     
-                    // Update UI with user data
-                    updateUI(userData);
+                    if (hasChanged) {
+                        // Save to localStorage
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        
+                        // Update UI with user data
+                        updateUI(userData);
+                        
+                        // Update the hash
+                        lastDataHash = currentHash;
+                    }
                     
                     return userData;
                 } else {
-                    // User not found, redirect to login
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('userData');
-                    window.location.href = 'login.html';
+                    // Only redirect if not in silent mode
+                    if (!silent) {
+                        // User not found, redirect to login
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('userData');
+                        window.location.href = 'login.html';
+                    }
                     return null;
                 }
             } catch (error) {
@@ -618,9 +740,8 @@
                 
                 // Use cached data if available
                 const cachedData = JSON.parse(localStorage.getItem('userData') || '{}');
-                if (cachedData.email) {
+                if (cachedData.email && !silent) {
                     updateUI(cachedData);
-                    return cachedData;
                 }
                 
                 return null;
@@ -629,108 +750,56 @@
         
         // Update UI with user data
         function updateUI(userData) {
-            // Update user info
-            const userInfo = document.querySelector('.user-info');
-            if (userInfo) {
-                userInfo.innerHTML = `
-                    <div style="font-size: 18px; font-weight: bold;">${userData.username || userData.email.split('@')[0]}</div>
-                    <div style="color: #666; margin-top: 5px;">${userData.email}</div>
-                    <i class="fas fa-copy copy-icon"></i>
-                `;
-            }
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = 'Email: ' + userData.email;
             
-            // Update financial data
-            document.getElementById('total-assets').textContent = `$${userData.total_assets || '0'}`;
-            document.getElementById('quantitative-account').textContent = `$${userData.quantitative_account || ''}`;
-            document.getElementById('smart-account').textContent = `$${userData.smart_account || '0'}`;
-            document.getElementById('profit-assets').textContent = `$${userData.profit_assets || ''}`;
+            // Ensure all values have default values if missing
+            const ensureValue = (value) => {
+                if (value === undefined || value === null || value === '') {
+                    return '0.00';
+                }
+                // If value doesn't have 2 decimal places, add them
+                if (typeof value === 'string' && !value.includes('.')) {
+                    return value + '.00';
+                }
+                return value;
+            };
             
-            document.getElementById('total-revenue').textContent = `$${userData.total_revenue || ''}`;
-            document.getElementById('yesterday-earnings').textContent = `$${userData.yesterday_earnings || ''}`;
-            document.getElementById('today-earnings').textContent = `$${userData.today_earnings || ''}`;
-            document.getElementById('commission-today').textContent = `$${userData.commission_today || ''}`;
+            // Update financial data with smooth transitions
+            updateElementWithTransition('total-assets', '$' + ensureValue(userData.total_assets));
+            updateElementWithTransition('quantitative-account', '$' + ensureValue(userData.quantitative_account));
+            updateElementWithTransition('smart-account', '$' + ensureValue(userData.smart_account));
+            updateElementWithTransition('profit-assets', '$' + ensureValue(userData.profit_assets));
+            
+            updateElementWithTransition('total-revenue', '$' + ensureValue(userData.total_revenue));
+            updateElementWithTransition('yesterday-earnings', '$' + ensureValue(userData.yesterday_earnings));
+            updateElementWithTransition('today-earnings', '$' + ensureValue(userData.today_earnings || userData.today_earnings));
+            updateElementWithTransition('commission-today', '$' + ensureValue(userData.commission_today));
         }
         
-        // Sign out functionality
-        document.getElementById('sign-out-btn').addEventListener('click', function() {
-            if (confirm('Are you sure you want to sign out?')) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                window.location.href = 'login.html';
-            }
-        });
-        
-        // Action buttons functionality
-        document.getElementById('recharge-btn').addEventListener('click', function() {
-            window.location.href = 'recharge.html';
-        });
-        
-        document.getElementById('withdraw-btn').addEventListener('click', function() {
-            window.location.href = 'withdraw.html';
-        });
-        
-        // Service items functionality
-        document.querySelectorAll('.service-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const serviceId = this.id;
-                alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
-            });
-        });
-        
-        // Refresh button functionality
-        document.getElementById('refresh-btn').addEventListener('click', function() {
-            // First scroll to top
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-            
-            // Then refresh user data
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            if (userData.email) {
-                fetchUserData(userData.email)
-                    .then(() => {
-                        // Show a brief notification that data was refreshed
-                        const notification = document.createElement('div');
-                        notification.style.position = 'fixed';
-                        notification.style.top = '20px';
-                        notification.style.left = '50%';
-                        notification.style.transform = 'translateX(-50%)';
-                        notification.style.padding = '10px 20px';
-                        notification.style.backgroundColor = '#4CAF50';
-                        notification.style.color = 'white';
-                        notification.style.borderRadius = '5px';
-                        notification.style.zIndex = '1000';
-                        notification.textContent = 'Data refreshed!';
-                        
-                        document.body.appendChild(notification);
+        // Update element with smooth transition if value has changed
+        function updateElementWithTransition(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (element && element.textContent !== newValue) {
+                // Apply subtle highlight effect for changed values
+                element.style.transition = 'none';
+                element.textContent = newValue;
+                
+                // Only apply highlight effect for financial values that have changed significantly
+                if (elementId !== 'username' && elementId !== 'user-email') {
+                    // Very subtle effect that user might not consciously notice
+                    setTimeout(() => {
+                        element.style.transition = 'color 0.5s ease';
+                        element.style.color = '#ffa500';
                         
                         setTimeout(() => {
-                            notification.style.opacity = '0';
-                            notification.style.transition = 'opacity 0.5s';
-                            setTimeout(() => {
-                                document.body.removeChild(notification);
-                            }, 500);
-                        }, 2000);
-                    });
+                            element.style.color = '';
+                        }, 500);
+                    }, 10);
+                }
             }
-        });
-        
-        // Copy user email
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('copy-icon')) {
-                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                const textToCopy = userData.email || '';
-                
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => {
-                        alert('Email copied to clipboard!');
-                    })
-                    .catch(err => {
-                        console.error('Failed to copy: ', err);
-                    });
-            }
-        });
+        }
     </script>
 </body>
 </html>
