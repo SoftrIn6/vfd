@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     <style>
+    <style>
         /* Reset & Base Styles */
         * {
             margin: 0;
@@ -385,77 +385,404 @@
     </style>
 </head>
 <body>
+    <!-- Add this at the beginning of profile.html right after the opening <body> tag -->
     <script>
+        // Immediate authentication check
         (function() {
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
             if (!authToken || !userData.email) {
+                // Not logged in, redirect immediately
                 window.location.href = 'login.html';
             }
         })();
     </script>
 
     <div class="container">
-        <header class="header">
+        <!-- Header -->
+        <div class="header">
             <div class="logo">
-                <img src="/placeholder.svg?height=35&width=35" alt="Logo" class="logo-img">
-                <span class="logo-text">AI ROBOT</span>
+                <img src="/placeholder.svg?height=35&width=35" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
             </div>
             <div class="header-btns">
-                <button class="header-btn"><i class="fas fa-mobile-alt"></i> App</button>
-                <button class="header-btn"><i class="fas fa-globe"></i> English</button>
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
             </div>
-        </header>
+        </div>
 
-        <section class="user-profile">
+        <!-- User Profile -->
+        <div class="user-profile">
             <div class="user-avatar">
                 <i class="fas fa-user"></i>
             </div>
             <div class="user-info">
-                <h2 id="username"></h2>
-                <p id="user-email"></p>
-                <button id="copy-email"><i class="fas fa-copy"></i> Copy</button>
+                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
+                <div style="color: #666; margin-top: 5px;" id="user-email">Email:</div>
+                <i class="fas fa-copy copy-icon" id="copy-email"></i>
             </div>
-        </section>
+        </div>
 
-        <section class="content-section">
-            <h3>Total Assets</h3>
-            <p id="total-assets">$0.00</p>
+        <!-- Total Assets Section -->
+        <div class="content-section">
+            <div class="section-title">Total Assets</div>
+            <div class="total-amount" id="total-assets">$0.00</div>
+            
             <div class="account-grid">
-                <div><span>Quantitative Account:</span> <span id="quantitative-account">$0.00</span></div>
-                <div><span>Smart Account:</span> <span id="smart-account">$0.00</span></div>
-                <div><span>Profit Assets:</span> <span id="profit-assets">$0.00</span></div>
+                <div class="account-item">
+                    <div class="account-label">Quantitative Account</div>
+                    <div class="account-value" id="quantitative-account">$0.00</div>
+                </div>
+                <div class="account-item">
+                    <div class="account-label">Smart Account</div>
+                    <div class="account-value" id="smart-account">$0.00</div>
+                </div>
             </div>
-            <button id="recharge-btn">Recharge</button>
-            <button id="withdraw-btn">Withdraw</button>
-        </section>
+            
+            <div class="account-item">
+                <div class="account-label">Profit Assets</div>
+                <div class="account-value" id="profit-assets">$0.00</div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <div class="action-btn" id="recharge-btn">Recharge</div>
+                <div class="action-btn" id="withdraw-btn">Withdraw</div>
+            </div>
+        </div>
+        
+        <!-- Total Revenue Section -->
+        <div class="content-section">
+            <div class="section-title">Total Revenue</div>
+            <div class="total-amount" id="total-revenue">$0.00</div>
+            
+            <div class="account-grid">
+                <div class="account-item">
+                    <div class="account-label">Yesterday's Earnings</div>
+                    <div class="account-value" id="yesterday-earnings">$0.00</div>
+                </div>
+                <div class="account-item">
+                    <div class="account-label">Today's Earnings</div>
+                    <div class="account-value" id="today-earnings">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="account-item">
+                <div class="account-label">Commission Today</div>
+                <div class="account-value" id="commission-today">$0.00</div>
+            </div>
+        </div>
+        
+        <!-- App Services -->
+        <div class="content-section services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <div class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Detail</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">Transfer</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">News</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Security Center</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Quantization Tutorial</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Common Problem</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sign Out Button -->
+            <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
+        </div>
 
-        <section class="content-section">
-            <h3>Total Revenue</h3>
-            <p id="total-revenue">$0.00</p>
-            <div>
-                <span>Yesterday's Earnings:</span> <span id="yesterday-earnings">$0.00</span>
-            </div>
-            <div>
-                <span>Today's Earnings:</span> <span id="today-earnings">$0.00</span>
-            </div>
-            <div>
-                <span>Commission Today:</span> <span id="commission-today">$0.00</span>
-            </div>
-        </section>
-
-        <section class="services">
-            <h3>App Services</h3>
-            <button id="detail-service"><i class="fas fa-chart-line"></i> Detail</button>
-            <button id="transfer-service"><i class="fas fa-exchange-alt"></i> Transfer</button>
-            <button id="news-service"><i class="fas fa-newspaper"></i> News</button>
-            <button id="security-service"><i class="fas fa-shield-alt"></i> Security</button>
-        </section>
-
-        <button id="sign-out-btn">Sign Out</button>
+        <!-- Float Button -->
+        <div class="float-btn" id="refresh-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script src="auth.js"></script>
+    <script>
+        // SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
+        const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
+        
+        // Track the last data hash to detect changes
+        let lastDataHash = '';
+        
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken || !userData.email) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Initialize UI with cached data first
+            if (userData) {
+                updateUI(userData);
+            }
+            
+            // Fetch fresh user data from SheetDB
+            fetchUserData(userData.email);
+            
+            // Set up more frequent refresh interval (every 5 seconds)
+            setInterval(() => {
+                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (currentUserData.email) {
+                    fetchUserData(currentUserData.email);
+                }
+            }, 5000); // Check for updates every 5 seconds
+            
+            // Copy email functionality
+            document.getElementById('copy-email').addEventListener('click', function() {
+                const email = document.getElementById('user-email').textContent.replace('Email: ', '');
+                navigator.clipboard.writeText(email)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            });
+            
+            // Sign out functionality
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            // Action buttons functionality
+            document.getElementById('recharge-btn').addEventListener('click', function() {
+                window.location.href = 'recharge.html';
+            });
+            
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                window.location.href = 'withdraw.html';
+            });
+            
+            // Service items functionality
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.id;
+                    alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+                });
+            });
+            
+            // Refresh button functionality - now just scrolls to top and forces data refresh
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Force data refresh
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    fetchUserData(userData.email, true);
+                }
+            });
+        });
+        
+        // Fetch user data from SheetDB
+        async function fetchUserData(email, forceRefresh = false) {
+            try {
+                // Add a random parameter to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${SHEETDB_API}/search?email=${encodeURIComponent(email)}&_=${timestamp}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    const userData = data[0];
+                    
+                    // Log the data for debugging
+                    console.log('Fetched user data:', userData);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Update UI with user data
+                    updateUI(userData);
+                    
+                    return userData;
+                } else {
+                    console.error('No user data found for email:', email);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                return null;
+            }
+        }
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = 'Email: ' + userData.email;
+            
+            // Log all financial data for debugging
+            console.log('Financial data:', {
+                total_assets: userData.total_assets,
+                quantitative_account: userData.quantitative_account,
+                smart_account: userData.smart_account,
+                profit_assets: userData.profit_assets,
+                total_revenue: userData.total_revenue,
+                yesterday_earnings: userData.yesterday_earnings,
+                today_earnings: userData.today_earnings,
+                commission_today: userData.commission_today
+            });
+            
+            // Update financial data
+            updateFinancialValue('total-assets', userData.total_assets);
+            updateFinancialValue('quantitative-account', userData.quantitative_account);
+            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('profit-assets', userData.profit_assets);
+            
+            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+            updateFinancialValue('today-earnings', userData.today_earnings);
+            updateFinancialValue('commission-today', userData.commission_today);
+        }
+        
+        // Helper function to update financial values
+        function updateFinancialValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Format the value
+                let formattedValue = '0.00';
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    // If it's a number or a string that can be converted to a number
+                    if (!isNaN(parseFloat(value))) {
+                        formattedValue = parseFloat(value).toFixed(2);
+                    } else {
+                        formattedValue = value;
+                        // If it doesn't have decimal places, add them
+                        if (!formattedValue.includes('.')) {
+                            formattedValue += '.00';
+                        }
+                    }
+                }
+                
+                // Update the element
+                element.textContent = '$' + formattedValue;
+            }
+        }
+    </script>
 </body>
 </html>
