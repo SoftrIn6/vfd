@@ -1,16 +1,27 @@
 // Ensure Firebase is loaded
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 import "./firebase-config.js";
 
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 // Register User
-async function registerUser(email, password) {
+async function registerUser(username, email, password) {
   try {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-    console.log("User registered:", userCredential.user);
-    return { success: true, user: userCredential.user };
+    const user = userCredential.user;
+
+    // Store user details in Firestore
+    await db.collection("users").doc(user.uid).set({
+      username: username,
+      email: email,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log("User registered and saved:", user);
+    return { success: true, user };
   } catch (error) {
     console.error("Registration error:", error.message);
     return { success: false, error: error.message };
