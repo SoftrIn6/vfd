@@ -5,367 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <!-- Your existing styles remain the same -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
-       /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Container */
-        .container {
-            width: 470px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Logo */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            border-radius: 50%;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Form */
-        .form-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #ffa500;
-        }
-
-        .btn-register {
-            width: 100%;
-            background-color: #ffa500;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-register:hover {
-            background-color: #ff9000;
-            color: blue;            
-        }
-
-        .form-footer {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .form-footer a {
-            color: #ffa500;
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-message {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        /* Media Queries */
-        @media (max-width: 500px) {
-            .container {
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-            }
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8f9fa; }
+        .container { width: 400px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-register { width: 100%; padding: 10px; background: #ffa500; color: #fff; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .btn-register:hover { background: #ff9000; }
+        .error-message { color: red; font-size: 14px; display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="back-btn">
-                <i class="fas fa-chevron-left"></i>
+        <h2>Register</h2>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
             </div>
-            <div class="header-title">Register</div>
-        </div>
-
-        <!-- Register Form -->
-        <div class="register-section">
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" class="form-input" placeholder="Enter a username">
-                    <div class="error-message" id="username-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
-                    <div class="error-message" id="email-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="password" class="form-input" placeholder="Create a password">
-                        <div class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                    <div class="error-message" id="password-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirm-password" class="form-label">Confirm Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password">
-                        <div class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                    <div class="error-message" id="confirm-password-error"></div>
-                </div>
-                
-                <div class="referral-section">
-                    <div class="referral-title">Referral Code (Optional)</div>
-                    <input type="text" id="referral-code" class="form-input" placeholder="Enter referral code if you have one">
-                </div>
-                
-                <div class="terms-container">
-                    <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
-                    <div class="terms-text">
-                        I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a>
-                    </div>
-                </div>
-                <div class="error-message" id="terms-error"></div>
-                
-                <button type="submit" class="register-btn">
-                    <div class="register-btn-content">
-                        <span>Register</span>
-                        <div class="spinner" id="register-spinner"></div>
-                    </div>
-                </button>
-            </form>
-        </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn-register">Register</button>
+            <div class="error-message" id="error-message"></div>
+        </form>
     </div>
-
-    <!-- Load your Firebase configuration and auth functions -->
-    <script src="firebase-config.js"></script>
-    <script src="auth.js"></script>
-    
     <script>
-        // Check if user is already logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthState(function(user) {
-                if (user) {
-                    // User is signed in, redirect to home page
-                    window.location.href = 'index.html';
-                }
-            });
-        });
-        
-        // Back button functionality
-        document.querySelector('.back-btn').addEventListener('click', function() {
-            window.location.href = 'login.html';
-        });
-        
-        // Toggle password visibility
-        document.querySelectorAll('.toggle-password').forEach(function(toggle, index) {
-            toggle.addEventListener('click', function() {
-                const passwordInput = index === 0 ? document.getElementById('password') : document.getElementById('confirm-password');
-                const eyeIcon = this.querySelector('i');
-                
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
-                }
-            });
-        });
-        
-        // Form validation and submission
+        async function isEmailRegistered(email) {
+            const response = await fetch(`https://sheetdb.io/api/v1/qbn5kbigoxmw3/search?email=${email}`);
+            const data = await response.json();
+            return data.length > 0;
+        }
+
+        function isStrongPassword(password) {
+            return password.length >= 8 && /[A-Z]/.test(password) && /\d/.test(password);
+        }
+
         document.getElementById('register-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(function(el) {
-                el.style.display = 'none';
-            });
-            
-            // Get form values
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            const confirmPassword = document.getElementById('confirm-password').value.trim();
-            const referralCode = document.getElementById('referral-code').value.trim();
-            const termsChecked = document.getElementById('terms-checkbox').checked;
-            
-            // Validate form
-            let isValid = true;
-            
-            if (!username) {
-                document.getElementById('username-error').textContent = 'Username is required';
-                document.getElementById('username-error').style.display = 'block';
-                isValid = false;
-            } else if (username.length < 3) {
-                document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
-                document.getElementById('username-error').style.display = 'block';
-                isValid = false;
+
+            if (await isEmailRegistered(email)) {
+                document.getElementById('error-message').textContent = 'Email already registered!';
+                document.getElementById('error-message').style.display = 'block';
+                return;
             }
-            
-            if (!email) {
-                document.getElementById('email-error').textContent = 'Email is required';
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
-            } else if (!isValidEmail(email)) {
-                document.getElementById('email-error').textContent = 'Please enter a valid email address';
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
+
+            if (!isStrongPassword(password)) {
+                document.getElementById('error-message').textContent = 'Password must be at least 8 characters, include a number, and an uppercase letter.';
+                document.getElementById('error-message').style.display = 'block';
+                return;
             }
-            
-            if (!password) {
-                document.getElementById('password-error').textContent = 'Password is required';
-                document.getElementById('password-error').style.display = 'block';
-                isValid = false;
-            } else if (password.length < 6) {
-                document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
-                document.getElementById('password-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (password !== confirmPassword) {
-                document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
-                document.getElementById('confirm-password-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!termsChecked) {
-                document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
-                document.getElementById('terms-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (isValid) {
-                // Show loading spinner
-                document.getElementById('register-spinner').style.display = 'block';
-                
-                // Call Firebase register function
-                const result = await registerUser(username, email, password, referralCode);
-                
-                // Hide loading spinner
-                document.getElementById('register-spinner').style.display = 'none';
-                
-                if (result.success) {
-                    // Registration successful, redirect to login
-                    alert('Registration successful! Please login with your new account.');
+
+            const encryptedPassword = CryptoJS.SHA256(password).toString();
+            const data = { username, email, password: encryptedPassword };
+
+            try {
+                const response = await fetch('https://sheetdb.io/api/v1/qbn5kbigoxmw3', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: [data] })
+                });
+
+                if (response.ok) {
+                    alert('Registration successful!');
                     window.location.href = 'login.html';
                 } else {
-                    // Show error message
-                    if (result.error.includes('email') || result.error.includes('already in use')) {
-                        document.getElementById('email-error').textContent = result.error;
-                        document.getElementById('email-error').style.display = 'block';
-                    } else {
-                        document.getElementById('password-error').textContent = result.error;
-                        document.getElementById('password-error').style.display = 'block';
-                    }
+                    document.getElementById('error-message').textContent = 'Registration failed. Try again.';
+                    document.getElementById('error-message').style.display = 'block';
                 }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Network error. Try again later.';
+                document.getElementById('error-message').style.display = 'block';
             }
         });
-        
-        // Terms and Conditions links
-        document.querySelectorAll('.terms-link').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Terms and Conditions document coming soon.');
-            });
-        });
-        
-        // Email validation helper function
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
     </script>
 </body>
 </html>
-
