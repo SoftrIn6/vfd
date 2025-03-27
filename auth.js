@@ -87,6 +87,7 @@ async function register(userData) {
         // Check if user already exists by email
         const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(userData.email)}`);
         const data = await response.json();
+        console.log("User check response:", data); // Log the response for debugging
 
         if (data.length > 0) {
             return { status: 'error', message: 'Email already exists' };
@@ -114,8 +115,10 @@ async function register(userData) {
             body: JSON.stringify([newUser]) // SheetDB expects an array of objects
         });
 
-        // Handle the response
+        // Log the response to check if it was successful
         const responseData = await createResponse.json();
+        console.log("Create user response:", responseData); // Log the response for debugging
+
         if (createResponse.ok) {
             return { status: 'success', message: 'Registration successful' };
         } else {
