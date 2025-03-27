@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - AI ROBOT</title>
+    <title>Register - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Your existing styles remain the same -->
     <style>
-        /* Reset & Base Styles */
+       /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -105,6 +110,7 @@
 
         .btn-register:hover {
             background-color: #ff9000;
+            color: blue;            
         }
 
         .form-footer {
@@ -151,154 +157,215 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
-            <div class="logo">
-                <div class="logo-img"></div>
-                <div class="logo-text">AI ROBOT</div>
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
             </div>
+            <div class="header-title">Register</div>
         </div>
 
-        <div class="form-title">Create an Account</div>
-        
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
-        
-        <form id="register-form" onsubmit="handleRegister(event)">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required minlength="6">
-            </div>
-            
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password" required minlength="6">
-            </div>
-            
-            <button type="submit" class="btn-register" id="register-button">
-                <span id="register-text">Register</span>
-                <span id="register-spinner" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i> Processing...
-                </span>
-            </button>
-        </form>
-        
-        <div class="form-footer">
-            Already have an account? <a href="login.html">Login</a>
+        <!-- Register Form -->
+        <div class="register-section">
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter a username">
+                    <div class="error-message" id="username-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                    <div class="error-message" id="email-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Create a password">
+                        <div class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="password-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">Confirm Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password">
+                        <div class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="confirm-password-error"></div>
+                </div>
+                
+                <div class="referral-section">
+                    <div class="referral-title">Referral Code (Optional)</div>
+                    <input type="text" id="referral-code" class="form-input" placeholder="Enter referral code if you have one">
+                </div>
+                
+                <div class="terms-container">
+                    <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
+                    <div class="terms-text">
+                        I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a>
+                    </div>
+                </div>
+                <div class="error-message" id="terms-error"></div>
+                
+                <button type="submit" class="register-btn">
+                    <div class="register-btn-content">
+                        <span>Register</span>
+                        <div class="spinner" id="register-spinner"></div>
+                    </div>
+                </button>
+            </form>
         </div>
     </div>
 
+    <!-- Load your Firebase configuration and auth functions -->
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    
     <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA3nviyIFRz0niS1A-dC8GUvLS8L6phi7sDsv-niaUiWhDakghEkGtNOqA-0FjqDEShg/exec"; // Replace with your actual Google Apps Script URL
-
-    // Handle registration form submission
-    async function handleRegister(event) {
-        event.preventDefault();
-        
-        const username = document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const confirmPassword = document.getElementById("confirm-password").value.trim();
-
-        // Hide previous messages
-        document.getElementById("error-message").style.display = "none";
-        document.getElementById("success-message").style.display = "none";
-
-        // Validate passwords match
-        if (password !== confirmPassword) {
-            const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = "Passwords do not match";
-            errorMessage.style.display = "block";
-            return;
-        }
-
-        // Show loading state
-        document.getElementById("register-text").style.display = "none";
-        document.getElementById("register-spinner").style.display = "inline";
-        document.getElementById("register-button").disabled = true;
-
-        try {
-            // Call the register function
-            const response = await registerUser(username, email, password);
-            handleRegisterResponse(response);
-        } catch (error) {
-            handleRegisterError(error);
-        }
-    }
-
-    // Function to register user by calling the Google Apps Script API
-    async function registerUser(username, email, password) {
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthState(function(user) {
+                if (user) {
+                    // User is signed in, redirect to home page
+                    window.location.href = 'index.html';
                 }
             });
-
-            if (!response.ok) {
-                throw new Error("Failed to connect to server");
+        });
+        
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+        
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(function(toggle, index) {
+            toggle.addEventListener('click', function() {
+                const passwordInput = index === 0 ? document.getElementById('password') : document.getElementById('confirm-password');
+                const eyeIcon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Form validation and submission
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const referralCode = document.getElementById('referral-code').value.trim();
+            const termsChecked = document.getElementById('terms-checkbox').checked;
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!username) {
+                document.getElementById('username-error').textContent = 'Username is required';
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            } else if (username.length < 3) {
+                document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
             }
-
-            return await response.json();
-        } catch (error) {
-            console.error("Registration API error:", error);
-            throw error;
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Email is required';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                document.getElementById('email-error').textContent = 'Please enter a valid email address';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                document.getElementById('password-error').textContent = 'Password is required';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
+                document.getElementById('confirm-password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!termsChecked) {
+                document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
+                document.getElementById('terms-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show loading spinner
+                document.getElementById('register-spinner').style.display = 'block';
+                
+                // Call Firebase register function
+                const result = await registerUser(username, email, password, referralCode);
+                
+                // Hide loading spinner
+                document.getElementById('register-spinner').style.display = 'none';
+                
+                if (result.success) {
+                    // Registration successful, redirect to login
+                    alert('Registration successful! Please login with your new account.');
+                    window.location.href = 'login.html';
+                } else {
+                    // Show error message
+                    if (result.error.includes('email') || result.error.includes('already in use')) {
+                        document.getElementById('email-error').textContent = result.error;
+                        document.getElementById('email-error').style.display = 'block';
+                    } else {
+                        document.getElementById('password-error').textContent = result.error;
+                        document.getElementById('password-error').style.display = 'block';
+                    }
+                }
+            }
+        });
+        
+        // Terms and Conditions links
+        document.querySelectorAll('.terms-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Terms and Conditions document coming soon.');
+            });
+        });
+        
+        // Email validation helper function
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
         }
-    }
-
-    // Handle registration response
-    function handleRegisterResponse(response) {
-        // Reset button state
-        document.getElementById("register-text").style.display = "inline";
-        document.getElementById("register-spinner").style.display = "none";
-        document.getElementById("register-button").disabled = false;
-
-        if (response.status === "success") {
-            // Show success message
-            const successMessage = document.getElementById("success-message");
-            successMessage.textContent = "Registration successful! Redirecting to login...";
-            successMessage.style.display = "block";
-
-            // Reset form
-            document.getElementById("register-form").reset();
-
-            // Redirect to login page after 2 seconds
-            setTimeout(function() {
-                window.location.href = "login.html";
-            }, 2000);
-        } else {
-            // Show error message
-            const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = response.message || "Registration failed. Please try again.";
-            errorMessage.style.display = "block";
-        }
-    }
-
-    // Handle registration error
-    function handleRegisterError(error) {
-        // Reset button state
-        document.getElementById("register-text").style.display = "inline";
-        document.getElementById("register-spinner").style.display = "none";
-        document.getElementById("register-button").disabled = false;
-
-        // Show error message
-        const errorMessage = document.getElementById("error-message");
-        errorMessage.textContent = "An error occurred: " + error.message;
-        errorMessage.style.display = "block";
-
-        console.error("Registration error:", error);
-    }
-</script>
+    </script>
 </body>
 </html>
 
