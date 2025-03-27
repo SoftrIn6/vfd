@@ -3,20 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ROBOT - Crypto Trading Platform</title>
+    <title>Profile - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Keep your existing styles */
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000066;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 14px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e6f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .user-avatar i {
+            font-size: 30px;
+            color: #99c2ff;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .copy-icon {
+            margin-left: 10px;
+            color: #999;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Total Amount */
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 20px;
+        }
+
+        /* Account Grid */
+        .account-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .account-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .account-label {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .account-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .action-btn {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* App Services */
+        .services-section {
+            margin-top: 20px;
+        }
+
+        .service-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000066;
+            position: relative;
+        }
+
+        .service-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(to right, #ffa500, #ffcc80);
+        }
+
+        .service-list {
+            margin-top: 20px;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff8e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ffa500;
+        }
+
+        .service-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-name {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .service-arrow {
+            color: #ccc;
+        }
+
+        /* Sign Out Button */
+        .sign-out-btn {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            margin: 20px 0 80px 0;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Keep your existing HTML structure -->
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=35&width=35" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
+            </div>
+            <div class="header-btns">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <!-- User info will be populated by JavaScript -->
+                <i class="fas fa-copy copy-icon"></i>
+            </div>
+        </div>
+
+        <!-- Total Assets Section -->
+        <div class="content-section">
+            <div class="section-title">Total Assets</div>
+            <div class="total-amount" id="total-assets">$0</div>
+            
+            <div class="account-grid">
+                <div class="account-item">
+                    <div class="account-label">Quantitative Account</div>
+                    <div class="account-value" id="quantitative-account">$</div>
+                </div>
+                <div class="account-item">
+                    <div class="account-label">Smart Account</div>
+                    <div class="account-value" id="smart-account">$0</div>
+                </div>
+            </div>
+            
+            <div class="account-item">
+                <div class="account-label">Profit Assets</div>
+                <div class="account-value" id="profit-assets">$</div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <div class="action-btn" id="recharge-btn">Recharge</div>
+                <div class="action-btn" id="withdraw-btn">Withdraw</div>
+            </div>
+        </div>
+        
+        <!-- Total Revenue Section -->
+        <div class="content-section">
+            <div class="section-title">Total Revenue</div>
+            <div class="total-amount" id="total-revenue">$</div>
+            
+            <div class="account-grid">
+                <div class="account-item">
+                    <div class="account-label">Yesterday's Earnings</div>
+                    <div class="account-value" id="yesterday-earnings">$</div>
+                </div>
+                <div class="account-item">
+                    <div class="account-label">Today's Earnings</div>
+                    <div class="account-value" id="today-earnings">$</div>
+                </div>
+            </div>
+            
+            <div class="account-item">
+                <div class="account-label">Commission Today</div>
+                <div class="account-value" id="commission-today">$</div>
+            </div>
+        </div>
+        
+        <!-- App Services -->
+        <div class="content-section services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <div class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Detail</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">Transfer</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">News</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Security Center</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Quantization Tutorial</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Common Problem</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sign Out Button -->
+            <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn" id="refresh-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
     </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
+        <a href="index.html" class="nav-item">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
@@ -32,7 +546,7 @@
             <i class="fas fa-user-plus"></i>
             <span>Invite Friends</span>
         </a>
-        <a href="profile.html" class="nav-item">
+        <a href="profile.html" class="nav-item active">
             <i class="fas fa-user"></i>
             <span>Me</span>
         </a>
@@ -40,76 +554,170 @@
 
     <script src="auth.js"></script>
     <script>
+        // SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
+        const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
+        
         // Check if user is logged in when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
             if (!authToken) {
-                // Add click protection to redirect to login page
-                addClickProtection();
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
                 return;
             }
             
-            // Update UI with user data if available
-            if (userData.username) {
-                // Update account balance if it exists in the page
-                const cardAmounts = document.querySelectorAll('.card-amount');
-                if (cardAmounts.length > 0) {
-                    cardAmounts[0].textContent = `${userData.total_assets || '0.00'} USDT`;
-                    if (cardAmounts.length > 1) {
-                        cardAmounts[1].textContent = `${userData.quantitative_account || '0.00'} USDT`;
-                    }
+            // Fetch fresh user data from SheetDB
+            fetchUserData(userData.email);
+            
+            // Set up refresh interval (every 30 seconds)
+            setInterval(() => {
+                fetchUserData(userData.email);
+            }, 30000);
+        });
+        
+        // Fetch user data from SheetDB
+        async function fetchUserData(email) {
+            try {
+                const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`);
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    const userData = data[0];
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Update UI with user data
+                    updateUI(userData);
+                    
+                    return userData;
+                } else {
+                    // User not found, redirect to login
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                
+                // Use cached data if available
+                const cachedData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (cachedData.email) {
+                    updateUI(cachedData);
+                    return cachedData;
                 }
                 
-                // Update card values
-                const cardValues = document.querySelectorAll('.card-value');
-                if (cardValues.length > 0) {
-                    cardValues[0].textContent = `= $${userData.total_assets || '0.00'}`;
-                    if (cardValues.length > 1) {
-                        cardValues[1].textContent = `= $${userData.quantitative_account || '0.00'}`;
-                    }
-                }
+                return null;
+            }
+        }
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update user info
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo) {
+                userInfo.innerHTML = `
+                    <div style="font-size: 18px; font-weight: bold;">${userData.username || userData.email.split('@')[0]}</div>
+                    <div style="color: #666; margin-top: 5px;">${userData.email}</div>
+                    <i class="fas fa-copy copy-icon"></i>
+                `;
             }
             
-            // Verify token with server and get latest user data
-            fetchUserData(userData.email)
-                .then(data => {
-                    if (data) {
-                        // Update user data with latest from server
-                        localStorage.setItem('userData', JSON.stringify(data));
-                        
-                        // Update UI with fresh data
-                        const cardAmounts = document.querySelectorAll('.card-amount');
-                        if (cardAmounts.length > 0) {
-                            cardAmounts[0].textContent = `${data.total_assets || '0.00'} USDT`;
-                            if (cardAmounts.length > 1) {
-                                cardAmounts[1].textContent = `${data.quantitative_account || '0.00'} USDT`;
-                            }
-                        }
-                        
-                        // Update card values
-                        const cardValues = document.querySelectorAll('.card-value');
-                        if (cardValues.length > 0) {
-                            cardValues[0].textContent = `= $${data.total_assets || '0.00'}`;
-                            if (cardValues.length > 1) {
-                                cardValues[1].textContent = `= $${data.quantitative_account || '0.00'}`;
-                            }
-                        }
-                    } else {
-                        // Token is invalid or expired
-                        localStorage.removeItem('authToken');
-                        localStorage.removeItem('userData');
-                        window.location.href = 'login.html';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error verifying authentication:', error);
-                });
+            // Update financial data
+            document.getElementById('total-assets').textContent = `$${userData.total_assets || '0'}`;
+            document.getElementById('quantitative-account').textContent = `$${userData.quantitative_account || ''}`;
+            document.getElementById('smart-account').textContent = `$${userData.smart_account || '0'}`;
+            document.getElementById('profit-assets').textContent = `$${userData.profit_assets || ''}`;
+            
+            document.getElementById('total-revenue').textContent = `$${userData.total_revenue || ''}`;
+            document.getElementById('yesterday-earnings').textContent = `$${userData.yesterday_earnings || ''}`;
+            document.getElementById('today-earnings').textContent = `$${userData.today_earnings || ''}`;
+            document.getElementById('commission-today').textContent = `$${userData.commission_today || ''}`;
+        }
+        
+        // Sign out functionality
+        document.getElementById('sign-out-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
+            }
         });
-
-        // Keep your existing JavaScript functionality
+        
+        // Action buttons functionality
+        document.getElementById('recharge-btn').addEventListener('click', function() {
+            window.location.href = 'recharge.html';
+        });
+        
+        document.getElementById('withdraw-btn').addEventListener('click', function() {
+            window.location.href = 'withdraw.html';
+        });
+        
+        // Service items functionality
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const serviceId = this.id;
+                alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+            });
+        });
+        
+        // Refresh button functionality
+        document.getElementById('refresh-btn').addEventListener('click', function() {
+            // First scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Then refresh user data
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.email) {
+                fetchUserData(userData.email)
+                    .then(() => {
+                        // Show a brief notification that data was refreshed
+                        const notification = document.createElement('div');
+                        notification.style.position = 'fixed';
+                        notification.style.top = '20px';
+                        notification.style.left = '50%';
+                        notification.style.transform = 'translateX(-50%)';
+                        notification.style.padding = '10px 20px';
+                        notification.style.backgroundColor = '#4CAF50';
+                        notification.style.color = 'white';
+                        notification.style.borderRadius = '5px';
+                        notification.style.zIndex = '1000';
+                        notification.textContent = 'Data refreshed!';
+                        
+                        document.body.appendChild(notification);
+                        
+                        setTimeout(() => {
+                            notification.style.opacity = '0';
+                            notification.style.transition = 'opacity 0.5s';
+                            setTimeout(() => {
+                                document.body.removeChild(notification);
+                            }, 500);
+                        }, 2000);
+                    });
+            }
+        });
+        
+        // Copy user email
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('copy-icon')) {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const textToCopy = userData.email || '';
+                
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            }
+        });
     </script>
 </body>
 </html>
