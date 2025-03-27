@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - AI ROBOT</title>
+    <title>Login - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Your existing styles remain the same -->
     <style>
         /* Reset & Base Styles */
         * {
@@ -26,8 +31,8 @@
 
         /* Container */
         .container {
-            width: 470px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 10 auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
@@ -142,170 +147,156 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo-container">
+        <!-- Header -->
+        <div class="header">
             <div class="logo">
-                <div class="logo-img"></div>
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
                 <div class="logo-text">AI ROBOT</div>
             </div>
         </div>
 
-        <div class="form-title">Login to Your Account</div>
-        
-        <div id="error-message" class="error-message"></div>
-        
-        <form id="login-form" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+        <!-- Login Form -->
+        <div class="login-section">
+            <div class="login-title">Login to Your Account</div>
             
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            
-            <button type="submit" class="btn-login" id="login-button">
-                <span id="login-text">Login</span>
-                <span id="login-spinner" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i> Processing...
-                </span>
-            </button>
-        </form>
-        
-        <div class="form-footer">
-            Don't have an account? <a href="register.html">Register</a>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                    <div class="error-message" id="email-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password">
+                        <div class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="password-error"></div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <div class="login-btn-content">
+                        <span>Login</span>
+                        <div class="spinner" id="login-spinner"></div>
+                    </div>
+                </button>
+                
+                <div class="login-options">
+                    <div class="forgot-password">Forgot Password?</div>
+                    <div class="register-link" id="register-link">Register Now</div>
+                </div>
+            </form>
         </div>
     </div>
 
-   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA3nviyIFRz0niS1A-dC8GUvLS8L6phi7sDsv-niaUiWhDakghEkGtNOqA-0FjqDEShg/exec"; // Replace with your actual Google Apps Script URL
-
-    // Check if user is already logged in
-    window.onload = async function() {
-        const email = sessionStorage.getItem("userEmail");
-        const token = sessionStorage.getItem("sessionToken");
-
-        if (email && token) {
-            try {
-                // Verify if session is still valid
-                const response = await verifyUserSession(email, token);
-
-                if (response.status === "success") {
-                    window.location.href = "index.html";
+    <!-- Load your Firebase configuration and auth functions -->
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthState(function(user) {
+                if (user) {
+                    // User is signed in, redirect to home page
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+        
+        // Toggle password visibility
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+        
+        // Form validation and submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.getElementById('email-error').style.display = 'none';
+            document.getElementById('password-error').style.display = 'none';
+            
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Email is required';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                document.getElementById('password-error').textContent = 'Password is required';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show loading spinner
+                document.getElementById('login-spinner').style.display = 'block';
+                
+                // Call Firebase login function
+                const result = await loginUser(email, password);
+                
+                // Hide loading spinner
+                document.getElementById('login-spinner').style.display = 'none';
+                
+                if (result.success) {
+                    // Login successful, redirect to home page
+                    window.location.href = 'index.html';
                 } else {
-                    sessionStorage.clear(); // Clear session if invalid
+                    // Show error message
+                    document.getElementById('password-error').textContent = result.error || 'Login failed. Please try again.';
+                    document.getElementById('password-error').style.display = 'block';
                 }
-            } catch (error) {
-                console.error("Error verifying session:", error);
-                sessionStorage.clear();
             }
-        }
-    };
-
-    // Handle login form submission
-    async function handleLogin(event) {
-        event.preventDefault();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        // Show loading state
-        document.getElementById("login-text").style.display = "none";
-        document.getElementById("login-spinner").style.display = "inline";
-        document.getElementById("login-button").disabled = true;
-
-        // Hide any previous error messages
-        document.getElementById("error-message").style.display = "none";
-
-        try {
-            // Call the login function
-            const response = await loginUser(email, password);
-            handleLoginResponse(response);
-        } catch (error) {
-            handleLoginError(error);
-        }
-    }
-
-    // Function to login user by calling the Google Apps Script API
-    async function loginUser(email, password) {
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to connect to server");
+        });
+        
+        // Register link
+        document.getElementById('register-link').addEventListener('click', function() {
+            window.location.href = 'register.html';
+        });
+        
+        // Forgot password
+        document.querySelector('.forgot-password').addEventListener('click', function() {
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Please enter your email first';
+                document.getElementById('email-error').style.display = 'block';
+                return;
             }
-
-            return await response.json();
-        } catch (error) {
-            console.error("Login API error:", error);
-            throw error;
-        }
-    }
-
-    // Function to verify session validity
-    async function verifyUserSession(email, token) {
-        try {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=verifySession&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to verify session");
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error("Session verification error:", error);
-            throw error;
-        }
-    }
-
-    // Handle login response
-    function handleLoginResponse(response) {
-        // Reset button state
-        document.getElementById("login-text").style.display = "inline";
-        document.getElementById("login-spinner").style.display = "none";
-        document.getElementById("login-button").disabled = false;
-
-        if (response.status === "success") {
-            // Store session data
-            sessionStorage.setItem("userEmail", response.email);
-            sessionStorage.setItem("sessionToken", response.sessionToken);
-            sessionStorage.setItem("username", response.username);
-
-            // Redirect to dashboard
-            window.location.href = "index.html";
-        } else {
-            // Show error message
-            const errorMessage = document.getElementById("error-message");
-            errorMessage.textContent = response.message || "Login failed. Please try again.";
-            errorMessage.style.display = "block";
-        }
-    }
-
-    // Handle login error
-    function handleLoginError(error) {
-        // Reset button state
-        document.getElementById("login-text").style.display = "inline";
-        document.getElementById("login-spinner").style.display = "none";
-        document.getElementById("login-button").disabled = false;
-
-        // Show error message
-        const errorMessage = document.getElementById("error-message");
-        errorMessage.textContent = "An error occurred: " + error.message;
-        errorMessage.style.display = "block";
-
-        console.error("Login error:", error);
-    }
-</script>
+            
+            // Send password reset email
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('Password reset email sent. Please check your inbox.');
+                })
+                .catch((error) => {
+                    document.getElementById('email-error').textContent = error.message;
+                    document.getElementById('email-error').style.display = 'block';
+                });
+        });
+    </script>
 </body>
 </html>
 
