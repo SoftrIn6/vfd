@@ -1,4 +1,4 @@
-// SheetDB API endpoint - Replace with your actual SheetDB API URL
+// SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
 const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
 
 // Check if user is logged in
@@ -12,7 +12,7 @@ function checkAuth() {
         return false;
     }
 
-    // Verify token and get latest user data
+    // Always fetch fresh data from the server to reflect any changes made in Google Sheet
     fetchUserData(userData.email)
         .then(data => {
             if (data) {
@@ -64,7 +64,10 @@ function updateUI(userData) {
 
     // Update total assets
     if (document.querySelector('.total-assets')) {
-        document.querySelector('.total-assets').textContent = `$${userData.total_assets || '0'}`;
+        const totalAssetsElements = document.querySelectorAll('.total-assets');
+        totalAssetsElements.forEach(element => {
+            element.textContent = `$${userData.total_assets || '0.00'}`;
+        });
     }
 
     // Update account cards on index page
@@ -76,20 +79,29 @@ function updateUI(userData) {
         }
     }
 
+    // Update card values
+    const cardValues = document.querySelectorAll('.card-value');
+    if (cardValues.length > 0) {
+        cardValues[0].textContent = `= $${userData.total_assets || '0.00'}`;
+        if (cardValues.length > 1) {
+            cardValues[1].textContent = `= $${userData.quantitative_account || '0.00'}`;
+        }
+    }
+
     // Update asset values in profile page
     const assetItems = document.querySelectorAll('.asset-item');
     if (assetItems.length > 0) {
         // Update Quantitative Account
         const quantValue = assetItems[0].querySelector('.asset-value');
         if (quantValue) {
-            quantValue.textContent = `$${userData.quantitative_account || '0'}`;
+            quantValue.textContent = `$${userData.quantitative_account || '0.00'}`;
         }
         
         // Update Smart Account
         if (assetItems.length > 1) {
             const smartValue = assetItems[1].querySelector('.asset-value');
             if (smartValue) {
-                smartValue.textContent = `$${userData.smart_account || '0'}`;
+                smartValue.textContent = `$${userData.smart_account || '0.00'}`;
             }
         }
         
@@ -97,7 +109,7 @@ function updateUI(userData) {
         if (assetItems.length > 2) {
             const profitValue = assetItems[2].querySelector('.asset-value');
             if (profitValue) {
-                profitValue.textContent = `$${userData.profit_assets || '0'}`;
+                profitValue.textContent = `$${userData.profit_assets || '0.00'}`;
             }
         }
     }
@@ -106,7 +118,7 @@ function updateUI(userData) {
     if (document.querySelector('.revenue-section')) {
         const totalRevenue = document.querySelector('.revenue-section .total-assets');
         if (totalRevenue) {
-            totalRevenue.textContent = `$${userData.total_revenue || '0'}`;
+            totalRevenue.textContent = `$${userData.total_revenue || '0.00'}`;
         }
 
         const revenueItems = document.querySelectorAll('.revenue-grid .asset-item');
@@ -114,14 +126,14 @@ function updateUI(userData) {
             // Update Yesterday's Earnings
             const yesterdayValue = revenueItems[0].querySelector('.asset-value');
             if (yesterdayValue) {
-                yesterdayValue.textContent = `$${userData.yesterday_earnings || '0'}`;
+                yesterdayValue.textContent = `$${userData.yesterday_earnings || '0.00'}`;
             }
             
             // Update Today's Earnings
             if (revenueItems.length > 1) {
                 const todayValue = revenueItems[1].querySelector('.asset-value');
                 if (todayValue) {
-                    todayValue.textContent = `$${userData.today_earnings || '0'}`;
+                    todayValue.textContent = `$${userData.today_earnings || '0.00'}`;
                 }
             }
             
@@ -129,7 +141,7 @@ function updateUI(userData) {
             if (revenueItems.length > 2) {
                 const commissionValue = revenueItems[2].querySelector('.asset-value');
                 if (commissionValue) {
-                    commissionValue.textContent = `$${userData.commission_today || '0'}`;
+                    commissionValue.textContent = `$${userData.commission_today || '0.00'}`;
                 }
             }
         }
@@ -178,18 +190,21 @@ async function register(userData) {
             return { status: 'error', message: 'Email already registered' };
         }
         
-        // Add default values for new user
+        // Generate a 6-digit referral code
+        const referralCode = Math.floor(100000 + Math.random() * 900000).toString();
+        
+        // Add default values for new user with proper formatting (0.00)
         const newUser = {
             ...userData,
-            total_assets: '0',
-            quantitative_account: '0',
-            smart_account: '0',
-            profit_assets: '0',
-            total_revenue: '0',
-            yesterday_earnings: '0',
-            today_earnings: '0',
-            commission_today: '0',
-            referral_code: Math.floor(100000 + Math.random() * 900000).toString() // 6-digit code
+            total_assets: '0.00',
+            quantitative_account: '0.00',
+            smart_account: '0.00',
+            profit_assets: '0.00',
+            total_revenue: '0.00',
+            yesterday_earnings: '0.00',
+            today_earnings: '0.00',
+            commission_today: '0.00',
+            referral_code: referralCode
         };
         
         // Add user to SheetDB
@@ -233,3 +248,30 @@ function addClickProtection() {
         }, { capture: true });
     }
 }
+
+// Function to refresh user data periodically (every 30 seconds)
+function startDataRefreshInterval() {
+    setInterval(() => {
+        const authToken = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        if (authToken && userData.email) {
+            fetchUserData(userData.email)
+                .then(data => {
+                    if (data) {
+                        // Update user data with latest from server
+                        localStorage.setItem('userData', JSON.stringify(data));
+                        updateUI(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error refreshing user data:', error);
+                });
+        }
+    }, 30000); // Refresh every 30 seconds
+}
+
+// Start the data refresh interval when the script loads
+document.addEventListener('DOMContentLoaded', function() {
+    startDataRefreshInterval();
+});
