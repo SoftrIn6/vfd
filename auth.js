@@ -114,9 +114,14 @@ async function register(email, password, username) {
             body: JSON.stringify([newUser]) // SheetDB expects an array of objects
         });
 
+        // Log response for debugging
+        const responseData = await createResponse.json();
+        console.log('Create user response:', responseData);
+
         if (createResponse.ok) {
             return { status: 'success', message: 'Registration successful' };
         } else {
+            console.error('Error creating user:', responseData);
             return { status: 'error', message: 'Error registering user. Please try again.' };
         }
     } catch (error) {
