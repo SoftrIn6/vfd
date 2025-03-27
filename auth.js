@@ -81,25 +81,23 @@ async function login(email, password) {
     }
 }
 
-// Registration function
-async function register(email, password, username) {
+// Register function in auth.js
+async function register(userData) {
     try {
-        // Check if user already exists
-        console.log('Checking if user exists...');
-        const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`);
+        // Check if user already exists by email
+        const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(userData.email)}`);
         const data = await response.json();
 
         if (data.length > 0) {
-            console.log('Email already exists:', data);
             return { status: 'error', message: 'Email already exists' };
         }
 
         // Create new user data
         const newUser = {
-            email: email,
-            password: password,
-            username: username || email.split('@')[0],  // Default username if not provided
-            referralCode: generateReferralCode(), // Generate a unique referral code
+            email: userData.email,
+            password: userData.password,
+            username: userData.username,
+            referralCode: userData.referred_by || '',  // Referral code is optional
             total_assets: 0.00,
             quantitative_account: 0.00,
             smart_account: 0.00,
@@ -109,8 +107,6 @@ async function register(email, password, username) {
             commission_today: 0.00
         };
 
-        console.log('Creating user with data:', newUser);
-
         // Add new user to SheetDB
         const createResponse = await fetch(SHEETDB_API, {
             method: 'POST',
@@ -118,24 +114,17 @@ async function register(email, password, username) {
             body: JSON.stringify([newUser]) // SheetDB expects an array of objects
         });
 
-        const createResponseData = await createResponse.json();
-        console.log('Create user response:', createResponseData);
-
+        // Handle the response
+        const responseData = await createResponse.json();
         if (createResponse.ok) {
             return { status: 'success', message: 'Registration successful' };
         } else {
-            console.error('Error creating user:', createResponseData);
             return { status: 'error', message: 'Error registering user. Please try again.' };
         }
     } catch (error) {
         console.error('Registration error:', error);
         return { status: 'error', message: 'An error occurred. Please try again.' };
     }
-}
-
-// Function to generate referral code
-function generateReferralCode() {
-    return 'REF' + Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
 // Generate referral code (you can customize this function to generate a referral code in your preferred format)
