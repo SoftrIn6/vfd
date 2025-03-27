@@ -357,6 +357,19 @@
     </style>
 </head>
 <body>
+    <!-- Add this at the beginning of profile.html right after the opening <body> tag -->
+    <script>
+        // Immediate authentication check
+        (function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken || !userData.email) {
+                // Not logged in, redirect immediately
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
     <div class="container">
         <!-- Header -->
         <div class="header">
