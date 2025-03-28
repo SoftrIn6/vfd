@@ -234,120 +234,56 @@
     </div>
 
     <script>
-    const SHEETDB_API = 'https://sheetdb.io/api/v1/677wbdnn3l3gx';
+    async function login(userData) {
+    const AIRTABLE_API_KEY = "patox1uzToHHuTN6C.43aeae3a53dcde9a2d77dca1208f249f701c441a8be695a57e20cd7e55160c72";  // Replace with your API Key
+    const AIRTABLE_BASE_ID = "appkPRB6udnf0oyUb";  // Replace with your Base ID
+    const AIRTABLE_TABLE_NAME = "Users"; // Replace with your actual table name
 
-    // Check if user is already logged in
-    document.addEventListener('DOMContentLoaded', function() {
-        const authToken = localStorage.getItem('authToken');
-        if (authToken) {
-            window.location.href = 'index.html';
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula={Email}='${userData.email}'`;
+
+    const headers = {
+        "Authorization": `Bearer ${AIRTABLE_API_KEY}`,
+        "Content-Type": "application/json"
+    };
+
+    try {
+        const response = await fetch(url, { method: "GET", headers });
+        const result = await response.json();
+
+        if (!response.ok) {
+            return { status: "error", message: "Error fetching user data. Please try again." };
         }
-    });
 
-    // Toggle password visibility
-    document.querySelector('.toggle-password').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = this.querySelector('i');
+        if (result.records.length === 0) {
+            return { status: "error", message: "User not found. Please check your email." };
+        }
 
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            eyeIcon.classList.remove('fa-eye');
-            eyeIcon.classList.add('fa-eye-slash');
+        const user = result.records[0].fields;
+        const enteredPasswordHash = await hashPassword(userData.password);
+
+        if (enteredPasswordHash === user.Password) {
+            return { status: "success", user: { id: result.records[0].id, username: user.Username, email: user.Email } };
         } else {
-            passwordInput.type = 'password';
-            eyeIcon.classList.remove('fa-eye-slash');
-            eyeIcon.classList.add('fa-eye');
-        }
-    });
-
-    // Form validation and submission
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        // Reset error messages
-        document.getElementById('email-error').style.display = 'none';
-        document.getElementById('password-error').style.display = 'none';
-
-        // Get form values
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-
-        // Validate form
-        let isValid = true;
-
-        if (!email) {
-            document.getElementById('email-error').textContent = 'Email is required';
-            document.getElementById('email-error').style.display = 'block';
-            isValid = false;
+            return { status: "error", message: "Incorrect password. Please try again." };
         }
 
-        if (!password) {
-            document.getElementById('password-error').textContent = 'Password is required';
-            document.getElementById('password-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (isValid) {
-            // Show loading spinner
-            document.getElementById('login-spinner').style.display = 'block';
-
-            // Perform login
-            const result = await login(email, password);
-
-            // Hide loading spinner
-            document.getElementById('login-spinner').style.display = 'none';
-
-            if (result.status === 'success') {
-                // Store user data and token
-                localStorage.setItem('authToken', result.token);
-                localStorage.setItem('userData', JSON.stringify(result.user));
-
-                // Redirect to home page
-                window.location.href = 'index.html';
-            } else {
-                // Show error message
-                document.getElementById('password-error').textContent = result.message;
-                document.getElementById('password-error').style.display = 'block';
-            }
-        }
-    });
-
-    // Register link
-    document.getElementById('register-link').addEventListener('click', function() {
-        window.location.href = 'register.html';
-    });
-
-    // Forgot password
-    document.querySelector('.forgot-password').addEventListener('click', function() {
-        alert('Password recovery feature coming soon.');
-    });
-
-    // **Login Function**
-    async function login(email, password) {
-        try {
-            const response = await fetch(`${SHEETDB_API}/search?email=${encodeURIComponent(email)}`);
-            if (!response.ok) throw new Error('Error fetching user data.');
-
-            const data = await response.json();
-            console.log('Login data fetched:', data);
-
-            if (data.length === 0) {
-                return { status: 'error', message: 'Email not found' };
-            }
-
-            const user = data[0];
-
-            // Verify password
-            if (user.password !== password) {
-                return { status: 'error', message: 'Incorrect password' };
-            }
-
-            return { status: 'success', user: user, token: 'random_generated_token' };
-        } catch (error) {
-            console.error('Login error:', error);
-            return { status: 'error', message: 'Login failed. Try again later.' };
-        }
+    } catch (error) {
+        console.error("Login Error:", error);
+        return { status: "error", message: "Network error. Please try again later." };
     }
+}
+
+/**
+ * Function to hash password using SHA-256
+ */
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+}
 </script>
 </body>
 </html>
