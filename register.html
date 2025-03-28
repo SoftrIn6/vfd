@@ -373,46 +373,10 @@
                 // Show loading spinner
                 document.getElementById('register-spinner').style.display = 'block';
                 
-                // Check if email already exists
-                checkEmailExists(email)
-                    .then(exists => {
-                        if (exists) {
-                            // Email already exists
-                            document.getElementById('email-error').textContent = 'Email already exists';
-                            document.getElementById('email-error').style.display = 'block';
-                            document.getElementById('register-spinner').style.display = 'none';
-                        } else {
-                            // Register the user
-                            registerUser(username, email, password, referralCode);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error checking email:', error);
-                        document.getElementById('register-spinner').style.display = 'none';
-                        document.getElementById('email-error').textContent = 'An error occurred. Please try again.';
-                        document.getElementById('email-error').style.display = 'block';
-                    });
+                // Register the user directly
+                registerUser(username, email, password, referralCode);
             }
         });
-        
-        // Check if email already exists in Baserow
-        async function checkEmailExists(email) {
-            try {
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true&filter__field_email__equal=${encodeURIComponent(email)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const data = await response.json();
-                return data.results && data.results.length > 0;
-            } catch (error) {
-                console.error('Error checking email:', error);
-                throw error;
-            }
-        }
         
         // Register user in Baserow
         async function registerUser(username, email, password, referralCode) {
@@ -423,24 +387,49 @@
                 // Generate a random referral code if not provided
                 const userReferralCode = referralCode || Math.floor(100000 + Math.random() * 900000).toString();
                 
-                // Prepare user data
-                const userData = {
-                    username: username,
-                    email: email,
-                    password: hashedPassword,
-                    referralCode: userReferralCode,
-                    total_assets: '0.00',
-                    quantitative_account: '0.00',
-                    smart_account: '0.00',
-                    profit_assets: '0.00',
-                    total_revenue: '0.00',
-                    yesterday_earnings: '0.00',
-                    today_earnings: '0.00',
-                    commission_today: '0.00'
-                };
+                // First, let's get the field names from Baserow to ensure we're using the correct ones
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Field mapping:', fieldMap);
+                
+                // Prepare user data using field IDs instead of names
+                const userData = {};
+                
+                // Add each field using the field ID
+                if (fieldMap['username']) userData[`field_${fieldMap['username']}`] = username;
+                if (fieldMap['email']) userData[`field_${fieldMap['email']}`] = email;
+                if (fieldMap['password']) userData[`field_${fieldMap['password']}`] = hashedPassword;
+                if (fieldMap['referralCode']) userData[`field_${fieldMap['referralCode']}`] = userReferralCode;
+                
+                // Add financial fields with default values
+                if (fieldMap['total_assets']) userData[`field_${fieldMap['total_assets']}`] = '0.00';
+                if (fieldMap['quantitative_account']) userData[`field_${fieldMap['quantitative_account']}`] = '0.00';
+                if (fieldMap['smart_account']) userData[`field_${fieldMap['smart_account']}`] = '0.00';
+                if (fieldMap['profit_assets']) userData[`field_${fieldMap['profit_assets']}`] = '0.00';
+                if (fieldMap['total_revenue']) userData[`field_${fieldMap['total_revenue']}`] = '0.00';
+                if (fieldMap['yesterday_earnings']) userData[`field_${fieldMap['yesterday_earnings']}`] = '0.00';
+                if (fieldMap['today_earnings']) userData[`field_${fieldMap['today_earnings']}`] = '0.00';
+                if (fieldMap['commission_today']) userData[`field_${fieldMap['commission_today']}`] = '0.00';
+                
+                console.log('Attempting to register user with data:', userData);
                 
                 // Create user in Baserow
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
+                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Token ${BASEROW_API.token}`,
@@ -449,7 +438,18 @@
                     body: JSON.stringify(userData)
                 });
                 
-                const data = await response.json();
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Failed to parse JSON response:', e);
+                    data = { error: 'Invalid response from server' };
+                }
+                
+                console.log('Registration response:', data);
                 
                 // Hide loading spinner
                 document.getElementById('register-spinner').style.display = 'none';
@@ -458,8 +458,20 @@
                     // Registration successful
                     alert('Registration successful! Please login with your new account.');
                     window.location.href = 'login.html';
+                } else if (data.error) {
+                    // Handle specific Baserow errors
+                    document.getElementById('password-error').textContent = `Registration failed: ${data.error}`;
+                    document.getElementById('password-error').style.display = 'block';
+                } else if (data.errors) {
+                    // Handle validation errors
+                    const errorMessages = [];
+                    for (const field in data.errors) {
+                        errorMessages.push(`${field}: ${data.errors[field].join(', ')}`);
+                    }
+                    document.getElementById('password-error').textContent = `Validation errors: ${errorMessages.join('; ')}`;
+                    document.getElementById('password-error').style.display = 'block';
                 } else {
-                    // Registration failed
+                    // Registration failed with unknown error
                     document.getElementById('password-error').textContent = 'Registration failed. Please try again.';
                     document.getElementById('password-error').style.display = 'block';
                 }
@@ -484,10 +496,7 @@
         // Terms and Conditions links
         document.querySelectorAll('.terms-link').forEach(function(link) {
             link.addEventListener('click', function(e) {
-                // Allow the links to work normally now that we have the pages
-                // e.preventDefault  {
-                // Allow the links to work normally now that we have the pages
-                // e.preventDefault
+                // Allow the links to work normally
             });
         });
     </script>
