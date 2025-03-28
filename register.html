@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,8 +23,8 @@
         /* Container */
         .container {
             width: 470px;
-            margin: 0 auto;
-            padding: 0;
+            margin: 10 auto;
+            padding: 14;
             position: relative;
             min-width: 470px;
             background-color: #fff;
@@ -201,117 +200,120 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="back-btn">
-                <i class="fas fa-chevron-left"></i>
+        <h2>Register</h2>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" class="form-input" placeholder="Enter a username">
+                <div class="error-message" id="username-error"></div>
             </div>
-            <div class="header-title">Register</div>
-        </div>
+            
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="Create a password">
+                <div class="error-message" id="password-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password">
+                <div class="error-message" id="confirm-password-error"></div>
+            </div>
 
-        <!-- Register Form -->
-        <div class="register-section">
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" class="form-input" placeholder="Enter a username">
-                    <div class="error-message" id="username-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
-                    <div class="error-message" id="email-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="password" class="form-input" placeholder="Create a password">
-                        <div class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                    <div class="error-message" id="password-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirm-password" class="form-label">Confirm Password</label>
-                    <div class="password-input-container">
-                        <input type="password" id="confirm-password" class="form-input" placeholder="Confirm your password">
-                        <div class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                    </div>
-                    <div class="error-message" id="confirm-password-error"></div>
-                </div>
-                
-                <div class="referral-section">
-                    <div class="referral-title">Referral Code (Optional)</div>
-                    <input type="text" id="referral-code" class="form-input" placeholder="Enter referral code if you have one">
-                </div>
-                
-                <div class="terms-container">
-                    <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
-                    <div class="terms-text">
-                        I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="referral-code" class="form-label">Referral Code (Optional)</label>
+                <input type="text" id="referral-code" class="form-input" placeholder="Enter referral code">
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="terms-checkbox">
+                <label for="terms-checkbox">I agree to the <a href="#">Terms & Conditions</a></label>
                 <div class="error-message" id="terms-error"></div>
-                
-                <button type="submit" class="register-btn">
-                    <div class="register-btn-content">
-                        <span>Register</span>
-                        <div class="spinner" id="register-spinner"></div>
-                    </div>
-                </button>
-            </form>
-        </div>
+            </div>
+            
+            <button type="submit" class="register-btn">
+                <span>Register</span>
+                <div class="spinner" id="register-spinner"></div>
+            </button>
+        </form>
     </div>
 
 <script>
-    async function registerUser(userData) {
-    const BASE_ID = "202237";  // Replace with your Database ID
-    const TABLE_ID = "488473";  // Replace with your Table ID
-    const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M";  // Replace with your Database Token
+document.getElementById("register-form").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent page reload
+
+    // Get user input values
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    const referralCode = document.getElementById("referral-code").value.trim();
+    const termsChecked = document.getElementById("terms-checkbox").checked;
+
+    // Clear error messages
+    document.getElementById("username-error").textContent = "";
+    document.getElementById("email-error").textContent = "";
+    document.getElementById("password-error").textContent = "";
+    document.getElementById("confirm-password-error").textContent = "";
+    document.getElementById("terms-error").textContent = "";
+
+    let hasError = false;
+
+    // Input validation
+    if (!username) { document.getElementById("username-error").textContent = "Username required."; hasError = true; }
+    if (!email) { document.getElementById("email-error").textContent = "Email required."; hasError = true; }
+    if (!password) { document.getElementById("password-error").textContent = "Password required."; hasError = true; }
+    if (password !== confirmPassword) { document.getElementById("confirm-password-error").textContent = "Passwords do not match."; hasError = true; }
+    if (!termsChecked) { document.getElementById("terms-error").textContent = "You must agree to the Terms."; hasError = true; }
+    
+    if (hasError) return;
+
+    // Show loading spinner
+    document.getElementById("register-spinner").style.display = "inline-block";
+
+    // API Request to Baserow
+    const response = await registerUser({ username, email, password, referralCode });
+
+    // Hide spinner
+    document.getElementById("register-spinner").style.display = "none";
+
+    if (response.status === "success") {
+        alert("Registration successful! Redirecting to login...");
+        window.location.href = "login.html";
+    } else {
+        alert(response.message || "Error registering user. Try again.");
+    }
+});
+
+// Function to send data to Baserow API
+async function registerUser(userData) {
+    const TABLE_ID = "488473"; // Your Table ID
+    const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M"; // Your API Token
 
     const url = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/`;
-
-    const headers = {
-        "Authorization": `Token ${TOKEN}`,
-        "Content-Type": "application/json"
-    };
+    const headers = { "Authorization": `Token ${TOKEN}`, "Content-Type": "application/json" };
 
     const body = JSON.stringify({
         "username": userData.username,
         "email": userData.email,
         "password": userData.password, // Encrypt before sending
         "referralCode": userData.referralCode,
-        "total_assets": 0,
-        "quantitative_account": 0,
-        "smart_account": 0,
-        "profit_assets": 0,
-        "total_revenue": 0,
-        "yesterday_earnings": 0,
-        "commission_today": 0
+        "total_assets": 0, "quantitative_account": 0, "smart_account": 0,
+        "profit_assets": 0, "total_revenue": 0, "yesterday_earnings": 0, "commission_today": 0
     });
 
     try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: headers,
-            body: body
-        });
-
+        const response = await fetch(url, { method: "POST", headers, body });
         const result = await response.json();
-
-        if (response.ok) {
-            return { status: "success", data: result };
-        } else {
-            return { status: "error", message: result.error || "Error registering user." };
-        }
+        return response.ok ? { status: "success", data: result } : { status: "error", message: result.error || "Error registering user." };
     } catch (error) {
-        return { status: "error", message: "Network error. Please try again later." };
+        return { status: "error", message: "Network error. Try again." };
     }
 }
 </script>
