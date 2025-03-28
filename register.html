@@ -297,23 +297,43 @@ async function registerUser(userData) {
     const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M"; // Your API Token
 
     const url = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/`;
-    const headers = { "Authorization": `Token ${TOKEN}`, "Content-Type": "application/json" };
+    const headers = {
+        "Authorization": `Token ${TOKEN}`,
+        "Content-Type": "application/json"
+    };
 
     const body = JSON.stringify({
         "username": userData.username,
         "email": userData.email,
         "password": userData.password, // Encrypt before sending
         "referralCode": userData.referralCode,
-        "total_assets": 0, "quantitative_account": 0, "smart_account": 0,
-        "profit_assets": 0, "total_revenue": 0, "yesterday_earnings": 0, "commission_today": 0
+        "total_assets": 0,
+        "quantitative_account": 0,
+        "smart_account": 0,
+        "profit_assets": 0,
+        "total_revenue": 0,
+        "yesterday_earnings": 0,
+        "commission_today": 0
     });
 
     try {
-        const response = await fetch(url, { method: "POST", headers, body });
+        const response = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: body
+        });
+
         const result = await response.json();
-        return response.ok ? { status: "success", data: result } : { status: "error", message: result.error || "Error registering user." };
+        console.log("Baserow API Response:", result); // Log response to see any errors
+
+        if (response.ok) {
+            return { status: "success", data: result };
+        } else {
+            return { status: "error", message: result.error || "Error registering user." };
+        }
     } catch (error) {
-        return { status: "error", message: "Network error. Try again." };
+        console.error("Network Error:", error);
+        return { status: "error", message: "Network error. Please try again later." };
     }
 }
 </script>
