@@ -144,7 +144,7 @@ function logout() {
     }
 }
 
-// Periodically refresh user data
+// Periodically refresh user data every 30 minutes (1800000 ms)
 function startDataRefreshInterval() {
     setInterval(() => {
         const authToken = localStorage.getItem('authToken');
@@ -164,7 +164,7 @@ function startDataRefreshInterval() {
                     console.error('Error refreshing user data:', error);
                 });
         }
-    }, 30000);
+    }, 1800000); // 1800000 milliseconds = 30 minutes
 }
 
 // Run authentication check on page load
