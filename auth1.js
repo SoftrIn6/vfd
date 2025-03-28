@@ -1,6 +1,6 @@
 async function register(userData) {
-    const AIRTABLE_API_KEY = "your_api_key_here";  // Replace with your API Key
-    const AIRTABLE_BASE_ID = "your_base_id_here";  // Replace with your Base ID
+    const AIRTABLE_API_KEY = "patox1uzToHHuTN6C.43aeae3a53dcde9a2d77dca1208f249f701c441a8be695a57e20cd7e55160c72";  // Replace with your API Key
+    const AIRTABLE_BASE_ID = "appkPRB6udnf0oyUb";  // Replace with your Base ID
     const AIRTABLE_TABLE_NAME = "Users"; // Replace with your actual table name
 
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`;
