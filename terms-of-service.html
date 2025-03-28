@@ -1,1 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - AI ROBOT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: #555;
+        }
+
+        .content-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .content-list {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: #999;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Terms of Service</div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="section-title">Terms of Service</div>
+            
+            <p class="content-text">
+                Welcome to AI ROBOT. These Terms of Service ("Terms") govern your access to and use of our crypto trading platform, services, and website. By accessing or using our platform, you agree to be bound by these Terms.
+            </p>
+            
+            <div class="section-subtitle">Acceptance of Terms</div>
+            <p class="content-text">
+                By creating an account, accessing, or using our platform, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree to these Terms, you must not access or use our platform.
+            </p>
+            
+            <div class="section-subtitle">Eligibility</div>
+            <p class="content-text">
+                To use our platform, you must:
+            </p>
+            <ul class="content-list">
+                <li>Be at least 18 years old.</li>
+                <li>Have the legal capacity to enter into a binding agreement.</li>
+                <li>Not be a resident of a jurisdiction where the use of our platform would be illegal or restricted.</li>
+                <li>Not be on any sanctions lists or prohibited from engaging in financial activities.</li>
+            </ul>
+            
+            <div class="section-subtitle">Account Registration</div>
+            <p class="content-text">
+                To access certain features of our platform, you must create an account. When registering, you agree to:
+            </p>
+            <ul class="content-list">
+                <li>Provide accurate, current, and complete information.</li>
+                <li>Maintain and promptly update your account information.</li>
+                <li>Keep your login credentials secure and confidential.</li>
+                <li>Be solely responsible for all activities that occur under your account.</li>
+                <li>Notify us immediately of any unauthorized use of your account.</li>
+            </ul>
+            
+            <div class="section-subtitle">Platform Services</div>
+            <p class="content-text">
+                Our platform provides various services related to cryptocurrency trading, including but not limited to:
+            </p>
+            <ul class="content-list">
+                <li>Cryptocurrency trading and investment opportunities.</li>
+                <li>Digital wallet services for storing cryptocurrencies.</li>
+                <li>Market data and analysis tools.</li>
+                <li>Educational resources about cryptocurrency trading.</li>
+            </ul>
+            
+            <div class="section-subtitle">Risks and Disclaimers</div>
+            <p class="content-text">
+                You acknowledge and agree that:
+            </p>
+            <ul class="content-list">
+                <li>Cryptocurrency trading involves significant risks, including price volatility and potential loss of funds.</li>
+                <li>Past performance is not indicative of future results.</li>
+                <li>We do not provide investment advice, and any information provided on our platform should not be construed as such.</li>
+                <li>You are solely responsible for your trading decisions and should conduct your own research before making any investment.</li>
+                <li>We are not responsible for any losses you may incur while using our platform.</li>
+            </ul>
+            
+            <div class="section-subtitle">Fees and Payments</div>
+            <p class="content-text">
+                We charge fees for certain services on our platform. All fees are clearly displayed before you complete a transaction. You agree to pay all applicable fees and authorize us to automatically deduct such fees from your account balance.
+            </p>
+            
+            <div class="section-subtitle">Prohibited Activities</div>
+            <p class="content-text">
+                You agree not to:
+            </p>
+            <ul class="content-list">
+                <li>Use our platform for any illegal or unauthorized purpose.</li>
+                <li>Violate any laws, regulations, or third-party rights.</li>
+                <li>Engage in fraudulent, deceptive, or manipulative activities.</li>
+                <li>Attempt to gain unauthorized access to our systems or other users' accounts.</li>
+                <li>Interfere with or disrupt the operation of our platform.</li>
+                <li>Use our platform to launder money or finance terrorism.</li>
+                <li>Upload or transmit viruses, malware, or other malicious code.</li>
+            </ul>
+            
+            <div class="section-subtitle">Intellectual Property</div>
+            <p class="content-text">
+                All content, features, and functionality of our platform, including but not limited to text, graphics, logos, icons, images, and software, are owned by us or our licensors and are protected by intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of our platform without our prior written consent.
+            </p>
+            
+            <div class="section-subtitle">Termination</div>
+            <p class="content-text">
+                We reserve the right to suspend or terminate your access to our platform at any time, with or without cause, and without prior notice or liability. Upon termination, your right to use our platform will immediately cease, and you must cease all use of our platform.
+            </p>
+            
+            <div class="section-subtitle">Limitation of Liability</div>
+            <p class="content-text">
+                To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or use, arising out of or in connection with your use of our platform.
+            </p>
+            
+            <div class="section-subtitle">Governing Law</div>
+            <p class="content-text">
+                These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.
+            </p>
+            
+            <div class="section-subtitle">Changes to Terms</div>
+            <p class="content-text">
+                We may modify these Terms at any time by posting the revised Terms on our platform. Your continued use of our platform after any such changes constitutes your acceptance of the new Terms.
+            </p>
+            
+            <div class="section-subtitle">Contact Us</div>
+            <p class="content-text">
+                If you have any questions about these Terms, please contact us at support@airobot.com.
+            </p>
+            
+            <p class="last-updated">Last Updated: March 28, 2025</p>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.history.back();
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
