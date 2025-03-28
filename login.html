@@ -306,8 +306,8 @@
         // Function to authenticate user with Baserow
         async function loginUser(email, hashedPassword) {
             try {
-                // Fetch user data from Baserow
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true&filter__field_email__equal=${encodeURIComponent(email)}`, {
+                // First, get the field structure from Baserow
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Token ${BASEROW_API.token}`,
@@ -315,7 +315,46 @@
                     }
                 });
                 
-                const data = await response.json();
+                const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Field mapping:', fieldMap);
+                
+                // Get the email and password field IDs
+                const emailFieldId = fieldMap['email'];
+                const passwordFieldId = fieldMap['password'];
+                
+                if (!emailFieldId) {
+                    throw new Error('Email field not found in Baserow table');
+                }
+                
+                // Fetch user data from Baserow using field IDs
+                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Failed to parse JSON response:', e);
+                    throw new Error('Invalid response from server');
+                }
+                
+                console.log('Login response:', data);
                 
                 // Hide loading spinner
                 document.getElementById('login-spinner').style.display = 'none';
@@ -323,25 +362,33 @@
                 // Check if user exists and password matches
                 if (data.results && data.results.length > 0) {
                     const user = data.results[0];
+                    console.log('Found user:', user);
                     
-                    if (user.password === hashedPassword) {
+                    // Get the password from the user data using the field ID
+                    const storedPassword = user[`field_${passwordFieldId}`];
+                    console.log('Stored password:', storedPassword);
+                    console.log('Provided hashed password:', hashedPassword);
+                    
+                    if (storedPassword === hashedPassword) {
                         // Create a user data object to store in localStorage
                         const userData = {
                             id: user.id,
-                            username: user.username,
-                            email: user.email,
-                            referralCode: user.referralCode || '',
-                            total_assets: user.total_assets || '0.00',
-                            quantitative_account: user.quantitative_account || '0.00',
-                            smart_account: user.smart_account || '0.00',
-                            profit_assets: user.profit_assets || '0.00',
-                            total_revenue: user.total_revenue || '0.00',
-                            yesterday_earnings: user.yesterday_earnings || '0.00',
-                            today_earnings: user.today_earnings || '0.00',
-                            commission_today: user.commission_today || '0.00'
+                            username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                            email: email,
+                            referralCode: user[`field_${fieldMap['referralCode']}`] || '',
+                            total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                            quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                            smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                            profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                            total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                            yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                            today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                            commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
                         };
                         
-                        // Generate a simple auth token (in a real app, use JWT or other secure token)
+                        console.log('User data to store:', userData);
+                        
+                        // Generate a simple auth token
                         const authToken = btoa(email + ':' + new Date().getTime());
                         
                         // Save user data and token to localStorage
@@ -352,11 +399,13 @@
                         window.location.href = 'index.html';
                     } else {
                         // Password doesn't match
+                        console.error('Password mismatch');
                         document.getElementById('password-error').textContent = 'Invalid email or password';
                         document.getElementById('password-error').style.display = 'block';
                     }
                 } else {
                     // User not found
+                    console.error('User not found');
                     document.getElementById('email-error').textContent = 'Invalid email or password';
                     document.getElementById('email-error').style.display = 'block';
                 }
