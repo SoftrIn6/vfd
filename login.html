@@ -234,55 +234,39 @@
     </div>
 
     <script>
-    async function login(userData) {
-    const AIRTABLE_API_KEY = "patox1uzToHHuTN6C.43aeae3a53dcde9a2d77dca1208f249f701c441a8be695a57e20cd7e55160c72";  // Replace with your API Key
-    const AIRTABLE_BASE_ID = "appkPRB6udnf0oyUb";  // Replace with your Base ID
-    const AIRTABLE_TABLE_NAME = "Users"; // Replace with your actual table name
+    async function loginUser(email, password) {
+    const TABLE_ID = "488473";  // Replace with your Table ID
+    const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M";  // Replace with your Database Token
 
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula={Email}='${userData.email}'`;
+    const url = `https://api.baserow.io/api/database/rows/table/${202237}/?user_field_names=true`;
 
     const headers = {
-        "Authorization": `Bearer ${AIRTABLE_API_KEY}`,
+        "Authorization": `Token ${TOKEN}`,
         "Content-Type": "application/json"
     };
 
     try {
-        const response = await fetch(url, { method: "GET", headers });
+        const response = await fetch(url, {
+            method: "GET",
+            headers: headers
+        });
+
         const result = await response.json();
 
-        if (!response.ok) {
-            return { status: "error", message: "Error fetching user data. Please try again." };
-        }
+        if (response.ok) {
+            const user = result.results.find(u => u.email === email);
 
-        if (result.records.length === 0) {
-            return { status: "error", message: "User not found. Please check your email." };
-        }
-
-        const user = result.records[0].fields;
-        const enteredPasswordHash = await hashPassword(userData.password);
-
-        if (enteredPasswordHash === user.Password) {
-            return { status: "success", user: { id: result.records[0].id, username: user.Username, email: user.Email } };
+            if (user && user.password === password) { // Encrypt comparison needed
+                return { status: "success", user };
+            } else {
+                return { status: "error", message: "Invalid email or password." };
+            }
         } else {
-            return { status: "error", message: "Incorrect password. Please try again." };
+            return { status: "error", message: "Error fetching user data." };
         }
-
     } catch (error) {
-        console.error("Login Error:", error);
-        return { status: "error", message: "Network error. Please try again later." };
+        return { status: "error", message: "Network error. Please try again." };
     }
-}
-
-/**
- * Function to hash password using SHA-256
- */
-async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuffer))
-        .map(byte => byte.toString(16).padStart(2, '0'))
-        .join('');
 }
 </script>
 </body>
