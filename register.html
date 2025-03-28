@@ -5,10 +5,203 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Register Form */
+        .register-section {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ffa500;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+        }
+
+        .referral-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .referral-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #ff3b30;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .register-btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Terms and Conditions */
+        .terms-container {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .terms-checkbox {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .terms-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .terms-link {
+            color: #ffa500;
+            text-decoration: none;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <div class="back-btn">
                 <i class="fas fa-chevron-left"></i>
@@ -16,6 +209,7 @@
             <div class="header-title">Register</div>
         </div>
 
+        <!-- Register Form -->
         <div class="register-section">
             <form id="register-form">
                 <div class="form-group">
@@ -23,13 +217,13 @@
                     <input type="text" id="username" class="form-input" placeholder="Enter a username">
                     <div class="error-message" id="username-error"></div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" class="form-input" placeholder="Enter your email">
                     <div class="error-message" id="email-error"></div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
                     <div class="password-input-container">
@@ -40,7 +234,7 @@
                     </div>
                     <div class="error-message" id="password-error"></div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="confirm-password" class="form-label">Confirm Password</label>
                     <div class="password-input-container">
@@ -51,12 +245,12 @@
                     </div>
                     <div class="error-message" id="confirm-password-error"></div>
                 </div>
-
+                
                 <div class="referral-section">
                     <div class="referral-title">Referral Code (Optional)</div>
                     <input type="text" id="referral-code" class="form-input" placeholder="Enter referral code if you have one">
                 </div>
-
+                
                 <div class="terms-container">
                     <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
                     <div class="terms-text">
@@ -64,7 +258,7 @@
                     </div>
                 </div>
                 <div class="error-message" id="terms-error"></div>
-
+                
                 <button type="submit" class="register-btn">
                     <div class="register-btn-content">
                         <span>Register</span>
@@ -75,75 +269,148 @@
         </div>
     </div>
 
-    <script src="auth.js"></script>
     <script>
-        document.getElementById('register-form').addEventListener('submit', async function(e) {
+        // Google Apps Script Web App URL - Replace with your deployed web app URL
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+        
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'login.html';
+        });
+        
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(function(toggle, index) {
+            toggle.addEventListener('click', function() {
+                const passwordInput = index === 0 ? document.getElementById('password') : document.getElementById('confirm-password');
+                const eyeIcon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Form validation and submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            
+            // Get form values
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmPassword = document.getElementById('confirm-password').value.trim();
             const referralCode = document.getElementById('referral-code').value.trim();
             const termsChecked = document.getElementById('terms-checkbox').checked;
-
+            
+            // Validate form
             let isValid = true;
-
+            
             if (!username) {
                 document.getElementById('username-error').textContent = 'Username is required';
                 document.getElementById('username-error').style.display = 'block';
                 isValid = false;
+            } else if (username.length < 3) {
+                document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
             }
-
+            
             if (!email) {
                 document.getElementById('email-error').textContent = 'Email is required';
                 document.getElementById('email-error').style.display = 'block';
                 isValid = false;
+            } else if (!isValidEmail(email)) {
+                document.getElementById('email-error').textContent = 'Please enter a valid email address';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
             }
-
+            
             if (!password) {
                 document.getElementById('password-error').textContent = 'Password is required';
                 document.getElementById('password-error').style.display = 'block';
                 isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById('password-error').textContent = 'Password must be at least 6 characters';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
             }
-
+            
             if (password !== confirmPassword) {
                 document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
                 document.getElementById('confirm-password-error').style.display = 'block';
                 isValid = false;
             }
-
+            
             if (!termsChecked) {
                 document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
                 document.getElementById('terms-error').style.display = 'block';
                 isValid = false;
             }
-
+            
             if (isValid) {
+                // Show loading spinner
                 document.getElementById('register-spinner').style.display = 'block';
-
-                const userData = {
-                    username,
-                    email,
-                    password,
-                    referred_by: referralCode
-                };
-
-                const result = await register(userData);
-
-                document.getElementById('register-spinner').style.display = 'none';
-
-                if (result.status === 'success') {
-                    alert('Registration successful! Please login.');
-                    window.location.href = 'login.html';
-                } else {
-                    document.getElementById('email-error').textContent = result.message;
-                    document.getElementById('email-error').style.display = 'block';
-                }
+                
+                // Send registration request to Google Apps Script
+                const url = `${SCRIPT_URL}?action=register&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&referredBy=${encodeURIComponent(referralCode)}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading spinner
+                        document.getElementById('register-spinner').style.display = 'none';
+                        
+                        if (data.status === 'success') {
+                            // Show success message and redirect to login
+                            alert('Registration successful! Please login with your new account.');
+                            window.location.href = 'login.html';
+                        } else {
+                            // Show error message
+                            if (data.message.includes('Username or email already exists')) {
+                                document.getElementById('email-error').textContent = data.message;
+                                document.getElementById('email-error').style.display = 'block';
+                            } else {
+                                document.getElementById('password-error').textContent = data.message;
+                                document.getElementById('password-error').style.display = 'block';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        // Hide loading spinner
+                        document.getElementById('register-spinner').style.display = 'none';
+                        
+                        // Show error message
+                        document.getElementById('password-error').textContent = 'An error occurred. Please try again.';
+                        document.getElementById('password-error').style.display = 'block';
+                        console.error('Error:', error);
+                    });
             }
         });
+        
+        // Terms and Conditions links
+        document.querySelectorAll('.terms-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Terms and Conditions document coming soon.');
+            });
+        });
+        
+        // Email validation helper function
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
     </script>
 </body>
 </html>

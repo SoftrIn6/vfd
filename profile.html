@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - AI ROBOT</title>
+    <title>Profile - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -28,18 +28,17 @@
             padding: 0;
             position: relative;
             min-width: 470px;
-            background-color: #fff;
+            background-color: #f8f9fa;
             min-height: 100vh;
         }
 
         /* Header Styles */
         .header {
-            padding: 15px 20px;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            border-bottom: 1px solid #f0f0f0;
         }
 
         .logo {
@@ -48,15 +47,15 @@
         }
 
         .logo-img {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             margin-right: 10px;
         }
 
         .logo-text {
             font-size: 20px;
             font-weight: bold;
-            color: #000066;
+            color: #333;
         }
 
         .header-btns {
@@ -67,11 +66,10 @@
         .header-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
             background-color: #fff;
             border-radius: 20px;
-            padding: 5px 15px;
-            font-size: 14px;
+            padding: 5px 12px;
+            font-size: 12px;
             color: #ffa500;
             border: 1px solid #ffa500;
         }
@@ -97,81 +95,69 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background-color: #e6f0ff;
+            background-color: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            overflow: hidden;
         }
 
         .user-avatar i {
             font-size: 30px;
-            color: #99c2ff;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            color: #ccc;
         }
 
         .user-info {
             flex: 1;
         }
 
-        .copy-icon {
+        .user-copy {
             margin-left: 10px;
             color: #999;
-            cursor: pointer;
         }
 
-        /* Main Content */
-        .content-section {
+        /* Assets Section */
+        .assets-section {
+            margin: 15px;
             padding: 20px;
             background-color: #fff;
+            border-radius: 10px;
         }
 
-        /* Section Title */
         .section-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #333;
         }
 
-        /* Total Amount */
-        .total-amount {
+        .total-assets {
             font-size: 28px;
             font-weight: bold;
             color: #ffa500;
             margin-bottom: 20px;
         }
 
-        /* Account Grid */
-        .account-grid {
+        .assets-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 15px;
         }
 
-        .account-item {
+        .asset-item {
+            padding: 15px;
             background-color: #f9f9f9;
             border-radius: 10px;
-            padding: 15px;
         }
 
-        .account-label {
+        .asset-label {
             font-size: 16px;
-            color: #888;
+            color: #999;
             margin-bottom: 10px;
         }
 
-        .account-value {
+        .asset-value {
             font-size: 18px;
             font-weight: bold;
-            color: #333;
         }
 
         /* Action Buttons */
@@ -179,31 +165,54 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin: 20px 0;
+            margin: 15px;
         }
 
         .action-btn {
+            padding: 15px;
             background-color: #ffa500;
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 15px 0;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            text-align: center;
             cursor: pointer;
+            text-align: center;
+        }
+
+        /* Revenue Section */
+        .revenue-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .revenue-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
         }
 
         /* App Services */
         .services-section {
-            margin-top: 20px;
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
         }
 
         .service-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 20px;
-            color: #000066;
+            margin-bottom: 15px;
             position: relative;
         }
 
@@ -214,7 +223,7 @@
             left: 0;
             width: 40px;
             height: 3px;
-            background: linear-gradient(to right, #ffa500, #ffcc80);
+            background-color: #ffa500;
         }
 
         .service-list {
@@ -254,7 +263,6 @@
 
         .service-name {
             font-size: 16px;
-            color: #333;
         }
 
         .service-arrow {
@@ -263,17 +271,18 @@
 
         /* Sign Out Button */
         .sign-out-btn {
+            margin: 15px;
+            padding: 15px;
             background-color: #ffa500;
             color: white;
             border: none;
             border-radius: 10px;
-            padding: 15px 0;
             font-size: 18px;
             font-weight: bold;
-            width: 100%;
-            text-align: center;
+            width: calc(100% - 30px);
             cursor: pointer;
-            margin: 20px 0 80px 0;
+            text-align: center;
+            margin-bottom: 80px;
         }
 
         /* Float button */
@@ -328,34 +337,6 @@
             margin-bottom: 5px;
         }
 
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #ffa500;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
@@ -385,25 +366,11 @@
     </style>
 </head>
 <body>
-    <!-- Add this at the beginning of profile.html right after the opening <body> tag -->
-    <script>
-        // Immediate authentication check
-        (function() {
-            const authToken = localStorage.getItem('authToken');
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            
-            if (!authToken || !userData.email) {
-                // Not logged in, redirect immediately
-                window.location.href = 'login.html';
-            }
-        })();
-    </script>
-
     <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <img src="/placeholder.svg?height=35&width=35" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
                 <div class="logo-text">AI ROBOT</div>
             </div>
             <div class="header-btns">
@@ -417,241 +384,241 @@
         </div>
 
         <!-- User Profile -->
-<div class="user-profile">
-    <div class="user-avatar">
-        <i class="fas fa-user"></i>
-    </div>
-    <div class="user-info">
-        <div style="font-size: 18px; font-weight: bold;" id="username"></div>
-        <div style="color: #666; margin-top: 5px;" id="user-email">Email:</div>
-        <i class="fas fa-copy copy-icon" id="copy-email"></i>
-    </div>
-</div>
-
-<!-- Total Assets Section -->
-<div class="content-section">
-    <div class="section-title">Total Assets</div>
-    <div class="total-amount" id="total-assets">$0.00</div>
-
-    <div class="account-grid">
-        <div class="account-item">
-            <div class="account-label">Quantitative Account</div>
-            <div class="account-value" id="quantitative-account">$0.00</div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <i class="fas fa-copy user-copy"></i>
+            </div>
         </div>
-        <div class="account-item">
-            <div class="account-label">Smart Account</div>
-            <div class="account-value" id="smart-account">$0.00</div>
+
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="section-title">Total Assets</div>
+            <div class="total-assets">$0</div>
+            <div class="assets-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Quantitative Account</div>
+                    <div class="asset-value">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Smart Account</div>
+                    <div class="asset-value">$0</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Profit Assets</div>
+                    <div class="asset-value">$</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <div class="action-btn" id="recharge-btn">Recharge</div>
+            <div class="action-btn" id="withdraw-btn">Withdraw</div>
+        </div>
+
+        <!-- Revenue Section -->
+        <div class="revenue-section">
+            <div class="section-title">Total Revenue</div>
+            <div class="total-assets">$</div>
+            <div class="revenue-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Yesterday's Earnings</div>
+                    <div class="asset-value">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Today's Earnings</div>
+                    <div class="asset-value">$</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Commission Today</div>
+                    <div class="asset-value">$</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Services -->
+        <div class="services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <div class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Detail</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">Transfer</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">News</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Security Center</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Quantization Tutorial</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Common Problem</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Out Button -->
+        <div class="sign-out-btn">Sign Out</div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
-    <div class="account-item">
-        <div class="account-label">Profit Assets</div>
-        <div class="account-value" id="profit-assets">$0.00</div>
-    </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
 
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <div class="action-btn" id="recharge-btn">Recharge</div>
-        <div class="action-btn" id="withdraw-btn">Withdraw</div>
-    </div>
-</div>
-
-<!-- Total Revenue Section -->
-<div class="content-section">
-    <div class="section-title">Total Revenue</div>
-    <div class="total-amount" id="total-revenue">$0.00</div>
-
-    <div class="account-grid">
-        <div class="account-item">
-            <div class="account-label">Yesterday's Earnings</div>
-            <div class="account-value" id="yesterday-earnings">$0.00</div>
-        </div>
-        <div class="account-item">
-            <div class="account-label">Today's Earnings</div>
-            <div class="account-value" id="today-earnings">$0.00</div>
-        </div>
-    </div>
-
-    <div class="account-item">
-        <div class="account-label">Commission Today</div>
-        <div class="account-value" id="commission-today">$0.00</div>
-    </div>
-</div>
-
-<!-- Sign Out Button -->
-<div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
-
-<!-- Float Button -->
-<div class="float-btn">
-    <i class="fas fa-arrow-up"></i>
-</div>
-
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="quantify.html" class="nav-item">
-        <i class="fas fa-chart-pie"></i>
-        <span>Quantify</span>
-    </a>
-    <a href="invest.html" class="nav-item">
-        <i class="fas fa-gift"></i>
-        <span>Invest</span>
-    </a>
-    <a href="invite-friends.html" class="nav-item">
-        <i class="fas fa-user-plus"></i>
-        <span>Invite Friends</span>
-    </a>
-    <a href="profile.html" class="nav-item active">
-        <i class="fas fa-user"></i>
-        <span>Me</span>
-    </a>
-</nav>
-
-<script>
-// SheetDB API endpoint - Replace with your correct SheetDB API URL
-const SHEETDB_API = 'https://sheetdb.io/api/v1/677wbdnn3l3gx';
-
-// Check if user is logged in when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-    const authToken = localStorage.getItem('authToken');
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-
-    if (!authToken || !userData.email) {
-        window.location.href = 'login.html'; // Redirect to login page if not logged in
-        return;
-    }
-
-    // Initialize UI with cached data
-    if (userData) {
-        updateUI(userData);
-    }
-
-    // Fetch fresh user data
-    fetchUserData(userData.email);
-
-    // Refresh user data every 5 seconds
-    setInterval(() => {
-        const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
-        if (currentUserData.email) {
-            fetchUserData(currentUserData.email);
-        }
-    }, 5000);
-
-    // Copy email functionality
-    document.getElementById('copy-email')?.addEventListener('click', function () {
-        const email = document.getElementById('user-email')?.textContent.replace('Email: ', '');
-        if (email) {
-            navigator.clipboard.writeText(email)
-                .then(() => alert('Email copied to clipboard!'))
-                .catch(err => console.error('Failed to copy: ', err));
-        }
-    });
-
-    // Sign out functionality
-    document.getElementById('sign-out-btn')?.addEventListener('click', function () {
-        if (confirm('Are you sure you want to sign out?')) {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
-            window.location.href = 'login.html';
-        }
-    });
-
-    // Action buttons functionality
-    document.getElementById('recharge-btn')?.addEventListener('click', () => window.location.href = 'recharge.html');
-    document.getElementById('withdraw-btn')?.addEventListener('click', () => window.location.href = 'withdraw.html');
-});
-
-// Fetch user data from SheetDB
-async function fetchUserData(email) {
-    try {
-        const timestamp = new Date().getTime();
-        const url = `${SHEETDB_API}/search?email=${encodeURIComponent(email)}&_=${timestamp}`;
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update UI with user data
+            if (userData.username) {
+                // Update username display
+                const userInfo = document.querySelector('.user-info');
+                userInfo.innerHTML = `
+                    <div style="font-size: 18px; font-weight: bold;">${userData.username}</div>
+                    <div style="color: #666; margin-top: 5px;">${userData.email}</div>
+                    <i class="fas fa-copy user-copy"></i>
+                `;
+                
+                // Update account balance
+                document.querySelector('.total-assets').textContent = `$${userData.accountBalance || '0'}`;
             }
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-
-        if (data && data.length > 0) {
-            // Ensure the correct user by strict matching
-            const userData = data.find(user => user.email.toLowerCase() === email.toLowerCase());
-
-            if (userData) {
-                console.log('Fetched user data:', userData); // Debugging log
-
-                localStorage.setItem('userData', JSON.stringify(userData));
-                updateUI(userData);
-                return userData;
-            } else {
-                console.error('No exact match found for email:', email);
-                return null;
+        // Sign out functionality
+        document.querySelector('.sign-out-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to sign out?')) {
+                // Clear authentication data
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
             }
-        } else {
-            console.error('No user data found for email:', email);
-            return null;
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        return null;
-    }
-}
+        });
 
-// Update UI with user data
-function updateUI(userData) {
-    // Ensure elements exist before updating
-    setTextContent('username', userData.username || userData.email.split('@')[0]);
-    setTextContent('user-email', `Email: ${userData.email || 'N/A'}`);
-    setTextContent('user-id', userData.id || 'N/A');
-    setTextContent('referral-code', userData.referralCode || 'N/A');
+        // Action buttons functionality
+        document.getElementById('recharge-btn').addEventListener('click', function() {
+            window.location.href = 'recharge.html';
+        });
 
-    updateFinancialValue('total-assets', userData.total_assets);
-    updateFinancialValue('quantitative-account', userData.quantitative_account);
-    updateFinancialValue('smart-account', userData.smart_account);
-    updateFinancialValue('profit-assets', userData.profit_assets);
-    updateFinancialValue('total-revenue', userData.total_revenue);
-    updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
-    updateFinancialValue('commission-today', userData.commission_today);
-}
+        document.getElementById('withdraw-btn').addEventListener('click', function() {
+            window.location.href = 'withdraw.html';
+        });
 
-// Helper function to update text content safely
-function setTextContent(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = value;
-    }
-}
+        // Service items functionality
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const serviceId = this.id;
+                alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+            });
+        });
 
-// Helper function to update financial values
-function updateFinancialValue(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        let formattedValue = '0.00';
-
-        if (value !== undefined && value !== null && value !== '') {
-            if (!isNaN(parseFloat(value))) {
-                formattedValue = parseFloat(value).toFixed(2);
-            } else {
-                formattedValue = value;
-                if (!formattedValue.includes('.')) {
-                    formattedValue += '.00';
-                }
-            }
-        }
-
-        element.textContent = '$' + formattedValue;
-    }
-}
-</script>
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>
