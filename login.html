@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Crypto Trading Platform</title>
+    <title>Login - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -233,41 +233,154 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-    async function loginUser(email, password) {
-    const TABLE_ID = "488473";  // Replace with your Table ID
-    const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M";  // Replace with your Database Token
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
 
-    const url = `https://api.baserow.io/api/database/rows/table/${202237}/?user_field_names=true`;
-
-    const headers = {
-        "Authorization": `Token ${TOKEN}`,
-        "Content-Type": "application/json"
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: headers
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            const user = result.results.find(u => u.email === email);
-
-            if (user && user.password === password) { // Encrypt comparison needed
-                return { status: "success", user };
-            } else {
-                return { status: "error", message: "Invalid email or password." };
-            }
-        } else {
-            return { status: "error", message: "Error fetching user data." };
+        // Helper function to hash passwords
+        function hashPassword(password) {
+            return CryptoJS.SHA256(password).toString();
         }
-    } catch (error) {
-        return { status: "error", message: "Network error. Please try again." };
-    }
-}
-</script>
+
+        // Toggle password visibility
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+        
+        // Form validation and submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.getElementById('email-error').style.display = 'none';
+            document.getElementById('password-error').style.display = 'none';
+            
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!email) {
+                document.getElementById('email-error').textContent = 'Email is required';
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                document.getElementById('password-error').textContent = 'Password is required';
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show loading spinner
+                document.getElementById('login-spinner').style.display = 'block';
+                
+                // Hash the password for security
+                const hashedPassword = hashPassword(password);
+                
+                // Authenticate with Baserow
+                loginUser(email, hashedPassword);
+            }
+        });
+        
+        // Function to authenticate user with Baserow
+        async function loginUser(email, hashedPassword) {
+            try {
+                // Fetch user data from Baserow
+                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true&filter__field_email__equal=${encodeURIComponent(email)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading spinner
+                document.getElementById('login-spinner').style.display = 'none';
+                
+                // Check if user exists and password matches
+                if (data.results && data.results.length > 0) {
+                    const user = data.results[0];
+                    
+                    if (user.password === hashedPassword) {
+                        // Create a user data object to store in localStorage
+                        const userData = {
+                            id: user.id,
+                            username: user.username,
+                            email: user.email,
+                            referralCode: user.referralCode || '',
+                            total_assets: user.total_assets || '0.00',
+                            quantitative_account: user.quantitative_account || '0.00',
+                            smart_account: user.smart_account || '0.00',
+                            profit_assets: user.profit_assets || '0.00',
+                            total_revenue: user.total_revenue || '0.00',
+                            yesterday_earnings: user.yesterday_earnings || '0.00',
+                            today_earnings: user.today_earnings || '0.00',
+                            commission_today: user.commission_today || '0.00'
+                        };
+                        
+                        // Generate a simple auth token (in a real app, use JWT or other secure token)
+                        const authToken = btoa(email + ':' + new Date().getTime());
+                        
+                        // Save user data and token to localStorage
+                        localStorage.setItem('authToken', authToken);
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        
+                        // Redirect to home page
+                        window.location.href = 'index.html';
+                    } else {
+                        // Password doesn't match
+                        document.getElementById('password-error').textContent = 'Invalid email or password';
+                        document.getElementById('password-error').style.display = 'block';
+                    }
+                } else {
+                    // User not found
+                    document.getElementById('email-error').textContent = 'Invalid email or password';
+                    document.getElementById('email-error').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Hide loading spinner
+                document.getElementById('login-spinner').style.display = 'none';
+                
+                // Show error message
+                document.getElementById('password-error').textContent = 'An error occurred. Please try again.';
+                document.getElementById('password-error').style.display = 'block';
+            }
+        }
+        
+        // Register link
+        document.getElementById('register-link').addEventListener('click', function() {
+            window.location.href = 'register.html';
+        });
+        
+        // Forgot password
+        document.querySelector('.forgot-password').addEventListener('click', function() {
+            alert('Password recovery feature coming soon.');
+        });
+    </script>
 </body>
 </html>
