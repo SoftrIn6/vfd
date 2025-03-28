@@ -511,50 +511,47 @@
 </nav>
 
 <script>
-// SheetDB API endpoint - Replace with your complete SheetDB API endpoint URL
+// SheetDB API endpoint - Replace with your correct SheetDB API URL
 const SHEETDB_API = 'https://sheetdb.io/api/v1/qbn5kbigoxmw3';
 
-// Check if user is logged in when page loads
-document.addEventListener('DOMContentLoaded', function() {
+// Check if user is logged in when the page loads
+document.addEventListener('DOMContentLoaded', function () {
     const authToken = localStorage.getItem('authToken');
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
     if (!authToken || !userData.email) {
-        // Redirect to login page if not logged in
-        window.location.href = 'login.html';
+        window.location.href = 'login.html'; // Redirect to login page if not logged in
         return;
     }
 
-    // Initialize UI with cached data first
+    // Initialize UI with cached data
     if (userData) {
         updateUI(userData);
     }
 
-    // Fetch fresh user data from SheetDB
+    // Fetch fresh user data
     fetchUserData(userData.email);
 
-    // Set up more frequent refresh interval (every 5 seconds)
+    // Refresh user data every 5 seconds
     setInterval(() => {
         const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
         if (currentUserData.email) {
             fetchUserData(currentUserData.email);
         }
-    }, 5000); // Check for updates every 5 seconds
+    }, 5000);
 
     // Copy email functionality
-    document.getElementById('copy-email').addEventListener('click', function() {
-        const email = document.getElementById('user-email').textContent.replace('Email: ', '');
-        navigator.clipboard.writeText(email)
-            .then(() => {
-                alert('Email copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Failed to copy: ', err);
-            });
+    document.getElementById('copy-email')?.addEventListener('click', function () {
+        const email = document.getElementById('user-email')?.textContent.replace('Email: ', '');
+        if (email) {
+            navigator.clipboard.writeText(email)
+                .then(() => alert('Email copied to clipboard!'))
+                .catch(err => console.error('Failed to copy: ', err));
+        }
     });
 
     // Sign out functionality
-    document.getElementById('sign-out-btn').addEventListener('click', function() {
+    document.getElementById('sign-out-btn')?.addEventListener('click', function () {
         if (confirm('Are you sure you want to sign out?')) {
             localStorage.removeItem('authToken');
             localStorage.removeItem('userData');
@@ -563,19 +560,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Action buttons functionality
-    document.getElementById('recharge-btn').addEventListener('click', function() {
-        window.location.href = 'recharge.html';
-    });
-
-    document.getElementById('withdraw-btn').addEventListener('click', function() {
-        window.location.href = 'withdraw.html';
-    });
+    document.getElementById('recharge-btn')?.addEventListener('click', () => window.location.href = 'recharge.html');
+    document.getElementById('withdraw-btn')?.addEventListener('click', () => window.location.href = 'withdraw.html');
 });
 
 // Fetch user data from SheetDB
 async function fetchUserData(email) {
     try {
-        // Add a random parameter to prevent caching
         const timestamp = new Date().getTime();
         const url = `${SHEETDB_API}/search?email=${encodeURIComponent(email)}&_=${timestamp}`;
 
@@ -588,25 +579,24 @@ async function fetchUserData(email) {
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
 
         if (data && data.length > 0) {
-            const userData = data[0];
+            // Ensure the correct user by strict matching
+            const userData = data.find(user => user.email.toLowerCase() === email.toLowerCase());
 
-            // Log the data for debugging
-            console.log('Fetched user data:', userData);
+            if (userData) {
+                console.log('Fetched user data:', userData); // Debugging log
 
-            // Save to localStorage
-            localStorage.setItem('userData', JSON.stringify(userData));
-
-            // Update UI with user data
-            updateUI(userData);
-
-            return userData;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                updateUI(userData);
+                return userData;
+            } else {
+                console.error('No exact match found for email:', email);
+                return null;
+            }
         } else {
             console.error('No user data found for email:', email);
             return null;
@@ -619,21 +609,27 @@ async function fetchUserData(email) {
 
 // Update UI with user data
 function updateUI(userData) {
-    // Update user info
-    document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
-    document.getElementById('user-email').textContent = 'Email: ' + userData.email;
-    document.getElementById('user-id').textContent = userData.id || 'N/A'; // Display ID
-    document.getElementById('referral-code').textContent = userData.referralCode || 'N/A'; // Display Referral Code
+    // Ensure elements exist before updating
+    setTextContent('username', userData.username || userData.email.split('@')[0]);
+    setTextContent('user-email', `Email: ${userData.email || 'N/A'}`);
+    setTextContent('user-id', userData.id || 'N/A');
+    setTextContent('referral-code', userData.referralCode || 'N/A');
 
-    // Update financial data
     updateFinancialValue('total-assets', userData.total_assets);
     updateFinancialValue('quantitative-account', userData.quantitative_account);
     updateFinancialValue('smart-account', userData.smart_account);
     updateFinancialValue('profit-assets', userData.profit_assets);
-
     updateFinancialValue('total-revenue', userData.total_revenue);
     updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
     updateFinancialValue('commission-today', userData.commission_today);
+}
+
+// Helper function to update text content safely
+function setTextContent(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = value;
+    }
 }
 
 // Helper function to update financial values
