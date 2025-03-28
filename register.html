@@ -269,81 +269,51 @@
         </div>
     </div>
 
-     <script src="auth1.js"></script> <!-- Ensure auth1.js is linked -->
 <script>
-    document.getElementById('register-form').addEventListener('submit', async function(e) {
-        e.preventDefault();  // Prevents page reload
+    async function registerUser(userData) {
+    const BASE_ID = "202237";  // Replace with your Database ID
+    const TABLE_ID = "488473";  // Replace with your Table ID
+    const TOKEN = "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M";  // Replace with your Database Token
 
-        document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+    const url = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/`;
 
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-        const confirmPassword = document.getElementById('confirm-password').value.trim();
-        const referralCode = document.getElementById('referral-code').value.trim();
-        const termsChecked = document.getElementById('terms-checkbox').checked;
+    const headers = {
+        "Authorization": `Token ${TOKEN}`,
+        "Content-Type": "application/json"
+    };
 
-        let isValid = true;
-
-        if (!username) {
-            document.getElementById('username-error').textContent = 'Username is required';
-            document.getElementById('username-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (!email) {
-            document.getElementById('email-error').textContent = 'Email is required';
-            document.getElementById('email-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (!password) {
-            document.getElementById('password-error').textContent = 'Password is required';
-            document.getElementById('password-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (password !== confirmPassword) {
-            document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
-            document.getElementById('confirm-password-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (!termsChecked) {
-            document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions';
-            document.getElementById('terms-error').style.display = 'block';
-            isValid = false;
-        }
-
-        if (isValid) {
-            document.getElementById('register-spinner').style.display = 'block';
-
-            const userData = {
-                username,
-                email,
-                password,
-                referred_by: referralCode
-            };
-
-            try {
-                const result = await register(userData); // Call function from auth1.js
-
-                document.getElementById('register-spinner').style.display = 'none';
-
-                if (result.status === 'success') {
-                    alert('Registration successful! Please login.');
-                    window.location.href = 'login.html';
-                } else {
-                    document.getElementById('email-error').textContent = result.message;
-                    document.getElementById('email-error').style.display = 'block';
-                }
-            } catch (error) {
-                console.error("Registration failed:", error);
-                document.getElementById('email-error').textContent = "An error occurred. Please try again.";
-                document.getElementById('email-error').style.display = 'block';
-            }
-        }
+    const body = JSON.stringify({
+        "username": userData.username,
+        "email": userData.email,
+        "password": userData.password, // Encrypt before sending
+        "referralCode": userData.referralCode,
+        "total_assets": 0,
+        "quantitative_account": 0,
+        "smart_account": 0,
+        "profit_assets": 0,
+        "total_revenue": 0,
+        "yesterday_earnings": 0,
+        "commission_today": 0
     });
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: headers,
+            body: body
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            return { status: "success", data: result };
+        } else {
+            return { status: "error", message: result.error || "Error registering user." };
+        }
+    } catch (error) {
+        return { status: "error", message: "Network error. Please try again later." };
+    }
+}
 </script>
 </body>
 </html>
