@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - Crypto Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Withdrawal Section */
+        .withdrawal-section {
+            margin: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .withdrawal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .withdrawal-title {
+            font-size: 16px;
+            color: #ff6b6b;
+        }
+
+        .withdrawal-icon {
+            color: #ffa500;
+            font-size: 20px;
+        }
+
+        .withdrawal-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .withdrawal-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .withdrawal-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .withdrawal-unit {
+            font-size: 16px;
+            margin-left: 5px;
+        }
+
+        .withdrawal-process {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .process-label {
+            font-size: 16px;
+        }
+
+        .process-amount {
+            font-size: 16px;
+            color: #ffa500;
+        }
+
+        /* Payment Method */
+        .payment-section {
+            margin: 15px;
+        }
+
+        .payment-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .payment-option {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .payment-option.active {
+            background-color: #ffa500;
+            color: #fff;
+            border-color: #ffa500;
+        }
+
+        /* Withdrawal Limit */
+        .limit-section {
+            margin: 15px;
+            padding: 15px;
+            background-color: #e6f7ff;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        /* Address Section */
+        .address-section {
+            margin: 15px;
+        }
+
+        .address-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .address-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            font-size: 16px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .address-input input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .address-input .eye-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+        }
+
+        /* Fee Section */
+        .fee-section {
+            margin: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fee-label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .fee-amount {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .free-withdrawals {
+            text-align: right;
+            margin: 15px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .receipt-section {
+            margin: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .receipt-label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .receipt-amount {
+            font-size: 16px;
+            color: #4cd964;
+        }
+
+        /* Confirm Button */
+        .confirm-btn {
+            margin: 15px;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            width: calc(100% - 30px);
+            cursor: pointer;
+        }
+
+        /* Withdrawal Note */
+        .note-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .note-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .note-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .note-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Customer Service */
+        .customer-service {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .customer-service img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">WithDraw</div>
+        </div>
+
+        <!-- Withdrawal Section -->
+        <div class="withdrawal-section">
+            <div class="withdrawal-header">
+                <div class="withdrawal-title">24-hour withdrawal</div>
+                <div class="withdrawal-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+            </div>
+            <div class="withdrawal-content">
+                <div class="withdrawal-label">Withdrawable</div>
+                <div class="withdrawal-amount">0.000000 <span class="withdrawal-unit">USDT</span></div>
+                <div class="withdrawal-process">
+                    <div class="process-label">Amount to be processed</div>
+                    <div class="process-amount">0 USDT</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="payment-section">
+            <div class="payment-label">Payment method</div>
+            <div class="payment-options">
+                <div class="payment-option active">BEP20-USDT</div>
+                <div class="payment-option">TRC20-USDT</div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Limit -->
+        <div class="limit-section">
+            Withdrawal limit range 2.000 - 99999999.00
+        </div>
+
+        <!-- Address Section -->
+        <div class="address-section">
+            <div class="address-label">Withdrawal Address</div>
+            <div class="address-input">
+                <input type="password" id="address" value="••••••••••">
+                <div class="eye-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fee Section -->
+        <div class="fee-section">
+            <div class="fee-label">Handling Fee</div>
+            <div class="fee-amount">0 USDT</div>
+        </div>
+
+        <div class="free-withdrawals">
+            Number of remaining fee-free withdrawals 999
+        </div>
+
+        <div class="receipt-section">
+            <div class="receipt-label">Receipt</div>
+            <div class="receipt-amount">0 USDT</div>
+        </div>
+
+        <!-- Confirm Button -->
+        <button class="confirm-btn">Confirm</button>
+
+        <!-- Withdrawal Note -->
+        <div class="note-section">
+            <div class="note-title">Withdrawal Note</div>
+            <div class="note-content">
+                <p>No handling fee is required, and withdrawal can be made once a day.</p>
+                <p>Minimum withdrawal: 2USDT</p>
+                <p>Support TRC20-USDT and BEP20-USDT withdrawals, please make sure that the wallet address is correct</p>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+
+        <!-- Customer Service -->
+        <div class="customer-service">
+            <img src="/placeholder.svg?height=50&width=50" alt="Customer Service">
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'profile.html';
+        });
+
+        // Payment option selection
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Toggle password visibility
+        document.querySelector('.eye-icon').addEventListener('click', function() {
+            const addressInput = document.getElementById('address');
+            const eyeIcon = this.querySelector('i');
+            
+            if (addressInput.type === 'password') {
+                addressInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                addressInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+
+        // Confirm button functionality
+        document.querySelector('.confirm-btn').addEventListener('click', function() {
+            alert('Withdrawal request submitted. This feature is coming soon.');
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Customer service click
+        document.querySelector('.customer-service').addEventListener('click', function() {
+            alert('Customer service is available 24/7. How can we help you?');
+        });
+    </script>
+</body>
+</html>

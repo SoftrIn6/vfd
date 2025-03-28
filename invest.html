@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invest - Crypto Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .tab {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 0;
+            position: relative;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .tab.active {
+            color: #000;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        /* Investment Plans */
+        .investment-plans {
+            padding: 15px;
+            background-color: #fff;
+            margin-bottom: 80px;
+        }
+
+        .plan-card {
+            border: 1px solid #ffa500;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .plan-header {
+            padding: 15px;
+            position: relative;
+        }
+
+        .plan-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .plan-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .plan-image {
+            width: 100px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            overflow: hidden;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+
+        .plan-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .detail-value.price {
+            text-align: right;
+        }
+
+        .detail-value.rate {
+            color: #4cd964;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
+            </div>
+            <div class="header-btns">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active">Smart investment</div>
+            <div class="tab">Invest Record</div>
+        </div>
+
+        <!-- Investment Plans -->
+        <div class="investment-plans">
+            <!-- Plan 5 -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-title">Investment Plan 5</div>
+                    <img src="/placeholder.svg?height=60&width=100" alt="Investment Plan 5" class="plan-image">
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">30000 USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">24.00%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">30 Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan 4 -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-title">Investment Plan 4</div>
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">10000 USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">22.00%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">30 Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan 3 -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-title">Investment Plan 3</div>
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">2000 USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">20.00%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">15 Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan 2 -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-title">Investment Plan 2</div>
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">500 USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">18.00%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">15 Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan 1 -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-title">Investment Plan 1</div>
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">100 USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">16.00%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">7 Day</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item active">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // For now, just show an alert when switching to Invest Record
+                if (this.textContent === 'Invest Record') {
+                    alert('Invest Record feature coming soon.');
+                    // Switch back to Smart investment tab
+                    setTimeout(() => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab')[0].classList.add('active');
+                    }, 500);
+                }
+            });
+        });
+
+        // Plan card click functionality
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const planTitle = this.querySelector('.plan-title').textContent;
+                const planPrice = this.querySelector('.detail-value').textContent;
+                alert(`You selected ${planTitle} for ${planPrice}. Investment feature coming soon.`);
+            });
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Back button functionality
+        document.querySelector('.back-btn') === null ? console.log("back_btn not found") : document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
