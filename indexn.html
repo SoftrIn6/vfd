@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI ROBOT - Crypto Trading Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: right;
+        }
+
+        .hero-img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            padding: 15px;
+            background-color: #fff;
+            text-align: center;
+            border-bottom: 10px solid #f5f5f5;
+        }
+
+        .partners-count {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .partners-text {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .partners-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .partner-logo {
+            height: 20px;
+            margin: 5px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin: 15px;
+            padding: 10px 15px;
+            background-color: #fff;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ffa500;
+        }
+
+        .search-icon {
+            color: #ffa500;
+            margin-right: 10px;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+            object-fit: contain;
+        }
+
+        .feature-name {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Account Cards */
+        .account-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .account-card {
+            background-color: #f8f0ff;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Withdrawal Record */
+        .withdrawal-section {
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+            margin-top: 5px;
+        }
+
+        .withdrawal-record {
+            margin-bottom: 15px;
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .record-email {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .record-amount {
+            font-size: 14px;
+            color: #ffa500;
+        }
+
+        /* Quotes Section */
+        .quotes-section {
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .crypto-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .crypto-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .crypto-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .crypto-unit {
+            font-size: 12px;
+            color: #999;
+            margin-left: 5px;
+        }
+
+        .exchange-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .exchange-card {
+            border: 1px solid #ffa500;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .exchange-name {
+            font-size: 12px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .exchange-logo {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        .exchange-price {
+            font-size: 14px;
+            color: #4cd964;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        /* Partners Section */
+        .institutions-section {
+            padding: 15px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .institutions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .institution-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .institution-logo {
+            height: 30px;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Crypto price animation */
+        @keyframes priceChange {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .price-changing {
+            animation: priceChange 0.5s ease;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
+            </div>
+            <div class="header-btns">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-text">
+                <div class="hero-title">Money.<br>The Power<br>On Your Side.</div>
+                <div class="hero-subtitle">Invest, Trade, and Real ROI Cryptocurrency.</div>
+                <a href="#" class="hero-btn">Download</a>
+            </div>
+            <div class="hero-image">
+                <img src="/placeholder.svg?height=150&width=150" alt="Hero Image" class="hero-img">
+            </div>
+        </div>
+
+        <!-- Partners Section -->
+        <div class="partners-section">
+            <div class="partners-count">1,50,000+</div>
+            <div class="partners-text">Companies where we built / investment to build their Finance</div>
+            <div class="partners-logos">
+                <img src="/placeholder.svg?height=20&width=40&text=airbnb" alt="Airbnb" class="partner-logo">
+                <img src="/placeholder.svg?height=20&width=40&text=amazon" alt="Amazon" class="partner-logo">
+                <img src="/placeholder.svg?height=20&width=40&text=FedEx" alt="FedEx" class="partner-logo">
+                <img src="/placeholder.svg?height=20&width=40&text=Google" alt="Google" class="partner-logo">
+                <img src="/placeholder.svg?height=20&width=40&text=OLA" alt="OLA" class="partner-logo">
+                <img src="/placeholder.svg?height=20&width=40&text=Wistma" alt="Wistma" class="partner-logo">
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <a href="recharge.html" class="feature-item" id="recharge">
+                <img src="/placeholder.svg?height=50&width=50" alt="Recharge" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Recharge</div>
+            </a>
+            <a href="withdraw.html" class="feature-item" id="withdraw">
+                <img src="/placeholder.svg?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Withdraw</div>
+            </a>
+            <a href="#" class="feature-item" id="help">
+                <img src="/placeholder.svg?height=50&width=50" alt="Help" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Help</div>
+            </a>
+            <a href="#" class="feature-item" id="team">
+                <img src="/placeholder.svg?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Team</div>
+            </a>
+            <a href="activity.html" class="feature-item" id="activity">
+                <img src="/placeholder.svg?height=50&width=50" alt="Activity" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Activity</div>
+            </a>
+            <a href="invite-friends.html" class="feature-item" id="invite">
+                <img src="/placeholder.svg?height=50&width=50" alt="Invite Friends" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Invite Friends</div>
+            </a>
+            <a href="agent-cooperation.html" class="feature-item" id="agent">
+                <img src="/placeholder.svg?height=50&width=50" alt="Agent Cooperation" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">Agent Cooperation</div>
+            </a>
+            <a href="#" class="feature-item" id="news">
+                <img src="/placeholder.svg?height=50&width=50" alt="News" class="feature-icon" style="background-color: #ffa500; border-radius: 10px;">
+                <div class="feature-name">News</div>
+            </a>
+        </div>
+
+        <!-- Account Cards -->
+        <div class="account-cards">
+            <div class="account-card">
+                <div class="card-title">Total Assets</div>
+                <div class="card-amount">0.00 USDT</div>
+                <div class="card-value">= $</div>
+            </div>
+            <div class="account-card">
+                <div class="card-title">Quantitative Account</div>
+                <div class="card-amount">0.00 USDT</div>
+                <div class="card-value">= $ 0.00</div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Record -->
+        <div class="withdrawal-section">
+            <div class="section-title">Withdrawal Record</div>
+            <div class="withdrawal-record">
+                <div class="record-item">
+                    <div class="record-email">c***t614c@hotmail.com</div>
+                    <div class="record-amount">+$2067628.48</div>
+                </div>
+                <div class="record-item">
+                    <div class="record-email">c***maj24@gmail.com</div>
+                    <div class="record-amount">+$851506.05</div>
+                </div>
+                <div class="record-item">
+                    <div class="record-email">q***qh94@icloud.com</div>
+                    <div class="record-amount">+$1841345.78</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Quotes -->
+        <div class="quotes-section">
+            <div class="section-title">Real-Time Quotes</div>
+            
+            <!-- BTC Quotes -->
+            <div class="crypto-title">
+                <img src="/placeholder.svg?height=20&width=20" alt="BTC" class="crypto-icon" style="background-color: #F7931A; border-radius: 50%;">
+                <div class="crypto-name">BTC</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="binance">$84905.5</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="okx">$84908.9</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="huobi">$84893.09</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="coinbase">$84905.5</div>
+                </div>
+            </div>
+            
+            <!-- ETH Quotes -->
+            <div class="crypto-title">
+                <img src="/placeholder.svg?height=20&width=20" alt="ETH" class="crypto-icon" style="background-color: #627EEA; border-radius: 50%;">
+                <div class="crypto-name">ETH</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="binance">$2017.33</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="okx">$2017.4305</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="huobi">$2017.54</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="coinbase">$2017.75</div>
+                </div>
+            </div>
+            
+            <!-- BNB Quotes -->
+            <div class="crypto-title">
+                <img src="/placeholder.svg?height=20&width=20" alt="BNB" class="crypto-icon" style="background-color: #F3BA2F; border-radius: 50%;">
+                <div class="crypto-name">BNB</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="binance">$623.71</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="okx">$623.74</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="huobi">$623.69</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="/placeholder.svg?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="coinbase">$623.75</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-item">
+                <div class="stat-label">Safe Operation</div>
+                <div class="stat-value">398Day</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Cumulative Income</div>
+                <div class="stat-value">58115284$USDT</div>
+            </div>
+        </div>
+
+        <!-- Core Cooperative Financial Institutions -->
+        <div class="institutions-section">
+            <div class="section-title">Core Cooperative Financial Institutions</div>
+            <div class="institutions-grid">
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Binance" alt="Binance" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Kraken" alt="Kraken" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=KuCoin" alt="KuCoin" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Coinbase" alt="Coinbase" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=OKX" alt="OKX" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Bitstamp" alt="Bitstamp" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Bitfinex" alt="Bitfinex" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Bybit" alt="Bybit" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Gate.io" alt="Gate.io" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="/placeholder.svg?height=30&width=80&text=Bitget" alt="Bitget" class="institution-logo">
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Feature item click functionality
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const featureId = this.id;
+        
+                switch(featureId) {
+                    case 'recharge':
+                        window.location.href = 'recharge.html';
+                        break;
+                    case 'withdraw':
+                        window.location.href = 'withdraw.html';
+                        break;
+                    case 'activity':
+                        window.location.href = 'activity.html';
+                        break;
+                    case 'invite':
+                        window.location.href = 'invite-friends.html';
+                        break;
+                    case 'agent':
+                        window.location.href = 'agent-cooperation.html';
+                        break;
+                    case 'invest':
+                        window.location.href = 'invest.html';
+                        break;
+                    default:
+                        alert('This feature is coming soon.');
+                }
+            });
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Real-time crypto price simulation
+        function updateCryptoPrices() {
+            const cryptos = ['BTC', 'ETH', 'BNB'];
+            const exchanges = ['binance', 'okx', 'huobi', 'coinbase'];
+            
+            cryptos.forEach(crypto => {
+                exchanges.forEach(exchange => {
+                    const priceElement = document.querySelector(`.exchange-price[data-crypto="${crypto}"][data-exchange="${exchange}"]`);
+                    if (priceElement) {
+                        const currentPrice = parseFloat(priceElement.textContent.replace('$', ''));
+                        const change = (Math.random() * 0.002 - 0.001) * currentPrice;
+                        const newPrice = (currentPrice + change).toFixed(crypto === 'BTC' ? 1 : 2);
+                        
+                        // Add animation class
+                        priceElement.classList.remove('price-changing');
+                        void priceElement.offsetWidth; // Trigger reflow
+                        priceElement.classList.add('price-changing');
+                        
+                        // Update price
+                        priceElement.textContent = '$' + newPrice;
+                    }
+                });
+            });
+            
+            // Update every 3 seconds
+            setTimeout(updateCryptoPrices, 3000);
+        }
+        
+        // Start price updates
+        updateCryptoPrices();
+    </script>
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update UI with user data if available
+            if (userData.username) {
+                // You can update UI elements with user data here
+                console.log('Logged in as:', userData.username);
+                
+                // Example: Update account balance if it exists in the page
+                const accountBalanceElements = document.querySelectorAll('.account-balance');
+                if (accountBalanceElements.length > 0) {
+                    accountBalanceElements.forEach(function(el) {
+                        el.textContent = `$${userData.accountBalance || '0'}`;
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
