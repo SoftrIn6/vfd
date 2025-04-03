@@ -529,6 +529,163 @@
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             }
         }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 20px 15px;
+            background-color: #fff;
+            border-top: 10px solid #f5f5f5;
+            border-bottom: 10px solid #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        .reviews-counter {
+            font-size: 16px;
+            color: #4169e1;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .reviews-heading {
+            font-size: 28px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .reviews-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn-download {
+            background-color: #4169e1;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-all-reviews {
+            background-color: #fff;
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .review-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-quote {
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .author-name {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .username {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .review-rating {
+            color: #ffc107;
+            font-size: 16px;
+        }
+
+        /* Ensure grid stays the same on all screen sizes */
+        @media (max-width: 400px) {
+            .reviews-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .review-card {
+                padding: 15px;
+            }
+            
+            .review-quote {
+                font-size: 14px;
+            }
+            
+            .review-text {
+                font-size: 12px;
+            }
+            
+            .author-avatar {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .name {
+                font-size: 12px;
+            }
+            
+            .username {
+                font-size: 10px;
+            }
+            
+            .review-rating {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -643,7 +800,7 @@
                 </div>
             </div>
         </div>
-
+<script defer src="https://www.livecoinwatch.com/static/lcw-widget.js"></script> <div class="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#000000" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10" ></div>
         <!-- Real-Time Quotes -->
         <div class="quotes-section">
             <div class="section-title">Real-Time Quotes</div>
@@ -793,6 +950,62 @@
                         COINBASE
                     </div>
                     <div class="exchange-price" data-crypto="XRP" data-exchange="coinbase">$2.0565</div>
+                </div>
+            </div>
+            
+            <!-- Crypto Wallet Section -->
+            <div class="crypto-wallet-section" style="padding: 30px 15px; background-color: #f8f9fa; margin: 20px 0; border-radius: 12px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; overflow: hidden;">
+                <div class="wallet-content" style="flex: 1; padding-right: 15px;">
+                    <div style="color: #4169e1; font-size: 16px; font-weight: 500; margin-bottom: 10px;">02 — 08</div>
+                    <h2 style="font-size: 28px; font-weight: bold; color: #222; margin-bottom: 15px; line-height: 1.2;">A crypto wallet<br>from the future</h2>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.5;">
+                        Experience the next generation of crypto trading with our advanced wallet technology. Secure, fast, and user-friendly.
+                    </p>
+                    <div class="wallet-features">
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #4169e1; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
+                            </div>
+                            <span style="font-size: 14px; font-weight: 500;">Lowest fees in market</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #4169e1; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
+                            </div>
+                            <span style="font-size: 14px; font-weight: 500;">Fast and secure transactions</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #4169e1; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                <i class="fas fa-check" style="color: white; font-size: 12px;"></i>
+                            </div>
+                            <span style="font-size: 14px; font-weight: 500;">256-bit secure encryption</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="wallet-image" style="flex: 1; position: relative; min-height: 300px;">
+                    <div style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; background-color: #f0f4ff; border-radius: 12px; overflow: hidden;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 250px;">
+                            <div style="background-color: white; border-radius: 20px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="width: 40px; height: 40px; background-color: #F7931A; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                        <i class="fab fa-bitcoin" style="color: white; font-size: 20px;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold;">Bitcoin</div>
+                                        <div style="font-size: 18px; font-weight: bold;">$48,798.23</div>
+                                    </div>
+                                    <div style="margin-left: auto; background-color: #f0f8ff; padding: 4px 8px; border-radius: 12px; color: #4169e1;">
+                                        <i class="fas fa-arrow-up" style="font-size: 10px;"></i> 4.66%
+                                    </div>
+                                </div>
+                                <div style="height: 60px; position: relative; margin-bottom: 10px;">
+                                    <svg width="100%" height="100%" viewBox="0 0 200 60" preserveAspectRatio="none" style="overflow: visible;">
+                                        <path d="M0,30 C20,40 40,20 60,25 C80,30 100,10 120,15 C140,20 160,5 180,10 C190,15 200,5 200,5" fill="none" stroke="#4169e1" stroke-width="2"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1111,6 +1324,115 @@
             </div>
         </div>
 
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <div class="reviews-counter">06 — 08</div>
+            <h1 class="reviews-heading">See what people are saying our Coin</h1>
+            
+            <div class="reviews-actions">
+                <button class="btn-download">Download app</button>
+                <button class="btn-all-reviews">All reviews</button>
+            </div>
+            
+            <div class="reviews-grid">
+                <!-- Review Card 1 -->
+                <div class="review-card">
+                    <div class="review-quote">"Buying crypto was never so easy"</div>
+                    <div class="review-text">
+                        AI ROBOT has simplified my crypto trading experience. The platform is intuitive and the AI-powered insights have helped me make better investment decisions.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="/placeholder.svg?height=40&width=40" alt="John Carter" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">John Carter</div>
+                                <div class="username">@johncarter</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Card 2 -->
+                <div class="review-card">
+                    <div class="review-quote">"The best crypto wallet, period"</div>
+                    <div class="review-text">
+                        I've tried many crypto platforms, but AI ROBOT stands out with its security features and user-friendly interface. The AI trading system delivers consistent returns.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Michael Scott" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Michael Scott</div>
+                                <div class="username">@michscott</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Card 3 -->
+                <div class="review-card">
+                    <div class="review-quote">"Such a great trading experience"</div>
+                    <div class="review-text">
+                        The AI-powered trading system has transformed how I invest in crypto. It accurately captures market fluctuations and helps me maximize profits with minimal effort.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Sophie Moore" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Sophie Moore</div>
+                                <div class="username">@soph_moore</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Card 4 -->
+                <div class="review-card">
+                    <div class="review-quote">"The future of crypto trading"</div>
+                    <div class="review-text">
+                        AI ROBOT's intelligent system has helped me achieve consistent returns even in volatile markets. The platform is secure, reliable, and truly revolutionary.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Matt Cannon" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Matt Cannon</div>
+                                <div class="username">@matt_cannon</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Core Cooperative Financial Institutions -->
         <div class="institutions-section">
             <div class="section-title">Core Cooperative Financial Institutions</div>
@@ -1305,6 +1627,129 @@
                 });
             });
         });
+
+// Reviews functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Sample reviews data - can be expanded or loaded from an API
+    const reviewsData = [
+        {
+            quote: "Buying crypto was never so easy",
+            text: "AI ROBOT has simplified my crypto trading experience. The platform is intuitive and the AI-powered insights have helped me make better investment decisions.",
+            author: "John Carter",
+            username: "@johncarter",
+            rating: 5
+        },
+        {
+            quote: "The best crypto wallet, period",
+            text: "I've tried many crypto platforms, but AI ROBOT stands out with its security features and user-friendly interface. The AI trading system delivers consistent returns.",
+            author: "Michael Scott",
+            username: "@michscott",
+            rating: 5
+        },
+        {
+            quote: "Such a great trading experience",
+            text: "The AI-powered trading system has transformed how I invest in crypto. It accurately captures market fluctuations and helps me maximize profits with minimal effort.",
+            author: "Sophie Moore",
+            username: "@soph_moore",
+            rating: 5
+        },
+        {
+            quote: "The future of crypto trading",
+            text: "AI ROBOT's intelligent system has helped me achieve consistent returns even in volatile markets. The platform is secure, reliable, and truly revolutionary.",
+            author: "Matt Cannon",
+            username: "@matt_cannon",
+            rating: 5
+        },
+        {
+            quote: "Game changer for crypto investors",
+            text: "Since using AI ROBOT, my investment strategy has completely transformed. The AI predictions are remarkably accurate and the interface makes trading effortless.",
+            author: "Emma Wilson",
+            username: "@emma_trades",
+            rating: 5
+        },
+        {
+            quote: "Best investment I've made",
+            text: "The returns I've seen through AI ROBOT's quantitative trading system have exceeded all my expectations. This platform is truly revolutionary.",
+            author: "David Chen",
+            username: "@dchen_crypto",
+            rating: 5
+        },
+        {
+            quote: "Secure and profitable",
+            text: "What impresses me most about AI ROBOT is the perfect balance between security and profitability. My investments are safe while generating excellent returns.",
+            author: "Sarah Johnson",
+            username: "@sarah_j",
+            rating: 5
+        },
+        {
+            quote: "Trading made simple",
+            text: "AI ROBOT has demystified crypto trading for me. The AI does all the heavy lifting while I enjoy the profits. Couldn't ask for a better platform.",
+            author: "James Wilson",
+            username: "@jwilson",
+            rating: 5
+        }
+    ];
+
+    // Function to load more reviews
+    function loadMoreReviews() {
+        const reviewsGrid = document.querySelector('.reviews-grid');
+        if (!reviewsGrid) return; // Exit if element doesn't exist
+        
+        reviewsGrid.innerHTML = ''; // Clear existing reviews
+        
+        // Get current counter values
+        const counterElement = document.querySelector('.reviews-counter');
+        if (!counterElement) return; // Exit if element doesn't exist
+        
+        const counterText = counterElement.textContent;
+        const [start, end] = counterText.split('—').map(num => parseInt(num.trim()));
+        
+        // Display reviews based on counter
+        for (let i = start - 1; i < end; i++) {
+            if (i < reviewsData.length) {
+                const review = reviewsData[i];
+                const stars = '<i class="fas fa-star"></i>'.repeat(review.rating);
+                
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                reviewCard.innerHTML = `
+                    <div class="review-quote">"${review.quote}"</div>
+                    <div class="review-text">${review.text}</div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="/placeholder.svg?height=40&width=40" alt="${review.author}" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">${review.author}</div>
+                                <div class="username">${review.username}</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${stars}
+                        </div>
+                    </div>
+                `;
+                
+                reviewsGrid.appendChild(reviewCard);
+            }
+        }
+    }
+
+    // Button functionality for reviews
+    const allReviewsBtn = document.querySelector('.btn-all-reviews');
+    if (allReviewsBtn) {
+        allReviewsBtn.addEventListener('click', function() {
+            // Navigate to reviews.html page
+            window.location.href = 'reviews.html';
+        });
+    }
+    
+    const downloadBtn = document.querySelector('.btn-download');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            alert('Download app clicked');
+        });
+    }
+});
     </script>
 </body>
 </html>
