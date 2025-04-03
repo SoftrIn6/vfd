@@ -4,12 +4,7 @@ import "firebase/firestore"
 
 // Initialize Firebase (replace with your configuration)
 // const firebaseConfig = {
-//   apiKey: "AIzaSyBrxOkeTvxINBSy5jpd5gi4nh51CdV9GTE",
-//   authDomain: "crypto-trading-platform-7c30a.firebaseapp.com",
-//   projectId: "crypto-trading-platform-7c30a",
-//   storageBucket: "crypto-trading-platform-7c30a.firebasestorage.app",
-//   messagingSenderId: "244486040017",
-//   appId: "1:244486040017:web:adb708f4e25d7e065f58f0"
+//   a
 // };
 
 // firebase.initializeApp(firebaseConfig);
