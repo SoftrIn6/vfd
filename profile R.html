@@ -3,392 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Crypto Trading Platform</title>
+    <title>Profile - AI ROBOT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <!-- Your existing styles remain the same -->
     <style>
-         /* Reset & Base Styles */
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-      body {
-          background-color: #f8f9fa;
-          color: #333;
-          line-height: 1.5;
-          overflow-x: hidden;
-          
-      }
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
 
-      /* Container */
-      .container {
-          width: 470px;
-          margin: 0 auto;
-          padding: 0;
-          position: relative;
-          min-width: 470px;
-          background-color: #fff;
-          min-height: 100vh;
-      }
+        /* Container */
+        .container {
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 470px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
 
-      /* Header Styles */
-      .header {
-          padding: 15px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #fff;
-      }
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+        }
 
-      .logo {
-          display: flex;
-          align-items: center;
-      }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
 
-      .logo-img {
-          width: 40px;
-          height: 40px;
-          margin-right: 10px;
-      }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
 
-      .logo-text {
-          font-size: 20px;
-          font-weight: bold;
-          color: #333;
-      }
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
 
-      .header-btns {
-          display: flex;
-          gap: 10px;
-      }
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
 
-      .header-btn {
-          display: flex;
-          align-items: center;
-          background-color: #fff;
-          border-radius: 20px;
-          padding: 5px 12px;
-          font-size: 14px;
-          color: #ffa500;
-          border: 1px solid #ffa500;
-          cursor: pointer;
-      }
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
 
-      .header-btn.app {
-          background-color: #ffa500;
-          color: #fff;
-      }
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
 
-      .header-btn i {
-          margin-right: 5px;
-      }
+        .header-btn i {
+            margin-right: 5px;
+        }
 
-      /* User Profile */
-      .user-profile {
-          padding: 20px;
-          background-color: #fff;
-          display: flex;
-          align-items: center;
-          gap: 15px;
-      }
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
 
-      .user-avatar {
-          width: 70px;
-          height: 70px;
-          background-color: #f0f0f0;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 30px;
-          color: #ccc;
-          position: relative;
-      }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
 
-      .edit-icon {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          background-color: #fff;
-          border: 1px solid #eee;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          color: #666;
-      }
+        .user-avatar i {
+            font-size: 30px;
+            color: #ccc;
+        }
 
-      .user-info {
-          flex: 1;
-      }
+        .user-info {
+            flex: 1;
+        }
 
-      .username {
-          font-size: 18px;
-          font-weight: bold;
-          margin-bottom: 5px;
-      }
+        .user-copy {
+            margin-left: 10px;
+            color: #999;
+            cursor: pointer;
+        }
 
-      .user-email {
-          font-size: 14px;
-          color: #666;
-      }
+        /* Assets Section */
+        .assets-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
 
-      /* Assets Section */
-      .assets-section {
-          padding: 20px;
-          background-color: #fff;
-      }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
 
-      .section-label {
-          font-size: 16px;
-          font-weight: bold;
-          margin-bottom: 10px;
-      }
+        .total-assets {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 20px;
+        }
 
-      .total-assets {
-          font-size: 32px;
-          font-weight: bold;
-          color: #ffa500;
-          margin-bottom: 20px;
-      }
+        .assets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-      .assets-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 15px;
-      }
+        .asset-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
 
-      .asset-item {
-          background-color: #f9f9f9;
-          border-radius: 10px;
-          padding: 15px;
-      }
+        .asset-label {
+            font-size: 16px;
+            color: #999;
+            margin-bottom: 10px;
+        }
 
-      .asset-label {
-          font-size: 14px;
-          color: #666;
-          margin-bottom: 10px;
-      }
+        .asset-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-      .asset-value {
-          font-size: 18px;
-          font-weight: bold;
-          color: #333;
-      }
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px;
+        }
 
-      /* Action Buttons */
-      .action-buttons {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 15px;
-          padding: 0 20px 20px;
-          
-      }
+        .action-btn {
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
 
-      .action-btn {
-          background-color: #ffa500;
-          color: white;
-          border: none;
-          border-radius: 10px;
-          padding: 12px 0;
-          font-size: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          text-align: center;
-      }
+        /* Revenue Section */
+        .revenue-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
 
-      /* Revenue Section */
-      .revenue-section {
-          padding: 20px;
-          background-color: #fff;
-      }
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
 
-      .revenue-total {
-          font-size: 32px;
-          font-weight: bold;
-          color: #ffa500;
-          margin-bottom: 20px;
-      }
+        .revenue-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
 
-      .revenue-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 15px;
-          margin-bottom: 15px;
-      }
+        /* App Services */
+        .services-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
 
-      /* App Services */
-      .app-services {
-          padding: 20px;
-          background-color: #fff;
-          align-items: center;
-      }
+        .service-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+        }
 
-      .services-title {
-          font-size: 18px;
-          font-weight: bold;
-          margin-bottom: 15px;
-          position: relative;
-          display: flex;
-          align-items: center;
-          
-      }
+        .service-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+        }
 
-      .services-title::after {
-          content: '';
-          display: block;
-          width: 40px;
-          height: 3px;
-          background: linear-gradient(90deg, #ffa500, #ff6b6b);
-          position: absolute;
-          bottom: -5px;
-          left: 0;
-          
-      }
+        .service-list {
+            margin-top: 20px;
+        }
 
-      .service-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 0;
-          border-bottom: 1px solid #f0f0f0;
-          cursor: pointer;
-        margin-left: 15px;
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
 
-      }
+        .service-item:last-child {
+            border-bottom: none;
+        }
 
-      .service-left {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-      }
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff8e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ffa500;
+        }
 
-      .service-icon {
-          width: 40px;
-          height: 40px;
-          background-color: #f9f9f9;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffa500;
-          font-size: 18px;
-          
-      }
+        .service-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
 
-      .service-name {
-          font-size: 16px;
-      }
+        .service-name {
+            font-size: 16px;
+        }
 
-      .service-right {
-          color: #ccc;
-          
-      }
+        .service-arrow {
+            color: #ccc;
+        }
 
-      /* Sign Out Button */
-      .sign-out-btn {
-          margin: 20px;
-          background-color: #ffa500;
-          color: white;
-          border: none;
-          border-radius: 10px;
-          padding: 15px 0;
-          font-size: 18px;
-          font-weight: bold;
-          width: calc(100% - 40px);
-          cursor: pointer;
-          text-align: center;
-      }
+        /* Sign Out Button */
+        .sign-out-btn {
+            margin: 15px;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            width: calc(100% - 30px);
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 80px;
+        }
 
-      /* Bottom Navigation */
-      .bottom-nav {
-          position: fixed;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 470px;
-          min-width: 470px;
-          background-color: #fff;
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          padding: 10px 0;
-          border-top: 1px solid #eee;
-          z-index: 100;
-          
-      }
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
 
-      .nav-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-decoration: none;
-          color: #999;
-          font-size: 12px;
-      }
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 470px;
+            min-width: 470px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
 
-      .nav-item.active {
-          color: #ffa500;
-      }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
 
-      .nav-item i {
-          font-size: 20px;
-          margin-bottom: 5px;
-      }
+        .nav-item.active {
+            color: #ffa500;
+        }
 
-      /* Back to top button */
-      .back-to-top {
-          position: fixed;
-          bottom: 80px;
-          right: 20px;
-          width: 40px;
-          height: 40px;
-          background-color: #ffa500;
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 99;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
 
-      /* Media Queries for Responsiveness */
-      @media (max-width: 470px) {
-          .container {
-              width: 100%;
-              min-width: 320px;
-          }
-          
-          .bottom-nav {
-              width: 100%;
-              min-width: 320px;
-          }
-      }
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+                min-width: 320px;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
+        }
 
-      @media (min-width: 471px) {
-          body {
-              display: flex;
-              justify-content: center;
-              align-items: flex-start;
-              min-height: 100vh;
-              background-color: #f0f0f0;
-          }
-          
-          .container {
-              box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-          }
-      }
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
     </style>
 </head>
 <body>
@@ -415,8 +390,8 @@
                 <i class="fas fa-user"></i>
             </div>
             <div class="user-info">
-                <div id="username">Loading...</div>
-                <div id="email" style="color: #666; font-size: 14px;">Loading...</div>
+                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
+                <div style="color: #666; margin-top: 5px;" id="user-email"></div>
                 <i class="fas fa-copy user-copy" id="copy-email"></i>
             </div>
         </div>
@@ -424,19 +399,19 @@
         <!-- Assets Section -->
         <div class="assets-section">
             <div class="section-title">Total Assets</div>
-            <div class="total-assets" id="account-balance">$0</div>
+            <div class="total-assets" id="total-assets">$0.00</div>
             <div class="assets-grid">
                 <div class="asset-item">
                     <div class="asset-label">Quantitative Account</div>
-                    <div class="asset-value" id="quantitative-account">$0</div>
+                    <div class="asset-value" id="quantitative-account">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Smart Account</div>
-                    <div class="asset-value" id="smart-account">$0</div>
+                    <div class="asset-value" id="smart-account">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Profit Assets</div>
-                    <div class="asset-value" id="profit-assets">$0</div>
+                    <div class="asset-value" id="profit-assets">$0.00</div>
                 </div>
             </div>
         </div>
@@ -450,19 +425,19 @@
         <!-- Revenue Section -->
         <div class="revenue-section">
             <div class="section-title">Total Revenue</div>
-            <div class="total-assets" id="total-revenue">$0</div>
+            <div class="total-assets" id="total-revenue">$0.00</div>
             <div class="revenue-grid">
                 <div class="asset-item">
                     <div class="asset-label">Yesterday's Earnings</div>
-                    <div class="asset-value" id="yesterday-earnings">$0</div>
+                    <div class="asset-value" id="yesterday-earnings">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Today's Earnings</div>
-                    <div class="asset-value" id="today-earnings">$0</div>
+                    <div class="asset-value" id="today-earnings">$0.00</div>
                 </div>
                 <div class="asset-item">
                     <div class="asset-label">Commission Today</div>
-                    <div class="asset-value" id="commission">$0</div>
+                    <div class="asset-value" id="commission-today">$0.00</div>
                 </div>
             </div>
         </div>
@@ -552,10 +527,10 @@
         </div>
 
         <!-- Sign Out Button -->
-        <div class="sign-out-btn" id="logout-btn">Sign Out</div>
+        <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
 
         <!-- Float Button -->
-        <div class="float-btn">
+        <div class="float-btn" id="refresh-btn">
             <i class="fas fa-arrow-up"></i>
         </div>
     </div>
@@ -584,100 +559,256 @@
         </a>
     </nav>
 
-    <!-- Load your Firebase configuration and auth/firestore functions -->
-    <script src="firebase-config.js"></script>
-    <script src="auth.js"></script>
-    <script src="firestore.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        // Check if user is logged in
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
+
+        // Check if user is logged in when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuthState(async function(user) {
-                if (!user) {
-                    // User is not signed in, redirect to login page
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken || !userData.email) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Initialize UI with cached data first
+            if (userData) {
+                updateUI(userData);
+            }
+            
+            // Fetch fresh user data from Baserow
+            fetchUserData(userData.email);
+            
+            // Set up refresh interval (every 30 seconds)
+            setInterval(() => {
+                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (currentUserData.email) {
+                    fetchUserData(currentUserData.email);
+                }
+            }, 30000);
+            
+            // Copy email functionality
+            document.getElementById('copy-email').addEventListener('click', function() {
+                const email = document.getElementById('user-email').textContent;
+                navigator.clipboard.writeText(email)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            });
+            
+            // Sign out functionality
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
                     window.location.href = 'login.html';
-                    return;
+                }
+            });
+            
+            // Action buttons functionality
+            document.getElementById('recharge-btn').addEventListener('click', function() {
+                window.location.href = 'recharge.html';
+            });
+            
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                window.location.href = 'withdraw.html';
+            });
+            
+            // Service items functionality
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.id;
+                    alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
+                });
+            });
+            
+            // Refresh button functionality
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Force data refresh
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    fetchUserData(userData.email, true);
+                }
+            });
+        });
+        
+        // Fetch user data from Baserow
+        async function fetchUserData(email, forceRefresh = false) {
+            try {
+                // First, get the field structure from Baserow
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Field mapping:', fieldMap);
+                
+                // Get the email field ID
+                const emailFieldId = fieldMap['email'];
+                
+                if (!emailFieldId) {
+                    throw new Error('Email field not found in Baserow table');
                 }
                 
-                // User is signed in, load profile data
-                const profileResult = await getUserProfile(user.uid);
+                // Add a timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
                 
-                if (profileResult.success) {
-                    const userData = profileResult.data;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Fetched user data response:', data);
+                
+                if (data.results && data.results.length > 0) {
+                    const user = data.results[0];
+                    console.log('Found user:', user);
                     
-                    // Update UI with user data
-                    document.getElementById('username').textContent = userData.username || 'User';
-                    document.getElementById('email').textContent = userData.email || '';
-                    
-                    // Format currency values
-                    const formatCurrency = (value) => {
-                        return parseFloat(value || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    // Create a user data object to store in localStorage
+                    const userDataToStore = {
+                        id: user.id,
+                        username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                        email: email,
+                        referralCode: user[`field_${fieldMap['referralCode']}`] || '',
+                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                        quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                        yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                        today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
                     };
                     
-                    // Update financial data
-                    document.getElementById('account-balance').textContent = `$${formatCurrency(userData.accountBalance)}`;
-                    document.getElementById('quantitative-account').textContent = `$${formatCurrency(userData.quantitativeAccount)}`;
-                    document.getElementById('smart-account').textContent = `$${formatCurrency(userData.smartAccount)}`;
-                    document.getElementById('profit-assets').textContent = `$${formatCurrency(userData.profitAssets || 0)}`;
-                    document.getElementById('total-revenue').textContent = `$${formatCurrency(userData.totalRevenue)}`;
-                    document.getElementById('yesterday-earnings').textContent = `$${formatCurrency(userData.yesterdayEarnings)}`;
-                    document.getElementById('today-earnings').textContent = `$${formatCurrency(userData.todayEarnings)}`;
-                    document.getElementById('commission').textContent = `$${formatCurrency(userData.commission)}`;
+                    console.log('User data to store:', userDataToStore);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                    
+                    // Update UI with user data
+                    updateUI(userDataToStore);
+                    
+                    if (forceRefresh) {
+                        alert('Data refreshed successfully!');
+                    }
+                    
+                    return userDataToStore;
                 } else {
-                    console.error("Failed to load user data:", profileResult.error);
+                    console.error('No user data found for email:', email);
+                    
+                    if (forceRefresh) {
+                        alert('No user data found. Please try again or contact support.');
+                    }
+                    
+                    return null;
                 }
-            });
-        });
-
-        // Copy email to clipboard
-        document.getElementById('copy-email').addEventListener('click', function() {
-            const email = document.getElementById('email').textContent;
-            navigator.clipboard.writeText(email)
-                .then(() => {
-                    alert('Email copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy email: ', err);
-                });
-        });
-
-        // Action buttons functionality
-        document.getElementById('recharge-btn').addEventListener('click', function() {
-            window.location.href = 'recharge.html';
-        });
-
-        document.getElementById('withdraw-btn').addEventListener('click', function() {
-            window.location.href = 'withdraw.html';
-        });
-
-        // Service items functionality
-        document.querySelectorAll('.service-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const serviceId = this.id;
-                alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
-            });
-        });
-
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', async function() {
-            if (confirm('Are you sure you want to sign out?')) {
-                const result = await logoutUser();
-                if (result.success) {
-                    window.location.href = 'login.html';
-                } else {
-                    alert('Error signing out: ' + result.error);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                
+                if (forceRefresh) {
+                    alert('Failed to refresh data. Please try again.');
                 }
+                
+                return null;
             }
-        });
-
-        // Float button scroll to top
-        document.querySelector('.float-btn').addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        }
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = userData.email;
+            
+            // Log all financial data for debugging
+            console.log('Financial data:', {
+                total_assets: userData.total_assets,
+                quantitative_account: userData.quantitative_account,
+                smart_account: userData.smart_account,
+                profit_assets: userData.profit_assets,
+                total_revenue: userData.total_revenue,
+                yesterday_earnings: userData.yesterday_earnings,
+                today_earnings: userData.today_earnings,
+                commission_today: userData.commission_today
             });
-        });
+            
+            // Update financial data
+            updateFinancialValue('total-assets', userData.total_assets);
+            updateFinancialValue('quantitative-account', userData.quantitative_account);
+            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('profit-assets', userData.profit_assets);
+            
+            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+            updateFinancialValue('today-earnings', userData.today_earnings);
+            updateFinancialValue('commission-today', userData.commission_today);
+        }
+        
+        // Helper function to update financial values
+        function updateFinancialValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Format the value
+                let formattedValue = '0.00';
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    // If it's a number or a string that can be converted to a number
+                    if (!isNaN(parseFloat(value))) {
+                        formattedValue = parseFloat(value).toFixed(2);
+                    } else {
+                        formattedValue = value;
+                        // If it doesn't have decimal places, add them
+                        if (!formattedValue.includes('.')) {
+                            formattedValue += '.00';
+                        }
+                    }
+                }
+                
+                // Update the element
+                element.textContent = '$' + formattedValue;
+            }
+        }
     </script>
 </body>
 </html>
-
