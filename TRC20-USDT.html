@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRC20-USDT Recharge</title>
+    <title>USDC Recharge</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -263,7 +263,7 @@
             </div>
 
             <div class="crypto-icon">
-                <img src="/placeholder.svg?height=60&width=60" alt="TRC20-USDT" id="crypto-logo">
+                <img src="/placeholder.svg?height=60&width=60" alt="USDC" id="crypto-logo">
             </div>
 
             <div class="warning-box">
@@ -286,15 +286,15 @@
                     QR Code will be displayed here
                 </div>
                 <div class="recharge-address-title">Recharge Address</div>
-                <div class="address-box" id="address-text">LRgT6fqwDxNxyrpguNGgekP2e18XZ8T5hL</div>
+                <div class="address-box" id="address-text">0x0c5D4f87d43aE8037c88D768C6481762e2544B8C</div>
                 <button class="copy-btn" onclick="copyAddress()">Copy</button>
             </div>
 
             <button class="recharge-complete-btn" onclick="rechargeComplete()">Recharge Complete</button>
 
             <div class="instructions">
-                <div class="instruction-item">1. Copy the address above or scan the QR code and select the TRC20 network to recharge USDT</div>
-                <div class="instruction-item">2. Please do not recharge other non-TRC20-USDT assets, the funds will arrive in your account in about 1 to 3 minutes after recharging</div>
+                <div class="instruction-item">1. Copy the address above or scan the QR code and select the ERC20 network to recharge USDC</div>
+                <div class="instruction-item">2. Please do not recharge other non-USDC assets, the funds will arrive in your account in about 1 to 3 minutes after recharging</div>
                 <div class="instruction-item">3. If it does not arrive for a long time, please refresh the page or contact customer service</div>
             </div>
         </div>
@@ -321,8 +321,8 @@
             history.back();
         }
 
-        // Add TRC20-USDT logo
-        document.getElementById('crypto-logo').src = 'https://cryptologos.cc/logos/tether-usdt-logo.png';
+        // Add USDC logo
+        document.getElementById('crypto-logo').src = 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png';
 
         function goBack() {
             window.location.href = 'recharge.html';
@@ -330,4 +330,3 @@
     </script>
 </body>
 </html>
-
