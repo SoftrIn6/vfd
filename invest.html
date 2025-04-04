@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -441,6 +440,36 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Email input styles */
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .email-input:focus {
+            border-color: #ffa500;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+        }
+
+        .email-error {
+            color: #ff3b30;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: left;
+            display: none;
+        }
+
+        .modal-btn.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            margin-top: 10px;
+        }
+
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
@@ -523,6 +552,17 @@
                 <div class="modal-message" id="modal-message">Your investment was successful!</div>
                 <button class="modal-btn" onclick="closeModal()">OK</button>
             </div>
+            <div id="modal-email-input" style="display: none;">
+                <div class="modal-icon">
+                    <i class="fas fa-envelope" style="color: #ffa500;"></i>
+                </div>
+                <div class="modal-title">Enter Your Email</div>
+                <div class="modal-message">Please enter your email to verify your account.</div>
+                <input type="email" id="email-input" class="email-input" placeholder="your@email.com">
+                <div id="email-error" class="email-error">Please enter a valid email address</div>
+                <button class="modal-btn" id="verify-email-btn">Verify & Invest</button>
+                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -590,11 +630,13 @@
         { label: "8 days", value: 8, interestRate: 2.06 }
     ];
 
+    // Variables to store current investment selection
+    let currentPlan = null;
+    let currentQuantity = 1;
+    let currentDuration = null;
+
     // Initialize the app when document is ready
     document.addEventListener('DOMContentLoaded', function() {
-        // Check if user is logged in
-        checkUserLogin();
-        
         // Generate plan cards
         generatePlanCards();
         
@@ -615,38 +657,266 @@
                 }
             });
         });
+
+        // Add event listener for email verification button
+        document.getElementById('verify-email-btn').addEventListener('click', function() {
+            const email = document.getElementById('email-input').value.trim();
+            
+            // Validate email
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('email-error').style.display = 'block';
+                return;
+            }
+            
+            // Hide email input, show loading
+            document.getElementById('modal-email-input').style.display = 'none';
+            document.getElementById('modal-loading').style.display = 'block';
+            
+            // Process verification and investment
+            verifyAndInvest(email);
+        });
     });
 
-    // Check if user is logged in
-    function checkUserLogin() {
-        const userEmail = localStorage.getItem('userEmail');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    // Generate Plan Cards
+    function generatePlanCards() {
+        const plansContainer = document.querySelector('.investment-plans');
+        plansContainer.innerHTML = '';
+
+        const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
+
+        sortedPlans.forEach(plan => {
+            const planCard = document.createElement('div');
+            planCard.className = 'plan-card';
+            planCard.setAttribute('data-plan-id', plan.id);
+
+            planCard.innerHTML = `
+                <div class="plan-header">
+                    <div class="plan-title">${plan.title}</div>
+                </div>
+                <div class="plan-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">${plan.price} USDT</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Daily Rate</div>
+                        <div class="detail-value rate">${plan.dailyRate}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Cycle</div>
+                        <div class="detail-value">${plan.cycle}</div>
+                    </div>
+                </div>
+            `;
+            planCard.addEventListener('click', () => showPlanDetail(plan.id));
+            plansContainer.appendChild(planCard);
+        });
+    }
+
+    // Show Plan Detail
+    function showPlanDetail(planId) {
+        const plan = investmentPlans.find(p => p.id === planId);
+        if (!plan) return;
+
+        // Store current plan
+        currentPlan = plan;
+        currentQuantity = 1;
+        currentDuration = durationOptions[0];
+
+        document.getElementById('main-page').style.display = 'none';
+        document.getElementById('plan-detail').style.display = 'block';
+
+        const detailContent = document.querySelector('.plan-detail-content');
         
-        if (!userEmail) {
-            // For demo purposes, set a default user
-            // In a real app, you would redirect to login
-            const demoUser = {
-                email: 'demo@example.com',
-                total_assets: '1000.00',
-                smart_account: '500.00',
-                profit_assets: '200.00',
-                total_revenue: '300.00'
-            };
+        // Generate initial content
+        updatePlanDetailContent();
+        
+        function updatePlanDetailContent() {
+            const totalInvestment = plan.price * currentQuantity;
+            const dailyRate = parseFloat(plan.dailyRate);
+            const cycleDays = parseInt(plan.cycle);
+            const estimatedRevenue = (plan.price * currentQuantity * dailyRate / 100 * cycleDays).toFixed(2);
             
-            localStorage.setItem('userEmail', demoUser.email);
-            localStorage.setItem('userData', JSON.stringify(demoUser));
+            detailContent.innerHTML = `
+                <div class="plan-detail-card">
+                    <div class="plan-detail-title">${plan.title}</div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Available Balance</div>
+                        <div class="detail-value-lg">0.000000 USDT</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Price</div>
+                        <div class="detail-value-lg">${plan.price} USDT</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Purchase Limit</div>
+                        <div class="detail-value-lg">No Limit(Bought0)</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Purchase Quantity</div>
+                        <div class="quantity-selector">
+                            <div class="quantity-btn" id="decrease-btn">−</div>
+                            <input type="text" class="quantity-input" id="quantity-input" value="${currentQuantity}" readonly>
+                            <div class="quantity-btn" id="increase-btn">+</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Cycle</div>
+                        <div class="detail-value-lg">${plan.cycle}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Daily Rate</div>
+                        <div class="detail-value-lg">${plan.dailyRate}</div>
+                    </div>
+                    
+                    <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USDT Invest</button>
+                </div>
+                
+                <div class="plan-detail-card">
+                    <div class="project-rule">Project Rule</div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Repayment</div>
+                        <div class="detail-value-lg">Maturity Principal And Interest</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Unit Price</div>
+                        <div class="detail-value-lg">${plan.price} USDT</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Amount</div>
+                        <div class="detail-value-lg">${currentQuantity}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Daily Return</div>
+                        <div class="detail-value-lg">${plan.dailyRate}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Invest Cycle</div>
+                        <div class="detail-value-lg">${plan.cycle}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label-lg">Estimated Revenue</div>
+                        <div class="detail-value-lg">
+                            ${plan.price} * ${currentQuantity} * ${plan.dailyRate} * ${cycleDays} = ${estimatedRevenue} USDT
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            console.log('Demo user set for testing purposes');
-        } else {
-            console.log('User already logged in:', userEmail);
+            // Add event listeners after content is updated
+            document.getElementById('decrease-btn').addEventListener('click', () => {
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                    updatePlanDetailContent();
+                }
+            });
             
-            // Refresh user data from Baserow
-            fetchUserData(userEmail);
+            document.getElementById('increase-btn').addEventListener('click', () => {
+                currentQuantity++;
+                updatePlanDetailContent();
+            });
+
+            // Add invest button click handler
+            document.getElementById('invest-btn').addEventListener('click', () => {
+                showEmailInputModal();
+            });
         }
     }
 
-    // Fetch user data from Baserow
-    async function fetchUserData(email) {
+    // Show email input modal
+    function showEmailInputModal() {
+        const modal = document.getElementById('modal');
+        const modalEmailInput = document.getElementById('modal-email-input');
+        const emailInput = document.getElementById('email-input');
+        const emailError = document.getElementById('email-error');
+        
+        // Reset email input and error
+        emailInput.value = '';
+        emailError.style.display = 'none';
+        
+        // Show modal with email input
+        modal.style.display = 'flex';
+        modalEmailInput.style.display = 'block';
+        document.getElementById('modal-loading').style.display = 'none';
+        document.getElementById('modal-result').style.display = 'none';
+        
+        // Focus on email input
+        setTimeout(() => {
+            emailInput.focus();
+        }, 100);
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    // Verify user and process investment
+    async function verifyAndInvest(email) {
+        try {
+            // Fetch user data from Baserow
+            const userData = await fetchUserDataByEmail(email);
+            
+            if (!userData) {
+                showModalResult(false, 'User not found', 'No account found with this email. Please check your email or register.');
+                return;
+            }
+            
+            // Calculate total investment amount
+            const totalInvestment = currentPlan.price * currentQuantity;
+            
+            // Check if user has enough balance
+            const totalAssets = parseFloat(userData.total_assets) || 0;
+            
+            console.log('User assets:', totalAssets);
+            console.log('Investment amount:', totalInvestment);
+            
+            if (totalAssets < totalInvestment) {
+                showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USDT) is not enough for this investment (${totalInvestment.toFixed(2)} USDT).`);
+                return;
+            }
+            
+            // If balance is sufficient, process the investment
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Update user balance in Baserow
+            const success = await updateUserBalance(userData, totalAssets - totalInvestment);
+            
+            if (success) {
+                showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${currentPlan.title}.`);
+                
+                // Save user email to localStorage for future use
+                localStorage.setItem('userEmail', email);
+                
+                // Update userData with new balance and save to localStorage
+                userData.total_assets = (totalAssets - totalInvestment).toFixed(2);
+                localStorage.setItem('userData', JSON.stringify(userData));
+            } else {
+                showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
+            }
+            
+        } catch (error) {
+            console.error('Error processing investment:', error);
+            showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
+        }
+    }
+    
+    // Fetch user data from Baserow by email
+    async function fetchUserDataByEmail(email) {
         try {
             // Get the field structure from Baserow to map field IDs
             const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
@@ -698,8 +968,8 @@
             if (data.results && data.results.length > 0) {
                 const user = data.results[0];
                 
-                // Create a user data object to store in localStorage
-                const userDataToStore = {
+                // Create a user data object
+                const userData = {
                     id: user.id,
                     email: email,
                     total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
@@ -708,10 +978,7 @@
                     total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00'
                 };
                 
-                // Save to localStorage
-                localStorage.setItem('userData', JSON.stringify(userDataToStore));
-                
-                return userDataToStore;
+                return userData;
             } else {
                 console.error('No user data found for email:', email);
                 return null;
@@ -721,271 +988,9 @@
             return null;
         }
     }
-
-    // Generate Plan Cards
-    function generatePlanCards() {
-        const plansContainer = document.querySelector('.investment-plans');
-        plansContainer.innerHTML = '';
-
-        const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
-
-        sortedPlans.forEach(plan => {
-            const planCard = document.createElement('div');
-            planCard.className = 'plan-card';
-            planCard.setAttribute('data-plan-id', plan.id);
-
-            planCard.innerHTML = `
-                <div class="plan-header">
-                    <div class="plan-title">${plan.title}</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">${plan.price} USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">${plan.dailyRate}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">${plan.cycle}</div>
-                    </div>
-                </div>
-            `;
-            planCard.addEventListener('click', () => showPlanDetail(plan.id));
-            plansContainer.appendChild(planCard);
-        });
-    }
-
-    // Show Plan Detail
-    function showPlanDetail(planId) {
-        const plan = investmentPlans.find(p => p.id === planId);
-        if (!plan) return;
-
-        document.getElementById('main-page').style.display = 'none';
-        document.getElementById('plan-detail').style.display = 'block';
-
-        const detailContent = document.querySelector('.plan-detail-content');
-        
-        // Default values
-        let quantity = 1;
-        let selectedDuration = durationOptions[0]; // Default to 12hrs
-        
-        // Generate initial content
-        updatePlanDetailContent();
-        
-        function updatePlanDetailContent() {
-            const totalInvestment = plan.price * quantity;
-            const estimatedRevenue = totalInvestment * selectedDuration.interestRate;
-            
-            // Get user data from localStorage
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            const userBalance = userData.total_assets ? parseFloat(userData.total_assets).toFixed(2) : '0.00';
-            
-            detailContent.innerHTML = `
-                <div class="plan-detail-card">
-                    <div class="plan-detail-title">${plan.title}</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">${userBalance} USDT</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Price</div>
-                        <div class="detail-value-lg">${plan.price} USDT</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Limit</div>
-                        <div class="detail-value-lg">No Limit(Bought0)</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Quantity</div>
-                        <div class="quantity-selector">
-                            <div class="quantity-btn" id="decrease-btn">−</div>
-                            <input type="text" class="quantity-input" id="quantity-input" value="${quantity}" readonly>
-                            <div class="quantity-btn" id="increase-btn">+</div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Cycle</div>
-                        <div class="cycle-selector" id="cycle-selector">
-                            <span id="selected-cycle">${plan.cycle}</span>
-                            <i class="fas fa-chevron-down"></i>
-                            <div class="cycle-dropdown" id="cycle-dropdown">
-                                ${durationOptions.map(option => `
-                                    <div class="cycle-option" data-value="${option.value}" data-label="${option.label}" data-rate="${option.interestRate}">
-                                        ${option.label} (${(option.interestRate * 100).toFixed(0)}%)
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Daily Rate</div>
-                        <div class="detail-value-lg">${plan.dailyRate}</div>
-                    </div>
-                    
-                    <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USDT Invest</button>
-                </div>
-                
-                <div class="plan-detail-card">
-                    <div class="project-rule">Project Rule</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Repayment</div>
-                        <div class="detail-value-lg">Maturity Principal And Interest</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Unit Price</div>
-                        <div class="detail-value-lg">${plan.price} USDT</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Amount</div>
-                        <div class="detail-value-lg">${quantity}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Daily Return</div>
-                        <div class="detail-value-lg">${plan.dailyRate}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Invest Cycle</div>
-                        <div class="detail-value-lg">${plan.cycle}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Estimated Revenue</div>
-                        <div class="detail-value-lg">
-                            ${plan.price} * ${quantity} * ${plan.dailyRate} * ${plan.cycle.split(' ')[0]} = ${(plan.price * quantity * parseFloat(plan.dailyRate) / 100 * parseInt(plan.cycle)).toFixed(2)} USDT
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Add event listeners after content is updated
-            document.getElementById('decrease-btn').addEventListener('click', () => {
-                if (quantity > 1) {
-                    quantity--;
-                    updatePlanDetailContent();
-                }
-            });
-            
-            document.getElementById('increase-btn').addEventListener('click', () => {
-                quantity++;
-                updatePlanDetailContent();
-            });
-            
-            const cycleSelector = document.getElementById('cycle-selector');
-            const cycleDropdown = document.getElementById('cycle-dropdown');
-            
-            cycleSelector.addEventListener('click', (e) => {
-                e.stopPropagation();
-                cycleDropdown.style.display = cycleDropdown.style.display === 'block' ? 'none' : 'block';
-            });
-            
-            document.querySelectorAll('.cycle-option').forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const value = parseFloat(option.getAttribute('data-value'));
-                    const label = option.getAttribute('data-label');
-                    const rate = parseFloat(option.getAttribute('data-rate'));
-                    
-                    selectedDuration = { label, value, interestRate: rate };
-                    document.getElementById('selected-cycle').textContent = label;
-                    cycleDropdown.style.display = 'none';
-                    updatePlanDetailContent();
-                });
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', () => {
-                cycleDropdown.style.display = 'none';
-            });
-            
-            // Prevent closing when clicking inside dropdown
-            cycleDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-
-            // Add invest button click handler
-            document.getElementById('invest-btn').addEventListener('click', () => {
-                handleInvestment(plan, quantity, selectedDuration);
-            });
-        }
-    }
-
-    // Handle investment
-    async function handleInvestment(plan, quantity, selectedDuration) {
-        // Check if user is logged in
-        const userEmail = localStorage.getItem('userEmail');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
-        if (!userEmail) {
-            showModalResult(false, 'Authentication Required', 'Please log in to continue.');
-            return;
-        }
-        
-        // Show loading modal
-        showModal('loading');
-        
-        try {
-            // Get fresh user data from Baserow to ensure we have the latest balance
-            const freshUserData = await fetchUserData(userEmail);
-            
-            if (!freshUserData) {
-                showModalResult(false, 'User not found', 'Please try again later or contact support.');
-                return;
-            }
-            
-            // Check if user has enough balance
-            const totalAssets = parseFloat(freshUserData.total_assets) || 0;
-            const totalInvestment = plan.price * quantity;
-            
-            console.log('User assets:', totalAssets);
-            console.log('Investment amount:', totalInvestment);
-            
-            if (totalAssets < totalInvestment) {
-                showModalResult(false, 'Balance not enough', 'Please recharge your account to continue.');
-                return;
-            }
-            
-            // If balance is sufficient, process the investment
-            // In a real application, you would update the user's balance and record the investment
-            // For demo purposes, we'll just show a success message
-            
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Update user balance in Baserow
-            const success = await updateUserBalance(userEmail, totalAssets - totalInvestment);
-            
-            if (success) {
-                showModalResult(true, 'Plan purchase successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
-                
-                // Update local storage with new balance
-                freshUserData.total_assets = (totalAssets - totalInvestment).toFixed(2);
-                localStorage.setItem('userData', JSON.stringify(freshUserData));
-            } else {
-                showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
-            }
-            
-        } catch (error) {
-            console.error('Error processing investment:', error);
-            showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
-        }
-    }
     
     // Update user balance in Baserow
-    async function updateUserBalance(email, newBalance) {
+    async function updateUserBalance(userData, newBalance) {
         try {
             // Get the field structure from Baserow to map field IDs
             const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
@@ -1004,36 +1009,18 @@
                 fieldMap[field.name] = field.id;
             });
             
-            // Get the email field ID
-            const emailFieldId = fieldMap['email'];
+            // Get the total_assets field ID
             const totalAssetsFieldId = fieldMap['total_assets'];
             
-            if (!emailFieldId || !totalAssetsFieldId) {
-                throw new Error('Required fields not found in Baserow table');
+            if (!totalAssetsFieldId) {
+                throw new Error('Total assets field not found in Baserow table');
             }
-            
-            // First, get the user's row ID
-            const userResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const userData = await userResponse.json();
-            
-            if (!userData.results || userData.results.length === 0) {
-                throw new Error('User not found');
-            }
-            
-            const userId = userData.results[0].id;
             
             // Update the user's balance
             const updateData = {};
             updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
             
-            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userId}/`, {
+            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Token ${BASEROW_API.token}`,
@@ -1058,15 +1045,22 @@
         const modal = document.getElementById('modal');
         const modalLoading = document.getElementById('modal-loading');
         const modalResult = document.getElementById('modal-result');
+        const modalEmailInput = document.getElementById('modal-email-input');
         
         modal.style.display = 'flex';
         
         if (type === 'loading') {
             modalLoading.style.display = 'block';
             modalResult.style.display = 'none';
-        } else {
+            modalEmailInput.style.display = 'none';
+        } else if (type === 'result') {
             modalLoading.style.display = 'none';
             modalResult.style.display = 'block';
+            modalEmailInput.style.display = 'none';
+        } else if (type === 'email') {
+            modalLoading.style.display = 'none';
+            modalResult.style.display = 'none';
+            modalEmailInput.style.display = 'block';
         }
     }
     
@@ -1101,4 +1095,4 @@
 </script>
 </body>
 </html>
-```
+
