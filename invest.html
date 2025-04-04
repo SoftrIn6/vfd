@@ -1,532 +1,467 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Investment Platform</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-    /* Reset & Base Styles */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-        background-color: #f8f9fa;
-        color: #333;
-        line-height: 1.5;
-        overflow-x: hidden;
-    }
-
-    /* Container */
-    .container {
-        width: 470px;
-        margin: 0 auto;
-        padding: 0;
-        position: relative;
-        min-width: 470px;
-        background-color: #fff;
-        min-height: 100vh;
-    }
-
-    /* Header Styles */
-    .header {
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #fff;
-    }
-
-    .logo {
-        display: flex;
-        align-items: center;
-    }
-
-    .logo-img {
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-
-    .logo-text {
-        font-size: 20px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .header-btns {
-        display: flex;
-        gap: 10px;
-    }
-
-    .header-btn {
-        display: flex;
-        align-items: center;
-        background-color: #fff;
-        border-radius: 20px;
-        padding: 5px 12px;
-        font-size: 12px;
-        color: #ffa500;
-        border: 1px solid #ffa500;
-    }
-
-    .header-btn.app {
-        background-color: #ffa500;
-        color: #fff;
-    }
-
-    .header-btn i {
-        margin-right: 5px;
-    }
-
-    /* Tabs */
-    .tabs {
-        display: flex;
-        justify-content: space-around;
-        padding: 15px;
-        background-color: #fff;
-    }
-
-    .tab {
-        font-size: 18px;
-        font-weight: bold;
-        padding: 10px 0;
-        position: relative;
-        cursor: pointer;
-        color: #333;
-    }
-
-    .tab.active {
-        color: #000;
-    }
-
-    .tab.active::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background-color: #ffa500;
-    }
-
-    /* Investment Plans */
-    .investment-plans {
-        padding: 15px;
-        background-color: #fff;
-        margin-bottom: 80px;
-    }
-
-    .plan-card {
-        border: 1px solid #ffa500;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        cursor: pointer;
-    }
-
-    .plan-header {
-        padding: 15px;
-        position: relative;
-    }
-
-    .plan-title {
-        font-size: 18px;
-        font-weight: bold;
-        position: relative;
-    }
-
-    .plan-title::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 40px;
-        height: 3px;
-        background-color: #ffa500;
-    }
-
-    .plan-image {
-        width: 100px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 5px;
-        overflow: hidden;
-        position: absolute;
-        top: 15px;
-        left: 15px;
-    }
-
-    .plan-details {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 15px;
-        background-color: #f9f9f9;
-    }
-
-    .detail-item {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .detail-label {
-        font-size: 14px;
-        color: #999;
-        margin-bottom: 5px;
-    }
-
-    .detail-value {
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .detail-value.rate {
-        color: #4cd964;
-    }
-
-    /* Plan Detail Page */
-    .plan-detail {
-        display: none;
-        padding: 0;
-        background-color: #f8f9fa;
-        min-height: 100vh;
-    }
-
-    .plan-detail-content {
-        padding: 15px;
-    }
-
-    .plan-detail-card {
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .plan-detail-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #1a237e;
-        margin-bottom: 15px;
-        position: relative;
-    }
-
-    .plan-detail-title::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 80px;
-        height: 3px;
-        background: linear-gradient(90deg, #ff9800, #ffcc80);
-    }
-
-    .detail-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .detail-row:last-child {
-        border-bottom: none;
-    }
-
-    .detail-label-lg {
-        font-size: 16px;
-        color: #333;
-    }
-
-    .detail-value-lg {
-        font-size: 18px;
-        font-weight: bold;
-        color: #1a237e;
-    }
-
-    .quantity-selector {
-        display: flex;
-        align-items: center;
-    }
-
-    .quantity-btn {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #ddd;
-        background-color: #f5f5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .quantity-btn:hover {
-        background-color: #eee;
-    }
-
-    .quantity-input {
-        width: 50px;
-        height: 36px;
-        border: 1px solid #ddd;
-        text-align: center;
-        font-size: 16px;
-        margin: 0 5px;
-    }
-
-    .cycle-selector {
-        position: relative;
-        cursor: pointer;
-    }
-
-    .cycle-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 200px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        z-index: 10;
-        display: none;
-    }
-
-    .cycle-option {
-        padding: 10px 15px;
-        border-bottom: 1px solid #eee;
-        transition: background-color 0.2s;
-    }
-
-    .cycle-option:hover {
-        background-color: #f5f5f5;
-    }
-
-    .cycle-option:last-child {
-        border-bottom: none;
-    }
-
-    .invest-btn {
-        display: block;
-        width: 100%;
-        padding: 15px;
-        background-color: #ff9800;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        margin-top: 20px;
-        transition: background-color 0.3s;
-    }
-
-    .invest-btn:hover {
-        background-color: #f57c00;
-    }
-
-    .project-rule {
-        margin-top: 20px;
-    }
-
-    .rule-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #ff9800;
-        margin-bottom: 15px;
-    }
-
-    .estimated-revenue {
-        font-weight: bold;
-        word-break: break-word;
-    }
-
-    /* Float button */
-    .float-btn {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        background-color: #ffa500;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        z-index: 100;
-        cursor: pointer;
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 470px;
-        min-width: 470px;
-        background-color: #fff;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-        z-index: 100;
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: #999;
-        font-size: 12px;
-    }
-
-    .nav-item.active {
-        color: #ffa500;
-    }
-
-    .nav-item i {
-        font-size: 20px;
-        margin-bottom: 5px;
-    }
-
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 400px;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal-icon {
-        font-size: 50px;
-        margin-bottom: 20px;
-    }
-
-    .modal-icon.success {
-        color: #4cd964;
-    }
-
-    .modal-icon.error {
-        color: #ff3b30;
-    }
-
-    .modal-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .modal-message {
-        font-size: 16px;
-        margin-bottom: 20px;
-        color: #666;
-    }
-
-    .modal-btn {
-        padding: 10px 20px;
-        background-color: #ff9800;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    /* Loading Spinner */
-    .loading-spinner {
-        display: inline-block;
-        width: 50px;
-        height: 50px;
-        border: 5px solid rgba(255, 152, 0, 0.3);
-        border-radius: 50%;
-        border-top-color: #ff9800;
-        animation: spin 1s ease-in-out infinite;
-        margin-bottom: 20px;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    /* User info display */
-    .user-info {
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-        font-size: 14px;
-        color: #333;
-    }
-
-    .user-email {
-        margin-right: 10px;
-        max-width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .logout-btn {
-        color: #ff9800;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    /* Media Queries for Responsiveness */
-    @media (max-width: 470px) {
-        .container {
-            width: 100%;
-            min-width: 320px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Investment Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        .bottom-nav {
-            width: 100%;
-            min-width: 320px;
-        }
-    }
 
-    @media (min-width: 471px) {
         body {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
         }
-        
+
+        /* Container */
         .container {
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 470px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
         }
-    }
-</style>
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn i {
+            margin-right: 5px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            padding: 15px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            position: relative;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .tab.active {
+            color: #000;
+            border-bottom: 3px solid #ffa500;
+        }
+
+        /* Investment Plans */
+        .investment-plans {
+            padding: 15px;
+            background-color: #fff;
+            margin-bottom: 80px;
+        }
+
+        .plan-card {
+            border: 1px solid #ffa500;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .plan-header {
+            padding: 15px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .plan-title {
+            font-size: 16px;
+            font-weight: bold;
+            position: relative;
+            color: #333;
+        }
+
+        .plan-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .plan-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .detail-value.rate {
+            color: #4cd964;
+        }
+
+        /* Plan Detail Page */
+        .plan-detail {
+            display: none;
+            padding: 0;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .plan-detail-header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .plan-detail-content {
+            padding: 15px;
+        }
+
+        .plan-detail-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .plan-detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .plan-detail-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label-lg {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .detail-value-lg {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .quantity-input {
+            width: 40px;
+            height: 30px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+
+        .cycle-selector {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cycle-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: none;
+        }
+
+        .cycle-option {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cycle-option:last-child {
+            border-bottom: none;
+        }
+
+        .invest-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .project-rule {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffa500;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .modal-icon.success {
+            color: #4cd964;
+        }
+
+        .modal-icon.error {
+            color: #ff3b30;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .modal-message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 152, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffa500;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -535,7 +470,7 @@
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-img">AI</div>
                 <div class="logo-text">AI ROBOT</div>
             </div>
             <div class="header-btns">
@@ -561,21 +496,16 @@
 
     <!-- Plan Detail Page -->
     <div id="plan-detail" class="plan-detail">
-        <header class="header">
+        <div class="plan-detail-header">
             <div class="back-btn" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i>
             </div>
-            <h1 class="header-title">Smart investment</h1>
-        </header>
+            <div class="header-title">Smart investment</div>
+        </div>
 
         <div class="plan-detail-content">
             <!-- Plan detail content will be generated by JavaScript -->
         </div>
-    </div>
-
-    <!-- Float Button -->
-    <div class="float-btn">
-        <i class="fas fa-arrow-up"></i>
     </div>
 
     <!-- Modal -->
@@ -632,125 +562,42 @@
 
     // Investment Plans Data - Updated with additional smaller plans
     const investmentPlans = [
-        {
-            id: 1,
-            title: "Investment Plan 1",
-            price: 20,
-            dailyRate: "10.00%",
-            cycle: "7 Day"
-        },
-        {
-            id: 2,
-            title: "Investment Plan 2",
-            price: 50,
-            dailyRate: "12.00%",
-            cycle: "7 Day"
-        },
-        {
-            id: 3,
-            title: "Investment Plan 3",
-            price: 96,
-            dailyRate: "14.00%",
-            cycle: "7 Day"
-        },
-        {
-            id: 4,
-            title: "Investment Plan 4",
-            price: 100,
-            dailyRate: "16.00%",
-            cycle: "7 Day"
-        },
-        {
-            id: 5,
-            title: "Investment Plan 5",
-            price: 500,
-            dailyRate: "18.00%",
-            cycle: "15 Day"
-        },
-        {
-            id: 6,
-            title: "Investment Plan 6",
-            price: 1650,
-            dailyRate: "19.00%",
-            cycle: "15 Day"
-        },
-        {
-            id: 7,
-            title: "Investment Plan 7",
-            price: 2000,
-            dailyRate: "20.00%",
-            cycle: "15 Day"
-        },
-        {
-            id: 8,
-            title: "Investment Plan 8",
-            price: 3500,
-            dailyRate: "21.00%",
-            cycle: "30 Day"
-        },
-        {
-            id: 9,
-            title: "Investment Plan 9",
-            price: 10000,
-            dailyRate: "22.00%",
-            cycle: "30 Day"
-        },
-        {
-            id: 10,
-            title: "Investment Plan 10",
-            price: 30000,
-            dailyRate: "24.00%",
-            cycle: "30 Day"
-        },
-        {
-            id: 11,
-            title: "Investment Plan 11",
-            price: 50000,
-            dailyRate: "26.00%",
-            cycle: "30 Day"
-        },
-        {
-            id: 12,
-            title: "Investment Plan 12",
-            price: 80000,
-            dailyRate: "28.00%",
-            cycle: "30 Day"
-        },
-        {
-            id: 13,
-            title: "Investment Plan 13",
-            price: 100000,
-            dailyRate: "30.00%",
-            cycle: "30 Day"
-        }
+        { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "10.00%", cycle: "7 Day" },
+        { id: 2, title: "Investment Plan 2", price: 50, dailyRate: "12.00%", cycle: "7 Day" },
+        { id: 3, title: "Investment Plan 3", price: 96, dailyRate: "14.00%", cycle: "7 Day" },
+        { id: 4, title: "Investment Plan 4", price: 100, dailyRate: "16.00%", cycle: "7 Day" },
+        { id: 5, title: "Investment Plan 5", price: 500, dailyRate: "18.00%", cycle: "15 Day" },
+        { id: 6, title: "Investment Plan 6", price: 1650, dailyRate: "19.00%", cycle: "15 Day" },
+        { id: 7, title: "Investment Plan 7", price: 2000, dailyRate: "20.00%", cycle: "15 Day" },
+        { id: 8, title: "Investment Plan 8", price: 3500, dailyRate: "21.00%", cycle: "30 Day" },
+        { id: 9, title: "Investment Plan 9", price: 10000, dailyRate: "22.00%", cycle: "30 Day" },
+        { id: 10, title: "Investment Plan 10", price: 30000, dailyRate: "24.00%", cycle: "30 Day" },
+        { id: 11, title: "Investment Plan 11", price: 50000, dailyRate: "26.00%", cycle: "30 Day" },
+        { id: 12, title: "Investment Plan 12", price: 80000, dailyRate: "28.00%", cycle: "30 Day" },
+        { id: 13, title: "Investment Plan 13", price: 100000, dailyRate: "30.00%", cycle: "30 Day" }
     ];
 
     // Investment Duration Options
     const durationOptions = [
-        { label: "12hrs", value: 0.5, interestRate: 1.8 }, // 180%
-        { label: "1 day", value: 1, interestRate: 1.85 }, // 185%
-        { label: "2 days", value: 2, interestRate: 1.95 }, // 195%
-        { label: "3 days", value: 3, interestRate: 1.98 }, // 198%
-        { label: "4 days", value: 4, interestRate: 2.0 }, // 200%
-        { label: "5 days", value: 5, interestRate: 2.02 }, // 202%
-        { label: "6 days", value: 6, interestRate: 2.03 }, // 203%
-        { label: "7 days", value: 7, interestRate: 2.05 }, // 205%
-        { label: "8 days", value: 8, interestRate: 2.06 }  // 206%
+        { label: "12hrs", value: 0.5, interestRate: 1.8 },
+        { label: "1 day", value: 1, interestRate: 1.85 },
+        { label: "2 days", value: 2, interestRate: 1.95 },
+        { label: "3 days", value: 3, interestRate: 1.98 },
+        { label: "4 days", value: 4, interestRate: 2.0 },
+        { label: "5 days", value: 5, interestRate: 2.02 },
+        { label: "6 days", value: 6, interestRate: 2.03 },
+        { label: "7 days", value: 7, interestRate: 2.05 },
+        { label: "8 days", value: 8, interestRate: 2.06 }
     ];
 
     // Initialize the app when document is ready
     document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        checkUserLogin();
+        
         // Generate plan cards
         generatePlanCards();
         
-        // Float button scroll to top
-        document.querySelector('.float-btn').addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
         // Tab switching functionality
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -770,27 +617,126 @@
         });
     });
 
+    // Check if user is logged in
+    function checkUserLogin() {
+        const userEmail = localStorage.getItem('userEmail');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        if (!userEmail) {
+            // For demo purposes, set a default user
+            // In a real app, you would redirect to login
+            const demoUser = {
+                email: 'demo@example.com',
+                total_assets: '1000.00',
+                smart_account: '500.00',
+                profit_assets: '200.00',
+                total_revenue: '300.00'
+            };
+            
+            localStorage.setItem('userEmail', demoUser.email);
+            localStorage.setItem('userData', JSON.stringify(demoUser));
+            
+            console.log('Demo user set for testing purposes');
+        } else {
+            console.log('User already logged in:', userEmail);
+            
+            // Refresh user data from Baserow
+            fetchUserData(userEmail);
+        }
+    }
+
+    // Fetch user data from Baserow
+    async function fetchUserData(email) {
+        try {
+            // Get the field structure from Baserow to map field IDs
+            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!fieldsResponse.ok) {
+                throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
+            }
+            
+            const fieldsData = await fieldsResponse.json();
+            
+            // Create a mapping of field names to their IDs
+            const fieldMap = {};
+            fieldsData.forEach(field => {
+                fieldMap[field.name] = field.id;
+            });
+            
+            // Get the email field ID
+            const emailFieldId = fieldMap['email'];
+            
+            if (!emailFieldId) {
+                throw new Error('Email field not found in Baserow table');
+            }
+            
+            // Add a timestamp to prevent caching
+            const timestamp = new Date().getTime();
+            const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.results && data.results.length > 0) {
+                const user = data.results[0];
+                
+                // Create a user data object to store in localStorage
+                const userDataToStore = {
+                    id: user.id,
+                    email: email,
+                    total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                    smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                    profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00'
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                
+                return userDataToStore;
+            } else {
+                console.error('No user data found for email:', email);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            return null;
+        }
+    }
+
     // Generate Plan Cards
     function generatePlanCards() {
         const plansContainer = document.querySelector('.investment-plans');
         plansContainer.innerHTML = '';
 
-        // Sort plans by price (low to high)
         const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
 
         sortedPlans.forEach(plan => {
             const planCard = document.createElement('div');
             planCard.className = 'plan-card';
             planCard.setAttribute('data-plan-id', plan.id);
-            
-            // Add image to the highest price plan
-            const imageHtml = plan.price === 100000 ? 
-                `<img src="/placeholder.svg?height=60&width=100" alt="${plan.title}" class="plan-image">` : '';
-            
+
             planCard.innerHTML = `
                 <div class="plan-header">
                     <div class="plan-title">${plan.title}</div>
-                    ${imageHtml}
                 </div>
                 <div class="plan-details">
                     <div class="detail-item">
@@ -843,12 +789,12 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">${userBalance}USDT</div>
+                        <div class="detail-value-lg">${userBalance} USDT</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Price</div>
-                        <div class="detail-value-lg">${plan.price}USDT</div>
+                        <div class="detail-value-lg">${plan.price} USDT</div>
                     </div>
                     
                     <div class="detail-row">
@@ -868,8 +814,8 @@
                     <div class="detail-row">
                         <div class="detail-label-lg">Cycle</div>
                         <div class="cycle-selector" id="cycle-selector">
-                            <span id="selected-cycle">${selectedDuration.label}</span>
-                            <i class="fas fa-chevron-down ml-2"></i>
+                            <span id="selected-cycle">${plan.cycle}</span>
+                            <i class="fas fa-chevron-down"></i>
                             <div class="cycle-dropdown" id="cycle-dropdown">
                                 ${durationOptions.map(option => `
                                     <div class="cycle-option" data-value="${option.value}" data-label="${option.label}" data-rate="${option.interestRate}">
@@ -881,15 +827,15 @@
                     </div>
                     
                     <div class="detail-row">
-                        <div class="detail-label-lg">Return Rate</div>
-                        <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
+                        <div class="detail-label-lg">Daily Rate</div>
+                        <div class="detail-value-lg">${plan.dailyRate}</div>
                     </div>
                     
                     <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USDT Invest</button>
                 </div>
                 
-                <div class="plan-detail-card project-rule">
-                    <div class="rule-title">Project Rule</div>
+                <div class="plan-detail-card">
+                    <div class="project-rule">Project Rule</div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Repayment</div>
@@ -898,7 +844,7 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Unit Price</div>
-                        <div class="detail-value-lg">${plan.price}USDT</div>
+                        <div class="detail-value-lg">${plan.price} USDT</div>
                     </div>
                     
                     <div class="detail-row">
@@ -908,18 +854,18 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Daily Return</div>
-                        <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
+                        <div class="detail-value-lg">${plan.dailyRate}</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Invest Cycle</div>
-                        <div class="detail-value-lg">${selectedDuration.label}</div>
+                        <div class="detail-value-lg">${plan.cycle}</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Estimated Revenue</div>
-                        <div class="detail-value-lg estimated-revenue">
-                            ${plan.price} * ${quantity} * ${(selectedDuration.interestRate * 100).toFixed(0)}% = ${estimatedRevenue.toFixed(2)}USDT
+                        <div class="detail-value-lg">
+                            ${plan.price} * ${quantity} * ${plan.dailyRate} * ${plan.cycle.split(' ')[0]} = ${(plan.price * quantity * parseFloat(plan.dailyRate) / 100 * parseInt(plan.cycle)).toFixed(2)} USDT
                         </div>
                     </div>
                 </div>
@@ -980,12 +926,11 @@
     // Handle investment
     async function handleInvestment(plan, quantity, selectedDuration) {
         // Check if user is logged in
-        const authToken = localStorage.getItem('authToken');
+        const userEmail = localStorage.getItem('userEmail');
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         
-        if (!authToken || !userData.email) {
-            // User is not logged in, redirect to login page
-            window.location.href = 'login.html';
+        if (!userEmail) {
+            showModalResult(false, 'Authentication Required', 'Please log in to continue.');
             return;
         }
         
@@ -994,7 +939,7 @@
         
         try {
             // Get fresh user data from Baserow to ensure we have the latest balance
-            const freshUserData = await fetchUserData(userData.email);
+            const freshUserData = await fetchUserData(userEmail);
             
             if (!freshUserData) {
                 showModalResult(false, 'User not found', 'Please try again later or contact support.');
@@ -1020,7 +965,18 @@
             // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 1500));
             
-            showModalResult(true, 'Plan purchase successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
+            // Update user balance in Baserow
+            const success = await updateUserBalance(userEmail, totalAssets - totalInvestment);
+            
+            if (success) {
+                showModalResult(true, 'Plan purchase successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
+                
+                // Update local storage with new balance
+                freshUserData.total_assets = (totalAssets - totalInvestment).toFixed(2);
+                localStorage.setItem('userData', JSON.stringify(freshUserData));
+            } else {
+                showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
+            }
             
         } catch (error) {
             console.error('Error processing investment:', error);
@@ -1028,89 +984,75 @@
         }
     }
     
-    // Fetch user data from Baserow
-   document.addEventListener("DOMContentLoaded", function () {
-    const inputElement = document.getElementById("user-input");
-    const resultsContainer = document.getElementById("results-container");
-    const cyclesDropdown = document.getElementById("cycles-dropdown");
-    const selectedCycle = document.getElementById("selected-cycle");
-    
-    let userData = [];
-    
-    async function fetchUserData() {
-        const apiUrl = "https://baserow.io/database/202237/table/488473/884346";
-        const headers = {
-            Authorization: "6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M", // Replace with your actual API key
-            "Content-Type": "application/json"
-        };
-        
+    // Update user balance in Baserow
+    async function updateUserBalance(email, newBalance) {
         try {
-            const response = await fetch(apiUrl, { headers });
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            // Get the field structure from Baserow to map field IDs
+            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const fieldsData = await fieldsResponse.json();
+            
+            // Create a mapping of field names to their IDs
+            const fieldMap = {};
+            fieldsData.forEach(field => {
+                fieldMap[field.name] = field.id;
+            });
+            
+            // Get the email field ID
+            const emailFieldId = fieldMap['email'];
+            const totalAssetsFieldId = fieldMap['total_assets'];
+            
+            if (!emailFieldId || !totalAssetsFieldId) {
+                throw new Error('Required fields not found in Baserow table');
             }
             
-            const data = await response.json();
-            userData = data.results || [];
-            console.log("User data loaded:", userData);
+            // First, get the user's row ID
+            const userResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const userData = await userResponse.json();
+            
+            if (!userData.results || userData.results.length === 0) {
+                throw new Error('User not found');
+            }
+            
+            const userId = userData.results[0].id;
+            
+            // Update the user's balance
+            const updateData = {};
+            updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
+            
+            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+            
+            if (!updateResponse.ok) {
+                throw new Error(`Failed to update balance: ${updateResponse.status}`);
+            }
+            
+            return true;
         } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error('Error updating user balance:', error);
+            return false;
         }
     }
     
-    async function displayMatchingUsers(query) {
-        resultsContainer.innerHTML = "";
-        if (!query.trim()) return;
-        
-        const filteredUsers = userData.filter(user =>
-            user.name && user.name.toLowerCase().includes(query.toLowerCase())
-        );
-        
-        filteredUsers.forEach(user => {
-            const userDiv = document.createElement("div");
-            userDiv.textContent = user.name;
-            userDiv.classList.add("user-item");
-            userDiv.dataset.userId = user.id;
-            resultsContainer.appendChild(userDiv);
-        });
-    }
-    
-    function handleUserSelection(event) {
-        if (!event.target.classList.contains("user-item")) return;
-        
-        const userId = event.target.dataset.userId;
-        const selectedUser = userData.find(user => user.id == userId);
-        
-        if (selectedUser) {
-            console.log("Selected User:", selectedUser);
-            inputElement.value = selectedUser.name;
-            resultsContainer.innerHTML = "";
-        }
-    }
-    
-    function toggleDropdown() {
-        cyclesDropdown.classList.toggle("hidden");
-    }
-    
-    function selectCycle(event) {
-        if (!event.target.classList.contains("cycle-option")) return;
-        selectedCycle.textContent = event.target.textContent;
-        cyclesDropdown.classList.add("hidden");
-    }
-    
-    inputElement.addEventListener("input", () => displayMatchingUsers(inputElement.value));
-    resultsContainer.addEventListener("click", handleUserSelection);
-    selectedCycle.addEventListener("click", toggleDropdown);
-    cyclesDropdown.addEventListener("click", selectCycle);
-    document.addEventListener("click", (event) => {
-        if (!cyclesDropdown.contains(event.target) && event.target !== selectedCycle) {
-            cyclesDropdown.classList.add("hidden");
-        }
-    });
-    
-    fetchUserData();
-});
-
     // Show modal with loading or result
     function showModal(type) {
         const modal = document.getElementById('modal');
@@ -1137,7 +1079,7 @@
         if (success) {
             modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
         } else {
-            modalIcon.innerHTML = '<i class="fas fa-times-circle error"></i>';
+            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
         }
         
         modalTitle.textContent = title;
@@ -1159,4 +1101,4 @@
 </script>
 </body>
 </html>
-
+```
