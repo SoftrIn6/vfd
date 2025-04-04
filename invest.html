@@ -1,604 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Investment Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Investment Platform</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset & Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.5;
+        overflow-x: hidden;
+    }
 
-        /* Container */
+    /* Container */
+    .container {
+        width: 470px;
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+        min-width: 470px;
+        background-color: #fff;
+        min-height: 100vh;
+    }
+
+    /* Header Styles */
+    .header {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .logo-text {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .header-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-btn {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        color: #ffa500;
+        border: 1px solid #ffa500;
+    }
+
+    .header-btn.app {
+        background-color: #ffa500;
+        color: #fff;
+    }
+
+    .header-btn i {
+        margin-right: 5px;
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+        background-color: #fff;
+    }
+
+    .tab {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px 0;
+        position: relative;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .tab.active {
+        color: #000;
+    }
+
+    .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #ffa500;
+    }
+
+    /* Investment Plans */
+    .investment-plans {
+        padding: 15px;
+        background-color: #fff;
+        margin-bottom: 80px;
+    }
+
+    .plan-card {
+        border: 1px solid #ffa500;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .plan-header {
+        padding: 15px;
+        position: relative;
+    }
+
+    .plan-title {
+        font-size: 18px;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .plan-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: #ffa500;
+    }
+
+    .plan-image {
+        width: 100px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
+    .plan-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .detail-value.rate {
+        color: #4cd964;
+    }
+
+    /* Plan Detail Page */
+    .plan-detail {
+        display: none;
+        padding: 0;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .plan-detail-content {
+        padding: 15px;
+    }
+
+    .plan-detail-card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .plan-detail-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1a237e;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .plan-detail-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff9800, #ffcc80);
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label-lg {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .detail-value-lg {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a237e;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #ddd;
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .quantity-btn:hover {
+        background-color: #eee;
+    }
+
+    .quantity-input {
+        width: 50px;
+        height: 36px;
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 16px;
+        margin: 0 5px;
+    }
+
+    .cycle-selector {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .cycle-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 200px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        display: none;
+    }
+
+    .cycle-option {
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s;
+    }
+
+    .cycle-option:hover {
+        background-color: #f5f5f5;
+    }
+
+    .cycle-option:last-child {
+        border-bottom: none;
+    }
+
+    .invest-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+    }
+
+    .invest-btn:hover {
+        background-color: #f57c00;
+    }
+
+    .project-rule {
+        margin-top: 20px;
+    }
+
+    .rule-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff9800;
+        margin-bottom: 15px;
+    }
+
+    .estimated-revenue {
+        font-weight: bold;
+        word-break: break-word;
+    }
+
+    /* Float button */
+    .float-btn {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #ffa500;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 470px;
+        min-width: 470px;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        z-index: 100;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .nav-item.active {
+        color: #ffa500;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .modal-icon.success {
+        color: #4cd964;
+    }
+
+    .modal-icon.error {
+        color: #ff3b30;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .modal-message {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        background-color: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 152, 0, 0.3);
+        border-radius: 50%;
+        border-top-color: #ff9800;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* User info display */
+    .user-info {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .user-email {
+        margin-right: 10px;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .logout-btn {
+        color: #ff9800;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 470px) {
         .container {
-            width: 470px;
-            margin: 0 auto;
-            padding: 0;
-            position: relative;
-            min-width: 470px;
-            background-color: #fff;
-            min-height: 100vh;
-        }
-
-        /* Header Styles */
-        .header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .header-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .header-btn {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 12px;
-            color: #ffa500;
-            border: 1px solid #ffa500;
-        }
-
-        .header-btn.app {
-            background-color: #ffa500;
-            color: #fff;
-        }
-
-        .header-btn i {
-            margin-right: 5px;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            background-color: #fff;
-        }
-
-        .tab {
-            font-size: 18px;
-            font-weight: bold;
-            padding: 10px 0;
-            position: relative;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .tab.active {
-            color: #000;
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            height: 3px;
-            background-color: #ffa500;
+            min-width: 320px;
         }
-
-        /* Investment Plans */
-        .investment-plans {
-            padding: 15px;
-            background-color: #fff;
-            margin-bottom: 80px;
-        }
-
-        .plan-card {
-            border: 1px solid #ffa500;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .plan-header {
-            padding: 15px;
-            position: relative;
-        }
-
-        .plan-title {
-            font-size: 18px;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .plan-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .plan-image {
-            width: 100px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-            overflow: hidden;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-        }
-
-        .plan-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 15px;
-            background-color: #f9f9f9;
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-label {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .detail-value.rate {
-            color: #4cd964;
-        }
-
-        /* Plan Detail Page */
-        .plan-detail {
-            display: none;
-            padding: 0;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        .plan-detail-content {
-            padding: 15px;
-        }
-
-        .plan-detail-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .plan-detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a237e;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .plan-detail-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #ff9800, #ffcc80);
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label-lg {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .detail-value-lg {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1a237e;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid #ddd;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .quantity-btn:hover {
-            background-color: #eee;
-        }
-
-        .quantity-input {
-            width: 50px;
-            height: 36px;
-            border: 1px solid #ddd;
-            text-align: center;
-            font-size: 16px;
-            margin: 0 5px;
-        }
-
-        .cycle-selector {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-        }
-
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
-        }
-
-        .cycle-option:hover {
-            background-color: #f5f5f5;
-        }
-
-        .cycle-option:last-child {
-            border-bottom: none;
-        }
-
-        .invest-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #ff9800;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .invest-btn:hover {
-            background-color: #f57c00;
-        }
-
-        .project-rule {
-            margin-top: 20px;
-        }
-
-        .rule-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #ff9800;
-            margin-bottom: 15px;
-        }
-
-        .estimated-revenue {
-            font-weight: bold;
-            word-break: break-word;
-        }
-
-        /* Float button */
-        .float-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: #ffa500;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-            cursor: pointer;
-        }
-
-        /* Bottom Navigation */
+        
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 470px;
-            min-width: 470px;
-            background-color: #fff;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .nav-item.active {
-            color: #ffa500;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            min-width: 320px;
+        }
+    }
+
+    @media (min-width: 471px) {
+        body {
+            display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        
+        .container {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
-
-        .modal-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-
-        .modal-icon.success {
-            color: #4cd964;
-        }
-
-        .modal-icon.error {
-            color: #ff3b30;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: #666;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            background-color: #ff9800;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 152, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ff9800;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 470px) {
-            .container {
-                width: 100%;
-                min-width: 320px;
-            }
-            
-            .bottom-nav {
-                width: 100%;
-                min-width: 320px;
-            }
-        }
-
-        @media (min-width: 471px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f0f0f0;
-            }
-            
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Main Page -->
-        <div id="main-page">
-            <!-- Header -->
-            <div class="header">
-                <div class="logo">
-                    <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
-                    <div class="logo-text">AI ROBOT</div>
-                </div>
-                <div class="header-btns">
-                    <div class="header-btn app">
-                        <i class="fas fa-mobile-alt"></i> App
-                    </div>
-                    <div class="header-btn">
-                        <i class="fas fa-globe"></i> English
-                    </div>
-                </div>
+<div class="container">
+    <!-- Main Page -->
+    <div id="main-page">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">AI ROBOT</div>
             </div>
-
-            <!-- Tabs -->
-            <div class="tabs">
-                <div class="tab active">Smart investment</div>
-                <div class="tab">Invest Record</div>
-            </div>
-            
-            <div class="investment-plans">
-                <!-- Plan cards will be generated by JavaScript -->
+            <div class="header-btns">
+                <div class="user-info" id="user-info">
+                    <span class="user-email" id="user-email"></span>
+                    <span class="logout-btn" onclick="logout()">Logout</span>
+                </div>
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i> English
+                </div>
             </div>
         </div>
 
-        <!-- Plan Detail Page -->
-        <div id="plan-detail" class="plan-detail">
-            <header class="header">
-                <div class="back-btn" onclick="goBack()">
-                    <i class="fas fa-arrow-left"></i>
-                </div>
-                <h1 class="header-title">Smart investment</h1>
-            </header>
-
-            <div class="plan-detail-content">
-                <!-- Plan detail content will be generated by JavaScript -->
-            </div>
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active">Smart investment</div>
+            <div class="tab">Invest Record</div>
         </div>
-
-        <!-- Float Button -->
-        <div class="float-btn">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="modal">
-            <div class="modal-content">
-                <div id="modal-loading" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <div class="modal-message">Processing your investment...</div>
-                </div>
-                <div id="modal-result" style="display: none;">
-                    <div class="modal-icon" id="modal-icon">
-                        <i class="fas fa-check-circle success"></i>
-                    </div>
-                    <div class="modal-title" id="modal-title">Success</div>
-                    <div class="modal-message" id="modal-message">Your investment was successful!</div>
-                    <button class="modal-btn" onclick="closeModal()">OK</button>
-                </div>
-            </div>
+        
+        <div class="investment-plans">
+            <!-- Plan cards will be generated by JavaScript -->
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Quantify</span>
-        </a>
-        <a href="#" class="nav-item active">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
-        </a>
-    </nav>
+    <!-- Plan Detail Page -->
+    <div id="plan-detail" class="plan-detail">
+        <header class="header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <h1 class="header-title">Smart investment</h1>
+        </header>
 
-    <script>
+        <div class="plan-detail-content">
+            <!-- Plan detail content will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Float Button -->
+    <div class="float-btn">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div id="modal-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <div class="modal-message">Processing your investment...</div>
+            </div>
+            <div id="modal-result" style="display: none;">
+                <div class="modal-icon" id="modal-icon">
+                    <i class="fas fa-check-circle success"></i>
+                </div>
+                <div class="modal-title" id="modal-title">Success</div>
+                <div class="modal-message" id="modal-message">Your investment was successful!</div>
+                <button class="modal-btn" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="#" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fas fa-chart-pie"></i>
+        <span>Quantify</span>
+    </a>
+    <a href="#" class="nav-item active">
+        <i class="fas fa-gift"></i>
+        <span>Invest</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fas fa-user-plus"></i>
+        <span>Invite Friends</span>
+    </a>
+    <a href="#" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Me</span>
+    </a>
+</nav>
+
+<script>
+    // Check if user is logged in
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLogin();
+    });
+
+    function checkLogin() {
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!userEmail) {
+            // User is not logged in, redirect to login page
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Display user email in the header
+        document.getElementById('user-email').textContent = userEmail;
+        
+        // Initialize the app
+        initializeApp();
+    }
+    
+    function logout() {
+        // Clear user data from localStorage
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userId');
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+    }
+
+    function initializeApp() {
         // Baserow API configuration
         const BASEROW_API = {
             token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
@@ -607,8 +665,8 @@
             tableId: '488473'
         };
 
-        // Current user ID (for demo purposes)
-        const CURRENT_USER_ID = 1; // Replace with actual user ID or authentication mechanism
+        // Get current user email from localStorage
+        const userEmail = localStorage.getItem('userEmail');
 
         // Investment Plans Data - Updated with additional smaller plans
         const investmentPlans = [
@@ -787,7 +845,7 @@
                         
                         <div class="detail-row">
                             <div class="detail-label-lg">Available Balance</div>
-                            <div class="detail-value-lg">0.0000000USDT</div>
+                            <div class="detail-value-lg" id="user-balance">Loading...</div>
                         </div>
                         
                         <div class="detail-row">
@@ -869,6 +927,16 @@
                     </div>
                 `;
                 
+                // Fetch and display user balance
+                getUserDataByEmail(userEmail).then(userData => {
+                    if (userData) {
+                        const totalAssets = userData.total_assets || 0;
+                        document.getElementById('user-balance').textContent = `${totalAssets.toFixed(2)}USDT`;
+                    } else {
+                        document.getElementById('user-balance').textContent = '0.00USDT';
+                    }
+                });
+                
                 // Add event listeners after content is updated
                 document.getElementById('decrease-btn').addEventListener('click', () => {
                     if (quantity > 1) {
@@ -927,17 +995,20 @@
             showModal('loading');
             
             try {
-                // Get user data from Baserow
-                const userData = await getUserData(CURRENT_USER_ID);
+                // Get user data from Baserow using email
+                const userData = await getUserDataByEmail(userEmail);
                 
                 if (!userData) {
-                    showModalResult(false, 'User not found', 'Please try again later.');
+                    showModalResult(false, 'User not found', 'Please try again later or contact support.');
                     return;
                 }
                 
                 // Check if user has enough balance
-                const totalAssets = userData.total_assets || 0;
+                const totalAssets = parseFloat(userData.total_assets) || 0;
                 const totalInvestment = plan.price * quantity;
+                
+                console.log('User assets:', totalAssets);
+                console.log('Investment amount:', totalInvestment);
                 
                 if (totalAssets < totalInvestment) {
                     showModalResult(false, 'Balance not enough', 'Please recharge your account to continue.');
@@ -951,7 +1022,7 @@
                 // Simulate API delay
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
-                showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
+                showModalResult(true, 'Plan purchase successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
                 
             } catch (error) {
                 console.error('Error processing investment:', error);
@@ -959,8 +1030,8 @@
             }
         }
         
-        // Get user data from Baserow
-        async function getUserData(userId) {
+        // Get user data from Baserow by email
+        async function getUserDataByEmail(email) {
             try {
                 const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
                     method: 'GET',
@@ -976,8 +1047,8 @@
                 
                 const data = await response.json();
                 
-                // Find the user with the matching ID
-                const user = data.results.find(row => row.id === userId);
+                // Find the user with the matching email
+                const user = data.results.find(row => row.email === email);
                 
                 return user;
             } catch (error) {
@@ -1022,12 +1093,12 @@
         }
         
         // Close modal
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('modal').style.display = 'none';
         }
 
         // Go back to main page
-        function goBack() {
+        window.goBack = function() {
             document.getElementById('plan-detail').style.display = 'none';
             document.getElementById('main-page').style.display = 'block';
         }
@@ -1041,27 +1112,27 @@
         });
 
         // Tab switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // For now, just show an alert when switching to Invest Record
-                    if (this.textContent === 'Invest Record') {
-                        alert('Invest Record feature coming soon.');
-                        // Switch back to Smart investment tab
-                        setTimeout(() => {
-                            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                            document.querySelectorAll('.tab')[0].classList.add('active');
-                        }, 500);
-                    }
-                });
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // For now, just show an alert when switching to Invest Record
+                if (this.textContent === 'Invest Record') {
+                    alert('Invest Record feature coming soon.');
+                    // Switch back to Smart investment tab
+                    setTimeout(() => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab')[0].classList.add('active');
+                    }, 500);
+                }
             });
-            
-            // Initialize
-            generatePlanCards();
         });
-    </script>
+        
+        // Initialize
+        generatePlanCards();
+    }
+</script>
 </body>
 </html>
+
