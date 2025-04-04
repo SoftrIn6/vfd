@@ -1,1 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Recharge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .crypto-icon {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .crypto-icon img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            padding: 5px;
+        }
+
+        .warning-box {
+            border: 1px solid #ffa500;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .account-options {
+            margin-bottom: 20px;
+        }
+
+        .account-option {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .account-option.active {
+            background-color: #ffa500;
+            color: white;
+        }
+
+        .account-option.inactive {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .account-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .account-desc {
+            font-size: 14px;
+        }
+
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #999;
+            background-color: #fff;
+        }
+
+        .recharge-address-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .address-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .recharge-complete-btn {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            margin-bottom: 30px;
+        }
+
+        .instruction-item {
+            margin-bottom: 10px;
+        }
+
+        .float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 471px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="header-title">Recharge</div>
+        </div>
+
+        <div class="content">
+            <div class="logo-section">
+                <div class="logo">AI</div>
+                <div class="logo-text">AI ROBOT</div>
+            </div>
+
+            <div class="crypto-icon">
+                <img src="/placeholder.svg?height=60&width=60" alt="USDT" id="crypto-logo">
+            </div>
+
+            <div class="warning-box">
+                Note: Before switching recharge accounts, please confirm that the previous recharge has been received!
+            </div>
+
+            <div class="account-options">
+                <div class="account-option active">
+                    <div class="account-title">Quantitative Account</div>
+                    <div class="account-desc">Deposit into this account for intelligent quantified returns</div>
+                </div>
+                <div class="account-option inactive">
+                    <div class="account-title">Smart Account</div>
+                    <div class="account-desc">Deposits into this account can be used to invest in crowdfunding projects</div>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-code" id="qr-code-container">
+                    QR Code will be displayed here
+                </div>
+                <div class="recharge-address-title">Recharge Address</div>
+                <div class="address-box" id="address-text">0x0c5D4f87d43aE8037c88D768C6481762e2544B8C</div>
+                <button class="copy-btn" onclick="copyAddress()">Copy</button>
+            </div>
+
+            <button class="recharge-complete-btn" onclick="rechargeComplete()">Recharge Complete</button>
+
+            <div class="instructions">
+                <div class="instruction-item">1. Copy the address above or scan the QR code and select the ERC20 network to recharge USDT</div>
+                <div class="instruction-item">2. Please do not recharge other non-USDT assets, the funds will arrive in your account in about 1 to 3 minutes after recharging</div>
+                <div class="instruction-item">3. If it does not arrive for a long time, please refresh the page or contact customer service</div>
+            </div>
+        </div>
+
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <script>
+        function copyAddress() {
+            const addressText = document.getElementById('address-text').innerText;
+            navigator.clipboard.writeText(addressText)
+                .then(() => {
+                    alert('Address copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function rechargeComplete() {
+            alert('Thank you for your recharge. It will be processed shortly.');
+            history.back();
+        }
+
+        // Add USDT logo
+        document.getElementById('crypto-logo').src = 'https://cryptologos.cc/logos/tether-usdt-logo.png';
+
+        function goBack() {
+            window.location.href = 'recharge.html';
+        }
+    </script>
+</body>
+</html>
 
