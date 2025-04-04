@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invest - Crypto Trading Platform</title>
+    <title>Smart Investment Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -126,6 +126,7 @@
             border-radius: 10px;
             margin-bottom: 20px;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .plan-header {
@@ -184,12 +185,168 @@
             font-weight: bold;
         }
 
-        .detail-value.price {
-            text-align: right;
-        }
-
         .detail-value.rate {
             color: #4cd964;
+        }
+
+        /* Plan Detail Page */
+        .plan-detail {
+            display: none;
+            padding: 0;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .plan-detail-content {
+            padding: 15px;
+        }
+
+        .plan-detail-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .plan-detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a237e;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .plan-detail-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9800, #ffcc80);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label-lg {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .detail-value-lg {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #ddd;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .quantity-btn:hover {
+            background-color: #eee;
+        }
+
+        .quantity-input {
+            width: 50px;
+            height: 36px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+
+        .cycle-selector {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cycle-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: none;
+        }
+
+        .cycle-option {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .cycle-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .cycle-option:last-child {
+            border-bottom: none;
+        }
+
+        .invest-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .invest-btn:hover {
+            background-color: #f57c00;
+        }
+
+        .project-rule {
+            margin-top: 20px;
+        }
+
+        .rule-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+
+        .estimated-revenue {
+            font-weight: bold;
+            word-break: break-word;
         }
 
         /* Float button */
@@ -244,6 +401,82 @@
             margin-bottom: 5px;
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .modal-icon.success {
+            color: #4cd964;
+        }
+
+        .modal-icon.error {
+            color: #ff3b30;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .modal-message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 152, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff9800;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
@@ -274,255 +507,530 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
-                <div class="logo-text">AI ROBOT</div>
+        <!-- Main Page -->
+        <div id="main-page">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                    <div class="logo-text">AI ROBOT</div>
+                </div>
+                <div class="header-btns">
+                    <div class="header-btn app">
+                        <i class="fas fa-mobile-alt"></i> App
+                    </div>
+                    <div class="header-btn">
+                        <i class="fas fa-globe"></i> English
+                    </div>
+                </div>
             </div>
-            <div class="header-btns">
-                <div class="header-btn app">
-                    <i class="fas fa-mobile-alt"></i> App
-                </div>
-                <div class="header-btn">
-                    <i class="fas fa-globe"></i> English
-                </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active">Smart investment</div>
+                <div class="tab">Invest Record</div>
+            </div>
+            
+            <div class="investment-plans">
+                <!-- Plan cards will be generated by JavaScript -->
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active">Smart investment</div>
-            <div class="tab">Invest Record</div>
+        <!-- Plan Detail Page -->
+        <div id="plan-detail" class="plan-detail">
+            <header class="header">
+                <div class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <h1 class="header-title">Smart investment</h1>
+            </header>
+
+            <div class="plan-detail-content">
+                <!-- Plan detail content will be generated by JavaScript -->
+            </div>
         </div>
 
-        <!-- Investment Plans -->
-        <div class="investment-plans">
-            <!-- Plan 5 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 5</div>
-                    <img src="/placeholder.svg?height=60&width=100" alt="Investment Plan 5" class="plan-image">
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">30000 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">24.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">30 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 4 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 4</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">10000 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">22.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">30 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 3 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 3</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">2000 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">20.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">15 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 2 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 2</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">500 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">18.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">15 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 1 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 1</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">100 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">16.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">7 Day</div>
-                    </div>
-                </div>
-            </div>
- <!-- Plan 3 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 3</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">2000 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">20.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">15 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 2 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 2</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">500 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">18.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">15 Day</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plan 1 -->
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-title">Investment Plan 1</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">100 USDT</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">16.00%</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">7 Day</div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Float Button -->
         <div class="float-btn">
             <i class="fas fa-arrow-up"></i>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <div id="modal-loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <div class="modal-message">Processing your investment...</div>
+                </div>
+                <div id="modal-result" style="display: none;">
+                    <div class="modal-icon" id="modal-icon">
+                        <i class="fas fa-check-circle success"></i>
+                    </div>
+                    <div class="modal-title" id="modal-title">Success</div>
+                    <div class="modal-message" id="modal-message">Your investment was successful!</div>
+                    <button class="modal-btn" onclick="closeModal()">OK</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-        <a href="quantify.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fas fa-chart-pie"></i>
             <span>Quantify</span>
         </a>
-        <a href="invest.html" class="nav-item active">
+        <a href="#" class="nav-item active">
             <i class="fas fa-gift"></i>
             <span>Invest</span>
         </a>
-        <a href="invite-friends.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fas fa-user-plus"></i>
             <span>Invite Friends</span>
         </a>
-        <a href="profile.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fas fa-user"></i>
             <span>Me</span>
         </a>
     </nav>
 
     <script>
-        // Tab switching functionality
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // For now, just show an alert when switching to Invest Record
-                if (this.textContent === 'Invest Record') {
-                    alert('Invest Record feature coming soon.');
-                    // Switch back to Smart investment tab
-                    setTimeout(() => {
-                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                        document.querySelectorAll('.tab')[0].classList.add('active');
-                    }, 500);
-                }
-            });
-        });
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
 
-        // Plan card click functionality
-        document.querySelectorAll('.plan-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const planTitle = this.querySelector('.plan-title').textContent;
-                const planPrice = this.querySelector('.detail-value').textContent;
-                alert(`You selected ${planTitle} for ${planPrice}. Investment feature coming soon.`);
+        // Current user ID (for demo purposes)
+        const CURRENT_USER_ID = 1; // Replace with actual user ID or authentication mechanism
+
+        // Investment Plans Data - Updated with additional smaller plans
+        const investmentPlans = [
+            {
+                id: 1,
+                title: "Investment Plan 1",
+                price: 20,
+                dailyRate: "10.00%",
+                cycle: "7 Day"
+            },
+            {
+                id: 2,
+                title: "Investment Plan 2",
+                price: 50,
+                dailyRate: "12.00%",
+                cycle: "7 Day"
+            },
+            {
+                id: 3,
+                title: "Investment Plan 3",
+                price: 96,
+                dailyRate: "14.00%",
+                cycle: "7 Day"
+            },
+            {
+                id: 4,
+                title: "Investment Plan 4",
+                price: 100,
+                dailyRate: "16.00%",
+                cycle: "7 Day"
+            },
+            {
+                id: 5,
+                title: "Investment Plan 5",
+                price: 500,
+                dailyRate: "18.00%",
+                cycle: "15 Day"
+            },
+            {
+                id: 6,
+                title: "Investment Plan 6",
+                price: 1650,
+                dailyRate: "19.00%",
+                cycle: "15 Day"
+            },
+            {
+                id: 7,
+                title: "Investment Plan 7",
+                price: 2000,
+                dailyRate: "20.00%",
+                cycle: "15 Day"
+            },
+            {
+                id: 8,
+                title: "Investment Plan 8",
+                price: 3500,
+                dailyRate: "21.00%",
+                cycle: "30 Day"
+            },
+            {
+                id: 9,
+                title: "Investment Plan 9",
+                price: 10000,
+                dailyRate: "22.00%",
+                cycle: "30 Day"
+            },
+            {
+                id: 10,
+                title: "Investment Plan 10",
+                price: 30000,
+                dailyRate: "24.00%",
+                cycle: "30 Day"
+            },
+            {
+                id: 11,
+                title: "Investment Plan 11",
+                price: 50000,
+                dailyRate: "26.00%",
+                cycle: "30 Day"
+            },
+            {
+                id: 12,
+                title: "Investment Plan 12",
+                price: 80000,
+                dailyRate: "28.00%",
+                cycle: "30 Day"
+            },
+            {
+                id: 13,
+                title: "Investment Plan 13",
+                price: 100000,
+                dailyRate: "30.00%",
+                cycle: "30 Day"
+            }
+        ];
+
+        // Investment Duration Options
+        const durationOptions = [
+            { label: "12hrs", value: 0.5, interestRate: 1.8 }, // 180%
+            { label: "1 day", value: 1, interestRate: 1.85 }, // 185%
+            { label: "2 days", value: 2, interestRate: 1.95 }, // 195%
+            { label: "3 days", value: 3, interestRate: 1.98 }, // 198%
+            { label: "4 days", value: 4, interestRate: 2.0 }, // 200%
+            { label: "5 days", value: 5, interestRate: 2.02 }, // 202%
+            { label: "6 days", value: 6, interestRate: 2.03 }, // 203%
+            { label: "7 days", value: 7, interestRate: 2.05 }, // 205%
+            { label: "8 days", value: 8, interestRate: 2.06 }  // 206%
+        ];
+
+        // Generate Plan Cards
+        function generatePlanCards() {
+            const plansContainer = document.querySelector('.investment-plans');
+            plansContainer.innerHTML = '';
+
+            // Sort plans by price (low to high)
+            const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
+
+            sortedPlans.forEach(plan => {
+                const planCard = document.createElement('div');
+                planCard.className = 'plan-card';
+                planCard.setAttribute('data-plan-id', plan.id);
+                
+                // Add image to the highest price plan
+                const imageHtml = plan.price === 100000 ? 
+                    `<img src="/placeholder.svg?height=60&width=100" alt="${plan.title}" class="plan-image">` : '';
+                
+                planCard.innerHTML = `
+                    <div class="plan-header">
+                        <div class="plan-title">${plan.title}</div>
+                        ${imageHtml}
+                    </div>
+                    <div class="plan-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Price</div>
+                            <div class="detail-value">${plan.price} USDT</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Daily Rate</div>
+                            <div class="detail-value rate">${plan.dailyRate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cycle</div>
+                            <div class="detail-value">${plan.cycle}</div>
+                        </div>
+                    </div>
+                `;
+                planCard.addEventListener('click', () => showPlanDetail(plan.id));
+                plansContainer.appendChild(planCard);
             });
-        });
+        }
+
+        // Show Plan Detail
+        function showPlanDetail(planId) {
+            const plan = investmentPlans.find(p => p.id === planId);
+            if (!plan) return;
+
+            document.getElementById('main-page').style.display = 'none';
+            document.getElementById('plan-detail').style.display = 'block';
+
+            const detailContent = document.querySelector('.plan-detail-content');
+            
+            // Default values
+            let quantity = 1;
+            let selectedDuration = durationOptions[0]; // Default to 12hrs
+            
+            // Generate initial content
+            updatePlanDetailContent();
+            
+            function updatePlanDetailContent() {
+                const totalInvestment = plan.price * quantity;
+                const estimatedRevenue = totalInvestment * selectedDuration.interestRate;
+                
+                detailContent.innerHTML = `
+                    <div class="plan-detail-card">
+                        <div class="plan-detail-title">${plan.title}</div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Available Balance</div>
+                            <div class="detail-value-lg">0.0000000USDT</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Price</div>
+                            <div class="detail-value-lg">${plan.price}USDT</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Purchase Limit</div>
+                            <div class="detail-value-lg">No Limit(Bought0)</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Purchase Quantity</div>
+                            <div class="quantity-selector">
+                                <div class="quantity-btn" id="decrease-btn">−</div>
+                                <input type="text" class="quantity-input" id="quantity-input" value="${quantity}" readonly>
+                                <div class="quantity-btn" id="increase-btn">+</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Cycle</div>
+                            <div class="cycle-selector" id="cycle-selector">
+                                <span id="selected-cycle">${selectedDuration.label}</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                                <div class="cycle-dropdown" id="cycle-dropdown">
+                                    ${durationOptions.map(option => `
+                                        <div class="cycle-option" data-value="${option.value}" data-label="${option.label}" data-rate="${option.interestRate}">
+                                            ${option.label} (${(option.interestRate * 100).toFixed(0)}%)
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Return Rate</div>
+                            <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
+                        </div>
+                        
+                        <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USDT Invest</button>
+                    </div>
+                    
+                    <div class="plan-detail-card project-rule">
+                        <div class="rule-title">Project Rule</div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Repayment</div>
+                            <div class="detail-value-lg">Maturity Principal And Interest</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Unit Price</div>
+                            <div class="detail-value-lg">${plan.price}USDT</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Amount</div>
+                            <div class="detail-value-lg">${quantity}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Daily Return</div>
+                            <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Invest Cycle</div>
+                            <div class="detail-value-lg">${selectedDuration.label}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label-lg">Estimated Revenue</div>
+                            <div class="detail-value-lg estimated-revenue">
+                                ${plan.price} * ${quantity} * ${(selectedDuration.interestRate * 100).toFixed(0)}% = ${estimatedRevenue.toFixed(2)}USDT
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners after content is updated
+                document.getElementById('decrease-btn').addEventListener('click', () => {
+                    if (quantity > 1) {
+                        quantity--;
+                        updatePlanDetailContent();
+                    }
+                });
+                
+                document.getElementById('increase-btn').addEventListener('click', () => {
+                    quantity++;
+                    updatePlanDetailContent();
+                });
+                
+                const cycleSelector = document.getElementById('cycle-selector');
+                const cycleDropdown = document.getElementById('cycle-dropdown');
+                
+                cycleSelector.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    cycleDropdown.style.display = cycleDropdown.style.display === 'block' ? 'none' : 'block';
+                });
+                
+                document.querySelectorAll('.cycle-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const value = parseFloat(option.getAttribute('data-value'));
+                        const label = option.getAttribute('data-label');
+                        const rate = parseFloat(option.getAttribute('data-rate'));
+                        
+                        selectedDuration = { label, value, interestRate: rate };
+                        document.getElementById('selected-cycle').textContent = label;
+                        cycleDropdown.style.display = 'none';
+                        updatePlanDetailContent();
+                    });
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', () => {
+                    cycleDropdown.style.display = 'none';
+                });
+                
+                // Prevent closing when clicking inside dropdown
+                cycleDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+
+                // Add invest button click handler
+                document.getElementById('invest-btn').addEventListener('click', () => {
+                    handleInvestment(plan, quantity, selectedDuration);
+                });
+            }
+        }
+
+        // Handle investment
+        async function handleInvestment(plan, quantity, selectedDuration) {
+            // Show loading modal
+            showModal('loading');
+            
+            try {
+                // Get user data from Baserow
+                const userData = await getUserData(CURRENT_USER_ID);
+                
+                if (!userData) {
+                    showModalResult(false, 'User not found', 'Please try again later.');
+                    return;
+                }
+                
+                // Check if user has enough balance
+                const totalAssets = userData.total_assets || 0;
+                const totalInvestment = plan.price * quantity;
+                
+                if (totalAssets < totalInvestment) {
+                    showModalResult(false, 'Balance not enough', 'Please recharge your account to continue.');
+                    return;
+                }
+                
+                // If balance is sufficient, process the investment
+                // In a real application, you would update the user's balance and record the investment
+                // For demo purposes, we'll just show a success message
+                
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
+                
+            } catch (error) {
+                console.error('Error processing investment:', error);
+                showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
+            }
+        }
+        
+        // Get user data from Baserow
+        async function getUserData(userId) {
+            try {
+                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Find the user with the matching ID
+                const user = data.results.find(row => row.id === userId);
+                
+                return user;
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                return null;
+            }
+        }
+        
+        // Show modal with loading or result
+        function showModal(type) {
+            const modal = document.getElementById('modal');
+            const modalLoading = document.getElementById('modal-loading');
+            const modalResult = document.getElementById('modal-result');
+            
+            modal.style.display = 'flex';
+            
+            if (type === 'loading') {
+                modalLoading.style.display = 'block';
+                modalResult.style.display = 'none';
+            } else {
+                modalLoading.style.display = 'none';
+                modalResult.style.display = 'block';
+            }
+        }
+        
+        // Show modal with result
+        function showModalResult(success, title, message) {
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            
+            if (success) {
+                modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
+            } else {
+                modalIcon.innerHTML = '<i class="fas fa-times-circle error"></i>';
+            }
+            
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            showModal('result');
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Go back to main page
+        function goBack() {
+            document.getElementById('plan-detail').style.display = 'none';
+            document.getElementById('main-page').style.display = 'block';
+        }
 
         // Float button scroll to top
         document.querySelector('.float-btn').addEventListener('click', function() {
@@ -532,9 +1040,27 @@
             });
         });
 
-        // Back button functionality
-        document.querySelector('.back-btn') === null ? console.log("back_btn not found") : document.querySelector('.back-btn').addEventListener('click', function() {
-            window.location.href = 'index.html';
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // For now, just show an alert when switching to Invest Record
+                    if (this.textContent === 'Invest Record') {
+                        alert('Invest Record feature coming soon.');
+                        // Switch back to Smart investment tab
+                        setTimeout(() => {
+                            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                            document.querySelectorAll('.tab')[0].classList.add('active');
+                        }, 500);
+                    }
+                });
+            });
+            
+            // Initialize
+            generatePlanCards();
         });
     </script>
 </body>
