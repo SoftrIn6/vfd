@@ -27,7 +27,7 @@
             margin: 0 auto;
             padding: 0;
             position: relative;
-            min-width: 470px;
+            min-width: 320px;
             background-color: #f8f9fa;
             min-height: 100vh;
         }
@@ -155,7 +155,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 470px;
-            min-width: 470px;
+            min-width: 320px;
             background-color: #fff;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -186,12 +186,10 @@
         @media (max-width: 470px) {
             .container {
                 width: 100%;
-                min-width: 320px;
             }
             
             .bottom-nav {
                 width: 100%;
-                min-width: 320px;
             }
         }
 
@@ -258,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="crypto-option" data-crypto="trc20">
+            <div class="crypto-option" data-crypto="trc20-usdt">
                 <div class="crypto-info">
                     <div class="crypto-icon trc20">
                         <i class="fas fa-dollar-sign"></i>
@@ -319,11 +317,12 @@
             window.location.href = 'profile.html';
         });
 
-        // Crypto option click
+        // Crypto option click - Connect to individual crypto pages
         document.querySelectorAll('.crypto-option').forEach(option => {
             option.addEventListener('click', function() {
                 const crypto = this.getAttribute('data-crypto');
-                alert(`You selected ${crypto.toUpperCase()} for recharge. This feature is coming soon.`);
+                // Redirect to the corresponding crypto page
+                window.location.href = `${crypto}.html`;
             });
         });
 
@@ -334,3 +333,4 @@
     </script>
 </body>
 </html>
+
