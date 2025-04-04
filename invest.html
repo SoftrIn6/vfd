@@ -1,496 +1,532 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Investment Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Investment Platform</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset & Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.5;
+        overflow-x: hidden;
+    }
 
-        /* Container */
+    /* Container */
+    .container {
+        width: 470px;
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+        min-width: 470px;
+        background-color: #fff;
+        min-height: 100vh;
+    }
+
+    /* Header Styles */
+    .header {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .logo-text {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .header-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-btn {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        color: #ffa500;
+        border: 1px solid #ffa500;
+    }
+
+    .header-btn.app {
+        background-color: #ffa500;
+        color: #fff;
+    }
+
+    .header-btn i {
+        margin-right: 5px;
+    }
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+        background-color: #fff;
+    }
+
+    .tab {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px 0;
+        position: relative;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .tab.active {
+        color: #000;
+    }
+
+    .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #ffa500;
+    }
+
+    /* Investment Plans */
+    .investment-plans {
+        padding: 15px;
+        background-color: #fff;
+        margin-bottom: 80px;
+    }
+
+    .plan-card {
+        border: 1px solid #ffa500;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .plan-header {
+        padding: 15px;
+        position: relative;
+    }
+
+    .plan-title {
+        font-size: 18px;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .plan-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: #ffa500;
+    }
+
+    .plan-image {
+        width: 100px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
+    .plan-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-label {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .detail-value.rate {
+        color: #4cd964;
+    }
+
+    /* Plan Detail Page */
+    .plan-detail {
+        display: none;
+        padding: 0;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .plan-detail-content {
+        padding: 15px;
+    }
+
+    .plan-detail-card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .plan-detail-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1a237e;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .plan-detail-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff9800, #ffcc80);
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label-lg {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .detail-value-lg {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a237e;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #ddd;
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .quantity-btn:hover {
+        background-color: #eee;
+    }
+
+    .quantity-input {
+        width: 50px;
+        height: 36px;
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 16px;
+        margin: 0 5px;
+    }
+
+    .cycle-selector {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .cycle-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 200px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        display: none;
+    }
+
+    .cycle-option {
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s;
+    }
+
+    .cycle-option:hover {
+        background-color: #f5f5f5;
+    }
+
+    .cycle-option:last-child {
+        border-bottom: none;
+    }
+
+    .invest-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 20px;
+        transition: background-color 0.3s;
+    }
+
+    .invest-btn:hover {
+        background-color: #f57c00;
+    }
+
+    .project-rule {
+        margin-top: 20px;
+    }
+
+    .rule-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff9800;
+        margin-bottom: 15px;
+    }
+
+    .estimated-revenue {
+        font-weight: bold;
+        word-break: break-word;
+    }
+
+    /* Float button */
+    .float-btn {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: #ffa500;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 470px;
+        min-width: 470px;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        z-index: 100;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .nav-item.active {
+        color: #ffa500;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .modal-icon.success {
+        color: #4cd964;
+    }
+
+    .modal-icon.error {
+        color: #ff3b30;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .modal-message {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        background-color: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 152, 0, 0.3);
+        border-radius: 50%;
+        border-top-color: #ff9800;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* User info display */
+    .user-info {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .user-email {
+        margin-right: 10px;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .logout-btn {
+        color: #ff9800;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 470px) {
         .container {
-            width: 470px;
-            margin: 0 auto;
-            padding: 0;
-            position: relative;
+            width: 100%;
             min-width: 320px;
-            background-color: #fff;
-            min-height: 100vh;
         }
-
-        /* Header Styles */
-        .header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .logo-text {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .header-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .header-btn {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 12px;
-            color: #ffa500;
-            border: 1px solid #ffa500;
-        }
-
-        .header-btn.app {
-            background-color: #ffa500;
-            color: #fff;
-        }
-
-        .header-btn i {
-            margin-right: 5px;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            padding: 15px;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .tab {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px 20px;
-            position: relative;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .tab.active {
-            color: #000;
-            border-bottom: 3px solid #ffa500;
-        }
-
-        /* Investment Plans */
-        .investment-plans {
-            padding: 15px;
-            background-color: #fff;
-            margin-bottom: 80px;
-        }
-
-        .plan-card {
-            border: 1px solid #ffa500;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            background-color: #fff;
-        }
-
-        .plan-header {
-            padding: 15px;
-            position: relative;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .plan-title {
-            font-size: 16px;
-            font-weight: bold;
-            position: relative;
-            color: #333;
-        }
-
-        .plan-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .plan-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            padding: 15px;
-        }
-
-        .detail-item {
-            margin-bottom: 10px;
-        }
-
-        .detail-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .detail-value.rate {
-            color: #4cd964;
-        }
-
-        /* Plan Detail Page */
-        .plan-detail {
-            display: none;
-            padding: 0;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        .plan-detail-header {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .back-btn {
-            font-size: 20px;
-            margin-right: 15px;
-            cursor: pointer;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .plan-detail-content {
-            padding: 15px;
-        }
-
-        .plan-detail-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .plan-detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .plan-detail-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label-lg {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .detail-value-lg {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .quantity-input {
-            width: 40px;
-            height: 30px;
-            border: 1px solid #ddd;
-            text-align: center;
-            font-size: 16px;
-            margin: 0 5px;
-        }
-
-        .cycle-selector {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-        }
-
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cycle-option:last-child {
-            border-bottom: none;
-        }
-
-        .invest-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .project-rule {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffa500;
-        }
-
-        /* Bottom Navigation */
+        
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            background-color: #fff;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
+            min-width: 320px;
         }
+    }
 
-        .nav-item {
+    @media (min-width: 471px) {
+        body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .nav-item.active {
-            color: #ffa500;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        
+        .container {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
-
-        .modal-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-
-        .modal-icon.success {
-            color: #4cd964;
-        }
-
-        .modal-icon.error {
-            color: #ff3b30;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: #666;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 152, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffa500;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Email input styles */
-        .email-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .email-input:focus {
-            border-color: #ffa500;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-        }
-
-        .email-error {
-            color: #ff3b30;
-            margin-bottom: 15px;
-            font-size: 14px;
-            text-align: left;
-            display: none;
-        }
-
-        .modal-btn.secondary {
-            background-color: #f5f5f5;
-            color: #333;
-            margin-top: 10px;
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (max-width: 470px) {
-            .container {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 471px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f0f0f0;
-            }
-            
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 <div class="container">
@@ -499,7 +535,7 @@
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <div class="logo-img">AI</div>
+                <img src="/placeholder.svg?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
                 <div class="logo-text">AI ROBOT</div>
             </div>
             <div class="header-btns">
@@ -525,16 +561,21 @@
 
     <!-- Plan Detail Page -->
     <div id="plan-detail" class="plan-detail">
-        <div class="plan-detail-header">
+        <header class="header">
             <div class="back-btn" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i>
             </div>
-            <div class="header-title">Smart investment</div>
-        </div>
+            <h1 class="header-title">Smart investment</h1>
+        </header>
 
         <div class="plan-detail-content">
             <!-- Plan detail content will be generated by JavaScript -->
         </div>
+    </div>
+
+    <!-- Float Button -->
+    <div class="float-btn">
+        <i class="fas fa-arrow-up"></i>
     </div>
 
     <!-- Modal -->
@@ -551,17 +592,6 @@
                 <div class="modal-title" id="modal-title">Success</div>
                 <div class="modal-message" id="modal-message">Your investment was successful!</div>
                 <button class="modal-btn" onclick="closeModal()">OK</button>
-            </div>
-            <div id="modal-email-input" style="display: none;">
-                <div class="modal-icon">
-                    <i class="fas fa-envelope" style="color: #ffa500;"></i>
-                </div>
-                <div class="modal-title">Enter Your Email</div>
-                <div class="modal-message">Please enter your email to verify your account.</div>
-                <input type="email" id="email-input" class="email-input" placeholder="your@email.com">
-                <div id="email-error" class="email-error">Please enter a valid email address</div>
-                <button class="modal-btn" id="verify-email-btn">Verify & Invest</button>
-                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -602,44 +632,125 @@
 
     // Investment Plans Data - Updated with additional smaller plans
     const investmentPlans = [
-        { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "10.00%", cycle: "7 Day" },
-        { id: 2, title: "Investment Plan 2", price: 50, dailyRate: "12.00%", cycle: "7 Day" },
-        { id: 3, title: "Investment Plan 3", price: 96, dailyRate: "14.00%", cycle: "7 Day" },
-        { id: 4, title: "Investment Plan 4", price: 100, dailyRate: "16.00%", cycle: "7 Day" },
-        { id: 5, title: "Investment Plan 5", price: 500, dailyRate: "18.00%", cycle: "15 Day" },
-        { id: 6, title: "Investment Plan 6", price: 1650, dailyRate: "19.00%", cycle: "15 Day" },
-        { id: 7, title: "Investment Plan 7", price: 2000, dailyRate: "20.00%", cycle: "15 Day" },
-        { id: 8, title: "Investment Plan 8", price: 3500, dailyRate: "21.00%", cycle: "30 Day" },
-        { id: 9, title: "Investment Plan 9", price: 10000, dailyRate: "22.00%", cycle: "30 Day" },
-        { id: 10, title: "Investment Plan 10", price: 30000, dailyRate: "24.00%", cycle: "30 Day" },
-        { id: 11, title: "Investment Plan 11", price: 50000, dailyRate: "26.00%", cycle: "30 Day" },
-        { id: 12, title: "Investment Plan 12", price: 80000, dailyRate: "28.00%", cycle: "30 Day" },
-        { id: 13, title: "Investment Plan 13", price: 100000, dailyRate: "30.00%", cycle: "30 Day" }
+        {
+            id: 1,
+            title: "Investment Plan 1",
+            price: 20,
+            dailyRate: "10.00%",
+            cycle: "7 Day"
+        },
+        {
+            id: 2,
+            title: "Investment Plan 2",
+            price: 50,
+            dailyRate: "12.00%",
+            cycle: "7 Day"
+        },
+        {
+            id: 3,
+            title: "Investment Plan 3",
+            price: 96,
+            dailyRate: "14.00%",
+            cycle: "7 Day"
+        },
+        {
+            id: 4,
+            title: "Investment Plan 4",
+            price: 100,
+            dailyRate: "16.00%",
+            cycle: "7 Day"
+        },
+        {
+            id: 5,
+            title: "Investment Plan 5",
+            price: 500,
+            dailyRate: "18.00%",
+            cycle: "15 Day"
+        },
+        {
+            id: 6,
+            title: "Investment Plan 6",
+            price: 1650,
+            dailyRate: "19.00%",
+            cycle: "15 Day"
+        },
+        {
+            id: 7,
+            title: "Investment Plan 7",
+            price: 2000,
+            dailyRate: "20.00%",
+            cycle: "15 Day"
+        },
+        {
+            id: 8,
+            title: "Investment Plan 8",
+            price: 3500,
+            dailyRate: "21.00%",
+            cycle: "30 Day"
+        },
+        {
+            id: 9,
+            title: "Investment Plan 9",
+            price: 10000,
+            dailyRate: "22.00%",
+            cycle: "30 Day"
+        },
+        {
+            id: 10,
+            title: "Investment Plan 10",
+            price: 30000,
+            dailyRate: "24.00%",
+            cycle: "30 Day"
+        },
+        {
+            id: 11,
+            title: "Investment Plan 11",
+            price: 50000,
+            dailyRate: "26.00%",
+            cycle: "30 Day"
+        },
+        {
+            id: 12,
+            title: "Investment Plan 12",
+            price: 80000,
+            dailyRate: "28.00%",
+            cycle: "30 Day"
+        },
+        {
+            id: 13,
+            title: "Investment Plan 13",
+            price: 100000,
+            dailyRate: "30.00%",
+            cycle: "30 Day"
+        }
     ];
 
     // Investment Duration Options
     const durationOptions = [
-        { label: "12hrs", value: 0.5, interestRate: 1.8 },
-        { label: "1 day", value: 1, interestRate: 1.85 },
-        { label: "2 days", value: 2, interestRate: 1.95 },
-        { label: "3 days", value: 3, interestRate: 1.98 },
-        { label: "4 days", value: 4, interestRate: 2.0 },
-        { label: "5 days", value: 5, interestRate: 2.02 },
-        { label: "6 days", value: 6, interestRate: 2.03 },
-        { label: "7 days", value: 7, interestRate: 2.05 },
-        { label: "8 days", value: 8, interestRate: 2.06 }
+        { label: "12hrs", value: 0.5, interestRate: 1.8 }, // 180%
+        { label: "1 day", value: 1, interestRate: 1.85 }, // 185%
+        { label: "2 days", value: 2, interestRate: 1.95 }, // 195%
+        { label: "3 days", value: 3, interestRate: 1.98 }, // 198%
+        { label: "4 days", value: 4, interestRate: 2.0 }, // 200%
+        { label: "5 days", value: 5, interestRate: 2.02 }, // 202%
+        { label: "6 days", value: 6, interestRate: 2.03 }, // 203%
+        { label: "7 days", value: 7, interestRate: 2.05 }, // 205%
+        { label: "8 days", value: 8, interestRate: 2.06 }  // 206%
     ];
-
-    // Variables to store current investment selection
-    let currentPlan = null;
-    let currentQuantity = 1;
-    let currentDuration = null;
 
     // Initialize the app when document is ready
     document.addEventListener('DOMContentLoaded', function() {
         // Generate plan cards
         generatePlanCards();
         
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
         // Tab switching functionality
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -657,24 +768,6 @@
                 }
             });
         });
-
-        // Add event listener for email verification button
-        document.getElementById('verify-email-btn').addEventListener('click', function() {
-            const email = document.getElementById('email-input').value.trim();
-            
-            // Validate email
-            if (!email || !isValidEmail(email)) {
-                document.getElementById('email-error').style.display = 'block';
-                return;
-            }
-            
-            // Hide email input, show loading
-            document.getElementById('modal-email-input').style.display = 'none';
-            document.getElementById('modal-loading').style.display = 'block';
-            
-            // Process verification and investment
-            verifyAndInvest(email);
-        });
     });
 
     // Generate Plan Cards
@@ -682,16 +775,22 @@
         const plansContainer = document.querySelector('.investment-plans');
         plansContainer.innerHTML = '';
 
+        // Sort plans by price (low to high)
         const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
 
         sortedPlans.forEach(plan => {
             const planCard = document.createElement('div');
             planCard.className = 'plan-card';
             planCard.setAttribute('data-plan-id', plan.id);
-
+            
+            // Add image to the highest price plan
+            const imageHtml = plan.price === 100000 ? 
+                `<img src="/placeholder.svg?height=60&width=100" alt="${plan.title}" class="plan-image">` : '';
+            
             planCard.innerHTML = `
                 <div class="plan-header">
                     <div class="plan-title">${plan.title}</div>
+                    ${imageHtml}
                 </div>
                 <div class="plan-details">
                     <div class="detail-item">
@@ -718,24 +817,25 @@
         const plan = investmentPlans.find(p => p.id === planId);
         if (!plan) return;
 
-        // Store current plan
-        currentPlan = plan;
-        currentQuantity = 1;
-        currentDuration = durationOptions[0];
-
         document.getElementById('main-page').style.display = 'none';
         document.getElementById('plan-detail').style.display = 'block';
 
         const detailContent = document.querySelector('.plan-detail-content');
         
+        // Default values
+        let quantity = 1;
+        let selectedDuration = durationOptions[0]; // Default to 12hrs
+        
         // Generate initial content
         updatePlanDetailContent();
         
         function updatePlanDetailContent() {
-            const totalInvestment = plan.price * currentQuantity;
-            const dailyRate = parseFloat(plan.dailyRate);
-            const cycleDays = parseInt(plan.cycle);
-            const estimatedRevenue = (plan.price * currentQuantity * dailyRate / 100 * cycleDays).toFixed(2);
+            const totalInvestment = plan.price * quantity;
+            const estimatedRevenue = totalInvestment * selectedDuration.interestRate;
+            
+            // Get user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const userBalance = userData.total_assets ? parseFloat(userData.total_assets).toFixed(2) : '0.00';
             
             detailContent.innerHTML = `
                 <div class="plan-detail-card">
@@ -743,12 +843,12 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">0.000000 USDT</div>
+                        <div class="detail-value-lg">${userBalance}USDT</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Price</div>
-                        <div class="detail-value-lg">${plan.price} USDT</div>
+                        <div class="detail-value-lg">${plan.price}USDT</div>
                     </div>
                     
                     <div class="detail-row">
@@ -760,26 +860,36 @@
                         <div class="detail-label-lg">Purchase Quantity</div>
                         <div class="quantity-selector">
                             <div class="quantity-btn" id="decrease-btn">−</div>
-                            <input type="text" class="quantity-input" id="quantity-input" value="${currentQuantity}" readonly>
+                            <input type="text" class="quantity-input" id="quantity-input" value="${quantity}" readonly>
                             <div class="quantity-btn" id="increase-btn">+</div>
                         </div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Cycle</div>
-                        <div class="detail-value-lg">${plan.cycle}</div>
+                        <div class="cycle-selector" id="cycle-selector">
+                            <span id="selected-cycle">${selectedDuration.label}</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                            <div class="cycle-dropdown" id="cycle-dropdown">
+                                ${durationOptions.map(option => `
+                                    <div class="cycle-option" data-value="${option.value}" data-label="${option.label}" data-rate="${option.interestRate}">
+                                        ${option.label} (${(option.interestRate * 100).toFixed(0)}%)
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="detail-row">
-                        <div class="detail-label-lg">Daily Rate</div>
-                        <div class="detail-value-lg">${plan.dailyRate}</div>
+                        <div class="detail-label-lg">Return Rate</div>
+                        <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
                     </div>
                     
                     <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USDT Invest</button>
                 </div>
                 
-                <div class="plan-detail-card">
-                    <div class="project-rule">Project Rule</div>
+                <div class="plan-detail-card project-rule">
+                    <div class="rule-title">Project Rule</div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Repayment</div>
@@ -788,28 +898,28 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Unit Price</div>
-                        <div class="detail-value-lg">${plan.price} USDT</div>
+                        <div class="detail-value-lg">${plan.price}USDT</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Amount</div>
-                        <div class="detail-value-lg">${currentQuantity}</div>
+                        <div class="detail-value-lg">${quantity}</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Daily Return</div>
-                        <div class="detail-value-lg">${plan.dailyRate}</div>
+                        <div class="detail-value-lg">${(selectedDuration.interestRate * 100).toFixed(2)}%</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Invest Cycle</div>
-                        <div class="detail-value-lg">${plan.cycle}</div>
+                        <div class="detail-value-lg">${selectedDuration.label}</div>
                     </div>
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Estimated Revenue</div>
-                        <div class="detail-value-lg">
-                            ${plan.price} * ${currentQuantity} * ${plan.dailyRate} * ${cycleDays} = ${estimatedRevenue} USDT
+                        <div class="detail-value-lg estimated-revenue">
+                            ${plan.price} * ${quantity} * ${(selectedDuration.interestRate * 100).toFixed(0)}% = ${estimatedRevenue.toFixed(2)}USDT
                         </div>
                     </div>
                 </div>
@@ -817,97 +927,100 @@
             
             // Add event listeners after content is updated
             document.getElementById('decrease-btn').addEventListener('click', () => {
-                if (currentQuantity > 1) {
-                    currentQuantity--;
+                if (quantity > 1) {
+                    quantity--;
                     updatePlanDetailContent();
                 }
             });
             
             document.getElementById('increase-btn').addEventListener('click', () => {
-                currentQuantity++;
+                quantity++;
                 updatePlanDetailContent();
+            });
+            
+            const cycleSelector = document.getElementById('cycle-selector');
+            const cycleDropdown = document.getElementById('cycle-dropdown');
+            
+            cycleSelector.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cycleDropdown.style.display = cycleDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.querySelectorAll('.cycle-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = parseFloat(option.getAttribute('data-value'));
+                    const label = option.getAttribute('data-label');
+                    const rate = parseFloat(option.getAttribute('data-rate'));
+                    
+                    selectedDuration = { label, value, interestRate: rate };
+                    document.getElementById('selected-cycle').textContent = label;
+                    cycleDropdown.style.display = 'none';
+                    updatePlanDetailContent();
+                });
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                cycleDropdown.style.display = 'none';
+            });
+            
+            // Prevent closing when clicking inside dropdown
+            cycleDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
 
             // Add invest button click handler
             document.getElementById('invest-btn').addEventListener('click', () => {
-                showEmailInputModal();
+                handleInvestment(plan, quantity, selectedDuration);
             });
         }
     }
 
-    // Show email input modal
-    function showEmailInputModal() {
-        const modal = document.getElementById('modal');
-        const modalEmailInput = document.getElementById('modal-email-input');
-        const emailInput = document.getElementById('email-input');
-        const emailError = document.getElementById('email-error');
+    // Handle investment
+    async function handleInvestment(plan, quantity, selectedDuration) {
+        // Check if user is logged in
+        const authToken = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         
-        // Reset email input and error
-        emailInput.value = '';
-        emailError.style.display = 'none';
+        if (!authToken || !userData.email) {
+            // User is not logged in, redirect to login page
+            window.location.href = 'login.html';
+            return;
+        }
         
-        // Show modal with email input
-        modal.style.display = 'flex';
-        modalEmailInput.style.display = 'block';
-        document.getElementById('modal-loading').style.display = 'none';
-        document.getElementById('modal-result').style.display = 'none';
+        // Show loading modal
+        showModal('loading');
         
-        // Focus on email input
-        setTimeout(() => {
-            emailInput.focus();
-        }, 100);
-    }
-
-    // Validate email format
-    function isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-
-    // Verify user and process investment
-    async function verifyAndInvest(email) {
         try {
-            // Fetch user data from Baserow
-            const userData = await fetchUserDataByEmail(email);
+            // Get fresh user data from Baserow to ensure we have the latest balance
+            const freshUserData = await fetchUserData(userData.email);
             
-            if (!userData) {
-                showModalResult(false, 'User not found', 'No account found with this email. Please check your email or register.');
+            if (!freshUserData) {
+                showModalResult(false, 'User not found', 'Please try again later or contact support.');
                 return;
             }
             
-            // Calculate total investment amount
-            const totalInvestment = currentPlan.price * currentQuantity;
-            
             // Check if user has enough balance
-            const totalAssets = parseFloat(userData.total_assets) || 0;
+            const totalAssets = parseFloat(freshUserData.total_assets) || 0;
+            const totalInvestment = plan.price * quantity;
             
             console.log('User assets:', totalAssets);
             console.log('Investment amount:', totalInvestment);
             
             if (totalAssets < totalInvestment) {
-                showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USDT) is not enough for this investment (${totalInvestment.toFixed(2)} USDT).`);
+                showModalResult(false, 'Balance not enough', 'Please recharge your account to continue.');
                 return;
             }
             
             // If balance is sufficient, process the investment
+            // In a real application, you would update the user's balance and record the investment
+            // For demo purposes, we'll just show a success message
+            
             // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 1500));
             
-            // Update user balance in Baserow
-            const success = await updateUserBalance(userData, totalAssets - totalInvestment);
-            
-            if (success) {
-                showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${currentPlan.title}.`);
-                
-                // Save user email to localStorage for future use
-                localStorage.setItem('userEmail', email);
-                
-                // Update userData with new balance and save to localStorage
-                userData.total_assets = (totalAssets - totalInvestment).toFixed(2);
-                localStorage.setItem('userData', JSON.stringify(userData));
-            } else {
-                showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
-            }
+            showModalResult(true, 'Plan purchase successful', `You have successfully invested ${totalInvestment.toFixed(2)} USDT in ${plan.title}.`);
             
         } catch (error) {
             console.error('Error processing investment:', error);
@@ -915,10 +1028,10 @@
         }
     }
     
-    // Fetch user data from Baserow by email
-    async function fetchUserDataByEmail(email) {
+    // Fetch user data from Baserow
+    async function fetchUserData(email, forceRefresh = false) {
         try {
-            // Get the field structure from Baserow to map field IDs
+            // First, get the field structure from Baserow
             const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
                 method: 'GET',
                 headers: {
@@ -927,17 +1040,16 @@
                 }
             });
             
-            if (!fieldsResponse.ok) {
-                throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
-            }
-            
             const fieldsData = await fieldsResponse.json();
+            console.log('Baserow fields:', fieldsData);
             
             // Create a mapping of field names to their IDs
             const fieldMap = {};
             fieldsData.forEach(field => {
                 fieldMap[field.name] = field.id;
             });
+            
+            console.log('Field mapping:', fieldMap);
             
             // Get the email field ID
             const emailFieldId = fieldMap['email'];
@@ -955,7 +1067,9 @@
                 headers: {
                     'Authorization': `Token ${BASEROW_API.token}`,
                     'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache'
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
                 }
             });
             
@@ -964,79 +1078,55 @@
             }
             
             const data = await response.json();
+            console.log('Fetched user data response:', data);
             
             if (data.results && data.results.length > 0) {
                 const user = data.results[0];
+                console.log('Found user:', user);
                 
-                // Create a user data object
-                const userData = {
+                // Create a user data object to store in localStorage
+                const userDataToStore = {
                     id: user.id,
+                    username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
                     email: email,
+                    referralCode: user[`field_${fieldMap['referralCode']}`] || '',
                     total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                    quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
                     smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
                     profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00'
+                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                    yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                    today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                    commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
                 };
                 
-                return userData;
+                console.log('User data to store:', userDataToStore);
+                
+                // Save to localStorage
+                localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                
+                if (forceRefresh) {
+                    alert('Data refreshed successfully!');
+                }
+                
+                return userDataToStore;
             } else {
                 console.error('No user data found for email:', email);
+                
+                if (forceRefresh) {
+                    alert('No user data found. Please try again or contact support.');
+                }
+                
                 return null;
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
+            
+            if (forceRefresh) {
+                alert('Failed to refresh data. Please try again.');
+            }
+            
             return null;
-        }
-    }
-    
-    // Update user balance in Baserow
-    async function updateUserBalance(userData, newBalance) {
-        try {
-            // Get the field structure from Baserow to map field IDs
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const fieldsData = await fieldsResponse.json();
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-            });
-            
-            // Get the total_assets field ID
-            const totalAssetsFieldId = fieldMap['total_assets'];
-            
-            if (!totalAssetsFieldId) {
-                throw new Error('Total assets field not found in Baserow table');
-            }
-            
-            // Update the user's balance
-            const updateData = {};
-            updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
-            
-            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updateData)
-            });
-            
-            if (!updateResponse.ok) {
-                throw new Error(`Failed to update balance: ${updateResponse.status}`);
-            }
-            
-            return true;
-        } catch (error) {
-            console.error('Error updating user balance:', error);
-            return false;
         }
     }
     
@@ -1045,22 +1135,15 @@
         const modal = document.getElementById('modal');
         const modalLoading = document.getElementById('modal-loading');
         const modalResult = document.getElementById('modal-result');
-        const modalEmailInput = document.getElementById('modal-email-input');
         
         modal.style.display = 'flex';
         
         if (type === 'loading') {
             modalLoading.style.display = 'block';
             modalResult.style.display = 'none';
-            modalEmailInput.style.display = 'none';
-        } else if (type === 'result') {
+        } else {
             modalLoading.style.display = 'none';
             modalResult.style.display = 'block';
-            modalEmailInput.style.display = 'none';
-        } else if (type === 'email') {
-            modalLoading.style.display = 'none';
-            modalResult.style.display = 'none';
-            modalEmailInput.style.display = 'block';
         }
     }
     
@@ -1073,7 +1156,7 @@
         if (success) {
             modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
         } else {
-            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
+            modalIcon.innerHTML = '<i class="fas fa-times-circle error"></i>';
         }
         
         modalTitle.textContent = title;
