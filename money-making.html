@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .date {
+            color: #777;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Money-making Function</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <div class="page-title">Soft R investment Money-making Function</div>
+            <div class="date" id="current-date"></div>
+            
+            <p>
+                The Soft R investment intelligent quantitative trading system uses advanced AI high-speed trading algorithms to efficiently execute cross-exchange arbitrage within 1 second, ensuring the capture of the best spread in market fluctuations. For example: when BTC/USDT is bought at a price of $53,019 on the Binance exchange and sold at a price of $53,037 on the Coinbase exchange, each transaction can accurately make a profit of $18. This trading speed far exceeds manual operations, allowing investors to easily obtain stable returns.
+            </p>
+            
+            <div class="section-title">The core advantages of Soft R investment</div>
+            
+            <p>
+                In the crypto market, trading speed determines profitability. Soft R investment intelligently monitors the market 24/7, buy low and sell high in real time, avoiding delays and errors caused by manual operations. The system completes each transaction with extremely high accuracy based on preset algorithms, and has a built-in stop-profit and stop-loss mechanism to ensure maximum returns.
+            </p>
+            
+            <div class="section-title">Avoid the influence of human emotions</div>
+            
+            <p>
+                Most traders are affected by emotions, leading to over-trading or missed opportunities. Soft R investment adopts a fully automated quantitative trading system, strictly implements trading strategies, is not affected by fear or greed, and makes trading more stable and rational.
+            </p>
+            
+            <div class="section-title">Powerful data backtesting capabilities</div>
+            
+            <p>
+                Soft R investment combines historical market data and real-time market analysis to optimize quantitative trading models. The system will dynamically adjust the algorithm to ensure that the optimal trading strategy adapts to different market environments and maximizes profits.
+            </p>
+            
+            <div class="section-title">Intelligent risk control and trading discipline</div>
+            
+            <p>
+                Many investors suffer losses due to lack of discipline, but Soft R investment strictly implements the set trading strategy. For example: if the transaction amount is set to $100, the system will not mistakenly place an order for $1,000, effectively preventing human operational errors and ensuring the safety of funds.
+            </p>
+            
+            <div class="section-title">Market trend analysis and accurate decision making</div>
+            
+            <p>
+                Soft R investment can track market data in real time, analyze price fluctuations and trends of different cryptocurrencies, and help users accurately grasp market opportunities and improve profit stability.
+            </p>
+            
+            <div class="section-title">Automated multi-trading strategies</div>
+            
+            <p>
+                Soft R investment supports multiple exchanges, multiple currencies, and multiple strategies to diversify investment risks. For example, the system can automatically choose the optimal trading strategy, combining spot, contract, hedging, etc. to achieve long-term and stable income growth.
+            </p>
+            
+            <div class="section-title">Simplify operations and start intelligent trading with one click</div>
+            
+            <p>
+                Soft R investment adopts a fully automatic intelligent trading mode. Users only need to start it with one click. The system will complete the transaction within 1-2 minutes and automatically make profits, truly realizing worry-free quantitative investment.
+            </p>
+            
+            <p>
+                Soft R investment is the leader in intelligent arbitrage in the crypto market, making investment more efficient, safe and accurate. Join Soft R investment now and let AI make money for you!
+            </p>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="help-center.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <script>
+        // Function to update the date to current date
+        function updateDate() {
+            const dateElement = document.getElementById('current-date');
+            const now = new Date();
+            
+            // Format: DD/MM/YYYY
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            dateElement.textContent = `${day}/${month}/${year}`;
+        }
+        
+        // Update date when page loads
+        updateDate();
+        
+        // Update date every minute to ensure it's always current
+        setInterval(updateDate, 60000);
+        
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'help-center.html';
+        });
+        
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

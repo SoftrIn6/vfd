@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .faq-question {
+            background-color: #fff;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        .faq-answer.active {
+            padding: 15px;
+            max-height: 1000px;
+        }
+
+        .faq-answer-content {
+            color: #666;
+        }
+
+        .faq-question-text {
+            flex: 1;
+        }
+
+        .faq-toggle {
+            color: #ffa500;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        /* Security Features List */
+        .security-features {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .security-features li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .security-features li:before {
+            content: '✓';
+            color: #4cd964;
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Crypto List */
+        .crypto-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .crypto-item {
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        
+        /* Contact Info */
+        .contact-info {
+            margin-top: 10px;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .contact-icon {
+            width: 20px;
+            margin-right: 10px;
+            color: #ffa500;
+        }
+        
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">FAQ</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <div class="page-title">Frequently Asked Questions (Q&A)</div>
+            
+            <!-- FAQ Item 1 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">What is Soft R Investment?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Soft R Investment is a regulated cryptocurrency trading platform that combines AI-powered quantitative trading with user-friendly tools to help investors achieve stable returns. Our system automatically analyzes market trends to buy low and sell high, maximizing profits for our users.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 2 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">Is my investment secure?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes, we employ multiple security measures to ensure your investments are protected:
+                        
+                        <ul class="security-features">
+                            <li>256-bit bank-grade encryption</li>
+                            <li>Cold wallet storage for 95% of assets</li>
+                            <li>Regular third-party security audits</li>
+                            <li>Two-factor authentication (2FA)</li>
+                            <li>SSL-secured transactions</li>
+                            <li>$20M insurance coverage for digital assets</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 3 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">What returns can I expect?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Our AI trading system offers:
+                        
+                        <ul class="security-features">
+                            <li>Up to 35% daily ROI on selected plans</li>
+                            <li>Compounding interest options</li>
+                            <li>180-255% returns based on investment duration</li>
+                            <li>Real-time profit tracking in your dashboard</li>
+                        </ul>
+                        
+                        Please note that while we strive to deliver consistent returns, cryptocurrency markets are inherently volatile and actual results may vary.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 4 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">How do withdrawals work?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Our withdrawal process is designed to be simple and efficient:
+                        
+                        <ul class="security-features">
+                            <li>Minimum withdrawal: 2 USDT</li>
+                            <li>Zero withdrawal fees</li>
+                            <li>24/7 processing (approved within 2-12 hours)</li>
+                            <li>Supported networks: BEP20, TRC20, ERC20</li>
+                            <li>Daily withdrawal limit: $999,999.99</li>
+                        </ul>
+                        
+                        To withdraw funds, simply navigate to your profile, click "Withdraw," enter your wallet address and the amount you wish to withdraw.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 5 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">What cryptocurrencies are supported?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        We support 12+ major cryptocurrencies including:
+                        
+                        <div class="crypto-list">
+                            <div class="crypto-item">BTC</div>
+                            <div class="crypto-item">ETH</div>
+                            <div class="crypto-item">BNB</div>
+                            <div class="crypto-item">XRP</div>
+                            <div class="crypto-item">ADA</div>
+                            <div class="crypto-item">SOL</div>
+                            <div class="crypto-item">DOT</div>
+                            <div class="crypto-item">USDT (ERC20/TRC20/BEP20)</div>
+                            <div class="crypto-item">USDC</div>
+                            <div class="crypto-item">DOGE</div>
+                            <div class="crypto-item">SHIB</div>
+                            <div class="crypto-item">LTC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 6 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">Are there any hidden fees?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        No hidden charges. We only apply:
+                        
+                        <ul class="security-features">
+                            <li>0.1% trading fee</li>
+                            <li>Network gas fees (varies by blockchain)</li>
+                            <li>No deposit/withdrawal fees</li>
+                        </ul>
+                        
+                        All fees are clearly displayed before you complete any transaction.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Item 7 -->
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">How do I contact support?</div>
+                    <div class="faq-toggle"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        24/7 support is available via multiple channels:
+                        
+                        <div class="contact-info">
+                            <div class="contact-method">
+                                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                                <div>WhatsApp: +27 68 241 2149</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+                                <div>Telegram: @SoftRSupport</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                                <div>Email: support@softrinvestment.com</div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-icon"><i class="fas fa-comment"></i></div>
+                                <div>In-app live chat</div>
+                            </div>
+                        </div>
+                        
+                        Our support team typically responds within 1 hour during business hours.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="help-center.html" class="nav-item active">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'help-center.html';
+        });
+
+        // FAQ Accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const toggle = this.querySelector('.faq-toggle i');
+                
+                // Check if this answer is already active
+                const isActive = answer.classList.contains('active');
+                
+                // Close all other open FAQs
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelectorAll('.faq-toggle i').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Toggle this FAQ if it wasn't already active
+                if (!isActive) {
+                    answer.classList.add('active');
+                    toggle.classList.add('active');
+                }
+            });
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

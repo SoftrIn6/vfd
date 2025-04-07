@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        /* About Section Styles */
+        .about-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .section-content {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Company Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Team Section */
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .team-member {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .member-position {
+            font-size: 14px;
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+
+        .member-bio {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            margin: 30px 0;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: #ffa500;
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 3px solid #ffa500;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffa500;
+        }
+
+        .timeline-content {
+            color: #666;
+        }
+
+        /* Values Section */
+        .values-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .value-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .value-icon {
+            font-size: 24px;
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+
+        .value-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .value-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: block;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #ff9000;
+            transform: translateY(-2px);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .team-container, .values-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">About Us</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <div class="page-title">About Soft R Investment</div>
+            
+            <!-- Company Overview Section -->
+            <div class="about-section">
+                <div class="section-title">Our Story</div>
+                <div class="section-content">
+                    Founded in 2019, Soft R Investment has rapidly grown to become a leading AI-powered cryptocurrency trading platform. Our mission is to democratize access to high-yield investment opportunities through cutting-edge technology and innovative trading strategies.
+                </div>
+                <div class="section-content">
+                    What began as a small team of financial experts and AI engineers has evolved into a global platform serving investors across 120+ countries. Our proprietary AI algorithms analyze market trends 24/7, executing trades at optimal moments to maximize returns for our users.
+                </div>
+            </div>
+            
+            <!-- Stats Section -->
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">120+</div>
+                    <div class="stat-label">Countries Served</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$250M+</div>
+                    <div class="stat-label">Assets Managed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98.7%</div>
+                    <div class="stat-label">Client Satisfaction</div>
+                </div>
+            </div>
+            
+            <!-- Mission & Vision Section -->
+            <div class="about-section">
+                <div class="section-title">Our Mission</div>
+                <div class="section-content">
+                    To provide accessible, secure, and profitable cryptocurrency investment opportunities to everyone, regardless of their financial background or trading experience.
+                </div>
+                
+                <div class="section-title">Our Vision</div>
+                <div class="section-content">
+                    To become the world's most trusted AI-powered investment platform, helping millions achieve financial freedom through smart, automated cryptocurrency trading.
+                </div>
+            </div>
+            
+            <!-- Core Values Section -->
+            <div class="about-section">
+                <div class="section-title">Our Core Values</div>
+                <div class="values-container">
+                    <div class="value-item">
+                        <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="value-title">Security First</div>
+                        <div class="value-description">We implement bank-grade security measures to protect your assets and personal information.</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div class="value-title">Innovation</div>
+                        <div class="value-description">We continuously improve our AI algorithms to adapt to changing market conditions.</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="value-title">Transparency</div>
+                        <div class="value-description">We provide real-time insights into your investments and clear fee structures.</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon"><i class="fas fa-users"></i></div>
+                        <div class="value-title">Community</div>
+                        <div class="value-description">We foster a supportive community of investors sharing knowledge and success.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Section -->
+            <div class="about-section">
+                <div class="section-title">Our Leadership Team</div>
+                <div class="team-container">
+                    <div class="team-member">
+                        <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=80&width=80" alt="CEO" class="member-avatar">
+                        <div class="member-name">David Chen</div>
+                        <div class="member-position">CEO & Founder</div>
+                        <div class="member-bio">Former hedge fund manager with 15+ years of experience in quantitative trading and AI development.</div>
+                    </div>
+                    <div class="team-member">
+                        <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=80&width=80" alt="CTO" class="member-avatar">
+                        <div class="member-name">Sarah Johnson</div>
+                        <div class="member-position">Chief Technology Officer</div>
+                        <div class="member-bio">AI specialist with a background in machine learning and blockchain technology from MIT.</div>
+                    </div>
+                    <div class="team-member">
+                        <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=80&width=80" alt="COO" class="member-avatar">
+                        <div class="member-name">Michael Okonjo</div>
+                        <div class="member-position">Chief Operations Officer</div>
+                        <div class="member-bio">Former banking executive with expertise in scaling fintech operations globally.</div>
+                    </div>
+                    <div class="team-member">
+                        <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=80&width=80" alt="CSO" class="member-avatar">
+                        <div class="member-name">Elena Petrova</div>
+                        <div class="member-position">Chief Security Officer</div>
+                        <div class="member-bio">Cybersecurity expert with experience protecting major financial institutions.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Company Timeline -->
+            <div class="about-section">
+                <div class="section-title">Our Journey</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2019</div>
+                        <div class="timeline-content">Soft R Investment founded with a vision to democratize crypto trading</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2020</div>
+                        <div class="timeline-content">Launched our proprietary AI trading algorithm with initial success rates of 78%</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021</div>
+                        <div class="timeline-content">Expanded to 50+ countries and secured $15M in Series A funding</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022</div>
+                        <div class="timeline-content">Reached $100M in assets under management and improved AI accuracy to 92%</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023</div>
+                        <div class="timeline-content">Expanded to 120+ countries and launched enhanced security protocols</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024</div>
+                        <div class="timeline-content">Surpassed $250M in managed assets with 98.7% client satisfaction rate</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regulatory Compliance -->
+            <div class="about-section">
+                <div class="section-title">Regulatory Compliance</div>
+                <div class="section-content">
+                    Soft R Investment operates with full regulatory compliance in all jurisdictions where we offer services. We adhere to strict AML and KYC protocols to ensure a secure and legitimate trading environment.
+                </div>
+                <div class="section-content">
+                    Our platform is regularly audited by third-party security firms, and we maintain a comprehensive insurance policy to protect our clients' assets.
+                </div>
+            </div>
+            
+            <a href="invest.html" class="cta-button">Start Investing Today</a>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="help-center.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'help-center.html';
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

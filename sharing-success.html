@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Successful - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Success Content */
+        .success-content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffa500;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .info-box-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-box-title i {
+            color: #ffa500;
+            margin-right: 10px;
+        }
+
+        .info-box-content {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Tip Box */
+        .tip-box {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .tip-box-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-box-title i {
+            color: #1890ff;
+            margin-right: 10px;
+        }
+
+        .tip-box-content {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .cta-button {
+            display: block;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #ff9000;
+            transform: translateY(-2px);
+        }
+
+        .cta-button.secondary {
+            background-color: #f0f0f0;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Timeline */
+        .timeline {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #eee;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-step {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .timeline-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Submission Successful</div>
+        </div>
+
+        <!-- Success Content -->
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="success-title">Thank You!</h1>
+            <p class="success-message">
+                Your sharing task submission has been received successfully. Our team will review your submission within 24 hours and credit your account with 6 USDT upon approval.
+            </p>
+            
+            <!-- Review Info Box -->
+            <div class="info-box">
+                <div class="info-box-title">
+                    <i class="fas fa-clock"></i>
+                    Review Process
+                </div>
+                <div class="info-box-content">
+                    <p>Please note that it will take up to 24 hours for an admin to review your task. Once approved, the 6 USDT reward will be paid directly to your wallet.</p>
+                </div>
+            </div>
+            
+            <!-- Tip Box -->
+            <div class="tip-box">
+                <div class="tip-box-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Maximize Your Earnings!
+                </div>
+                <div class="tip-box-content">
+                    <p>For faster earnings, we recommend sharing to more groups and friends! The more you share, the more tasks you can complete, allowing you to accumulate rewards quickly.</p>
+                    <p style="margin-top: 10px;">Submit multiple tasks now, and our admin team will review them all at once, enabling you to reach the withdrawal threshold sooner!</p>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="sharing-task.html" class="cta-button">Submit Another Task</a>
+                <a href="index.html" class="cta-button secondary">Return to Home</a>
+            </div>
+        </div>
+        
+        <!-- Timeline -->
+        <div class="timeline">
+            <h2 class="timeline-title">What Happens Next?</h2>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-step">Step 1: Submission Received</div>
+                    <div class="timeline-description">Your sharing task has been successfully submitted to our system.</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-step">Step 2: Admin Review (24 hours)</div>
+                    <div class="timeline-description">Our admin team will verify your screenshots and sharing activities within 24 hours.</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-step">Step 3: Reward Credited</div>
+                    <div class="timeline-description">Upon approval, 6 USDT will be credited to your wallet automatically.</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-step">Step 4: Withdrawal Available</div>
+                    <div class="timeline-description">Once you've accumulated enough rewards, you can withdraw them to your preferred payment method.</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <div class="timeline-content">
+                    <div class="timeline-step">Step 5: Repeat Daily</div>
+                    <div class="timeline-description">Complete more sharing tasks to earn additional rewards and reach your financial goals faster!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="help-center.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Invest - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        /* Step Styles */
+        .step-container {
+            margin-bottom: 30px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .step-content {
+            padding-left: 55px;
+            color: #666;
+        }
+
+        .step-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .step-list li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .step-list li:before {
+            content: '✓';
+            color: #4cd964;
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+        /* Plan Table Styles */
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-table thead {
+            background-color: #ffa500;
+            color: white;
+        }
+
+        .plan-table th, .plan-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .plan-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Pro Tips Section */
+        .pro-tips {
+            margin-top: 30px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffa500;
+        }
+
+        .pro-tips-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .pro-tips-list {
+            list-style: none;
+        }
+
+        .pro-tips-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .pro-tips-list li:before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+        }
+
+        .contact-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            margin-top: 10px;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .contact-icon {
+            width: 20px;
+            margin-right: 10px;
+            color: #ffa500;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: block;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-decoration: none;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #ff9000;
+            transform: translateY(-2px);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+            
+            .plan-table {
+                font-size: 14px;
+            }
+            
+            .plan-table th, .plan-table td {
+                padding: 8px 5px;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Investment Guide</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <div class="page-title">How to Invest & Start Earning: Step-by-Step Guide</div>
+            
+            <!-- Step 1 -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Create Account</div>
+                </div>
+                <div class="step-content">
+                    <ul class="step-list">
+                        <li>Click "Sign Up" on homepage</li>
+                        <li>Enter email and strong password</li>
+                        <li>Verify email through confirmation link</li>
+                        <li>Complete KYC verification (ID + selfie)</li>
+                    </ul>
+                    
+                    <a href="signup.html" class="cta-button">Create Your Account Now</a>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Fund Your Account</div>
+                </div>
+                <div class="step-content">
+                    <ul class="step-list">
+                        <li>Go to Profile → "Fund Account"</li>
+                        <li>Choose cryptocurrency (BTC/ETH/USDT recommended)</li>
+                        <li>Send funds to your unique deposit address</li>
+                        <li>Wait for blockchain confirmations (2-60 mins)</li>
+                    </ul>
+                    
+                    <p style="margin-top: 10px;">Our platform supports multiple cryptocurrencies, with no minimum deposit requirement. Start with as little as $20 to test our platform.</p>
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Choose Investment Plan</div>
+                </div>
+                <div class="step-content">
+                    <p>Select a plan that matches your investment goals and risk tolerance:</p>
+                    
+                    <table class="plan-table">
+                        <thead>
+                            <tr>
+                                <th>Plan Type</th>
+                                <th>Minimum</th>
+                                <th>Duration</th>
+                                <th>Daily ROI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Basic</td>
+                                <td>$20</td>
+                                <td>12hr-7d</td>
+                                <td>180%</td>
+                            </tr>
+                            <tr>
+                                <td>Pro</td>
+                                <td>$500</td>
+                                <td>7-15d</td>
+                                <td>215%</td>
+                            </tr>
+                            <tr>
+                                <td>VIP</td>
+                                <td>$10,000</td>
+                                <td>15-30d</td>
+                                <td>255%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <ul class="step-list">
+                        <li>Navigate to "Invest" section</li>
+                        <li>Select preferred plan</li>
+                        <li>Choose investment duration</li>
+                        <li>Enter investment amount</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Activate AI Trading</div>
+                </div>
+                <div class="step-content">
+                    <ul class="step-list">
+                        <li>Confirm investment details</li>
+                        <li>Approve smart contract</li>
+                        <li>Watch AI bot start trading instantly</li>
+                        <li>Monitor real-time profits in "Quantify" section</li>
+                    </ul>
+                    
+                    <p style="margin-top: 10px;">Our AI-powered system operates 24/7, analyzing market conditions and executing trades automatically to maximize your returns. No trading experience needed!</p>
+                </div>
+            </div>
+            
+            <!-- Step 5 -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Withdraw Profits</div>
+                </div>
+                <div class="step-content">
+                    <ul class="step-list">
+                        <li>Go to "Withdraw" in profile</li>
+                        <li>Enter withdrawal address</li>
+                        <li>Input amount (min 2 USDT)</li>
+                        <li>Confirm via 2FA</li>
+                        <li>Receive funds within 2 hours</li>
+                    </ul>
+                    
+                    <p style="margin-top: 10px;">We offer zero withdrawal fees and 24/7 processing, with most withdrawals completed within 2 hours.</p>
+                </div>
+            </div>
+            
+            <!-- Pro Tips Section -->
+            <div class="pro-tips">
+                <div class="pro-tips-title">Pro Tips for Success</div>
+                
+                <ul class="pro-tips-list">
+                    <li>Start with 12-hour plans to test strategies</li>
+                    <li>Reinforcements first 3 days for compound growth</li>
+                    <li>Use our "Auto-Invest" feature for recurring investments</li>
+                    <li>Refer friends for 11% lifetime commission</li>
+                    <li>Join our Telegram group for market insights</li>
+                </ul>
+            </div>
+            
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <div class="contact-title">Need help? Our support team is available 24/7 via:</div>
+                
+                <div class="contact-info">
+                    <div class="contact-method">
+                        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div>WhatsApp: +27 68 241 2149</div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>Email: support@softrinvestment.com</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="invest.html" class="cta-button">Start Investing Now</a>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="help-center.html" class="nav-item active">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'help-center.html';
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
