@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download App - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        /* App Banner */
+        .app-banner {
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .app-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 20px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-logo img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .app-description {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #fff;
+            color: #ffa500;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-decoration: none;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn i {
+            margin-right: 10px;
+        }
+
+        /* App Info Section */
+        .app-info-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .app-features {
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #fff9e6;
+            color: #ffa500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* App Screenshots */
+        .screenshots-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            position: relative;
+        }
+
+        .screenshots-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .screenshots-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: #ffa500 #f0f0f0;
+        }
+
+        .screenshots-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .screenshots-container::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .screenshots-container::-webkit-scrollbar-thumb {
+            background-color: #ffa500;
+            border-radius: 10px;
+        }
+
+        .screenshot {
+            flex: 0 0 auto;
+            width: 180px;
+            height: 320px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* App Requirements */
+        .requirements-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .requirements-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .requirements-list {
+            list-style: none;
+        }
+
+        .requirements-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .requirements-list li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ffa500;
+            margin-right: 10px;
+        }
+
+        /* App Version Info */
+        .version-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .version-item {
+            text-align: center;
+        }
+
+        .version-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .version-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Download Counter */
+        .download-counter {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        .counter-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 5px;
+        }
+
+        .counter-label {
+            font-size: 14px;
+        }
+
+        /* Safety Notice */
+        .safety-notice {
+            background-color: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .safety-notice strong {
+            color: #333;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">Download App</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <!-- App Banner -->
+            <div class="app-banner">
+                <div class="app-logo">
+                    <i class="fas fa-chart-line" style="font-size: 36px; color: #ffa500;"></i>
+                </div>
+                <div class="app-name">Soft R Investment</div>
+                <div class="app-description">AI-Powered Cryptocurrency Trading Platform</div>
+                
+                <a href="https://apk.e-droid.net/apk/app3547410-ysa2rk.apk?v=1" class="download-btn">
+                    <i class="fas fa-download"></i> Download APK
+                </a>
+                
+                <div style="font-size: 14px; opacity: 0.8; margin-top: 10px;">
+                    Version 2.5.1 • 15.8 MB
+                </div>
+            </div>
+            
+            <!-- App Info Section -->
+            <div class="app-info-section">
+                <div class="section-title">About the App</div>
+                <p style="color: #666; margin-top: 15px;">
+                    The Soft R Investment mobile app brings our powerful AI-driven cryptocurrency trading platform to your fingertips. Experience seamless trading, real-time analytics, and secure transactions anywhere, anytime. Our app is designed to provide both beginners and experienced traders with an intuitive interface and advanced features.
+                </p>
+            </div>
+            
+            <!-- App Features -->
+            <div class="app-features">
+                <div class="section-title">Key Features</div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">AI-Powered Trading</div>
+                        <div class="feature-description">Our advanced algorithms analyze market trends 24/7 to execute trades at optimal moments.</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Real-Time Analytics</div>
+                        <div class="feature-description">Monitor your investments with comprehensive dashboards and performance metrics.</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Secure Wallet</div>
+                        <div class="feature-description">Manage your crypto assets with our built-in secure wallet featuring multi-layer protection.</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Instant Notifications</div>
+                        <div class="feature-description">Receive alerts for market movements, completed trades, and account activities.</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Daily Tasks & Rewards</div>
+                        <div class="feature-description">Complete simple tasks to earn additional rewards and boost your earnings.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- App Screenshots -->
+            <div class="screenshots-section">
+                <div class="screenshots-title">App Screenshots</div>
+                <div class="screenshots-container">
+                    <div class="screenshot">
+                        <img src="/placeholder.svg?height=320&width=180" alt="Dashboard Screenshot">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/placeholder.svg?height=320&width=180" alt="Trading Screenshot">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/placeholder.svg?height=320&width=180" alt="Analytics Screenshot">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/placeholder.svg?height=320&width=180" alt="Wallet Screenshot">
+                    </div>
+                    <div class="screenshot">
+                        <img src="/placeholder.svg?height=320&width=180" alt="Tasks Screenshot">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- App Requirements -->
+            <div class="requirements-container">
+                <div class="requirements-title">System Requirements</div>
+                <ul class="requirements-list">
+                    <li>Android 5.0 or higher</li>
+                    <li>At least 100MB of free storage space</li>
+                    <li>2GB RAM or higher recommended</li>
+                    <li>Active internet connection</li>
+                    <li>Permission to install apps from unknown sources</li>
+                </ul>
+            </div>
+            
+            <!-- App Version Info -->
+            <div class="version-info">
+                <div class="version-item">
+                    <div class="version-label">Version</div>
+                    <div class="version-value">2.5.1</div>
+                </div>
+                <div class="version-item">
+                    <div class="version-label">Size</div>
+                    <div class="version-value">15.8 MB</div>
+                </div>
+                <div class="version-item">
+                    <div class="version-label">Updated</div>
+                    <div class="version-value" id="update-date">Apr 8, 2025</div>
+                </div>
+                <div class="version-item">
+                    <div class="version-label">Rating</div>
+                    <div class="version-value">4.8 ★</div>
+                </div>
+            </div>
+            
+            <!-- Download Counter -->
+            <div class="download-counter">
+                <div class="counter-value">50,000+</div>
+                <div class="counter-label">Downloads</div>
+            </div>
+            
+            <!-- Safety Notice -->
+            <div class="safety-notice">
+                <strong>Security Notice:</strong> This APK has been scanned for viruses and is safe to install. For security reasons, you may need to enable "Install from Unknown Sources" in your device settings.
+            </div>
+            
+            <!-- Download Button (Again) -->
+            <a href="https://apk.e-droid.net/apk/app3547410-ysa2rk.apk?v=1" class="download-btn" style="margin-top: 30px;">
+                <i class="fas fa-download"></i> Download APK Now
+            </a>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="help-center.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Set current date for update date
+        const today = new Date();
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        document.getElementById('update-date').textContent = today.toLocaleDateString('en-US', options);
+    </script>
+</body>
+</html>

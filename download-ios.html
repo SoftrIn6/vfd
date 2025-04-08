@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS App Download - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Main Content Section */
+        .content-section {
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 60px;
+        }
+
+        /* App Banner */
+        .app-banner {
+            background: linear-gradient(135deg, #ffa500, #ff8c00);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .app-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 20px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-logo img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .app-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .app-description {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* Instructions Section */
+        .instructions-section {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .instructions-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .instruction-step {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .step-text {
+            display: inline-block;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            vertical-align: middle;
+        }
+
+        .step-description {
+            margin-top: 10px;
+            margin-left: 40px;
+            color: #666;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-left: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            margin: 30px 0;
+        }
+
+        .benefits-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .benefits-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #fff9e6;
+            color: #ffa500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .benefit-content {
+            flex: 1;
+        }
+
+        .benefit-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .benefit-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin: 30px 0;
+        }
+
+        .faq-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .faq-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #ffa500;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .faq-answer {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-title">iOS App Download</div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="content-section">
+            <!-- App Banner -->
+            <div class="app-banner">
+                <div class="app-logo">
+                    <i class="fas fa-chart-line" style="font-size: 36px; color: #ffa500;"></i>
+                </div>
+                <div class="app-name">Soft R Investment</div>
+                <div class="app-description">AI-Powered Cryptocurrency Trading Platform</div>
+                
+                <div style="font-size: 14px; opacity: 0.8; margin-top: 20px;">
+                    Add our web app to your iPhone home screen for the best experience
+                </div>
+            </div>
+            
+            <!-- Instructions Section -->
+            <div class="instructions-section">
+                <div class="instructions-title">How to Install on iPhone</div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">Tap the Share button in the menu bar</div>
+                    <div class="step-description">
+                        Open Safari and navigate to our website. Then tap the share icon at the bottom of your screen.
+                    </div>
+                    <div class="image-placeholder">
+                        <i class="fas fa-image" style="margin-right: 10px;"></i> Image showing the share button
+                    </div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">Scroll down the list of options and tap "Add to Home Screen"</div>
+                    <div class="step-description">
+                        If you don't see "Add to Home Screen", you can add it to the scroll options by scrolling down to the bottom of the list and tap "Edit Actions", and then tap "Add to Home Screen".
+                    </div>
+                    <div class="image-placeholder">
+                        <i class="fas fa-image" style="margin-right: 10px;"></i> Image showing the Add to Home Screen option
+                    </div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">Click Add</div>
+                    <div class="step-description">
+                        You can customize the name of the app before adding it to your home screen.
+                    </div>
+                    <div class="image-placeholder">
+                        <i class="fas fa-image" style="margin-right: 10px;"></i> Image showing the Add button
+                    </div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">Check your phone home to see the app</div>
+                    <div class="step-description">
+                        The Soft R Investment app icon will now appear on your home screen. Tap it to launch the app.
+                    </div>
+                    <div class="image-placeholder">
+                        <i class="fas fa-image" style="margin-right: 10px;"></i> Image showing the app on home screen
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits Section -->
+            <div class="benefits-section">
+                <div class="benefits-title">Benefits of Our iOS App</div>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <div class="benefit-title">Faster Access</div>
+                            <div class="benefit-description">Launch the app directly from your home screen without opening Safari first.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <div class="benefit-title">Push Notifications</div>
+                            <div class="benefit-description">Receive important alerts about your investments and account activities.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <div class="benefit-title">Native-Like Experience</div>
+                            <div class="benefit-description">Enjoy a full-screen experience without Safari navigation bars.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <div class="benefit-title">Enhanced Security</div>
+                            <div class="benefit-description">Separate app storage for improved data security and privacy.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <div class="faq-title">Frequently Asked Questions</div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Is this a native iOS app from the App Store?</div>
+                    <div class="faq-answer">
+                        No, this is a Progressive Web App (PWA) that can be installed directly from our website. It offers many of the same benefits as a native app without requiring App Store download.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Will the app update automatically?</div>
+                    <div class="faq-answer">
+                        Yes, the app will automatically update whenever you use it, ensuring you always have the latest features and security updates.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Can I use the app offline?</div>
+                    <div class="faq-answer">
+                        Some basic features may work offline, but most functionality requires an internet connection to access real-time data and execute trades.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How do I uninstall the app?</div>
+                    <div class="faq-answer">
+                        Long press on the app icon on your home screen, then select "Remove App" or "Delete App" from the menu that appears.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="quantify.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Quantify</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="help-center.html" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        // Float button scroll to top
+        document.querySelector('.float-btn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
