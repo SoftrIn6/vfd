@@ -104,16 +104,17 @@
 
         .user-avatar i {
             font-size: 30px;
-            color: #ccc;
+            color: #ffa500;
         }
 
         .user-info {
             flex: 1;
+            color: #ffa500;
         }
 
         .user-copy {
             margin-left: 10px;
-            color: #999;
+            color: #ffa500;
             cursor: pointer;
         }
 
@@ -152,7 +153,7 @@
 
         .asset-label {
             font-size: 16px;
-            color: #999;
+            color: #ffa500;
             margin-bottom: 10px;
         }
 
@@ -400,19 +401,19 @@
 
         <!-- Assets Section -->
         <div class="assets-section">
-            <div class="section-title">Total Assets</div>
+            <div class="section-title">Total Account Balance</div>
             <div class="total-assets" id="total-assets">$0.00</div>
             <div class="assets-grid">
                 <div class="asset-item">
-                    <div class="asset-label">Quantitative Account</div>
+                    <div class="asset-label">New Deposit</div>
                     <div class="asset-value" id="quantitative-account">$0.00</div>
                 </div>
                 <div class="asset-item">
-                    <div class="asset-label">Smart Account</div>
+                    <div class="asset-label">Smart Balance</div>
                     <div class="asset-value" id="smart-account">$0.00</div>
                 </div>
                 <div class="asset-item">
-                    <div class="asset-label">Profit Assets</div>
+                    <div class="asset-label">Registration Bonus</div>
                     <div class="asset-value" id="profit-assets">$0.00</div>
                 </div>
             </div>
@@ -426,7 +427,7 @@
 
         <!-- Revenue Section -->
         <div class="revenue-section">
-            <div class="section-title">Total Revenue</div>
+            <div class="section-title">Total Revenue Earned</div>
             <div class="total-assets" id="total-revenue">$0.00</div>
             <div class="revenue-grid">
                 <div class="asset-item">
@@ -438,7 +439,7 @@
                     <div class="asset-value" id="today-earnings">$0.00</div>
                 </div>
                 <div class="asset-item">
-                    <div class="asset-label">Commission Today</div>
+                    <div class="asset-label">Task Earnings </div>
                     <div class="asset-value" id="commission-today">$0.00</div>
                 </div>
             </div>
@@ -795,7 +796,7 @@
                         total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
                         quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
                         smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
                         total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
                         yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
                         today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
