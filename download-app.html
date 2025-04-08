@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download App - Soft R Investment</title>
+    <title>Download App - Soft R</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -172,6 +172,71 @@
             margin-right: 10px;
         }
 
+        /* Platform Cards */
+        .platform-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .platform-card {
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .platform-icon {
+            width: 70px;
+            height: 70px;
+            background-color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .platform-icon i {
+            font-size: 36px;
+        }
+
+        .android-icon {
+            color: #3ddc84;
+        }
+
+        .ios-icon {
+            color: #007aff;
+        }
+
+        .platform-info {
+            flex: 1;
+        }
+
+        .platform-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .platform-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
         /* App Info Section */
         .app-info-section {
             margin-bottom: 30px;
@@ -231,141 +296,6 @@
         .feature-description {
             font-size: 14px;
             color: #666;
-        }
-
-        /* App Screenshots */
-        .screenshots-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-            position: relative;
-        }
-
-        .screenshots-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .screenshots-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 10px 0;
-            margin-bottom: 20px;
-            scrollbar-width: thin;
-            scrollbar-color: #ffa500 #f0f0f0;
-        }
-
-        .screenshots-container::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .screenshots-container::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border-radius: 10px;
-        }
-
-        .screenshots-container::-webkit-scrollbar-thumb {
-            background-color: #ffa500;
-            border-radius: 10px;
-        }
-
-        .screenshot {
-            flex: 0 0 auto;
-            width: 180px;
-            height: 320px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .screenshot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* App Requirements */
-        .requirements-container {
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .requirements-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .requirements-list {
-            list-style: none;
-        }
-
-        .requirements-list li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .requirements-list li::before {
-            content: '\f058';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            color: #ffa500;
-            margin-right: 10px;
-        }
-
-        /* App Version Info */
-        .version-info {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f0f8ff;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .version-item {
-            text-align: center;
-        }
-
-        .version-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .version-value {
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Download Counter */
-        .download-counter {
-            text-align: center;
-            margin: 20px 0;
-            color: #666;
-        }
-
-        .counter-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffa500;
-            margin-bottom: 5px;
-        }
-
-        .counter-label {
-            font-size: 14px;
         }
 
         /* Safety Notice */
@@ -477,24 +407,51 @@
                 <div class="app-logo">
                     <i class="fas fa-chart-line" style="font-size: 36px; color: #ffa500;"></i>
                 </div>
-                <div class="app-name">Soft R Investment</div>
+                <div class="app-name">Soft R</div>
                 <div class="app-description">AI-Powered Cryptocurrency Trading Platform</div>
-                
-                <a href="https://apk.e-droid.net/apk/app3547410-ysa2rk.apk?v=1" class="download-btn">
-                    <i class="fas fa-download"></i> Download APK
-                </a>
-                
-                <div style="font-size: 14px; opacity: 0.8; margin-top: 10px;">
-                    Version 2.5.1 • 15.8 MB
-                </div>
             </div>
             
             <!-- App Info Section -->
             <div class="app-info-section">
                 <div class="section-title">About the App</div>
                 <p style="color: #666; margin-top: 15px;">
-                    The Soft R Investment mobile app brings our powerful AI-driven cryptocurrency trading platform to your fingertips. Experience seamless trading, real-time analytics, and secure transactions anywhere, anytime. Our app is designed to provide both beginners and experienced traders with an intuitive interface and advanced features.
+                    The Soft R mobile app brings our powerful AI-driven cryptocurrency trading platform to your fingertips. Experience seamless trading, real-time analytics, and secure transactions anywhere, anytime. Our app is designed to provide both beginners and experienced traders with an intuitive interface and advanced features.
                 </p>
+            </div>
+            
+            <!-- Platform Cards -->
+            <div class="platform-cards">
+                <!-- Android Card -->
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-android android-icon"></i>
+                    </div>
+                    <div class="platform-info">
+                        <div class="platform-name">SOFT R Android App</div>
+                        <div class="platform-description">
+                            Download our Android app for the best experience on your device. Compatible with Android 1.0 and above.
+                        </div>
+                        <a href="https://softrinvestment.com/download-android.html" class="download-btn">
+                            <i class="fas fa-download"></i> Download SOFT R Android
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- iOS Card -->
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-apple ios-icon"></i>
+                    </div>
+                    <div class="platform-info">
+                        <div class="platform-name">SOFT R iOS App</div>
+                        <div class="platform-description">
+                            Download our iOS app for a seamless experience on your iPhone or iPad. Compatible with iOS 5.0 and above.
+                        </div>
+                        <a href="https://softrinvestment.com/download-ios.html" class="download-btn">
+                            <i class="fas fa-download"></i> Download SOFT R iOS
+                        </a>
+                    </div>
+                </div>
             </div>
             
             <!-- App Features -->
@@ -540,86 +497,20 @@
                         <div class="feature-description">Receive alerts for market movements, completed trades, and account activities.</div>
                     </div>
                 </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <div class="feature-content">
-                        <div class="feature-title">Daily Tasks & Rewards</div>
-                        <div class="feature-description">Complete simple tasks to earn additional rewards and boost your earnings.</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- App Screenshots -->
-            <div class="screenshots-section">
-                <div class="screenshots-title">App Screenshots</div>
-                <div class="screenshots-container">
-                    <div class="screenshot">
-                        <img src="/placeholder.svg?height=320&width=180" alt="Dashboard Screenshot">
-                    </div>
-                    <div class="screenshot">
-                        <img src="/placeholder.svg?height=320&width=180" alt="Trading Screenshot">
-                    </div>
-                    <div class="screenshot">
-                        <img src="/placeholder.svg?height=320&width=180" alt="Analytics Screenshot">
-                    </div>
-                    <div class="screenshot">
-                        <img src="/placeholder.svg?height=320&width=180" alt="Wallet Screenshot">
-                    </div>
-                    <div class="screenshot">
-                        <img src="/placeholder.svg?height=320&width=180" alt="Tasks Screenshot">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- App Requirements -->
-            <div class="requirements-container">
-                <div class="requirements-title">System Requirements</div>
-                <ul class="requirements-list">
-                    <li>Android 5.0 or higher</li>
-                    <li>At least 100MB of free storage space</li>
-                    <li>2GB RAM or higher recommended</li>
-                    <li>Active internet connection</li>
-                    <li>Permission to install apps from unknown sources</li>
-                </ul>
-            </div>
-            
-            <!-- App Version Info -->
-            <div class="version-info">
-                <div class="version-item">
-                    <div class="version-label">Version</div>
-                    <div class="version-value">2.5.1</div>
-                </div>
-                <div class="version-item">
-                    <div class="version-label">Size</div>
-                    <div class="version-value">15.8 MB</div>
-                </div>
-                <div class="version-item">
-                    <div class="version-label">Updated</div>
-                    <div class="version-value" id="update-date">Apr 8, 2025</div>
-                </div>
-                <div class="version-item">
-                    <div class="version-label">Rating</div>
-                    <div class="version-value">4.8 ★</div>
-                </div>
-            </div>
-            
-            <!-- Download Counter -->
-            <div class="download-counter">
-                <div class="counter-value">50,000+</div>
-                <div class="counter-label">Downloads</div>
             </div>
             
             <!-- Safety Notice -->
             <div class="safety-notice">
-                <strong>Security Notice:</strong> This APK has been scanned for viruses and is safe to install. For security reasons, you may need to enable "Install from Unknown Sources" in your device settings.
+                <strong>Security Notice:</strong> All our apps have been scanned for viruses and are safe to install. For Android users, you may need to enable "Install from Unknown Sources" in your device settings.
             </div>
             
-            <!-- Download Button (Again) -->
-            <a href="https://apk.e-droid.net/apk/app3547410-ysa2rk.apk?v=1" class="download-btn" style="margin-top: 30px;">
-                <i class="fas fa-download"></i> Download APK Now
+            <!-- Download Buttons (Again) -->
+            <a href="http://www.fg.com" class="download-btn" style="margin-top: 30px; background-color: #3ddc84; color: white;">
+                <i class="fab fa-android"></i> Download SOFT R Android App
+            </a>
+            
+            <a href="http://www.fg.com" class="download-btn" style="margin-top: 15px; background-color: #007aff; color: white;">
+                <i class="fab fa-apple"></i> Download SOFT R iOS App
             </a>
         </div>
 
@@ -666,11 +557,6 @@
                 behavior: 'smooth'
             });
         });
-        
-        // Set current date for update date
-        const today = new Date();
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        document.getElementById('update-date').textContent = today.toLocaleDateString('en-US', options);
     </script>
 </body>
 </html>
