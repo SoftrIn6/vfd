@@ -393,8 +393,8 @@
                 <i class="fas fa-user"></i>
             </div>
             <div class="user-info">
-                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
-                <div style="color: #666; margin-top: 5px;" id="user-email"></div>
+                <div style="font-size: 18px; font-weight: bold;" id="username"></div> <div class="section-title">Username</div>
+                <div style="color: #666; margin-top: 5px;" id="user-email"></div> <div class="section-title">Email</div>
                 <i class="fas fa-copy user-copy" id="copy-email"></i>
             </div>
         </div>
@@ -650,44 +650,7 @@
             tableId: '488473'
         };
 
-        // Check if user is logged in when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            const authToken = localStorage.getItem('authToken');
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            
-            if (!authToken || !userData.email) {
-                // Redirect to login page if not logged in
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Initialize UI with cached data first
-            if (userData) {
-                updateUI(userData);
-            }
-            
-            // Fetch fresh user data from Baserow
-            fetchUserData(userData.email);
-            
-            // Set up refresh interval (every 30 seconds)
-            setInterval(() => {
-                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
-                if (currentUserData.email) {
-                    fetchUserData(currentUserData.email);
-                }
-            }, 30000);
-            
-            // Copy email functionality
-            document.getElementById('copy-email').addEventListener('click', function() {
-                const email = document.getElementById('user-email').textContent;
-                navigator.clipboard.writeText(email)
-                    .then(() => {
-                        alert('Email copied to clipboard!');
-                    })
-                    .catch(err => {
-                        console.error('Failed to copy: ', err);
-                    });
-            });
+     
             
             // Sign out functionality
             document.getElementById('sign-out-btn').addEventListener('click', function() {
