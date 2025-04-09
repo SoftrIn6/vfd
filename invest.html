@@ -484,6 +484,11 @@
             .container {
                 width: 100%;
             }
+            
+            .bottom-nav {
+                width: 100%;
+                min-width: 320px;
+            }
         }
 
         @media (min-width: 471px) {
@@ -535,6 +540,36 @@
         .cycle-option:last-child {
             border-bottom: none;
         }
+
+        /* User info styles */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #ff3b30;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -547,12 +582,16 @@
                 <div class="logo-img">AI</div>
                 <div class="logo-text">SOFT R INVESTMENT</div>
             </div>
-                  <div class="header-btns">
+            <div class="header-btns">
+                <div class="user-info" id="user-info">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-name" id="user-name">User</div>
+                </div>
                 <a href="https://softrinvestment.com/download-app.html">
-                <div class="header-btn app">
-                <i class="fas fa-mobile-alt"></i> App
-    </div>
-</a>
+                    <div class="header-btn app">
+                        <i class="fas fa-mobile-alt"></i> App
+                    </div>
+                </a>
                 <div class="header-btn">
                     <i class="fas fa-globe"></i> English
                 </div>
@@ -599,45 +638,35 @@
                 <div class="modal-message" id="modal-message">Your investment was successful!</div>
                 <button class="modal-btn" onclick="closeModal()">OK</button>
             </div>
-            <div id="modal-email-input" style="display: none;">
-                <div class="modal-icon">
-                    <i class="fas fa-envelope" style="color: #ffa500;"></i>
-                </div>
-                <div class="modal-title">Enter Your Email</div>
-                <div class="modal-message">Please enter your email to verify your account.</div>
-                <input type="email" id="email-input" class="email-input" placeholder="your@email.com">
-                <div id="email-error" class="email-error">Please enter a valid email address</div>
-                <button class="modal-btn" id="verify-email-btn">Verify & Invest</button>
-                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
-            </div>
         </div>
     </div>
 </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="sharing-task.html" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Task</span>
-        </a>
-        <a href="invest.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
-        </a>
-        <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
-        </a>
-    </nav>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="sharing-task.html" class="nav-item">
+        <i class="fas fa-chart-pie"></i>
+        <span>Task</span>
+    </a>
+    <a href="invest.html" class="nav-item active">
+        <i class="fas fa-gift"></i>
+        <span>Invest</span>
+    </a>
+    <a href="invite-friends.html" class="nav-item">
+        <i class="fas fa-user-plus"></i>
+        <span>Invite Friends</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Me</span>
+    </a>
+</nav>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
     // Baserow API configuration
     const BASEROW_API = {
@@ -688,11 +717,12 @@
     let currentPlan = null;
     let currentQuantity = 1;
     let currentDuration = null;
+    let currentUser = null;
 
     // Initialize the app when document is ready
     document.addEventListener('DOMContentLoaded', function() {
-        // Generate plan cards
-        generatePlanCards();
+        // Check if user is logged in
+        checkAuthStatus();
         
         // Tab switching functionality
         document.querySelectorAll('.tab').forEach(tab => {
@@ -711,25 +741,35 @@
                 }
             });
         });
-
-        // Add event listener for email verification button
-        document.getElementById('verify-email-btn').addEventListener('click', function() {
-            const email = document.getElementById('email-input').value.trim();
-            
-            // Validate email
-            if (!email || !isValidEmail(email)) {
-                document.getElementById('email-error').style.display = 'block';
-                return;
-            }
-            
-            // Hide email input, show loading
-            document.getElementById('modal-email-input').style.display = 'none';
-            document.getElementById('modal-loading').style.display = 'block';
-            
-            // Process verification and investment
-            verifyAndInvest(email);
-        });
     });
+
+    // Check authentication status
+    function checkAuthStatus() {
+        const authToken = localStorage.getItem('authToken');
+        const userData = localStorage.getItem('userData');
+        
+        if (!authToken || !userData) {
+            // Redirect to login page if not logged in
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        try {
+            currentUser = JSON.parse(userData);
+            updateUserInfo();
+            generatePlanCards();
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            window.location.href = 'login.html';
+        }
+    }
+    
+    // Update user info in header
+    function updateUserInfo() {
+        if (currentUser) {
+            document.getElementById('user-name').textContent = currentUser.username || currentUser.email.split('@')[0];
+        }
+    }
 
     // Generate Plan Cards
     function generatePlanCards() {
@@ -789,6 +829,9 @@
             const totalInvestment = plan.price * currentQuantity;
             const selectedInterestRate = currentDuration.interestRate;
             const estimatedRevenue = (totalInvestment * selectedInterestRate / 100).toFixed(2);
+            
+            // Get user balance if available
+            const userBalance = currentUser ? (parseFloat(currentUser.total_assets) || 0).toFixed(2) : '0.00';
         
             detailContent.innerHTML = `
                 <div class="plan-detail-card">
@@ -796,7 +839,7 @@
                     
                     <div class="detail-row">
                         <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">0.000000 USD</div>
+                        <div class="detail-value-lg">${userBalance} USD</div>
                     </div>
                     
                     <div class="detail-row">
@@ -914,359 +957,327 @@
 
             // Add invest button click handler
             document.getElementById('invest-btn').addEventListener('click', () => {
-                showEmailInputModal();
+                processInvestment();
             });
         }
     }
 
-    // Show email input modal
-    function showEmailInputModal() {
-        const modal = document.getElementById('modal');
-        const modalEmailInput = document.getElementById('modal-email-input');
-        const emailInput = document.getElementById('email-input');
-        const emailError = document.getElementById('email-error');
+    // Process investment directly (user is already logged in)
+    function processInvestment() {
+        // Calculate total investment amount
+        const totalInvestment = currentPlan.price * currentQuantity;
         
-        // Reset email input and error
-        emailInput.value = '';
-        emailError.style.display = 'none';
+        // Check if user has enough balance
+        const totalAssets = parseFloat(currentUser.total_assets) || 0;
         
-        // Show modal with email input
-        modal.style.display = 'flex';
-        modalEmailInput.style.display = 'block';
-        document.getElementById('modal-loading').style.display = 'none';
+        if (totalAssets < totalInvestment) {
+            showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USD) is not enough for this investment (${totalInvestment.toFixed(2)} USD).`);
+            return;
+        }
+        
+        // Show loading modal
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modal-loading').style.display = 'block';
         document.getElementById('modal-result').style.display = 'none';
         
-        // Focus on email input
-        setTimeout(() => {
-            emailInput.focus();
-        }, 100);
+        // Process the investment
+        setTimeout(async () => {
+            try {
+                // Update user balance in Baserow
+                const success = await updateUserBalance(currentUser, totalAssets - totalInvestment);
+                
+                if (success) {
+                    // Update local user data
+                    currentUser.total_assets = (totalAssets - totalInvestment).toFixed(2);
+                    localStorage.setItem('userData', JSON.stringify(currentUser));
+                    
+                    showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USD in ${currentPlan.title}.`);
+                } else {
+                    showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Error processing investment:', error);
+                showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
+            }
+        }, 1500);
     }
 
-    // Validate email format
-    function isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-
-    // Verify user and process investment
-    async function verifyAndInvest(email) {
-        try {
-            // Fetch user data from Baserow
-            const userData = await fetchUserDataByEmail(email);
-            
-            if (!userData) {
-                showModalResult(false, 'User not found', 'No account found with this email. Please check your email or register.');
-                return;
-            }
-            
-            // Calculate total investment amount
-            const totalInvestment = currentPlan.price * currentQuantity;
-            
-            // Check if user has enough balance
-            const totalAssets = parseFloat(userData.total_assets) || 0;
-            
-            console.log('User assets:', totalAssets);
-            console.log('Investment amount:', totalInvestment);
-            
-            if (totalAssets < totalInvestment) {
-                showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USD) is not enough for this investment (${totalInvestment.toFixed(2)} USD).`);
-                return;
-            }
-            
-            // If balance is sufficient, process the investment
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Update user balance in Baserow
-            const success = await updateUserBalance(userData, totalAssets - totalInvestment);
-            
-            if (success) {
-                showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USD in ${currentPlan.title}.`);
-                
-                // Save user email to localStorage for future use
-                localStorage.setItem('userEmail', email);
-                
-                // Update userData with new balance and save to localStorage
-                userData.total_assets = (totalAssets - totalInvestment).toFixed(2);
-                localStorage.setItem('userData', JSON.stringify(userData));
-            } else {
-                showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
-            }
-            
-        } catch (error) {
-            console.error('Error processing investment:', error);
-            showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
-        }
-    }
-    
     // Fetch user data from Baserow by email
     async function fetchUserDataByEmail(email) {
-    try {
-        console.log('Fetching user data for email:', email);
-        
-        // First try to get rows directly without field mapping
-        const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json'
+        try {
+            console.log('Fetching user data for email:', email);
+            
+            // First try to get rows directly without field mapping
+            const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!directResponse.ok) {
+                throw new Error(`Failed to fetch rows: ${directResponse.status}`);
             }
-        });
-        
-        if (!directResponse.ok) {
-            throw new Error(`Failed to fetch rows: ${directResponse.status}`);
-        }
-        
-        const allRows = await directResponse.json();
-        console.log('All rows from Baserow:', allRows);
-        
-        // Find the user by email manually
-        const user = allRows.results.find(row => {
-            // Check if email exists and matches (case insensitive)
-            return row.email && row.email.toLowerCase() === email.toLowerCase();
-        });
-        
-        if (user) {
-            console.log('Found user:', user);
             
-            // Create a user data object
-            const userData = {
-                id: user.id,
-                email: user.email,
-                total_assets: user.total_assets || '0.00',
-                smart_account: user.smart_account || '0.00',
-                profit_assets: user.profit_assets || '0.00',
-                total_revenue: user.total_revenue || '0.00'
-            };
+            const allRows = await directResponse.json();
+            console.log('All rows from Baserow:', allRows);
             
-            return userData;
-        }
-        
-        // If not found with direct approach, try with field mapping
-        console.log('User not found with direct approach, trying field mapping...');
-        
-        // Get the field structure from Baserow to map field IDs
-        const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json'
+            // Find the user by email manually
+            const user = allRows.results.find(row => {
+                // Check if email exists and matches (case insensitive)
+                return row.email && row.email.toLowerCase() === email.toLowerCase();
+            });
+            
+            if (user) {
+                console.log('Found user:', user);
+                
+                // Create a user data object
+                const userData = {
+                    id: user.id,
+                    username: user.username || email.split('@')[0],
+                    email: user.email,
+                    total_assets: user.total_assets || '0.00',
+                    smart_account: user.smart_account || '0.00',
+                    profit_assets: user.profit_assets || '0.00',
+                    total_revenue: user.total_revenue || '0.00',
+                    quantitative_account: user.quantitative_account || '0.00',
+                    yesterday_earnings: user.yesterday_earnings || '0.00',
+                    today_earnings: user.today_earnings || '0.00',
+                    commission_today: user.commission_today || '0.00'
+                };
+                
+                return userData;
             }
-        });
-        
-        if (!fieldsResponse.ok) {
-            throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
-        }
-        
-        const fieldsData = await fieldsResponse.json();
-        console.log('Fields data:', fieldsData);
-        
-        // Create a mapping of field names to their IDs
-        const fieldMap = {};
-        fieldsData.forEach(field => {
-            fieldMap[field.name] = field.id;
-            console.log(`Field: ${field.name}, ID: ${field.id}`);
-        });
-        
-        // Get the email field ID
-        const emailFieldId = fieldMap['email'];
-        
-        if (!emailFieldId) {
-            console.error('Email field not found in Baserow table');
-            // Try to find a field that might contain email
-            const possibleEmailFields = fieldsData.filter(field => 
-                field.name.toLowerCase().includes('email') || 
-                field.name.toLowerCase().includes('mail') ||
-                field.name.toLowerCase().includes('e-mail')
-            );
             
-            if (possibleEmailFields.length > 0) {
-                console.log('Possible email fields found:', possibleEmailFields);
-                // Use the first possible email field
-                const possibleEmailField = possibleEmailFields[0];
-                console.log(`Using ${possibleEmailField.name} as email field`);
+            // If not found with direct approach, try with field mapping
+            console.log('User not found with direct approach, trying field mapping...');
+            
+            // Get the field structure from Baserow to map field IDs
+            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!fieldsResponse.ok) {
+                throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
+            }
+            
+            const fieldsData = await fieldsResponse.json();
+            console.log('Fields data:', fieldsData);
+            
+            // Create a mapping of field names to their IDs
+            const fieldMap = {};
+            fieldsData.forEach(field => {
+                fieldMap[field.name] = field.id;
+                console.log(`Field: ${field.name}, ID: ${field.id}`);
+            });
+            
+            // Get the email field ID
+            const emailFieldId = fieldMap['email'];
+            
+            if (!emailFieldId) {
+                console.error('Email field not found in Baserow table');
+                // Try to find a field that might contain email
+                const possibleEmailFields = fieldsData.filter(field => 
+                    field.name.toLowerCase().includes('email') || 
+                    field.name.toLowerCase().includes('mail') ||
+                    field.name.toLowerCase().includes('e-mail')
+                );
                 
-                // Add a timestamp to prevent caching
-                const timestamp = new Date().getTime();
-                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${possibleEmailField.id}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-                
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache'
+                if (possibleEmailFields.length > 0) {
+                    console.log('Possible email fields found:', possibleEmailFields);
+                    // Use the first possible email field
+                    const possibleEmailField = possibleEmailFields[0];
+                    console.log(`Using ${possibleEmailField.name} as email field`);
+                    
+                    // Add a timestamp to prevent caching
+                    const timestamp = new Date().getTime();
+                    const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${possibleEmailField.id}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${BASEROW_API.token}`,
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
                     }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API request failed with status ${response.status}`);
+                    
+                    const data = await response.json();
+                    console.log('Response with possible email field:', data);
+                    
+                    if (data.results && data.results.length > 0) {
+                        const user = data.results[0];
+                        
+                        // Create a user data object
+                        const userData = {
+                            id: user.id,
+                            username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                            email: email,
+                            total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                            smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                            profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                            total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                            quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                            yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                            today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                            commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                        };
+                        
+                        return userData;
+                    }
                 }
                 
-                const data = await response.json();
-                console.log('Response with possible email field:', data);
-                
-                if (data.results && data.results.length > 0) {
-                    const user = data.results[0];
-                    
-                    // Create a user data object
-                    const userData = {
-                        id: user.id,
-                        email: email,
-                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00'
-                    };
-                    
-                    return userData;
+                throw new Error('Email field not found in Baserow table');
+            }
+            
+            // Add a timestamp to prevent caching
+            const timestamp = new Date().getTime();
+            const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
+            
+            console.log('Fetching with URL:', url);
+            
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
                 }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
             }
             
-            throw new Error('Email field not found in Baserow table');
-        }
-        
-        // Add a timestamp to prevent caching
-        const timestamp = new Date().getTime();
-        const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-        
-        console.log('Fetching with URL:', url);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
+            const data = await response.json();
+            console.log('Response with email field:', data);
+            
+            if (data.results && data.results.length > 0) {
+                const user = data.results[0];
+                
+                // Create a user data object
+                const userData = {
+                    id: user.id,
+                    username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                    email: email,
+                    total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                    smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                    profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                    quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                    yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                    today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                    commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                };
+                
+                return userData;
+            } else {
+                console.error('No user data found for email:', email);
+                return null;
             }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('Response with email field:', data);
-        
-        if (data.results && data.results.length > 0) {
-            const user = data.results[0];
-            
-            // Create a user data object
-            const userData = {
-                id: user.id,
-                email: email,
-                total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00'
-            };
-            
-            return userData;
-        } else {
-            console.error('No user data found for email:', email);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
             return null;
         }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        return null;
     }
-}
 
-// Also update the updateUserBalance function to handle both approaches
-async function updateUserBalance(userData, newBalance) {
-    try {
-        // First try with user_field_names=true approach
+    // Update user balance in Baserow
+    async function updateUserBalance(userData, newBalance) {
         try {
-            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/?user_field_names=true`, {
+            // First try with user_field_names=true approach
+            try {
+                const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/?user_field_names=true`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'total_assets': newBalance.toFixed(2)
+                    })
+                });
+                
+                if (updateResponse.ok) {
+                    console.log('Successfully updated balance with user_field_names approach');
+                    return true;
+                }
+            } catch (directError) {
+                console.error('Error updating with user_field_names approach:', directError);
+                // Continue to field mapping approach
+            }
+            
+            // If direct approach fails, try with field mapping
+            // Get the field structure from Baserow to map field IDs
+            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const fieldsData = await fieldsResponse.json();
+            
+            // Create a mapping of field names to their IDs
+            const fieldMap = {};
+            fieldsData.forEach(field => {
+                fieldMap[field.name] = field.id;
+            });
+            
+            // Get the total_assets field ID
+            const totalAssetsFieldId = fieldMap['total_assets'];
+            
+            if (!totalAssetsFieldId) {
+                throw new Error('Total assets field not found in Baserow table');
+            }
+            
+            // Update the user's balance
+            const updateData = {};
+            updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
+            
+            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Token ${BASEROW_API.token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    'total_assets': newBalance.toFixed(2)
-                })
+                body: JSON.stringify(updateData)
             });
             
-            if (updateResponse.ok) {
-                console.log('Successfully updated balance with user_field_names approach');
-                return true;
+            if (!updateResponse.ok) {
+                throw new Error(`Failed to update balance: ${updateResponse.status}`);
             }
-        } catch (directError) {
-            console.error('Error updating with user_field_names approach:', directError);
-            // Continue to field mapping approach
+            
+            return true;
+        } catch (error) {
+            console.error('Error updating user balance:', error);
+            return false;
         }
-        
-        // If direct approach fails, try with field mapping
-        // Get the field structure from Baserow to map field IDs
-        const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        const fieldsData = await fieldsResponse.json();
-        
-        // Create a mapping of field names to their IDs
-        const fieldMap = {};
-        fieldsData.forEach(field => {
-            fieldMap[field.name] = field.id;
-        });
-        
-        // Get the total_assets field ID
-        const totalAssetsFieldId = fieldMap['total_assets'];
-        
-        if (!totalAssetsFieldId) {
-            throw new Error('Total assets field not found in Baserow table');
-        }
-        
-        // Update the user's balance
-        const updateData = {};
-        updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
-        
-        const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-        });
-        
-        if (!updateResponse.ok) {
-            throw new Error(`Failed to update balance: ${updateResponse.status}`);
-        }
-        
-        return true;
-    } catch (error) {
-        console.error('Error updating user balance:', error);
-        return false;
     }
-}
     
     // Show modal with loading or result
     function showModal(type) {
         const modal = document.getElementById('modal');
         const modalLoading = document.getElementById('modal-loading');
         const modalResult = document.getElementById('modal-result');
-        const modalEmailInput = document.getElementById('modal-email-input');
         
         modal.style.display = 'flex';
         
         if (type === 'loading') {
             modalLoading.style.display = 'block';
             modalResult.style.display = 'none';
-            modalEmailInput.style.display = 'none';
         } else if (type === 'result') {
             modalLoading.style.display = 'none';
             modalResult.style.display = 'block';
-            modalEmailInput.style.display = 'none';
-        } else if (type === 'email') {
-            modalLoading.style.display = 'none';
-            modalResult.style.display = 'none';
-            modalEmailInput.style.display = 'block';
         }
     }
     
@@ -1301,4 +1312,3 @@ async function updateUserBalance(userData, newBalance) {
 </script>
 </body>
 </html>
-
