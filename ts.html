@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharing Task - Soft R Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            min-width: 320px;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* User info styles */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Task Card */
+        .task-card {
+            background-color: #fff;
+            border-radius: 15px;
+            margin: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Task Header */
+        .task-header {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Task Details */
+        .task-details {
+            padding: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffa500;
+        }
+
+        /* Task Instructions */
+        .task-instructions {
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+
+        .instructions-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .instruction-step {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            width: 25px;
+            height: 25px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Share Link */
+        .share-link-container {
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffa500;
+        }
+
+        .share-link-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .share-link {
+            font-weight: bold;
+            word-break: break-all;
+            color: #333;
+        }
+
+        .copy-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin: 20px 0;
+        }
+
+        .upload-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .upload-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .upload-box {
+            aspect-ratio: 1/1;
+            background-color: #f9f9f9;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-box:hover {
+            border-color: #ffa500;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .upload-text {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+        }
+
+        .upload-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .upload-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Form Section */
+        .form-section {
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #ff9000;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            min-width: 320px;
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        /* Login Page Styles */
+        #login-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .login-error {
+            color: #ff3b30;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .login-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #ffa500;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+            }
+            
+            .bottom-nav {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .upload-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 701px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 100vh;
+                background-color: #f0f0f0;
+            }
+            
+            .container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #ff3b30;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Content -->
+        <div id="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="back-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="header-title">Sharing Task</div>
+                <div class="user-info" id="user-info">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-name" id="user-name">User</div>
+                </div>
+            </div>
+
+            <!-- Task Card -->
+            <div class="task-card">
+                <!-- Task Header -->
+                <div class="task-header">
+                    <div class="task-title">Daily Sharing Reward</div>
+                    <div class="task-subtitle">Share Soft R Investment and earn rewards</div>
+                </div>
+
+                <!-- Task Details -->
+                <div class="task-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Task Benefits</div>
+                        <div class="detail-value">6.00 USDT</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Review Date</div>
+                        <div class="detail-value" id="review-date">Within 24 hours</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value">Available</div>
+                    </div>
+                </div>
+
+                <!-- Task Instructions -->
+                <div class="task-instructions">
+                    <div class="instructions-title">Task Steps</div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Take a screenshot of our website (home page, task page, or profile page)</div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Share the screenshot along with our registration link to at least 5 Facebook Groups or to 10 facebook or instagram or tiktok friends , 4 Telegram groups, 4 WhatsApp groups, or 10 friends on social media</div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Take screenshots of all your shares as proof (minimum 3 screenshots required)</div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">4</div>
+                        <div class="step-text">Upload all screenshots below and submit the form to receive your reward</div>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">5</div>
+                        <div class="step-text">Important: All screenshots must be clearly visible and show both the shared content and the platform where it was shared. Failure to follow instructions will result in rejection.</div>
+                    </div>
+                </div>
+
+                <!-- Share Link -->
+                <div class="task-details">
+                    <div class="share-link-container">
+                        <div class="share-link-label">Share this link along with your screenshots:</div>
+                        <div class="share-link" id="share-link">https://softrinvestment.com/register.html</div>
+                        <button class="copy-btn" id="copy-btn">Copy Link</button>
+                    </div>
+
+                    <!-- Upload Section -->
+                    <div class="upload-section">
+                        <div class="upload-title">Upload Your Screenshots</div>
+                        <div class="upload-container">
+                            <div class="upload-box" id="upload-box-1">
+                                <i class="fas fa-camera upload-icon"></i>
+                                <div class="upload-text">Upload Screenshot 1</div>
+                                <img src="/placeholder.svg" class="upload-preview" id="preview-1">
+                                <input type="file" class="upload-input" id="upload-1" accept="image/*">
+                            </div>
+                            <div class="upload-box" id="upload-box-2">
+                                <i class="fas fa-camera upload-icon"></i>
+                                <div class="upload-text">Upload Screenshot 2</div>
+                                <img src="/placeholder.svg" class="upload-preview" id="preview-2">
+                                <input type="file" class="upload-input" id="upload-2" accept="image/*">
+                            </div>
+                            <div class="upload-box" id="upload-box-3">
+                                <i class="fas fa-camera upload-icon"></i>
+                                <div class="upload-text">Upload Screenshot 3</div>
+                                <img src="/placeholder.svg" class="upload-preview" id="preview-3">
+                                <input type="file" class="upload-input" id="upload-3" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Section -->
+                    <form class="form-section" id="sharing-form" action="https://formsubmit.co/aidmyfin@gmail.com" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="_subject" value="Soft R Investment - Sharing Task Submission">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_next" value="https://softrinvestment.com/sharing-success.html">
+                        
+                        <div class="form-group">
+                            <label for="username" class="form-label">Your Username</label>
+                            <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Your Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter your phone number" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="platforms" class="form-label">Where Did You Share?</label>
+                            <input type="text" id="platforms" name="platforms" class="form-input" placeholder="e.g., Facebook, Telegram, WhatsApp, etc." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comments" class="form-label">Additional Comments (Optional)</label>
+                            <input type="text" id="comments" name="comments" class="form-input" placeholder="Any additional information">
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submit-btn" disabled>Submit Task</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="sharing-task.html" class="nav-item active">
+            <i class="fas fa-chart-pie"></i>
+            <span>Task</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
+
+        // Check authentication status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            
+            // Back button functionality
+            document.querySelector('.back-btn').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+            
+            // Copy link functionality
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                const shareLink = document.getElementById('share-link').textContent;
+                navigator.clipboard.writeText(shareLink).then(function() {
+                    document.getElementById('copy-btn').textContent = 'Copied!';
+                    setTimeout(function() {
+                        document.getElementById('copy-btn').textContent = 'Copy Link';
+                    }, 2000);
+                });
+            });
+            
+            // Image upload preview
+            function handleFileUpload(fileInput, previewId, boxId) {
+                fileInput.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        const preview = document.getElementById(previewId);
+                        const uploadBox = document.getElementById(boxId);
+                        
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                            uploadBox.querySelector('.upload-icon').style.display = 'none';
+                            uploadBox.querySelector('.upload-text').style.display = 'none';
+                        }
+                        
+                        reader.readAsDataURL(file);
+                        checkFormValidity();
+                    }
+                });
+            }
+            
+            handleFileUpload(document.getElementById('upload-1'), 'preview-1', 'upload-box-1');
+            handleFileUpload(document.getElementById('upload-2'), 'preview-2', 'upload-box-2');
+            handleFileUpload(document.getElementById('upload-3'), 'preview-3', 'upload-box-3');
+            
+            // Form validation
+            function checkFormValidity() {
+                const upload1 = document.getElementById('upload-1').files.length > 0;
+                const upload2 = document.getElementById('upload-2').files.length > 0;
+                const upload3 = document.getElementById('upload-3').files.length > 0;
+                const username = document.getElementById('username').value.trim() !== '';
+                const email = document.getElementById('email').value.trim() !== '';
+                const phone = document.getElementById('phone').value.trim() !== '';
+                const platforms = document.getElementById('platforms').value.trim() !== '';
+                
+                const submitBtn = document.getElementById('submit-btn');
+                
+                if (upload1 && upload2 && upload3 && username && email && phone && platforms) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            }
+            
+            // Add event listeners for form inputs
+            document.getElementById('username').addEventListener('input', checkFormValidity);
+            document.getElementById('email').addEventListener('input', checkFormValidity);
+            document.getElementById('phone').addEventListener('input', checkFormValidity);
+            document.getElementById('platforms').addEventListener('input', checkFormValidity);
+            
+            // Set current date for review
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('review-date').textContent = tomorrow.toLocaleDateString('en-US', options);
+            
+            // Form submission handling
+            document.getElementById('sharing-form').addEventListener('submit', function(e) {
+                // FormSubmit will handle the actual submission
+                // This is just for any additional client-side logic
+                
+                // Auto-fill user data if logged in
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    document.getElementById('email').value = userData.email;
+                    document.getElementById('username').value = userData.username || userData.email.split('@')[0];
+                }
+                
+                // For FormSubmit to work properly, we don't prevent default
+                // e.preventDefault();
+            });
+        });
+
+        function checkAuthStatus() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData');
+            
+            if (!authToken || !userData) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(userData);
+                // Show main content if logged in
+                showMainContent(user);
+                
+                // Auto-fill form with user data
+                document.getElementById('username').value = user.username || user.email.split('@')[0];
+                document.getElementById('email').value = user.email;
+                if (user.phone) {
+                    document.getElementById('phone').value = user.phone;
+                }
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Show main content
+        function showMainContent(userData) {
+            document.getElementById('main-content').style.display = 'block';
+            
+            // Update user info in header
+            document.getElementById('user-name').textContent = userData.username || userData.email.split('@')[0];
+            
+            // Add logout functionality
+            const userInfo = document.getElementById('user-info');
+            if (!userInfo.querySelector('.logout-btn')) {
+                const logoutBtn = document.createElement('div');
+                logoutBtn.className = 'logout-btn';
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+                logoutBtn.title = 'Logout';
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                });
+                userInfo.appendChild(logoutBtn);
+            }
+        }
+
+        // Fetch user data from Baserow by email
+        async function fetchUserDataByEmail(email, hashedPassword) {
+            try {
+                // First try to get rows directly without field mapping
+                const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!directResponse.ok) {
+                    throw new Error(`Failed to fetch rows: ${directResponse.status}`);
+                }
+                
+                const allRows = await directResponse.json();
+                
+                // Find the user by email manually
+                const user = allRows.results.find(row => {
+                    // Check if email exists and matches (case insensitive)
+                    return row.email && row.email.toLowerCase() === email.toLowerCase();
+                });
+                
+                if (user) {
+                    // Verify password
+                    if (user.password !== hashedPassword) {
+                        console.error('Password mismatch');
+                        return null;
+                    }
+                    
+                    // Create a user data object
+                    const userData = {
+                        id: user.id,
+                        username: user.username || email.split('@')[0],
+                        email: user.email,
+                        total_assets: user.total_assets || '0.00',
+                        smart_account: user.smart_account || '0.00',
+                        profit_assets: user.profit_assets || '0.00',
+                        total_revenue: user.total_revenue || '0.00',
+                        quantitative_account: user.quantitative_account || '0.00',
+                        yesterday_earnings: user.yesterday_earnings || '0.00',
+                        today_earnings: user.today_earnings || '0.00',
+                        commission_today: user.commission_today || '0.00'
+                    };
+                    
+                    return userData;
+                }
+                
+                // If not found with direct approach, try with field mapping
+                console.log('User not found with direct approach, trying field mapping...');
+                
+                // Get the field structure from Baserow to map field IDs
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!fieldsResponse.ok) {
+                    throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
+                }
+                
+                const fieldsData = await fieldsResponse.json();
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                // Get the email and password field IDs
+                const emailFieldId = fieldMap['email'];
+                const passwordFieldId = fieldMap['password'];
+                
+                if (!emailFieldId) {
+                    throw new Error('Email field not found in Baserow table');
+                }
+                
+                // Add a timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    const user = data.results[0];
+                    
+                    // Verify password
+                    const storedPassword = user[`field_${passwordFieldId}`];
+                    if (storedPassword !== hashedPassword) {
+                        console.error('Password mismatch');
+                        return null;
+                    }
+                    
+                    // Create a user data object
+                    const userData = {
+                        id: user.id,
+                        username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                        email: email,
+                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
+                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                        quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                        yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                        today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                    };
+                    
+                    return userData;
+                } else {
+                    console.error('No user data found for email:', email);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>
