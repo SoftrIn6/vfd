@@ -6,8 +6,8 @@
     <title>Profile - SOFT RINVESTMENT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset & Base Styles */
-        * {
+/* Reset & Base Styles */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -271,6 +271,35 @@ body {
     color: #ccc;
 }
 
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    background-color: #fff;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+    object-fit: contain;
+}
+
+.feature-name {
+    font-size: 12px;
+    text-align: center;
+}
+
 /* Sign Out Button */
 .sign-out-btn {
     margin: 15px;
@@ -342,7 +371,6 @@ body {
     .container,
     .bottom-nav {
         width: 100%;
-        min-width: 100%;
         padding-left: 10px;
         padding-right: 10px;
     }
@@ -383,7 +411,8 @@ body {
         background-color: #f0f0f0;
     }
 }
-    </style>
+</style>
+
 </head>
 <body>
     <div class="container">
@@ -462,63 +491,6 @@ body {
                 </div>
             </div>
         </div>
- <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
-
-        /* Container */
-        .container {
-            width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 15px;
-    position: relative;
-    background-color: #fff;
-    min-height: 100vh;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 15px;
-            background-color: #fff;
-        }
-
-        .feature-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 5px;
-            object-fit: contain;
-        }
-
-        .feature-name {
-            font-size: 12px;
-            text-align: center;
-        }
-        }
-    </style>
 </head>
 </head>
 
@@ -662,22 +634,7 @@ body {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Baserow API configuration
-        const BASEROW_API = {
-            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
-            baseUrl: 'https://api.baserow.io/api',
-            databaseId: '202237',
-            tableId: '488473'
-        };
-
-        // Check if user is logged in when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            const authToken = localStorage.getItem('authToken');
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            
-            if (!authToken || !userData.email) {
-                // Redirect to login page if not logged in
-                window.location.href = 'login.html';
-                return;
+      
             }
             
             // Initialize UI with cached data first
