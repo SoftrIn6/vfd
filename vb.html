@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Investment Platform</title>
+    <title>Profile - SOFT RINVESTMENT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -23,13 +23,13 @@
 
         /* Container */
         .container {
-            width: 700px;
-            margin: 0 auto;
-            padding: 0;
-            position: relative;
-            min-width: 320px;
-            background-color: #fff;
-            min-height: 100vh;
+            width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative;
+    background-color: #fff;
+    min-height: 100vh;
         }
 
         /* Header Styles */
@@ -39,7 +39,6 @@
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            border-bottom: 1px solid #eee;
         }
 
         .logo {
@@ -48,16 +47,9 @@
         }
 
         .logo-img {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             margin-right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
         }
 
         .logo-text {
@@ -91,58 +83,142 @@
             margin-right: 5px;
         }
 
-        /* Tabs */
-        .tabs {
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
             display: flex;
-            padding: 15px;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
+            align-items: center;
         }
 
-        .tab {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px 20px;
-            position: relative;
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .user-avatar i {
+            font-size: 30px;
+            color: #ffa500;
+        }
+
+        .user-info {
+            flex: 1;
+            color: #ffa500;
+        }
+
+        .user-copy {
+            margin-left: 10px;
+            color: #ffa500;
             cursor: pointer;
-            color: #333;
         }
 
-        .tab.active {
-            color: #000;
-            border-bottom: 3px solid #ffa500;
-        }
-
-        /* Investment Plans */
-        .investment-plans {
-            padding: 15px;
+        /* Assets Section */
+        .assets-section {
+            margin: 15px;
+            padding: 20px;
             background-color: #fff;
-            margin-bottom: 80px;
-        }
-
-        .plan-card {
-            border: 1px solid #ffa500;
             border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            background-color: #fff;
         }
 
-        .plan-header {
+        .total-assets {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffa500;
+            margin-bottom: 20px;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .asset-item {
             padding: 15px;
-            position: relative;
-            border-bottom: 1px solid #f0f0f0;
+            background-color: #f9f9f9;
+            border-radius: 10px;
         }
 
-        .plan-title {
+        .asset-label {
+            font-size: 16px;
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+
+        .asset-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
-            position: relative;
-            color: #333;
+            cursor: pointer;
+            text-align: center;
         }
 
-        .plan-title::after {
+        /* Revenue Section */
+        .revenue-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .revenue-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        /* App Services */
+        .services-section {
+            margin: 15px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .service-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .service-title::after {
             content: '';
             position: absolute;
             bottom: -5px;
@@ -152,207 +228,95 @@
             background-color: #ffa500;
         }
 
-        .plan-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            padding: 15px;
+        .service-list {
+            margin-top: 20px;
         }
 
-        .detail-item {
-            margin-bottom: 10px;
-        }
-
-        .detail-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .detail-value.rate {
-            color: #4cd964;
-        }
-
-        /* Plan Detail Page */
-        .plan-detail {
-            display: none;
-            padding: 0;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        .plan-detail-header {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .back-btn {
-            font-size: 20px;
-            margin-right: 15px;
-            cursor: pointer;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .plan-detail-content {
-            padding: 15px;
-        }
-
-        .plan-detail-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .plan-detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .plan-detail-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .detail-row {
+        .service-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
         }
 
-        .detail-row:last-child {
+        .service-item:last-child {
             border-bottom: none;
         }
 
-        .detail-label-lg {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .detail-value-lg {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background-color: #f5f5f5;
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff8e1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
+            margin-right: 15px;
+            color: #ffa500;
         }
 
-        .quantity-input {
-            width: 40px;
-            height: 30px;
-            border: 1px solid #ddd;
-            text-align: center;
-            font-size: 16px;
-            margin: 0 5px;
-        }
-
-        .cycle-selector {
+        .service-info {
+            flex: 1;
             display: flex;
             align-items: center;
-            cursor: pointer;
-            position: relative;
         }
 
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-            max-height: 300px;
-            overflow-y: auto;
+        .service-name {
+            font-size: 16px;
         }
 
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
+        .service-arrow {
+            color: #ccc;
         }
 
-        .cycle-option:hover {
-            background-color: #f5f5f5;
-        }
-
-        .cycle-option:last-child {
-            border-bottom: none;
-        }
-
-        .invest-btn {
-            display: block;
-            width: 100%;
+        /* Sign Out Button */
+        .sign-out-btn {
+            margin: 15px;
             padding: 15px;
             background-color: #ffa500;
-            color: #fff;
+            color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 18px;
             font-weight: bold;
+            width: calc(100% - 30px);
             cursor: pointer;
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 80px;
         }
 
-        .project-rule {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffa500;
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
         }
 
         /* Bottom Navigation */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 700px;
-            min-width: 470px;
-            background-color: #fff;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
+              position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    z-index: 100;
         }
 
         .nav-item {
@@ -373,116 +337,11 @@
             margin-bottom: 5px;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-
-        .modal-icon.success {
-            color: #4cd964;
-        }
-
-        .modal-icon.error {
-            color: #ff3b30;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: #666;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 152, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffa500;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Email input styles */
-        .email-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .email-input:focus {
-            border-color: #ffa500;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-        }
-
-        .email-error {
-            color: #ff3b30;
-            margin-bottom: 15px;
-            font-size: 14px;
-            text-align: left;
-            display: none;
-        }
-
-        .modal-btn.secondary {
-            background-color: #f5f5f5;
-            color: #333;
-            margin-top: 10px;
-        }
-
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
                 width: 100%;
+                min-width: 320px;
             }
             
             .bottom-nav {
@@ -499,816 +358,533 @@
                 min-height: 100vh;
                 background-color: #f0f0f0;
             }
-            
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
-        }
-
-        .cycle-selector {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-
-        .cycle-option:hover {
-            background-color: #f5f5f5;
-        }
-
-        .cycle-option:last-child {
-            border-bottom: none;
-        }
-
-        /* User info styles */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .logout-btn {
-            margin-left: 10px;
-            cursor: pointer;
-            color: #ff3b30;
-            font-size: 12px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Main Page -->
-    <div id="main-page">
+    <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <div class="logo-img">AI</div>
-                <div class="logo-text">SOFT R INVESTMENT</div>
+                <img src="image/4e0ab918-1d65-40ac-9762-0ad78571cc2c.png?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-text">SOFT RINVESTMENT</div>
             </div>
-            <div class="header-btns">
-                <div class="user-info" id="user-info">
-                    <div class="user-avatar"><i class="fas fa-user"></i></div>
-                    <div class="user-name" id="user-name">User</div>
-                </div>
+          <div class="header-btns">
                 <a href="https://softrinvestment.com/download-app.html">
-                    <div class="header-btn app">
-                        <i class="fas fa-mobile-alt"></i> App
-                    </div>
-                </a>
+                <div class="header-btn app">
+                <i class="fas fa-mobile-alt"></i> App
+    </div>
+</a>
                 <div class="header-btn">
                     <i class="fas fa-globe"></i> English
                 </div>
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active">Smart investment</div>
-            <div class="tab">Invest Record</div>
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
+                <div style="color: #666; margin-top: 5px;" id="user-email"></div>
+                <i class="fas fa-copy user-copy" id="copy-email"></i>
+            </div>
         </div>
-        
-        <div class="investment-plans">
-            <!-- Plan cards will be generated by JavaScript -->
+
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="section-title">Total Account Balance</div>
+            <div class="total-assets" id="total-assets">$0.00</div>
+            <div class="assets-grid">
+                <div class="asset-item">
+                    <div class="asset-label">New Deposit</div>
+                    <div class="asset-value" id="quantitative-account">$0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Smart Balance</div>
+                    <div class="asset-value" id="smart-account">$0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Registration Bonus</div>
+                    <div class="asset-value" id="profit-assets">$0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <div class="action-btn" id="recharge-btn">Recharge</div>
+            <div class="action-btn" id="withdraw-btn">Withdraw</div>
+        </div>
+
+        <!-- Revenue Section -->
+        <div class="revenue-section">
+            <div class="section-title">Total Revenue Earned</div>
+            <div class="total-assets" id="total-revenue">$0.00</div>
+            <div class="revenue-grid">
+                <div class="asset-item">
+                    <div class="asset-label">Yesterday's Earnings</div>
+                    <div class="asset-value" id="yesterday-earnings">$0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Today's Earnings</div>
+                    <div class="asset-value" id="today-earnings">$0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-label">Task Earnings </div>
+                    <div class="asset-value" id="commission-today">$0.00</div>
+                </div>
+            </div>
+        </div>
+ <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative;
+    background-color: #fff;
+    min-height: 100vh;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+            object-fit: contain;
+        }
+
+        .feature-name {
+            font-size: 12px;
+            text-align: center;
+        }
+        }
+    </style>
+</head>
+</head>
+
+<!-- Features Grid -->
+        < <!-- Features Grid -->
+        <div class="features-grid">
+            <a href="recharge.html" class="feature-item" id="recharge">
+                <img src="image/icons8-stack-of-coins.gif?height=50&width=50" alt="Recharge" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Fund Account</div>
+            </a>
+            <a href="withdraw.html" class="feature-item" id="withdraw">
+                <img src="image/icons8-coins.gif?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Withdraw</div>
+            </a>
+            <a href="help-center.html" class="feature-item" id="help">
+                <img src="image/icons8-online-support (1).gif?height=50&width=50" alt="Help" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Help</div>
+            </a>
+            <a href="reviews.html" class="feature-item" id="team">
+                <img src="image/icons8-comments.gif?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Exchange</div>
+            </a>
+        </div>
+        <!-- App Services -->
+        <div class="services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <div class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Detail</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">Transfer</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">News</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Security Center</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Quantization Tutorial</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Common Problem</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Out Button -->
+        <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
+
+        <!-- Float Button -->
+        <div class="float-btn" id="refresh-btn">
+            <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
-    <!-- Plan Detail Page -->
-    <div id="plan-detail" class="plan-detail">
-        <div class="plan-detail-header">
-            <div class="back-btn" onclick="goBack()">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <div class="header-title">Smart investment</div>
-        </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="sharing-task.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Task</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
 
-        <div class="plan-detail-content">
-            <!-- Plan detail content will be generated by JavaScript -->
-        </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
 
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div id="modal-loading" style="display: none;">
-                <div class="loading-spinner"></div>
-                <div class="modal-message">Processing your investment...</div>
-            </div>
-            <div id="modal-result" style="display: none;">
-                <div class="modal-icon" id="modal-icon">
-                    <i class="fas fa-check-circle success"></i>
-                </div>
-                <div class="modal-title" id="modal-title">Success</div>
-                <div class="modal-message" id="modal-message">Your investment was successful!</div>
-                <button class="modal-btn" onclick="closeModal()">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="sharing-task.html" class="nav-item">
-        <i class="fas fa-chart-pie"></i>
-        <span>Task</span>
-    </a>
-    <a href="invest.html" class="nav-item active">
-        <i class="fas fa-gift"></i>
-        <span>Invest</span>
-    </a>
-    <a href="invite-friends.html" class="nav-item">
-        <i class="fas fa-user-plus"></i>
-        <span>Invite Friends</span>
-    </a>
-    <a href="profile.html" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>Me</span>
-    </a>
-</nav>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script>
-    // Baserow API configuration
-    const BASEROW_API = {
-        token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
-        baseUrl: 'https://api.baserow.io/api',
-        databaseId: '202237',
-        tableId: '488473'
-    };
-
-    // Investment Plans Data - Updated with additional smaller plans
-    const investmentPlans = [
-        { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 2, title: "Investment Plan 2", price: 50, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 3, title: "Investment Plan 3", price: 96, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 4, title: "Investment Plan 4", price: 100, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 5, title: "Investment Plan 5", price: 500, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 6, title: "Investment Plan 6", price: 1650, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 7, title: "Investment Plan 7", price: 2000, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 8, title: "Investment Plan 8", price: 3500, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 9, title: "Investment Plan 9", price: 10000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 10, title: "Investment Plan 10", price: 30000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 11, title: "Investment Plan 11", price: 50000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 12, title: "Investment Plan 12", price: 80000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 13, title: "Investment Plan 13", price: 100000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" }
-    ];
-
-    // Investment Duration Options
-    const durationOptions = [
-        { label: "12hrs", value: 0.5, interestRate: 180 },
-        { label: "1 day", value: 1, interestRate: 185 },
-        { label: "2 days", value: 2, interestRate: 190 },
-        { label: "3 days", value: 3, interestRate: 195 },
-        { label: "4 days", value: 4, interestRate: 200 },
-        { label: "5 days", value: 5, interestRate: 205 },
-        { label: "6 days", value: 6, interestRate: 210 },
-        { label: "7 days", value: 7, interestRate: 215 },
-        { label: "8 days", value: 8, interestRate: 220 },
-        { label: "9 days", value: 9, interestRate: 225 },
-        { label: "10 days", value: 10, interestRate: 230 },
-        { label: "11 days", value: 11, interestRate: 235 },
-        { label: "12 days", value: 12, interestRate: 240 },
-        { label: "13 days", value: 13, interestRate: 245 },
-        { label: "14 days", value: 14, interestRate: 250 },
-        { label: "15 days", value: 15, interestRate: 255 }
-    ];
-
-    // Variables to store current investment selection
-    let currentPlan = null;
-    let currentQuantity = 1;
-    let currentDuration = null;
-    let currentUser = null;
-
-    // Initialize the app when document is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if user is logged in
-        checkAuthStatus();
-        
-        // Tab switching functionality
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // For now, just show an alert when switching to Invest Record
-                if (this.textContent === 'Invest Record') {
-                    alert('Invest Record feature coming soon.');
-                    // Switch back to Smart investment tab
-                    setTimeout(() => {
-                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                        document.querySelectorAll('.tab')[0].classList.add('active');
-                    }, 500);
-                }
-            });
-        });
-    });
-
-    // Check authentication status
-    function checkAuthStatus() {
-        const authToken = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
-        
-        if (!authToken || !userData) {
-            // Redirect to login page if not logged in
-            window.location.href = 'login.html';
-            return;
-        }
-        
-        try {
-            currentUser = JSON.parse(userData);
-            updateUserInfo();
-            generatePlanCards();
-        } catch (error) {
-            console.error('Error parsing user data:', error);
-            window.location.href = 'login.html';
-        }
-    }
-    
-    // Update user info in header
-    function updateUserInfo() {
-        if (currentUser) {
-            document.getElementById('user-name').textContent = currentUser.username || currentUser.email.split('@')[0];
-        }
-    }
-
-    // Generate Plan Cards
-    function generatePlanCards() {
-        const plansContainer = document.querySelector('.investment-plans');
-        plansContainer.innerHTML = '';
-
-        const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
-
-        sortedPlans.forEach(plan => {
-            const planCard = document.createElement('div');
-            planCard.className = 'plan-card';
-            planCard.setAttribute('data-plan-id', plan.id);
-
-            planCard.innerHTML = `
-                <div class="plan-header">
-                    <div class="plan-title">${plan.title}</div>
-                </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">${plan.price} USD</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">${plan.dailyRate}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">${plan.cycle}</div>
-                    </div>
-                </div>
-            `;
-            planCard.addEventListener('click', () => showPlanDetail(plan.id));
-            plansContainer.appendChild(planCard);
-        });
-    }
-
-    // Show Plan Detail
-    function showPlanDetail(planId) {
-        const plan = investmentPlans.find(p => p.id === planId);
-        if (!plan) return;
-
-        // Store current plan
-        currentPlan = plan;
-        currentQuantity = 1;
-        currentDuration = durationOptions[0]; // Default to 12hrs
-
-        document.getElementById('main-page').style.display = 'none';
-        document.getElementById('plan-detail').style.display = 'block';
-
-        const detailContent = document.querySelector('.plan-detail-content');
-        
-        // Generate initial content
-        updatePlanDetailContent();
-        
-        function updatePlanDetailContent() {
-            const totalInvestment = plan.price * currentQuantity;
-            const selectedInterestRate = currentDuration.interestRate;
-            const estimatedRevenue = (totalInvestment * selectedInterestRate / 100).toFixed(2);
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
-            // Get user balance if available
-            const userBalance = currentUser ? (parseFloat(currentUser.total_assets) || 0).toFixed(2) : '0.00';
-        
-            detailContent.innerHTML = `
-                <div class="plan-detail-card">
-                    <div class="plan-detail-title">${plan.title}</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">${userBalance} USD</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Price</div>
-                        <div class="detail-value-lg">${plan.price} USD</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Limit</div>
-                        <div class="detail-value-lg">No Limit(Bought0)</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Quantity</div>
-                        <div class="quantity-selector">
-                            <div class="quantity-btn" id="decrease-btn">−</div>
-                            <input type="text" class="quantity-input" id="quantity-input" value="${currentQuantity}" readonly>
-                            <div class="quantity-btn" id="increase-btn">+</div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Duration</div>
-                        <div class="cycle-selector" id="duration-selector">
-                            <div class="detail-value-lg">${currentDuration.label} <i class="fas fa-chevron-down"></i></div>
-                            <div class="cycle-dropdown" id="duration-dropdown">
-                                ${durationOptions.map(option => 
-                                    `<div class="cycle-option" data-value="${option.value}">${option.label} (${option.interestRate}%)</div>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Interest Rate</div>
-                        <div class="detail-value-lg">${selectedInterestRate}%</div>
-                    </div>
-                    
-                    <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USD Invest</button>
-                </div>
-                
-                <div class="plan-detail-card">
-                    <div class="project-rule">Project Rule</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Repayment</div>
-                        <div class="detail-value-lg">Maturity Principal And Interest</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Unit Price</div>
-                        <div class="detail-value-lg">${plan.price} USD</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Amount</div>
-                        <div class="detail-value-lg">${currentQuantity}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Duration</div>
-                        <div class="detail-value-lg">${currentDuration.label}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Interest Rate</div>
-                        <div class="detail-value-lg">${selectedInterestRate}%</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Estimated Revenue</div>
-                        <div class="detail-value-lg">
-                            ${plan.price} * ${currentQuantity} * ${selectedInterestRate}% = ${estimatedRevenue} USD
-                        </div>
-                    </div>
-                </div>
-            `;
-        
-            // Add event listeners after content is updated
-            document.getElementById('decrease-btn').addEventListener('click', () => {
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                    updatePlanDetailContent();
+            if (!authToken || !userData.email) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Initialize UI with cached data first
+            if (userData) {
+                updateUI(userData);
+            }
+            
+            // Fetch fresh user data from Baserow
+            fetchUserData(userData.email);
+            
+            // Set up refresh interval (every 30 seconds)
+            setInterval(() => {
+                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (currentUserData.email) {
+                    fetchUserData(currentUserData.email);
+                }
+            }, 30000);
+            
+            // Copy email functionality
+            document.getElementById('copy-email').addEventListener('click', function() {
+                const email = document.getElementById('user-email').textContent;
+                navigator.clipboard.writeText(email)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            });
+            
+            // Sign out functionality
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
                 }
             });
             
-            document.getElementById('increase-btn').addEventListener('click', () => {
-                currentQuantity++;
-                updatePlanDetailContent();
-            });
-
-            // Add duration selector functionality
-            const durationSelector = document.getElementById('duration-selector');
-            const durationDropdown = document.getElementById('duration-dropdown');
-            
-            durationSelector.addEventListener('click', (e) => {
-                e.stopPropagation();
-                durationDropdown.style.display = durationDropdown.style.display === 'block' ? 'none' : 'block';
+            // Action buttons functionality
+            document.getElementById('recharge-btn').addEventListener('click', function() {
+                window.location.href = 'recharge.html';
             });
             
-            document.querySelectorAll('.cycle-option').forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const value = parseFloat(option.getAttribute('data-value'));
-                    currentDuration = durationOptions.find(d => d.value === value);
-                    durationDropdown.style.display = 'none';
-                    updatePlanDetailContent();
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                window.location.href = 'withdraw.html';
+            });
+            
+            // Service items functionality
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.id;
+                    alert(`${serviceId.split('-')[0].charAt(0).toUpperCase() + serviceId.split('-')[0].slice(1)} service is coming soon.`);
                 });
             });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', () => {
-                durationDropdown.style.display = 'none';
+            
+            // Refresh button functionality
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Force data refresh
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    fetchUserData(userData.email, true);
+                }
             });
-
-            // Add invest button click handler
-            document.getElementById('invest-btn').addEventListener('click', () => {
-                processInvestment();
-            });
-        }
-    }
-
-    // Process investment directly (user is already logged in)
-    function processInvestment() {
-        // Calculate total investment amount
-        const totalInvestment = currentPlan.price * currentQuantity;
+        });
         
-        // Check if user has enough balance
-        const totalAssets = parseFloat(currentUser.total_assets) || 0;
-        
-        if (totalAssets < totalInvestment) {
-            showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USD) is not enough for this investment (${totalInvestment.toFixed(2)} USD).`);
-            return;
-        }
-        
-        // Show loading modal
-        document.getElementById('modal').style.display = 'flex';
-        document.getElementById('modal-loading').style.display = 'block';
-        document.getElementById('modal-result').style.display = 'none';
-        
-        // Process the investment
-        setTimeout(async () => {
+        // Fetch user data from Baserow
+        async function fetchUserData(email, forceRefresh = false) {
             try {
-                // Update user balance in Baserow
-                const success = await updateUserBalance(currentUser, totalAssets - totalInvestment);
-                
-                if (success) {
-                    // Update local user data
-                    currentUser.total_assets = (totalAssets - totalInvestment).toFixed(2);
-                    localStorage.setItem('userData', JSON.stringify(currentUser));
-                    
-                    showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USD in ${currentPlan.title}.`);
-                } else {
-                    showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
-                }
-            } catch (error) {
-                console.error('Error processing investment:', error);
-                showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
-            }
-        }, 1500);
-    }
-
-    // Fetch user data from Baserow by email
-    async function fetchUserDataByEmail(email) {
-        try {
-            console.log('Fetching user data for email:', email);
-            
-            // First try to get rows directly without field mapping
-            const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!directResponse.ok) {
-                throw new Error(`Failed to fetch rows: ${directResponse.status}`);
-            }
-            
-            const allRows = await directResponse.json();
-            console.log('All rows from Baserow:', allRows);
-            
-            // Find the user by email manually
-            const user = allRows.results.find(row => {
-                // Check if email exists and matches (case insensitive)
-                return row.email && row.email.toLowerCase() === email.toLowerCase();
-            });
-            
-            if (user) {
-                console.log('Found user:', user);
-                
-                // Create a user data object
-                const userData = {
-                    id: user.id,
-                    username: user.username || email.split('@')[0],
-                    email: user.email,
-                    total_assets: user.total_assets || '0.00',
-                    smart_account: user.smart_account || '0.00',
-                    profit_assets: user.profit_assets || '0.00',
-                    total_revenue: user.total_revenue || '0.00',
-                    quantitative_account: user.quantitative_account || '0.00',
-                    yesterday_earnings: user.yesterday_earnings || '0.00',
-                    today_earnings: user.today_earnings || '0.00',
-                    commission_today: user.commission_today || '0.00'
-                };
-                
-                return userData;
-            }
-            
-            // If not found with direct approach, try with field mapping
-            console.log('User not found with direct approach, trying field mapping...');
-            
-            // Get the field structure from Baserow to map field IDs
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!fieldsResponse.ok) {
-                throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
-            }
-            
-            const fieldsData = await fieldsResponse.json();
-            console.log('Fields data:', fieldsData);
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-                console.log(`Field: ${field.name}, ID: ${field.id}`);
-            });
-            
-            // Get the email field ID
-            const emailFieldId = fieldMap['email'];
-            
-            if (!emailFieldId) {
-                console.error('Email field not found in Baserow table');
-                // Try to find a field that might contain email
-                const possibleEmailFields = fieldsData.filter(field => 
-                    field.name.toLowerCase().includes('email') || 
-                    field.name.toLowerCase().includes('mail') ||
-                    field.name.toLowerCase().includes('e-mail')
-                );
-                
-                if (possibleEmailFields.length > 0) {
-                    console.log('Possible email fields found:', possibleEmailFields);
-                    // Use the first possible email field
-                    const possibleEmailField = possibleEmailFields[0];
-                    console.log(`Using ${possibleEmailField.name} as email field`);
-                    
-                    // Add a timestamp to prevent caching
-                    const timestamp = new Date().getTime();
-                    const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${possibleEmailField.id}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-                    
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Token ${BASEROW_API.token}`,
-                            'Content-Type': 'application/json',
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log('Response with possible email field:', data);
-                    
-                    if (data.results && data.results.length > 0) {
-                        const user = data.results[0];
-                        
-                        // Create a user data object
-                        const userData = {
-                            id: user.id,
-                            username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                            email: email,
-                            total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                            smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                            profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                            total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                            quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                            yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                            today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                            commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                        };
-                        
-                        return userData;
-                    }
-                }
-                
-                throw new Error('Email field not found in Baserow table');
-            }
-            
-            // Add a timestamp to prevent caching
-            const timestamp = new Date().getTime();
-            const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-            
-            console.log('Fetching with URL:', url);
-            
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('Response with email field:', data);
-            
-            if (data.results && data.results.length > 0) {
-                const user = data.results[0];
-                
-                // Create a user data object
-                const userData = {
-                    id: user.id,
-                    username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                    email: email,
-                    total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                    smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                    profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                    quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                    yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                    today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                    commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                };
-                
-                return userData;
-            } else {
-                console.error('No user data found for email:', email);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            return null;
-        }
-    }
-
-    // Update user balance in Baserow
-    async function updateUserBalance(userData, newBalance) {
-        try {
-            // First try with user_field_names=true approach
-            try {
-                const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/?user_field_names=true`, {
-                    method: 'PATCH',
+                // First, get the field structure from Baserow
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Token ${BASEROW_API.token}`,
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'total_assets': newBalance.toFixed(2)
-                    })
+                    }
                 });
                 
-                if (updateResponse.ok) {
-                    console.log('Successfully updated balance with user_field_names approach');
-                    return true;
+                const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Field mapping:', fieldMap);
+                
+                // Get the email field ID
+                const emailFieldId = fieldMap['email'];
+                
+                if (!emailFieldId) {
+                    throw new Error('Email field not found in Baserow table');
                 }
-            } catch (directError) {
-                console.error('Error updating with user_field_names approach:', directError);
-                // Continue to field mapping approach
-            }
-            
-            // If direct approach fails, try with field mapping
-            // Get the field structure from Baserow to map field IDs
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
+                
+                // Add a timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
-            
-            const fieldsData = await fieldsResponse.json();
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-            });
-            
-            // Get the total_assets field ID
-            const totalAssetsFieldId = fieldMap['total_assets'];
-            
-            if (!totalAssetsFieldId) {
-                throw new Error('Total assets field not found in Baserow table');
+                
+                const data = await response.json();
+                console.log('Fetched user data response:', data);
+                
+                if (data.results && data.results.length > 0) {
+                    const user = data.results[0];
+                    console.log('Found user:', user);
+                    
+                    // Create a user data object to store in localStorage
+                    const userDataToStore = {
+                        id: user.id,
+                        username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                        email: email,
+                        referralCode: user[`field_${fieldMap['referralCode']}`] || '',
+                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                        quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
+                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                        yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                        today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                    };
+                    
+                    console.log('User data to store:', userDataToStore);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                    
+                    // Update UI with user data
+                    updateUI(userDataToStore);
+                    
+                    if (forceRefresh) {
+                        alert('Data refreshed successfully!');
+                    }
+                    
+                    return userDataToStore;
+                } else {
+                    console.error('No user data found for email:', email);
+                    
+                    if (forceRefresh) {
+                        alert('No user data found. Please try again or contact support.');
+                    }
+                    
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                
+                if (forceRefresh) {
+                    alert('Failed to refresh data. Please try again.');
+                }
+                
+                return null;
             }
+        }
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = userData.email;
             
-            // Update the user's balance
-            const updateData = {};
-            updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
-            
-            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updateData)
+            // Log all financial data for debugging
+            console.log('Financial data:', {
+                total_assets: userData.total_assets,
+                quantitative_account: userData.quantitative_account,
+                smart_account: userData.smart_account,
+                profit_assets: userData.profit_assets,
+                total_revenue: userData.total_revenue,
+                yesterday_earnings: userData.yesterday_earnings,
+                today_earnings: userData.today_earnings,
+                commission_today: userData.commission_today
             });
             
-            if (!updateResponse.ok) {
-                throw new Error(`Failed to update balance: ${updateResponse.status}`);
-            }
+            // Update financial data
+            updateFinancialValue('total-assets', userData.total_assets);
+            updateFinancialValue('quantitative-account', userData.quantitative_account);
+            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('profit-assets', userData.profit_assets);
             
-            return true;
-        } catch (error) {
-            console.error('Error updating user balance:', error);
-            return false;
-        }
-    }
-    
-    // Show modal with loading or result
-    function showModal(type) {
-        const modal = document.getElementById('modal');
-        const modalLoading = document.getElementById('modal-loading');
-        const modalResult = document.getElementById('modal-result');
-        
-        modal.style.display = 'flex';
-        
-        if (type === 'loading') {
-            modalLoading.style.display = 'block';
-            modalResult.style.display = 'none';
-        } else if (type === 'result') {
-            modalLoading.style.display = 'none';
-            modalResult.style.display = 'block';
-        }
-    }
-    
-    // Show modal with result
-    function showModalResult(success, title, message) {
-        const modalIcon = document.getElementById('modal-icon');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        
-        if (success) {
-            modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
-        } else {
-            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
+            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+            updateFinancialValue('today-earnings', userData.today_earnings);
+            updateFinancialValue('commission-today', userData.commission_today);
         }
         
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        
-        showModal('result');
-    }
-    
-    // Close modal
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
-
-    // Go back to main page
-    function goBack() {
-        document.getElementById('plan-detail').style.display = 'none';
-        document.getElementById('main-page').style.display = 'block';
-    }
-</script>
+        // Helper function to update financial values
+        function updateFinancialValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Format the value
+                let formattedValue = '0.00';
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    // If it's a number or a string that can be converted to a number
+                    if (!isNaN(parseFloat(value))) {
+                        formattedValue = parseFloat(value).toFixed(2);
+                    } else {
+                        formattedValue = value;
+                        // If it doesn't have decimal places, add them
+                        if (!formattedValue.includes('.')) {
+                            formattedValue += '.00';
+                        }
+                    }
+                }
+                
+                // Update the element
+                element.textContent = '$' + formattedValue;
+            }
+        }
+    </script>
 </body>
 </html>
