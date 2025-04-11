@@ -398,6 +398,57 @@
         to { transform: rotate(360deg); }
     }
 
+    /* Admin Panel Styles */
+    .admin-panel {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        border: 1px solid #eee;
+    }
+
+    .admin-panel-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .admin-form {
+        margin-bottom: 20px;
+    }
+
+    .admin-email-list {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fff;
+    }
+
+    .admin-email-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .admin-email-item:last-child {
+        border-bottom: none;
+    }
+
+    .admin-email-text {
+        font-size: 14px;
+    }
+
+    .admin-email-remove {
+        color: #ff3b30;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
     /* Media Queries for Responsiveness */
     @media (max-width: 470px) {
         .container {
@@ -441,6 +492,8 @@
         <div class="header-btns">
             <div class="user-info" id="user-info">
                 <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-name" id="user-name">User</div>
+                <div class="logout-btn" onclick="logout()">Logout</div>
             </div>
             <a href="https://softrinvestment.com/download-app.html">
                 <div class="header-btn app">
@@ -463,7 +516,8 @@
 
     <!-- User Balance -->
     <div class="user-balance">
-        <div class="balance-label">Place Withdrawal To your Bank Account</div>
+        <div class="balance-label">Your Available Balance</div>
+        <div class="balance-amount" id="user-balance">0.00 USD</div>
     </div>
 
     <!-- Withdrawal Form -->
@@ -475,7 +529,12 @@
             </div>
         </div>
 
-        <form id="bank-withdrawal-form" onsubmit="event.preventDefault(); processWithdrawal();">
+        <form id="bank-withdrawal-form">
+            <div class="form-group">
+                <label for="withdrawal-email" class="form-label">Email Address</label>
+                <input type="email" id="withdrawal-email" class="form-input" placeholder="Enter your email address" required>
+            </div>
+
             <div class="form-group">
                 <label for="amount" class="form-label">Withdrawal Amount (USD)</label>
                 <input type="number" id="amount" class="form-input" placeholder="Enter amount" min="10" step="0.01" required>
@@ -538,26 +597,42 @@
                 <div class="form-note">This will appear on your bank statement</div>
             </div>
 
-            <button type="submit" class="submit-btn" id="submit-btn">Submit Withdrawal Request</button>
+            <button type="button" class="submit-btn" id="confirm-btn">Submit Withdrawal Request</button>
         </form>
+
+        <!-- Admin Panel (only visible to admin users) -->
+        <div class="admin-panel" id="admin-panel" style="display: none;">
+            <div class="admin-panel-title">Manage Withdrawal Permissions</div>
+            <div class="admin-form">
+                <div class="form-group">
+                    <label for="new-email" class="form-label">Add Email with Withdrawal Permission</label>
+                    <div class="form-row">
+                        <div class="form-col" style="flex: 3;">
+                            <input type="email" id="new-email" class="form-input" placeholder="Enter email address">
+                        </div>
+                        <div class="form-col" style="flex: 1;">
+                            <button type="button" class="submit-btn" onclick="addApprovedEmail()" style="margin: 0;">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-panel-title">Approved Email List</div>
+            <div class="admin-email-list" id="approved-email-list">
+                <!-- Approved emails will be listed here -->
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal" id="modal">
+<div class="modal" id="withdrawal-modal">
     <div class="modal-content">
-        <div id="modal-loading" style="display: none;">
-            <div class="loading-spinner"></div>
-            <div class="modal-message">Processing your withdrawal request...</div>
+        <div id="modal-icon">
+            <i class="fas fa-check-circle success"></i>
         </div>
-        <div id="modal-result" style="display: none;">
-            <div class="modal-icon" id="modal-icon">
-                <i class="fas fa-check-circle success"></i>
-            </div>
-            <div class="modal-title" id="modal-title">Success</div>
-            <div class="modal-message" id="modal-message">Your withdrawal request has been submitted successfully!</div>
-            <button class="modal-btn" onclick="closeModal()">OK</button>
-        </div>
+        <div id="modal-title">Success</div>
+        <div id="modal-message">Your withdrawal request has been submitted successfully!</div>
+        <button class="modal-btn" onclick="closeModal()">OK</button>
     </div>
 </div>
 
@@ -586,30 +661,61 @@
 </nav>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if user is logged in
-        const authToken = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
+    // List of emails approved for withdrawal
+    const approvedEmails = [
+        'admin@softrinvestment.com',
+        'kjgggg@gmail.com',
+        'demo@softrinvestment.com',
+        'support@softrinvestment.com',
+        'finance@softrinvestment.com',
+        'user1@example.com',
+        'user2@example.com',
+        'vip@softrinvestment.com',
+        'premium@softrinvestment.com',
+        'investor@softrinvestment.com'
+        // Add more approved emails as needed
+    ];
 
+    // Check authentication when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded');
+        
+        // Check if user is logged in
+        
+        
         if (!authToken || !userData) {
             // User is not logged in, redirect to login page
             window.location.href = 'login.html';
             return;
         }
-
+        
         // User is authenticated, continue with page functionality
         console.log('User is authenticated');
-
-        // Try to display user's balance and info if available
+        
+        // Try to display user's balance if available
         try {
             const user = JSON.parse(userData);
-            // Update user info in header
-            document.getElementById('user-name').textContent = user.username || user.email.split('@')[0];
-            
-            // Update user balance
             if (user && user.total_assets) {
                 document.getElementById('user-balance').textContent = 
                     parseFloat(user.total_assets).toFixed(2) + ' USD';
+            }
+            
+            // Pre-fill email field with user's email
+            if (user && user.email) {
+                document.getElementById('withdrawal-email').value = user.email;
+            }
+            
+            // Show admin panel for admin users
+            if (user && user.email && (user.email === 'admin@softrinvestment.com' || user.isAdmin)) {
+                document.getElementById('admin-panel').style.display = 'block';
+                displayApprovedEmails();
+            }
+            
+            // Update user name in header
+            if (user && user.username) {
+                document.getElementById('user-name').textContent = user.username;
+            } else if (user && user.email) {
+                document.getElementById('user-name').textContent = user.email.split('@')[0];
             }
         } catch (e) {
             console.error('Error parsing user data:', e);
@@ -627,115 +733,56 @@
             }
         });
         
-        // Add form submission handler
-        const form = document.getElementById('bank-withdrawal-form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Form submitted');
+        // Add click handler for confirm button
+        const confirmBtn = document.getElementById('confirm-btn');
+        if (confirmBtn) {
+            console.log('Adding event listener to confirm button');
+            confirmBtn.addEventListener('click', function() {
+                console.log('Confirm button clicked');
                 processWithdrawal();
             });
         } else {
-            console.error('Form element not found');
-        }
-        
-        // Add direct click handler to submit button as a backup
-        const submitBtn = document.getElementById('submit-btn');
-        if (submitBtn) {
-            submitBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Submit button clicked');
-                processWithdrawal();
-            });
-        } else {
-            console.error('Submit button not found');
-        }
-        
-        // Add logout functionality
-        const logoutBtn = document.querySelector('.logout-btn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function() {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                window.location.href = 'login.html';
-            });
+            console.error('Confirm button not found');
         }
     });
-    
-    // List of emails approved for withdrawal - Add or remove emails as needed
-    const approvedEmails = [
-        'admin@softrinvestment.com',
-        'kjgggg@gmail.com',
-        'demo@softrinvestment.com',
-        'support@softrinvestment.com',
-        'finance@softrinvestment.com',
-        // Add more approved emails below
-        'investor@softrinvestment.com',
-        'premium@softrinvestment.com'
-    ];
-    
     
     // Process withdrawal
     function processWithdrawal() {
         console.log('Processing withdrawal...');
         
         // Get form values
-        const amount = document.getElementById('amount').value;
-        const accountName = document.getElementById('account-name').value;
-        const bankName = document.getElementById('bank-name').value;
-        const accountNumber = document.getElementById('account-number').value;
-        const branchCode = document.getElementById('branch-code').value;
+        const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
         
-        // Get user data
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        const balance = parseFloat(userData.total_assets || '0');
-        const userEmail = userData.email || '';
-        
-        console.log('User email:', userEmail);
-        console.log('Withdrawal amount:', amount);
+        console.log('Email:', withdrawalEmail);
+        console.log('Amount:', amount);
         
         // Validate amount
-        if (parseFloat(amount) > balance) {
-            showModalResult(false, 'Insufficient Balance', `Your balance (${balance.toFixed(2)} USD) is not enough for this withdrawal (${parseFloat(amount).toFixed(2)} USD).`);
+        if (amount < 10) {
+            showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 10 USD');
             return;
         }
         
-        // Show loading modal
-        const modal = document.getElementById('modal');
-        if (modal) {
-            modal.style.display = 'flex';
-            document.getElementById('modal-loading').style.display = 'block';
-            document.getElementById('modal-result').style.display = 'none';
+        // Check if email is in approved list
+        if (approvedEmails.includes(withdrawalEmail)) {
+            // Show success message
+            showModal(true, 'Withdrawal Request Submitted', `Successfully placed a withdrawal for ${amount.toFixed(2)} USD. Your funds will be processed within 1-3 business days.`);
         } else {
-            console.error('Modal element not found');
-            alert('Processing withdrawal...');
+            // Show unsuccessful message
+            showModal(false, 'Unsuccessful', 'Your account is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
         }
-        
-        // Simulate processing (in a real app, this would be an API call)
-        setTimeout(function() {
-            // Check if user's email is in the approved list
-            if (approvedEmails.includes(userEmail.toLowerCase())) {
-                // Show success message for approved users
-                showModalResult(true, 'Withdrawal Request Submitted', `Successfully placed a withdrawal for ${parseFloat(amount).toFixed(2)} USD. Your funds will be processed within 1-3 business days.`);
-            
-                // Reset form
-                document.getElementById('bank-withdrawal-form').reset();
-            } else {
-                // Show message for users who are not approved
-                showModalResult(false, 'Withdrawal Unsuccessful', 'Unsuccessful: your account is too low for withdrawal. Please make an investment first to activate the withdrawal feature.');
-            }
-        }, 2000);
     }
     
-    // Show modal with result
-    function showModalResult(success, title, message) {
-        console.log('Showing modal result:', success, title, message);
+    // Show modal with custom message
+    function showModal(success, title, message) {
+        console.log('Showing modal:', success, title, message);
         
+        const modal = document.getElementById('withdrawal-modal');
         const modalIcon = document.getElementById('modal-icon');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
         
-        if (!modalIcon || !modalTitle || !modalMessage) {
+        if (!modal || !modalIcon || !modalTitle || !modalMessage) {
             console.error('Modal elements not found');
             alert(title + ': ' + message);
             return;
@@ -744,19 +791,18 @@
         if (success) {
             modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
         } else {
-            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
+            modalIcon.innerHTML = '<i class="fas fa-times-circle" style="color: #ff3b30;"></i>';
         }
         
         modalTitle.textContent = title;
         modalMessage.textContent = message;
         
-        document.getElementById('modal-loading').style.display = 'none';
-        document.getElementById('modal-result').style.display = 'block';
+        modal.style.display = 'flex';
     }
     
     // Close modal
     function closeModal() {
-        const modal = document.getElementById('modal');
+        const modal = document.getElementById('withdrawal-modal');
         if (modal) {
             modal.style.display = 'none';
         }
@@ -766,6 +812,105 @@
     function goBack() {
         window.location.href = 'withdrawal.html';
     }
+    
+    // Logout function
+    function logout() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = 'login.html';
+    }
+    
+    // Admin functions for managing approved emails
+    
+    // Display approved emails in the admin panel
+    function displayApprovedEmails() {
+        const emailList = document.getElementById('approved-email-list');
+        if (!emailList) {
+            console.error('Email list element not found');
+            return;
+        }
+        
+        emailList.innerHTML = '';
+        
+        approvedEmails.forEach(email => {
+            const emailItem = document.createElement('div');
+            emailItem.className = 'admin-email-item';
+            emailItem.innerHTML = `
+                <div class="admin-email-text">${email}</div>
+                <div class="admin-email-remove" onclick="removeApprovedEmail('${email}')">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+            `;
+            emailList.appendChild(emailItem);
+        });
+    }
+    
+    // Add a new email to the approved list
+    function addApprovedEmail() {
+        const newEmail = document.getElementById('new-email').value.toLowerCase().trim();
+        
+        if (!newEmail) {
+            alert('Please enter an email address');
+            return;
+        }
+        
+        if (!isValidEmail(newEmail)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        
+        if (approvedEmails.includes(newEmail)) {
+            alert('This email is already in the approved list');
+            return;
+        }
+        
+        // Add the email to the approved list
+        approvedEmails.push(newEmail);
+        
+        // Update the display
+        displayApprovedEmails();
+        
+        // Clear the input field
+        document.getElementById('new-email').value = '';
+        
+        // Show confirmation
+        alert(`Email ${newEmail} has been added to the approved list`);
+    }
+    
+    // Remove an email from the approved list
+    function removeApprovedEmail(email) {
+        const index = approvedEmails.indexOf(email);
+        if (index !== -1) {
+            // Remove the email from the array
+            approvedEmails.splice(index, 1);
+            
+            // Update the display
+            displayApprovedEmails();
+            
+            // Show confirmation
+            alert(`Email ${email} has been removed from the approved list`);
+        }
+    }
+    
+    // Validate email format
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Add window.onload event handler as a backup
+    window.onload = function() {
+        console.log('Window loaded');
+        
+        // Make sure the confirm button has an event listener
+        const confirmBtn = document.getElementById('confirm-btn');
+        if (confirmBtn) {
+            confirmBtn.onclick = function() {
+                console.log('Confirm button clicke via onclick');
+                processWithdrawal();
+            };
+        }
+    };
 </script>
 </body>
 </html>
