@@ -462,20 +462,20 @@
             </div>
             <div class="withdrawal-content">
                 <div class="withdrawal-label">Withdrawable</div>
-                <div class="withdrawal-amount">0.000000 <span class="withdrawal-unit">USDT</span></div>
+                <div class="withdrawal-amount">0.000000 <span class="withdrawal-unit">USD</span></div>
 
                 <!-- Add this new section for amount input -->
                 <div class="amount-input-section" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="withdrawal-label">Enter withdrawal amount</div>
                     <div style="display: flex; align-items: center; background-color: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
                         <input type="number" id="withdrawal-amount-input" placeholder="Enter amount" style="flex: 1; border: none; outline: none; font-size: 16px;">
-                        <span style="color: #666; margin-left: 5px;">USDT</span>
+                        <span style="color: #666; margin-left: 5px;">USD</span>
                     </div>
                 </div>
 
                 <div class="withdrawal-process">
                     <div class="process-label">Amount to be processed</div>
-                    <div class="process-amount">0 USDT</div>
+                    <div class="process-amount">0 USD</div>
                 </div>
             </div>
         </div>
@@ -484,14 +484,17 @@
         <div class="payment-section">
             <div class="payment-label">Payment method</div>
             <div class="payment-options">
-                <div class="payment-option active">BEP20-USDT</div>
-                <div class="payment-option">TRC20-USDT</div>
+                <div class="payment-option active">BTC</div>
+                <div class="payment-option active">USDT</div>
+                <div class="payment-option">ETH</div>
+                <div class="payment-option active">TRC20-USDT</div>
+                <div class="payment-option">USDC</div>
             </div>
         </div>
 
         <!-- Withdrawal Limit -->
         <div class="limit-section">
-            Withdrawal limit range 2.000 - 99999999.00
+            Withdrawal limit range 20.000 - 99999999.00
         </div>
 
         <!-- Address Section -->
@@ -508,7 +511,7 @@
         <!-- Fee Section -->
         <div class="fee-section">
             <div class="fee-label">Handling Fee</div>
-            <div class="fee-amount">0 USDT</div>
+            <div class="fee-amount">0 USD</div>
         </div>
 
         <div class="free-withdrawals">
@@ -517,7 +520,7 @@
 
         <div class="receipt-section">
             <div class="receipt-label">Receipt</div>
-            <div class="receipt-amount">0 USDT</div>
+            <div class="receipt-amount">0 USD</div>
         </div>
 
         <!-- Confirm Button -->
@@ -528,8 +531,8 @@
             <div class="note-title">Withdrawal Note</div>
             <div class="note-content">
                 <p>No handling fee is required, and withdrawal can be made once a day.</p>
-                <p>Minimum withdrawal: 2USDT</p>
-                <p>Support TRC20-USDT and BEP20-USDT withdrawals, please make sure that the wallet address is correct</p>
+                <p>Minimum withdrawal: 2USD</p>
+                <p>Support TRC20-USD and BEP20-USD withdrawals, please make sure that the wallet address is correct</p>
             </div>
         </div>
 
@@ -643,12 +646,12 @@
         // Update amount to be processed when withdrawal amount changes
         document.getElementById('withdrawal-amount-input').addEventListener('input', function() {
             const amount = parseFloat(this.value) || 0;
-            document.querySelector('.process-amount').textContent = amount.toFixed(2) + ' USDT';
-            document.querySelector('.receipt-amount').textContent = amount.toFixed(2) + ' USDT';
+            document.querySelector('.process-amount').textContent = amount.toFixed(2) + ' USD';
+            document.querySelector('.receipt-amount').textContent = amount.toFixed(2) + ' USD';
             
             // Validate against minimum withdrawal amount
             if (amount < 2) {
-                this.setCustomValidity('Minimum withdrawal amount is 2 USDT');
+                this.setCustomValidity('Minimum withdrawal amount is 2 USD');
             } else {
                 this.setCustomValidity('');
             }
