@@ -731,7 +731,7 @@
             // Check if email is in approved list
             if (approvedEmails.includes(withdrawalEmail)) {
                 // Show success message
-                showModal(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${amount.toFixed(2)} USD has been submitted successfully. Please allow 24 hours for processing.`);
+                showModal(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${amount.toFixed(2)} USD has been submitted successfully. Please allow 10Mins for processing.`);
             } else {
                 // Show unsuccessful message
                 showModal(false, 'Unsuccessful', 'Your account balance is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
