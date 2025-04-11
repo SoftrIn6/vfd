@@ -493,8 +493,8 @@
                 </div>
             </div>
             <div class="withdrawal-content">
-                <div class="withdrawal-label">Withdrawable</div>
-                <div class="withdrawal-amount">0.000000 <span class="withdrawal-unit">USD</span></div>
+                <div class="withdrawal-label">Withdrawable Amount to Your Crypto Wallet</div>
+                <div class="withdrawal-amount">0.00 <span class="withdrawal-unit">USD</span></div>
 
                 <!-- Add this new section for amount input -->
                 <div class="amount-input-section" style="margin-top: 15px; margin-bottom: 15px;">
@@ -571,8 +571,8 @@
             <div class="note-title">Withdrawal Note</div>
             <div class="note-content">
                 <p>No handling fee is required, and withdrawal can be made once a day.</p>
-                <p>Minimum withdrawal: 2USD</p>
-                <p>Support TRC20-USD and BEP20-USD withdrawals, please make sure that the wallet address is correct</p>
+                <p>Minimum withdrawal: 20USD</p>
+                <p>Support BTC, USDT, ETH, TRC20-USDT and USDC withdrawals, please make sure that the wallet address is correct</p>
             </div>
         </div>
 
@@ -673,7 +673,7 @@
 
         // Back button functionality
         document.querySelector('.back-btn').addEventListener('click', function() {
-            window.location.href = 'profile.html';
+            window.location.href = 'withdraw.html';
         });
 
         // Payment option selection
@@ -711,7 +711,7 @@
             
             // Validate against minimum withdrawal amount
             if (amount < 2) {
-                this.setCustomValidity('Minimum withdrawal amount is 2 USD');
+                this.setCustomValidity('Minimum withdrawal amount is 20 USD');
             } else {
                 this.setCustomValidity('');
             }
@@ -724,7 +724,7 @@
             
             // Validate amount
             if (amount < 2) {
-                showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 2 USD');
+                showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 20 USD');
                 return;
             }
             
