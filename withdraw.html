@@ -335,9 +335,7 @@
 
     <!-- User Balance -->
     <div class="user-balance">
-        <div class="balance-label">Available Balance</div>
-        <div class="balance-amount" id="user-balance">0.00 USD</div>
-    </div>
+        
 
     <!-- Withdrawal Options -->
     <div class="withdrawal-options">
@@ -417,6 +415,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Baserow API configuration
+        const BASEROW_API = {
+            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
+            baseUrl: 'https://api.baserow.io/api',
+            databaseId: '202237',
+            tableId: '488473'
+        };
+
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!authToken || !userData.email) {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
         // Check authentication status
         checkAuthStatus();
         
@@ -437,17 +455,7 @@
         });
     });
     
-    // Check if user is logged in
-    function checkAuthStatus() {
-        const authToken = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
-        
-        if (!authToken || !userData) {
-            // Redirect to login page if not logged in
-            window.location.href = 'login.html';
-            return;
-        }
-        
+    
         try {
             const user = JSON.parse(userData);
             // Update user info in header
