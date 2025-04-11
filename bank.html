@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Withdrawal - Soft R Investment</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset & Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.5;
+        overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+        width: 700px;
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+        min-width: 320px;
+        background-color: #fff;
+        min-height: 100vh;
+        padding-bottom: 80px;
+    }
+
+    /* Header Styles */
+    .header {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        background: linear-gradient(45deg, #ff6b6b, #ffa500);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    .logo-text {
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .header-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-btn {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        color: #ffa500;
+        border: 1px solid #ffa500;
+    }
+
+    .header-btn.app {
+        background-color: #ffa500;
+        color: #fff;
+    }
+
+    .header-btn i {
+        margin-right: 5px;
+    }
+
+    /* Page Header */
+    .page-header {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .back-btn {
+        font-size: 20px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+
+    .header-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* User Balance */
+    .user-balance {
+        padding: 20px 15px;
+        background-color: #f9f9f9;
+        margin: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .balance-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .balance-amount {
+        font-size: 28px;
+        font-weight: bold;
+        color: #ffa500;
+    }
+
+    /* Form Styles */
+    .withdrawal-form {
+        padding: 15px;
+    }
+
+    .form-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #ffa500;
+        box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.1);
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: #ffa500;
+        box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.1);
+    }
+
+    .form-note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #ffa500;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 8px;
+        margin: 30px 0 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #ff9000;
+        transform: translateY(-2px);
+    }
+
+    .submit-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* User info styles */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+    }
+
+    .user-name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .logout-btn {
+        margin-left: 10px;
+        cursor: pointer;
+        color: #ff3b30;
+        font-size: 12px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 700px;
+        min-width: 320px;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        z-index: 100;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .nav-item.active {
+        color: #ffa500;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Info Card */
+    .info-card {
+        background-color: #f0f8ff;
+        border-left: 4px solid #ffa500;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .info-card-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .info-card-text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .modal-icon.success {
+        color: #4cd964;
+    }
+
+    .modal-icon.error {
+        color: #ff3b30;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .modal-message {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        background-color: #ffa500;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 152, 0, 0.3);
+        border-radius: 50%;
+        border-top-color: #ffa500;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 470px) {
+        .container {
+            width: 100%;
+        }
+        
+        .bottom-nav {
+            width: 100%;
+            min-width: 320px;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+
+    @media (min-width: 471px) {
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-img">AI</div>
+            <div class="logo-text">SOFT R INVESTMENT</div>
+        </div>
+        <div class="header-btns">
+            <div class="user-info" id="user-info">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-name" id="user-name">User</div>
+                <div class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></div>
+            </div>
+            <a href="https://softrinvestment.com/download-app.html">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+            </a>
+            <div class="header-btn">
+                <i class="fas fa-globe"></i> English
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">Bank Account Withdrawal</div>
+    </div>
+
+    <!-- User Balance -->
+    <div class="user-balance">
+        <div class="balance-label">Available Balance</div>
+        <div class="balance-amount" id="user-balance">0.00 USD</div>
+    </div>
+
+    <!-- Withdrawal Form -->
+    <div class="withdrawal-form">
+        <div class="info-card">
+            <div class="info-card-title">Important Information</div>
+            <div class="info-card-text">
+                Please ensure all bank details are correct. Incorrect information may result in failed transfers or loss of funds. Processing time is typically 1-3 business days.
+            </div>
+        </div>
+
+        <form id="bank-withdrawal-form">
+            <div class="form-group">
+                <label for="amount" class="form-label">Withdrawal Amount (USD)</label>
+                <input type="number" id="amount" class="form-input" placeholder="Enter amount" min="10" step="0.01" required>
+                <div class="form-note">Minimum withdrawal: 10 USD</div>
+            </div>
+
+            <div class="form-group">
+                <label for="account-name" class="form-label">Account Holder Name</label>
+                <input type="text" id="account-name" class="form-input" placeholder="Enter full name as it appears on your bank account" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bank-name" class="form-label">Select Bank</label>
+                <select id="bank-name" class="form-select" required>
+                    <option value="" disabled selected>Select your bank</option>
+                    <option value="Absa Group">Absa Group</option>
+                    <option value="Nedbank">Nedbank</option>
+                    <option value="Standard Bank">Standard Bank</option>
+                    <option value="Capitec Bank">Capitec Bank</option>
+                    <option value="FirstRand">FirstRand</option>
+                    <option value="Investec">Investec</option>
+                    <option value="African Bank Limited">African Bank Limited</option>
+                    <option value="FNB">FNB</option>
+                    <option value="Bidvest Bank">Bidvest Bank</option>
+                    <option value="Discovery Bank">Discovery Bank</option>
+                    <option value="TymeBank">TymeBank</option>
+                    <option value="International Transfer (SWIFT)">International Transfer (SWIFT)</option>
+                    <option value="International Transfer (ACH)">International Transfer (ACH)</option>
+                    <option value="International Transfer (SEPA)">International Transfer (SEPA)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="account-number" class="form-label">Account Number</label>
+                <input type="text" id="account-number" class="form-input" placeholder="Enter your account number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="branch-code" class="form-label">Branch Code / SWIFT Code</label>
+                <input type="text" id="branch-code" class="form-input" placeholder="Enter branch code or SWIFT code for international transfers" required>
+                <div class="form-note">For local banks, enter branch code. For international transfers, enter SWIFT/BIC code.</div>
+            </div>
+
+            <div class="form-group" id="international-fields" style="display: none;">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="bank-address" class="form-label">Bank Address</label>
+                        <input type="text" id="bank-address" class="form-input" placeholder="Enter bank address">
+                    </div>
+                    <div class="form-col">
+                        <label for="bank-country" class="form-label">Bank Country</label>
+                        <input type="text" id="bank-country" class="form-input" placeholder="Enter bank country">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reference" class="form-label">Reference / Note (Optional)</label>
+                <input type="text" id="reference" class="form-input" placeholder="Add a reference for this transaction">
+                <div class="form-note">This will appear on your bank statement</div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Submit Withdrawal Request</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <div id="modal-loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="modal-message">Processing your withdrawal request...</div>
+        </div>
+        <div id="modal-result" style="display: none;">
+            <div class="modal-icon" id="modal-icon">
+                <i class="fas fa-check-circle success"></i>
+            </div>
+            <div class="modal-title" id="modal-title">Success</div>
+            <div class="modal-message" id="modal-message">Your withdrawal request has been submitted successfully!</div>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="sharing-task.html" class="nav-item">
+        <i class="fas fa-chart-pie"></i>
+        <span>Task</span>
+    </a>
+    <a href="invest.html" class="nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Invest</span>
+    </a>
+    <a href="withdrawal.html" class="nav-item active">
+        <i class="fas fa-wallet"></i>
+        <span>Withdraw</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Me</span>
+    </a>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const authToken = localStorage.getItem('authToken');
+        const userData = localStorage.getItem('userData');
+
+        if (!authToken || !userData) {
+            // User is not logged in, redirect to login page
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // User is authenticated, continue with page functionality
+        console.log('User is authenticated');
+
+        // Try to display user's balance and info if available
+        try {
+            const user = JSON.parse(userData);
+            // Update user info in header
+            document.getElementById('user-name').textContent = user.username || user.email.split('@')[0];
+            
+            // Update user balance
+            if (user && user.total_assets) {
+                document.getElementById('user-balance').textContent = 
+                    parseFloat(user.total_assets).toFixed(2) + ' USD';
+            }
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+        }
+        
+        // Add event listener for bank selection
+        document.getElementById('bank-name').addEventListener('change', function() {
+            const selectedBank = this.value;
+            const internationalFields = document.getElementById('international-fields');
+            
+            if (selectedBank.includes('International')) {
+                internationalFields.style.display = 'block';
+            } else {
+                internationalFields.style.display = 'none';
+            }
+        });
+        
+        // Add form submission handler
+        document.getElementById('bank-withdrawal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            processWithdrawal();
+        });
+        
+        // Add logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        });
+    });
+    
+    // List of emails approved for withdrawal
+    const approvedEmails = [
+        'admin@softrinvestment.com',
+        'test@example.com',
+        'demo@softrinvestment.com',
+        'support@softrinvestment.com',
+        'finance@softrinvestment.com'
+        // Add more approved emails as needed
+    ];
+    
+    
+    // Process withdrawal
+    function processWithdrawal() {
+        // Get form values
+        const amount = document.getElementById('amount').value;
+        const accountName = document.getElementById('account-name').value;
+        const bankName = document.getElementById('bank-name').value;
+        const accountNumber = document.getElementById('account-number').value;
+        const branchCode = document.getElementById('branch-code').value;
+        
+        // Get user data
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const balance = parseFloat(userData.total_assets || '0');
+        const userEmail = userData.email || '';
+        
+        // Validate amount
+        if (parseFloat(amount) > balance) {
+            showModalResult(false, 'Insufficient Balance', `Your balance (${balance.toFixed(2)} USD) is not enough for this withdrawal (${parseFloat(amount).toFixed(2)} USD).`);
+            return;
+        }
+        
+        // Show loading modal
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modal-loading').style.display = 'block';
+        document.getElementById('modal-result').style.display = 'none';
+        
+        // Simulate processing (in a real app, this would be an API call)
+        setTimeout(function() {
+            // Check if user's email is in the approved list
+            if (approvedEmails.includes(userEmail.toLowerCase())) {
+                // Show success message for approved users
+                showModalResult(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${parseFloat(amount).toFixed(2)} USD has been submitted successfully. Please allow 1-3 business days for processing.`);
+                
+                // Reset form
+                document.getElementById('bank-withdrawal-form').reset();
+            } else {
+                // Show message for users who need to make investments first
+                showModalResult(false, 'Withdrawal Not Available', 'You need to make an investment and earn profit before you can withdraw funds. Please visit the Investment page to explore investment options and activate your withdrawal feature.');
+            }
+        }, 2000);
+    }
+    
+    // Show modal with result
+    function showModalResult(success, title, message) {
+        const modalIcon = document.getElementById('modal-icon');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        
+        if (success) {
+            modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
+        } else {
+            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
+        }
+        
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        
+        document.getElementById('modal-loading').style.display = 'none';
+        document.getElementById('modal-result').style.display = 'block';
+    }
+    
+    // Close modal
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+    
+    // Go back function
+    function goBack() {
+        window.location.href = 'withdrawal.html';
+    }
+</script>
+</body>
+</html>
