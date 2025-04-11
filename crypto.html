@@ -160,6 +160,34 @@
             color: #666;
         }
 
+        /* Email Section */
+        .email-section {
+            margin: 15px;
+        }
+
+        .email-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .email-input input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+        }
+
         /* Address Section */
         .address-section {
             margin: 15px;
@@ -391,6 +419,10 @@
             color: #ff3b30;
         }
 
+        .modal-icon.success {
+            color: #4cd964;
+        }
+
         .modal-title {
             font-size: 20px;
             font-weight: bold;
@@ -497,6 +529,14 @@
             Withdrawal limit range 20.000 - 99999999.00
         </div>
 
+        <!-- Email Section -->
+        <div class="email-section">
+            <div class="email-label">Confirm Your Email</div>
+            <div class="email-input">
+                <input type="email" id="withdrawal-email" placeholder="Enter your registered email">
+            </div>
+        </div>
+
         <!-- Address Section -->
         <div class="address-section">
             <div class="address-label">Withdrawal Address</div>
@@ -524,7 +564,7 @@
         </div>
 
         <!-- Confirm Button -->
-        <button class="confirm-btn">Confirm</button>
+        <button class="confirm-btn" id="confirm-btn">Confirm</button>
 
         <!-- Withdrawal Note -->
         <div class="note-section">
@@ -548,13 +588,13 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal" id="error-modal">
+    <div class="modal" id="withdrawal-modal">
         <div class="modal-content">
-            <div class="modal-icon">
+            <div class="modal-icon" id="modal-icon">
                 <i class="fas fa-exclamation-circle"></i>
             </div>
-            <div class="modal-title">New User</div>
-            <div class="modal-message">You are a new user, please invest first before placing withdrawal!</div>
+            <div class="modal-title" id="modal-title">New User</div>
+            <div class="modal-message" id="modal-message">You are a new user, please invest first before placing withdrawal!</div>
             <button class="modal-btn" onclick="closeModal()">OK</button>
         </div>
     </div>
@@ -584,6 +624,21 @@
     </nav>
 
     <script>
+        // List of emails approved for withdrawal
+        const approvedEmails = [
+            'admin@softrinvestment.com',
+            'test@example.com',
+            'demo@softrinvestment.com',
+            'support@softrinvestment.com',
+            'finance@softrinvestment.com',
+            'user1@example.com',
+            'user2@example.com',
+            'vip@softrinvestment.com',
+            'premium@softrinvestment.com',
+            'investor@softrinvestment.com'
+            // Add more approved emails as needed
+        ];
+
         // Check authentication when page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in
@@ -605,6 +660,11 @@
                 if (user && user.total_assets) {
                     document.querySelector('.withdrawal-amount').textContent = 
                         parseFloat(user.total_assets).toFixed(6) + ' ';
+                }
+                
+                // Pre-fill email field with user's email
+                if (user && user.email) {
+                    document.getElementById('withdrawal-email').value = user.email;
                 }
             } catch (e) {
                 console.error('Error parsing user data:', e);
@@ -657,14 +717,49 @@
             }
         });
 
-        // Confirm button functionality - Show new user modal
-        document.querySelector('.confirm-btn').addEventListener('click', function() {
-            document.getElementById('error-modal').style.display = 'flex';
+        // Confirm button functionality - Check email permission
+        document.getElementById('confirm-btn').addEventListener('click', function() {
+            const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
+            const amount = parseFloat(document.getElementById('withdrawal-amount-input').value) || 0;
+            
+            // Validate amount
+            if (amount < 2) {
+                showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 2 USD');
+                return;
+            }
+            
+            // Check if email is in approved list
+            if (approvedEmails.includes(withdrawalEmail)) {
+                // Show success message
+                showModal(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${amount.toFixed(2)} USD has been submitted successfully. Please allow 24 hours for processing.`);
+            } else {
+                // Show unsuccessful message
+                showModal(false, 'Unsuccessful', 'Your account balance is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
+            }
         });
+
+        // Show modal with custom message
+        function showModal(success, title, message) {
+            const modal = document.getElementById('withdrawal-modal');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            
+            if (success) {
+                modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
+            } else {
+                modalIcon.innerHTML = '<i class="fas fa-times-circle" style="color: #ff3b30;"></i>';
+            }
+            
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            modal.style.display = 'flex';
+        }
 
         // Close modal
         function closeModal() {
-            document.getElementById('error-modal').style.display = 'none';
+            document.getElementById('withdrawal-modal').style.display = 'none';
         }
 
         // Float button scroll to top
@@ -682,7 +777,7 @@
 
         // Close modal when clicking outside
         window.addEventListener('click', function(event) {
-            const modal = document.getElementById('error-modal');
+            const modal = document.getElementById('withdrawal-modal');
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
