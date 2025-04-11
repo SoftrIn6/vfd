@@ -478,17 +478,11 @@
             </div>
         </div>
 
-        <form id="bank-withdrawal-form">
+        <form id="bank-withdrawal-form" onsubmit="event.preventDefault(); processWithdrawal();">
             <div class="form-group">
                 <label for="amount" class="form-label">Withdrawal Amount (USD)</label>
                 <input type="number" id="amount" class="form-input" placeholder="Enter amount" min="10" step="0.01" required>
                 <div class="form-note">Minimum withdrawal: 10 USD</div>
-            </div>
-
-            <div class="form-group">
-                <label for="withdrawal-email" class="form-label">Confirm Your Email</label>
-                <input type="email" id="withdrawal-email" class="form-input" placeholder="Enter your registered email" required>
-                <div class="form-note">Please enter the email associated with your account</div>
             </div>
 
             <div class="form-group">
@@ -620,11 +614,6 @@
                 document.getElementById('user-balance').textContent = 
                     parseFloat(user.total_assets).toFixed(2) + ' USD';
             }
-            
-            // Pre-fill email field with user's email
-            if (user && user.email) {
-                document.getElementById('withdrawal-email').value = user.email;
-            }
         } catch (e) {
             console.error('Error parsing user data:', e);
         }
@@ -642,40 +631,59 @@
         });
         
         // Add form submission handler
-        document.getElementById('bank-withdrawal-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            processWithdrawal();
-        });
+        const form = document.getElementById('bank-withdrawal-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Form submitted');
+                processWithdrawal();
+            });
+        } else {
+            console.error('Form element not found');
+        }
+        
+        // Add direct click handler to submit button as a backup
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Submit button clicked');
+                processWithdrawal();
+            });
+        } else {
+            console.error('Submit button not found');
+        }
         
         // Add logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
-            window.location.href = 'login.html';
-        });
+        const logoutBtn = document.querySelector('.logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
+            });
+        }
     });
     
-    // List of emails approved for withdrawal
+    // List of emails approved for withdrawal - Add or remove emails as needed
     const approvedEmails = [
         'admin@softrinvestment.com',
         'test@example.com',
         'demo@softrinvestment.com',
         'support@softrinvestment.com',
         'finance@softrinvestment.com',
-        'user1@example.com',
-        'user2@example.com',
-        'vip@softrinvestment.com',
-        'premium@softrinvestment.com',
-        'investor@softrinvestment.com'
-        // Add more approved emails as needed
+        // Add more approved emails below
+        'investor@softrinvestment.com',
+        'premium@softrinvestment.com'
     ];
     
     
     // Process withdrawal
     function processWithdrawal() {
+        console.log('Processing withdrawal...');
+        
         // Get form values
         const amount = document.getElementById('amount').value;
-        const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
         const accountName = document.getElementById('account-name').value;
         const bankName = document.getElementById('bank-name').value;
         const accountNumber = document.getElementById('account-number').value;
@@ -684,6 +692,10 @@
         // Get user data
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         const balance = parseFloat(userData.total_assets || '0');
+        const userEmail = userData.email || '';
+        
+        console.log('User email:', userEmail);
+        console.log('Withdrawal amount:', amount);
         
         // Validate amount
         if (parseFloat(amount) > balance) {
@@ -692,36 +704,45 @@
         }
         
         // Show loading modal
-        document.getElementById('modal').style.display = 'flex';
-        document.getElementById('modal-loading').style.display = 'block';
-        document.getElementById('modal-result').style.display = 'none';
+        const modal = document.getElementById('modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.getElementById('modal-loading').style.display = 'block';
+            document.getElementById('modal-result').style.display = 'none';
+        } else {
+            console.error('Modal element not found');
+            alert('Processing withdrawal...');
+        }
         
         // Simulate processing (in a real app, this would be an API call)
         setTimeout(function() {
             // Check if user's email is in the approved list
-            if (approvedEmails.includes(withdrawalEmail)) {
+            if (approvedEmails.includes(userEmail.toLowerCase())) {
                 // Show success message for approved users
-                showModalResult(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${parseFloat(amount).toFixed(2)} USD has been submitted successfully. Please allow 1-3 business days for processing.`);
-                
+                showModalResult(true, 'Withdrawal Request Submitted', `Successfully placed a withdrawal for ${parseFloat(amount).toFixed(2)} USD. Your funds will be processed within 1-3 business days.`);
+            
                 // Reset form
                 document.getElementById('bank-withdrawal-form').reset();
-                
-                // Pre-fill email again
-                if (userData.email) {
-                    document.getElementById('withdrawal-email').value = userData.email;
-                }
             } else {
-                // Show message for users who need to make investments first
-                showModalResult(false, 'Unsuccessful', 'Your account balance is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
+                // Show message for users who are not approved
+                showModalResult(false, 'Withdrawal Unsuccessful', 'Unsuccessful: your account is too low for withdrawal. Please make an investment first to activate the withdrawal feature.');
             }
         }, 2000);
     }
     
     // Show modal with result
     function showModalResult(success, title, message) {
+        console.log('Showing modal result:', success, title, message);
+        
         const modalIcon = document.getElementById('modal-icon');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
+        
+        if (!modalIcon || !modalTitle || !modalMessage) {
+            console.error('Modal elements not found');
+            alert(title + ': ' + message);
+            return;
+        }
         
         if (success) {
             modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
@@ -738,7 +759,10 @@
     
     // Close modal
     function closeModal() {
-        document.getElementById('modal').style.display = 'none';
+        const modal = document.getElementById('modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
     
     // Go back function
