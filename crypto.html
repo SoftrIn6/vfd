@@ -659,7 +659,7 @@
                 const user = JSON.parse(userData);
                 if (user && user.total_assets) {
                     document.querySelector('.withdrawal-amount').textContent = 
-                        parseFloat(user.total_assets).toFixed(6) + ' ';
+                        parseFloat(user.total_assets).toFixed(2) + ' ';
                 }
                 
                 // Pre-fill email field with user's email
