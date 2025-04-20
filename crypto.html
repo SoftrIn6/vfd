@@ -691,8 +691,79 @@
             // Add more emails as needed
         ];
 
+        // User activity storage
+        const USER_ACTIVITY_KEY = 'userActivityHistory';
+        
+        // Function to save activity to localStorage
+        function saveActivity(activity) {
+            // Get existing activities or initialize empty array
+            const existingActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            
+            // Add new activity with timestamp
+            const newActivity = {
+                ...activity,
+                timestamp: new Date().toISOString(),
+                page: 'crypto-withdrawal'
+            };
+            
+            // Add to beginning of array (most recent first)
+            existingActivities.unshift(newActivity);
+            
+            // Save back to localStorage
+            localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(existingActivities));
+            
+            console.log('Activity saved:', newActivity);
+        }
+        
+        // Function to log page view
+        function logPageView() {
+            saveActivity({
+                type: 'page_view',
+                details: 'Viewed crypto withdrawal page'
+            });
+        }
+        
+        // Function to log form field changes
+        function logFormFieldChange(fieldName, value) {
+            // Don't log sensitive data like wallet addresses
+            if (fieldName === 'address') {
+                value = '********';
+            }
+            
+            saveActivity({
+                type: 'form_field_change',
+                field: fieldName,
+                value: value
+            });
+        }
+        
+        // Function to log payment method selection
+        function logPaymentMethodSelection(method) {
+            saveActivity({
+                type: 'payment_method_selection',
+                method: method
+            });
+        }
+        
+        // Function to log form submission
+        function logFormSubmission(formData) {
+            // Create a safe copy without sensitive data
+            const safeFormData = {...formData};
+            
+            // Mask sensitive fields
+            if (safeFormData.address) safeFormData.address = '********';
+            
+            saveActivity({
+                type: 'withdrawal_request',
+                details: safeFormData
+            });
+        }
+
         // Check authentication when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Log page view
+            logPageView();
+            
             // Check if user is logged in
             const authToken = localStorage.getItem('authToken');
             const userData = localStorage.getItem('userData');
@@ -703,6 +774,19 @@
                 // window.location.href = 'login.html';
                 // return;
                 console.log('No auth token found, but continuing for testing');
+                
+                // Log authentication status
+                saveActivity({
+                    type: 'authentication_check',
+                    status: 'not_authenticated',
+                    details: 'User not logged in but continuing for testing'
+                });
+            } else {
+                // Log authentication status
+                saveActivity({
+                    type: 'authentication_check',
+                    status: 'authenticated'
+                });
             }
             
             // User is authenticated, continue with page functionality
@@ -715,6 +799,12 @@
                     if (user && user.total_assets) {
                         document.querySelector('.withdrawal-amount').textContent = 
                             parseFloat(user.total_assets).toFixed(2) + ' ';
+                            
+                        // Log user balance
+                        saveActivity({
+                            type: 'user_balance',
+                            balance: parseFloat(user.total_assets).toFixed(2)
+                        });
                     }
                     
                     // Pre-fill email field with user's email
@@ -724,15 +814,39 @@
                         // Check if user needs more investment
                         if (needMoreInvestmentEmails.includes(user.email.toLowerCase().trim())) {
                             document.getElementById('level-indicator').style.display = 'block';
+                            
+                            // Log level status
+                            saveActivity({
+                                type: 'level_check',
+                                level: 'Level 1',
+                                status: 'needs_upgrade'
+                            });
+                        } else {
+                            // Log level status
+                            saveActivity({
+                                type: 'level_check',
+                                level: 'Level 2+',
+                                status: 'sufficient'
+                            });
                         }
                     }
                 }
             } catch (e) {
                 console.error('Error parsing user data:', e);
+                
+                // Log error
+                saveActivity({
+                    type: 'error',
+                    details: 'Error parsing user data',
+                    error: e.message
+                });
             }
 
             // Set up event listeners for payment options
             setupPaymentOptions();
+            
+            // Add event listeners to form fields to track changes
+            setupFormTracking();
         });
 
         // Function to set up payment options
@@ -745,12 +859,59 @@
                     });
                     // Then add active class to the clicked option
                     this.classList.add('active');
+                    
+                    // Log payment method selection
+                    logPaymentMethodSelection(this.textContent.trim());
                 });
             });
+        }
+        
+        // Function to set up form tracking
+        function setupFormTracking() {
+            // Track withdrawal amount changes
+            const amountInput = document.getElementById('withdrawal-amount-input');
+            if (amountInput) {
+                amountInput.addEventListener('input', function() {
+                    const amount = parseFloat(this.value) || 0;
+                    document.querySelector('.process-amount').textContent = amount.toFixed(2) + ' USD';
+                    document.querySelector('.receipt-amount').textContent = amount.toFixed(2) + ' USD';
+                    
+                    // Update fee based on amount (0 for this example)
+                    document.querySelector('.fee-amount').textContent = '0 USD';
+                    
+                    // Log amount change
+                    logFormFieldChange('withdrawal-amount', amount.toFixed(2));
+                });
+            }
+            
+            // Track email changes
+            const emailInput = document.getElementById('withdrawal-email');
+            if (emailInput) {
+                emailInput.addEventListener('change', function() {
+                    logFormFieldChange('email', this.value);
+                });
+            }
+            
+            // Track address changes
+            const addressInput = document.getElementById('address');
+            if (addressInput) {
+                addressInput.addEventListener('change', function() {
+                    if (this.value !== 'Enter your withdrawal address here') {
+                        logFormFieldChange('address', '********');
+                    }
+                });
+            }
         }
 
         // Back button functionality
         document.querySelector('.back-btn').addEventListener('click', function() {
+            // Log navigation
+            saveActivity({
+                type: 'navigation',
+                action: 'back_button',
+                details: 'User clicked back button'
+            });
+            
             window.history.back();
         });
 
@@ -763,21 +924,25 @@
                 addressInput.type = 'text';
                 eyeIcon.classList.remove('fa-eye');
                 eyeIcon.classList.add('fa-eye-slash');
+                
+                // Log visibility toggle
+                saveActivity({
+                    type: 'ui_interaction',
+                    action: 'show_address',
+                    details: 'User showed wallet address'
+                });
             } else {
                 addressInput.type = 'password';
                 eyeIcon.classList.remove('fa-eye-slash');
                 eyeIcon.classList.add('fa-eye');
+                
+                // Log visibility toggle
+                saveActivity({
+                    type: 'ui_interaction',
+                    action: 'hide_address',
+                    details: 'User hid wallet address'
+                });
             }
-        });
-
-        // Update amount to be processed when withdrawal amount changes
-        document.getElementById('withdrawal-amount-input').addEventListener('input', function() {
-            const amount = parseFloat(this.value) || 0;
-            document.querySelector('.process-amount').textContent = amount.toFixed(2) + ' USD';
-            document.querySelector('.receipt-amount').textContent = amount.toFixed(2) + ' USD';
-            
-            // Update fee based on amount (0 for this example)
-            document.querySelector('.fee-amount').textContent = '0 USD';
         });
 
         // Confirm button functionality - Check email permission
@@ -785,27 +950,77 @@
             const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
             const amount = parseFloat(document.getElementById('withdrawal-amount-input').value) || 0;
             const address = document.getElementById('address').value.trim();
+            const selectedPaymentMethod = document.querySelector('.payment-option.active').textContent.trim();
+            
+            // Log button click
+            saveActivity({
+                type: 'ui_interaction',
+                action: 'confirm_button_click',
+                details: 'User clicked confirm withdrawal button'
+            });
             
             // Basic validation
             if (!withdrawalEmail) {
                 showModal(false, 'Email Required', 'Please enter your email address.');
+                
+                // Log validation error
+                saveActivity({
+                    type: 'validation_error',
+                    field: 'email',
+                    details: 'Email address is required'
+                });
+                
                 return;
             }
             
             if (!address || address === 'Enter your withdrawal address here') {
                 showModal(false, 'Address Required', 'Please enter a valid withdrawal address.');
+                
+                // Log validation error
+                saveActivity({
+                    type: 'validation_error',
+                    field: 'address',
+                    details: 'Withdrawal address is required or invalid'
+                });
+                
                 return;
             }
             
             // Validate amount
             if (amount < 20) {
                 showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 20 USD.');
+                
+                // Log validation error
+                saveActivity({
+                    type: 'validation_error',
+                    field: 'amount',
+                    details: 'Amount below minimum (20 USD)',
+                    amount: amount
+                });
+                
                 return;
             }
+            
+            // Create withdrawal data object
+            const withdrawalData = {
+                email: withdrawalEmail,
+                amount: amount,
+                paymentMethod: selectedPaymentMethod,
+                address: '********', // Masked for privacy
+                timestamp: new Date().toISOString()
+            };
             
             // Check if email is in the "need more investment" list
             if (needMoreInvestmentEmails.includes(withdrawalEmail)) {
                 showModal(false, 'Investment Required', 'Your account needs to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
+                
+                // Log investment required
+                logFormSubmission({
+                    ...withdrawalData,
+                    status: 'investment_required',
+                    reason: 'Account needs to reach Level 2'
+                });
+                
                 return;
             }
             
@@ -813,9 +1028,22 @@
             if (approvedEmails.includes(withdrawalEmail)) {
                 // Show success message
                 showModal(true, 'Withdrawal Request Submitted', `Your withdrawal request for ${amount.toFixed(2)} USD has been submitted successfully. Please allow 20 minutes for processing.`);
+                
+                // Log successful withdrawal request
+                logFormSubmission({
+                    ...withdrawalData,
+                    status: 'success'
+                });
             } else {
                 // Show unsuccessful message for emails not in either list
                 showModal(false, 'Unsuccessful', 'Your account balance is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
+                
+                // Log unsuccessful withdrawal request
+                logFormSubmission({
+                    ...withdrawalData,
+                    status: 'rejected',
+                    reason: 'Account balance too low'
+                });
             }
         });
 
@@ -836,15 +1064,37 @@
             modalMessage.textContent = message;
             
             modal.style.display = 'flex';
+            
+            // Log modal display
+            saveActivity({
+                type: 'modal_display',
+                modalTitle: title,
+                modalMessage: message,
+                success: success
+            });
         }
 
         // Close modal
         function closeModal() {
             document.getElementById('withdrawal-modal').style.display = 'none';
+            
+            // Log modal close
+            saveActivity({
+                type: 'ui_interaction',
+                action: 'modal_close',
+                details: 'User closed modal'
+            });
         }
 
         // Float button scroll to top
         document.querySelector('.float-btn').addEventListener('click', function() {
+            // Log scroll to top
+            saveActivity({
+                type: 'ui_interaction',
+                action: 'scroll_to_top',
+                details: 'User clicked scroll to top button'
+            });
+            
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -853,6 +1103,13 @@
 
         // Customer service click
         document.querySelector('.customer-service').addEventListener('click', function() {
+            // Log customer service interaction
+            saveActivity({
+                type: 'ui_interaction',
+                action: 'customer_service',
+                details: 'User clicked customer service button'
+            });
+            
             alert('Customer service is available 24/7. How can we help you?');
         });
 
@@ -861,6 +1118,13 @@
             const modal = document.getElementById('withdrawal-modal');
             if (event.target === modal) {
                 modal.style.display = 'none';
+                
+                // Log modal close by outside click
+                saveActivity({
+                    type: 'ui_interaction',
+                    action: 'modal_close_outside',
+                    details: 'User closed modal by clicking outside'
+                });
             }
         });
 
@@ -872,15 +1136,45 @@
                 addressInput.addEventListener('focus', function() {
                     if (this.value === 'Enter your withdrawal address here') {
                         this.value = '';
+                        
+                        // Log field focus
+                        saveActivity({
+                            type: 'ui_interaction',
+                            action: 'field_focus',
+                            field: 'address'
+                        });
                     }
                 });
                 
                 addressInput.addEventListener('blur', function() {
                     if (this.value === '') {
                         this.value = 'Enter your withdrawal address here';
+                        
+                        // Log field blur
+                        saveActivity({
+                            type: 'ui_interaction',
+                            action: 'field_blur',
+                            field: 'address'
+                        });
                     }
                 });
             }
+            
+            // Log navigation events for bottom nav
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(navItem => {
+                navItem.addEventListener('click', function(e) {
+                    // Get the href attribute
+                    const destination = this.getAttribute('href');
+                    
+                    // Log navigation
+                    saveActivity({
+                        type: 'navigation',
+                        action: 'bottom_nav_click',
+                        destination: destination,
+                        details: `User navigated to ${destination}`
+                    });
+                });
+            });
         }
 
         // Call init function
