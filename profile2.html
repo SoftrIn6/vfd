@@ -6,444 +6,337 @@
     <title>Profile - SOFT RINVESTMENT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-       /* Reset & Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-body {
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.5;
-    overflow-x: hidden;
-}
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
 
-/* Container */
-.container {
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 15px;
-    position: relative;
-    background-color: #fff;
-    min-height: 100vh;
-}
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 15px;
+            position: relative;
+            background-color: #fff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
 
-/* Header Styles */
-.header {
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-}
+        /* Header Styles */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
-}
+        .logo {
+            display: flex;
+            align-items: center;
+        }
 
-.logo-img {
-    width: 35px;
-    height: 35px;
-    margin-right: 8px;
-}
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.logo-text {
-    font-size: 10px;
-    font-weight: bold;
-    color: #333;
-}
+        .logo-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
 
-.header-btns {
-    display: flex;
-    gap: 8px;
-}
+        .header-btns {
+            display: flex;
+            gap: 8px;
+        }
 
-.header-btn {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 10px;
-    color: #ffa500;
-    border: 1px solid #ffa500;
-}
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
 
-.header-btn.app {
-    background-color: #ffa500;
-    color: #fff;
-}
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
 
-/* User Profile */
-.user-profile {
-    padding: 15px;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-}
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 165, 0, 0.2);
+        }
 
-.user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-}
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            border-radius: 15px;
+            margin: 15px 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
 
-.user-avatar i {
-    font-size: 24px;
-    color: #ffa500;
-}
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            border: 2px solid #ffa500;
+            overflow: hidden;
+        }
 
-.user-info {
-    flex: 1;
-    color: #ffa500;
-}
+        .user-avatar i {
+            font-size: 28px;
+            color: #ffa500;
+        }
 
-.user-copy {
-    margin-left: 10px;
-    color: #ffa500;
-    cursor: pointer;
-}
+        .user-info {
+            flex: 1;
+        }
 
-/* Assets Section */
-.assets-section {
-    margin: 10px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px;
-}
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
 
-.section-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 12px;
-}
+        .user-email {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
 
-.total-assets {
-    font-size: 22px;
-    font-weight: bold;
-    color: #ffa500;
-    margin-bottom: 15px;
-}
+        .user-copy {
+            margin-left: 8px;
+            color: #ffa500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
 
-.assets-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
+        .user-copy:hover {
+            transform: scale(1.1);
+        }
 
-.asset-item {
-    padding: 12px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-}
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffa500;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.asset-label {
-    font-size: 14px;
-    color: #ffa500;
-    margin-bottom: 8px;
-}
+        .notification-icon:hover {
+            background-color: #ffa500;
+            color: white;
+        }
 
-.asset-value {
-    font-size: 16px;
-    font-weight: bold;
-}
+        /* Balance Card */
+        .balance-card {
+            margin: 15px 10px;
+            padding: 25px;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.3);
+        }
 
-/* Action Buttons */
-.action-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 10px;
-}
+        .balance-label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
 
-.action-btn {
-    padding: 12px;
-    background-color: #ffa500;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-}
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-/* Revenue Section */
-.revenue-section {
-    margin: 10px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px;
-}
+        .balance-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
 
-.revenue-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 12px;
-}
+        .balance-action {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.revenue-item {
-    padding: 12px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-}
+        .balance-action:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
 
-/* Activity Section */
-.activity-section {
-    margin: 10px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px;
-}
+        .balance-action i {
+            font-size: 20px;
+        }
 
-.activity-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
+        .balance-illustration {
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+        }
 
-.activity-filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
+        /* Promo Cards / Financial Data */
+        .promo-section {
+            margin: 20px 10px;
+        }
 
-.activity-filter {
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border-radius: 15px;
-    font-size: 12px;
-    cursor: pointer;
-}
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            position: relative;
+            padding-left: 12px;
+        }
 
-.activity-filter.active {
-    background-color: #ffa500;
-    color: white;
-}
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 18px;
+            background-color: #ffa500;
+            border-radius: 2px;
+        }
 
-.activity-list {
-    max-height: 400px;
-    overflow-y: auto;
-}
+        .promo-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
 
-.activity-item {
-    padding: 12px;
-    border-bottom: 1px solid #f0f0f0;
-    position: relative;
-}
+        .promo-card {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 15px rgba(54, 209, 220, 0.2);
+            transition: transform 0.3s ease;
+        }
 
-.activity-item:last-child {
-    border-bottom: none;
-}
+        .promo-card:hover {
+            transform: translateY(-5px);
+        }
 
-.activity-time {
-    font-size: 12px;
-    color: #999;
-    margin-bottom: 5px;
-}
+        .promo-card:nth-child(2) {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
 
-.activity-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+        .promo-card:nth-child(3) {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+        }
 
-.activity-details {
-    font-size: 13px;
-    color: #666;
-}
+        .promo-card:nth-child(4) {
+            background: linear-gradient(135deg, #fc4a1a, #f7b733);
+        }
 
-.activity-status {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 10px;
-}
+        .promo-card:nth-child(5) {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
 
-.activity-status.success {
-    background-color: #e6f7ee;
-    color: #4cd964;
-}
+        .promo-card:nth-child(6) {
+            background: linear-gradient(135deg, #ee0979, #ff6a00);
+        }
 
-.activity-status.failed {
-    background-color: #ffeeee;
-    color: #ff3b30;
-}
+        .promo-title {
+            font-weight: 500;
+            font-size: 12px;
+            z-index: 1;
+            opacity: 0.9;
+        }
 
-.activity-status.pending {
-    background-color: #fff8e1;
-    color: #ffa500;
-}
+        .promo-subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-.activity-empty {
-    text-align: center;
-    padding: 20px;
-    color: #999;
-    font-style: italic;
-}
+        .promo-illustration {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.2;
+        }
 
-.activity-load-more {
-    text-align: center;
-    padding: 10px;
-    color: #ffa500;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* App Services */
-.services-section {
-    margin: 10px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 10px;
-}
-
-.service-title {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 12px;
-    position: relative;
-}
-
-.service-title::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 30px;
-    height: 3px;
-    background-color: #ffa500;
-}
-
-.service-list {
-    margin-top: 15px;
-}
-
-.service-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-}
-
-.service-item:last-child {
-    border-bottom: none;
-}
-
-.service-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #fff8e1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    color: #ffa500;
-}
-
-.service-info {
-    flex: 1;
-    display: flex;
-    align-items: center;
-}
-
-.service-name {
-    font-size: 14px;
-}
-
-.service-arrow {
-    color: #ccc;
-}
-
-/* Sign Out Button */
-.sign-out-btn {
-  margin: 0px 10px 11px 10px; /* top, right, bottom, left */
-    padding: 12px;
-    background-color: #ffa500;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    width: calc(100% - 30px);
-    cursor: pointer;
-    text-align: center;
-}
-
-/* Float button */
-.float-btn {
-    position: fixed;
-    bottom: 60px;
-    right: 15px;
-    width: 35px;
-    height: 35px;
-    background-color: #ffa500;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    cursor: pointer;
-}
-
-/* Bottom Navigation */
-.bottom-nav {
-   width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 15px;
-    position: relative;
-    background-color: #fff;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    padding: 8px 0;
-    border-top: 1px solid #eee;
-    z-index: 100;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #999;
-    font-size: 10px;
-}
-
-.nav-item.active {
-    color: #ffa500;
-}
-
-.nav-item i {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-/* Features Grid */
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            padding: 15px;
-            background-color: #fff;
+            margin: 20px 10px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .feature-item {
@@ -452,66 +345,388 @@ body {
             align-items: center;
             text-decoration: none;
             color: #333;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
         }
 
         .feature-icon {
             width: 50px;
             height: 50px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             object-fit: contain;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
         .feature-name {
             font-size: 12px;
             text-align: center;
+            font-weight: 500;
         }
-/* Media Queries for Responsiveness */
-@media (max-width: 470px) {
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
 
-    .section-title,
-    .total-assets,
-    .asset-label,
-    .asset-value,
-    .service-name {
-        font-size: 12px;
-    }
+        /* Activity Section */
+        .activity-section {
+            margin: 20px 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
 
-    .action-btn {
-        font-size: 12px;
-        padding: 10px;
-    }
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-    .sign-out-btn {
-        font-size: 14px;
-        padding: 10px;
-    }
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
 
-    .nav-item {
-        font-size: 8px;
-    }
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            transition: background-color 0.3s ease;
+            border-radius: 8px;
+        }
 
-    .nav-item i {
-        font-size: 16px;
-    }
+        .activity-item:hover {
+            background-color: #f9f9f9;
+        }
 
-    .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .activity-filters {
-        flex-wrap: wrap;
-    }
-    
-    .activity-filter {
-        font-size: 10px;
-        padding: 4px 8px;
-    }
-}
+        .activity-item:last-child {
+            border-bottom: none;
+        }
 
+        .activity-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .activity-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .activity-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .activity-status.success {
+            background-color: #e6f7ee;
+            color: #4cd964;
+        }
+
+        .activity-status.failed {
+            background-color: #ffeeee;
+            color: #ff3b30;
+        }
+
+        .activity-status.pending {
+            background-color: #fff8e1;
+            color: #ffa500;
+        }
+
+        .activity-empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .activity-load-more {
+            text-align: center;
+            padding: 15px;
+            color: #ffa500;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 10px;
+        }
+
+        .activity-load-more:hover {
+            color: #ff8c00;
+            background-color: #fff8e1;
+            border-radius: 0 0 15px 15px;
+        }
+
+        /* App Services */
+        .services-section {
+            margin: 20px 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            color: #333;
+        }
+
+        .service-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+            border-radius: 1.5px;
+        }
+
+        .service-list {
+            margin-top: 20px;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .service-item:hover {
+            padding-left: 5px;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff8e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ffa500;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover .service-icon {
+            background-color: #ffa500;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.2);
+        }
+
+        .service-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .service-arrow {
+            color: #ccc;
+            transition: transform 0.3s ease;
+        }
+
+        .service-item:hover .service-arrow {
+            transform: translateX(5px);
+            color: #ffa500;
+        }
+
+        /* Sign Out Button */
+        .sign-out-btn {
+            margin: 20px 10px 70px 10px; /* top, right, bottom, left */
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            width: calc(100% - 20px);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
+        }
+
+        .sign-out-btn:hover {
+            background-color: #ff8c00;
+            box-shadow: 0 6px 15px rgba(255, 165, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .float-btn:hover {
+            background-color: #ff8c00;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .float-btn i {
+            font-size: 18px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 12px 0 8px;
+            border-top: 1px solid #eee;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #ffa500;
+        }
+
+        .nav-item.active {
+            color: #ffa500;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* Animation for balance counter */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-count {
+            animation: countUp 1s ease-out forwards;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 470px) {
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .balance-amount {
+                font-size: 28px;
+            }
+
+            .service-name {
+                font-size: 12px;
+            }
+
+            .sign-out-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .nav-item {
+                font-size: 8px;
+            }
+
+            .nav-item i {
+                font-size: 16px;
+            }
+
+            .promo-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .promo-subtitle {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -519,17 +734,17 @@ body {
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <img src="image/4e0ab918-1d65-40ac-9762-0ad78571cc2c.png?height=40&width=40" alt="Logo" class="logo-img" style="background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;">
+                <div class="logo-img">
+                    <i class="fas fa-chart-line" style="color: white; font-size: 18px;"></i>
+                </div>
                 <div class="logo-text">SOFT RINVESTMENT</div>
             </div>
-          <div class="header-btns">
-                <a href="https://softrinvestment.com/download-app.html">
-                <div class="header-btn app">
-                <i class="fas fa-mobile-alt"></i> App
-    </div>
-</a>
+            <div class="header-btns">
+                <a href="https://softrinvestment.com/download-app.html" class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i>&nbsp; App
+                </a>
                 <div class="header-btn">
-                    <i class="fas fa-globe"></i> English
+                    <i class="fas fa-globe"></i>&nbsp; English
                 </div>
             </div>
         </div>
@@ -540,73 +755,113 @@ body {
                 <i class="fas fa-user"></i>
             </div>
             <div class="user-info">
-                <div style="font-size: 18px; font-weight: bold;" id="username"></div>
-                <div style="color: #666; margin-top: 5px;" id="user-email"></div>
-                <i class="fas fa-copy user-copy" id="copy-email"></i>
+                <div class="user-name" id="username">Loading...</div>
+                <div class="user-email" id="user-email">
+                    Loading...
+                    <i class="fas fa-copy user-copy" id="copy-email"></i>
+                </div>
+            </div>
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
             </div>
         </div>
 
-        <!-- Assets Section -->
-        <div class="assets-section">
-            <div class="section-title">Total Account Balance</div>
-            <div class="total-assets" id="total-assets">$0.00</div>
-            <div class="assets-grid">
-                <div class="asset-item">
-                    <div class="asset-label">New Deposit</div>
-                    <div class="asset-value" id="quantitative-account">$0.00</div>
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-label">Total Account Balance</div>
+            <div class="balance-amount" id="total-assets">$0.00</div>
+            <div class="balance-actions">
+                <div class="balance-action" id="add-money" title="Add Money">
+                    <i class="fas fa-plus"></i>
                 </div>
-                <div class="asset-item">
-                    <div class="asset-label">Today's Earnings</div>
-                    <div class="asset-value" id="smart-account">$0.00</div>
+                <div class="balance-action" id="withdraw-money" title="Withdraw">
+                    <i class="fas fa-arrow-down"></i>
                 </div>
-                <div class="asset-item">
-                    <div class="asset-label">Registration Bonus</div>
-                    <div class="asset-value" id="profit-assets">$0.00</div>
+                <div class="balance-action" id="invest-money" title="Invest">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+            <div class="balance-illustration">
+                <i class="fas fa-coins" style="font-size: 100px;"></i>
+            </div>
+        </div>
+
+        <!-- Financial Data Cards (Previously Promo Section) -->
+        <div class="promo-section">
+            <div class="section-title">Account Details</div>
+            <div class="promo-cards">
+                <div class="promo-card">
+                    <div class="promo-title">New Deposit</div>
+                    <div class="promo-subtitle" id="quantitative-account">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-wallet" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Smart Account</div>
+                    <div class="promo-subtitle" id="smart-account">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-brain" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Registration Bonus</div>
+                    <div class="promo-subtitle" id="profit-assets">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-gift" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Total Withdrawals</div>
+                    <div class="promo-subtitle" id="total-revenue">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-money-bill-wave" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Yesterday's Earnings</div>
+                    <div class="promo-subtitle" id="yesterday-earnings">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-calendar-day" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Today's Earnings</div>
+                    <div class="promo-subtitle" id="today-earnings">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-chart-line" style="font-size: 60px;"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <div class="action-btn" id="recharge-btn">Recharge</div>
-            <div class="action-btn" id="withdraw-btn">Withdraw</div>
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <a href="recharge.html" class="feature-item" id="recharge">
+                <img src="/placeholder.svg?height=50&width=50" alt="Fund Account" class="feature-icon">
+                <div class="feature-name">Fund Account</div>
+            </a>
+            <a href="withdraw.html" class="feature-item" id="withdraw">
+                <img src="/placeholder.svg?height=50&width=50" alt="Withdraw" class="feature-icon">
+                <div class="feature-name">Withdraw</div>
+            </a>
+            <a href="help-center.html" class="feature-item" id="help">
+                <img src="/placeholder.svg?height=50&width=50" alt="Help" class="feature-icon">
+                <div class="feature-name">Help</div>
+            </a>
+            <a href="exchange.html" class="feature-item" id="exchange">
+                <img src="/placeholder.svg?height=50&width=50" alt="Exchange" class="feature-icon">
+                <div class="feature-name">Exchange</div>
+            </a>
         </div>
-
-        <!-- Revenue Section -->
-        <div class="revenue-section">
-            <div class="section-title">Total Withdrawals Made</div>
-            <div class="total-assets" id="total-revenue">$0.00</div>
-            <div class="revenue-grid">
-                <div class="asset-item">
-                    <div class="asset-label">Yesterday's Earnings</div>
-                    <div class="asset-value" id="yesterday-earnings">$0.00</div>
-                </div>
-                <div class="asset-item">
-                    <div class="asset-label">Smart Balance</div>
-                    <div class="asset-value" id="today-earnings">$0.00</div>
-                </div>
-                <div class="asset-item">
-                    <div class="asset-label">Task Earnings </div>
-                    <div class="asset-value" id="commission-today">$0.00</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activity Section (New) -->
+        
+        <!-- Activity Section -->
         <div class="activity-section">
             <div class="activity-header">
-                <div class="section-title">Account Activity</div>
-                <div id="activity-export" style="font-size: 12px; color: #ffa500; cursor: pointer;">
-                    <i class="fas fa-download"></i> Export
+                <div class="section-title">Recent Activities</div>
+                <div id="activity-export" style="font-size: 13px; color: #ffa500; cursor: pointer; display: flex; align-items: center;">
+                    <i class="fas fa-download"></i>&nbsp; Export
                 </div>
-            </div>
-            
-            <div class="activity-filters">
-                <div class="activity-filter active" data-filter="all">All</div>
-                <div class="activity-filter" data-filter="withdrawal">Withdrawals</div>
-                <div class="activity-filter" data-filter="investment">Investments</div>
-                <div class="activity-filter" data-filter="authentication">Login/Auth</div>
-                <div class="activity-filter" data-filter="ui_interaction">Interactions</div>
             </div>
             
             <div class="activity-list" id="activity-list">
@@ -615,120 +870,106 @@ body {
             </div>
             
             <div class="activity-load-more" id="activity-load-more" style="display: none;">
-                Load More
+                Show More
             </div>
         </div>
 
-        <!-- Features Grid -->
-        <div class="features-grid">
-            <a href="recharge.html" class="feature-item" id="recharge">
-                <img src="image/icons8-stack-of-coins.gif?height=50&width=50" alt="Recharge" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
-                <div class="feature-name">Fund Account</div>
-            </a>
-            <a href="withdraw.html" class="feature-item" id="withdraw">
-                <img src="image/icons8-coins.gif?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
-                <div class="feature-name">Withdraw</div>
-            </a>
-            <a href="help-center.html" class="feature-item" id="help">
-                <img src="image/icons8-online-support (1).gif?height=50&width=50" alt="Help" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
-                <div class="feature-name">Help</div>
-            </a>
-            <a href="reviews.html" class="feature-item" id="team">
-                <img src="image/icons8-comments.gif?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
-                <div class="feature-name">Exchange</div>
-            </a>
-        </div>
-        
         <!-- App Services -->
         <div class="services-section">
-    <div class="service-title">App Services</div>
-    <div class="service-list">
-        <a href="https://softrinvestment.com/help-center.html" class="service-item" id="detail-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="service-name">Help</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <a href="https://softrinvestment.com/help-center.html" class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Help</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/how-to-invest.html" class="service-item" id="transfer-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-exchange-alt"></i>
-                </div>
-                <div class="service-name">How to Invest</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+                <a href="https://softrinvestment.com/how-to-invest.html" class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">How to Invest</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/faq.html" class="service-item" id="news-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-                <div class="service-name">Frequently Asked Questions</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+                <a href="https://softrinvestment.com/faq.html" class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">Frequently Asked Questions</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/invest.html" class="service-item" id="security-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="service-name">Investment Plan</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+                <a href="https://softrinvestment.com/invest.html" class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Investment Plan</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/sharing-task.html" class="service-item" id="tutorial-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="service-name">Tasks</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+                <a href="https://softrinvestment.com/sharing-task.html" class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Tasks</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/contact-us.html" class="service-item" id="problem-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-question-circle"></i>
-                </div>
-                <div class="service-name">Contact Us</div>
-            </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
+                <a href="https://softrinvestment.com/contact-us.html" class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Contact Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
 
-        <a href="https://softrinvestment.com/about-us.html" class="service-item" id="about-service">
-            <div class="service-info">
-                <div class="service-icon">
-                    <i class="fas fa-info-circle"></i>
-                </div>
-                <div class="service-name">About Us</div>
+                <a href="https://softrinvestment.com/about-us.html" class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
             </div>
-            <div class="service-arrow">
-                <i class="fas fa-chevron-right"></i>
-            </div>
-        </a>
-    </div>
-</div>
-
+        </div>
 
         <!-- Sign Out Button -->
         <div class="sign-out-btn" id="sign-out-btn">Sign Out</div>
@@ -737,8 +978,10 @@ body {
         <div class="float-btn" id="refresh-btn">
             <i class="fas fa-arrow-up"></i>
         </div>
-    </div>
-
+                </a>
+            </div>
+        </div>
+        
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
@@ -767,7 +1010,7 @@ body {
     <script>
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
-        const ACTIVITY_RETENTION_DAYS = 7;
+        const ACTIVITY_RETENTION_DAYS = 3; // Show activities from last 3 days
         
         // Baserow API configuration
         const BASEROW_API = {
@@ -775,7 +1018,7 @@ body {
             baseUrl: 'https://api.baserow.io/api',
             databaseId: '202237',
             tableId: '488473',
-            activityTableId: '488474' // New table ID for account_activity
+            activityTableId: '488474' // Table ID for account_activity
         };
 
         // Check if user is logged in when page loads
@@ -800,9 +1043,6 @@ body {
             // Load user activity history
             loadActivityHistory();
             
-            // Set up activity filters
-            setupActivityFilters();
-            
             // Set up activity export
             setupActivityExport();
             
@@ -816,6 +1056,9 @@ body {
                     loadActivityHistory();
                 }
             }, 30000);
+            
+            // Set up balance animation
+            setupBalanceAnimation();
             
             // Copy email functionality
             document.getElementById('copy-email').addEventListener('click', function() {
@@ -839,20 +1082,16 @@ body {
             });
             
             // Action buttons functionality
-            document.getElementById('recharge-btn').addEventListener('click', function() {
+            document.getElementById('add-money').addEventListener('click', function() {
                 window.location.href = 'recharge.html';
             });
             
-            document.getElementById('withdraw-btn').addEventListener('click', function() {
+            document.getElementById('withdraw-money').addEventListener('click', function() {
                 window.location.href = 'withdraw.html';
             });
             
-            // Service items functionality
-            document.querySelectorAll('.service-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const serviceId = this.id;
-                    // No need for alert as these are now proper links
-                });
+            document.getElementById('invest-money').addEventListener('click', function() {
+                window.location.href = 'invest.html';
             });
             
             // Refresh button functionality
@@ -873,9 +1112,97 @@ body {
                 }
             });
             
-            // Clean up old activities (older than 7 days)
+            // Clean up old activities (older than retention days)
             cleanupOldActivities();
         });
+        
+        // Setup balance animation
+        function setupBalanceAnimation() {
+            const balanceElement = document.getElementById('total-assets');
+            
+            // Function to animate counting up
+            function animateValue(start, end, duration) {
+                balanceElement.classList.remove('animate-count');
+                
+                // Force reflow to restart animation
+                void balanceElement.offsetWidth;
+                
+                balanceElement.classList.add('animate-count');
+                
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const currentValue = progress * (end - start) + start;
+                    balanceElement.textContent = '$' + currentValue.toFixed(2);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        balanceElement.textContent = '$' + end.toFixed(2);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            
+            // Store the original updateFinancialValue function
+            const originalUpdateFinancialValue = window.updateFinancialValue;
+            
+            // Override the updateFinancialValue function for total-assets
+            window.updateFinancialValue = function(elementId, value) {
+                if (elementId === 'total-assets') {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        let formattedValue = '0.00';
+                        
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (!isNaN(parseFloat(value))) {
+                                formattedValue = parseFloat(value).toFixed(2);
+                                
+                                // Get current value without $ sign
+                                const currentValueText = element.textContent.replace('$', '');
+                                const currentValue = parseFloat(currentValueText) || 0;
+                                
+                                // Animate from current value to new value
+                                animateValue(currentValue, parseFloat(formattedValue), 1000);
+                                return;
+                            } else {
+                                formattedValue = value;
+                                if (!formattedValue.includes('.')) {
+                                    formattedValue += '.00';
+                                }
+                            }
+                        }
+                        
+                        // If we can't animate, just set the value
+                        element.textContent = '$' + formattedValue;
+                    }
+                } else {
+                    // For other elements, use the original function
+                    if (typeof originalUpdateFinancialValue === 'function') {
+                        originalUpdateFinancialValue(elementId, value);
+                    } else {
+                        // Fallback if original function is not defined
+                        const element = document.getElementById(elementId);
+                        if (element) {
+                            let formattedValue = '0.00';
+                            
+                            if (value !== undefined && value !== null && value !== '') {
+                                if (!isNaN(parseFloat(value))) {
+                                    formattedValue = parseFloat(value).toFixed(2);
+                                } else {
+                                    formattedValue = value;
+                                    if (!formattedValue.includes('.')) {
+                                        formattedValue += '.00';
+                                    }
+                                }
+                            }
+                            
+                            element.textContent = '$' + formattedValue;
+                        }
+                    }
+                }
+            };
+        }
         
         // Fetch user data from Baserow
         async function fetchUserData(email, forceRefresh = false) {
@@ -1042,72 +1369,58 @@ body {
             const activityList = document.getElementById('activity-list');
             const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Filter activities to only show those from the last 7 days
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - ACTIVITY_RETENTION_DAYS);
+            // Filter activities to only show those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
             const recentActivities = activities.filter(activity => {
                 const activityDate = new Date(activity.timestamp);
-                return activityDate >= sevenDaysAgo;
+                return activityDate >= cutoffDate;
             });
             
-            // Get current filter
-            const currentFilter = document.querySelector('.activity-filter.active').dataset.filter;
+            // Filter to only show investment and withdrawal activities
+            const filteredActivities = recentActivities.filter(activity => {
+                return activity.type === 'withdrawal_request' || 
+                       activity.type === 'form_submission' || 
+                       activity.type === 'investment_attempt' || 
+                       activity.type === 'investment_processing';
+            });
             
-            // Filter activities based on selected filter
-            let filteredActivities = recentActivities;
-            if (currentFilter !== 'all') {
-                filteredActivities = recentActivities.filter(activity => {
-                    if (currentFilter === 'withdrawal') {
-                        return activity.type === 'withdrawal_request' || 
-                               (activity.type === 'form_submission' && activity.details?.status);
-                    } else if (currentFilter === 'investment') {
-                        return activity.type === 'investment_attempt' || 
-                               activity.type === 'investment_processing';
-                    } else if (currentFilter === 'authentication') {
-                        return activity.type === 'authentication' || 
-                               activity.type === 'authentication_check';
-                    } else if (currentFilter === 'ui_interaction') {
-                        return activity.type === 'ui_interaction';
-                    }
-                    return false;
-                });
-            }
+            // Sort activities by timestamp (newest first)
+            filteredActivities.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
             
             // Clear the activity list
             activityList.innerHTML = '';
             
             // Display activities or empty message
             if (filteredActivities.length === 0) {
-                activityList.innerHTML = '<div class="activity-empty">No activities found for the selected filter.</div>';
+                activityList.innerHTML = '<div class="activity-empty">No investment or withdrawal activities found.</div>';
                 document.getElementById('activity-load-more').style.display = 'none';
                 return;
             }
             
-            // Display first 10 activities
-            const activitiesToShow = filteredActivities.slice(0, 10);
+            // Display first 3 activities
+            const activitiesToShow = filteredActivities.slice(0, 3);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
                 activityList.appendChild(activityItem);
             });
             
             // Show/hide load more button
-            if (filteredActivities.length > 10) {
+            if (filteredActivities.length > 3) {
                 document.getElementById('activity-load-more').style.display = 'block';
                 document.getElementById('activity-load-more').onclick = () => {
-                    // Show next 10 activities
-                    const currentCount = activityList.querySelectorAll('.activity-item').length;
-                    const nextActivities = filteredActivities.slice(currentCount, currentCount + 10);
-                    
-                    nextActivities.forEach(activity => {
+                    // Show all activities
+                    activityList.innerHTML = '';
+                    filteredActivities.forEach(activity => {
                         const activityItem = createActivityItem(activity);
                         activityList.appendChild(activityItem);
                     });
                     
-                    // Hide load more button if all activities are shown
-                    if (currentCount + nextActivities.length >= filteredActivities.length) {
-                        document.getElementById('activity-load-more').style.display = 'none';
-                    }
+                    // Hide load more button
+                    document.getElementById('activity-load-more').style.display = 'none';
                 };
             } else {
                 document.getElementById('activity-load-more').style.display = 'none';
@@ -1136,11 +1449,6 @@ body {
             
             // Process different activity types
             switch (activity.type) {
-                case 'page_view':
-                    title = `Viewed ${activity.page || 'page'}`;
-                    details = activity.details || '';
-                    break;
-                    
                 case 'withdrawal_request':
                 case 'form_submission':
                     title = 'Withdrawal Request';
@@ -1149,13 +1457,15 @@ body {
                         if (typeof activity.details === 'object') {
                             const amount = activity.details.amount || '0.00';
                             const method = activity.details.paymentMethod || '';
-                            details = `Amount: $${amount} USD via ${method}`;
+                            details = `Amount: ${amount} USD via ${method}`;
                             
                             if (activity.details.status === 'success') {
                                 status = '<div class="activity-status success">Success</div>';
                             } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
                                 status = '<div class="activity-status failed">Failed</div>';
                                 details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                            } else {
+                                status = '<div class="activity-status pending">Pending</div>';
                             }
                         } else {
                             details = activity.details;
@@ -1168,7 +1478,7 @@ body {
                     
                     if (activity.planTitle) {
                         const amount = activity.totalAmount || '0.00';
-                        details = `Plan: ${activity.planTitle}, Amount: $${amount} USD`;
+                        details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
                         
                         if (activity.success) {
                             status = '<div class="activity-status success">Success</div>';
@@ -1185,53 +1495,9 @@ body {
                     title = 'Investment Processing';
                     
                     if (activity.planTitle) {
-                        details = `Plan: ${activity.planTitle}, Amount: $${activity.amount} USD`;
+                        details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
                         status = '<div class="activity-status pending">Processing</div>';
                     }
-                    break;
-                    
-                case 'authentication':
-                case 'authentication_check':
-                    title = 'Authentication';
-                    
-                    if (activity.status === 'success') {
-                        details = 'Successfully authenticated';
-                        status = '<div class="activity-status success">Success</div>';
-                    } else {
-                        details = activity.details || 'Authentication failed';
-                        status = '<div class="activity-status failed">Failed</div>';
-                    }
-                    break;
-                    
-                case 'ui_interaction':
-                    title = 'User Interaction';
-                    
-                    if (activity.action) {
-                        details = `Action: ${activity.action}`;
-                        if (activity.details) {
-                            details += `<br>${activity.details}`;
-                        }
-                    }
-                    break;
-                    
-                case 'plan_view':
-                    title = 'Viewed Investment Plan';
-                    
-                    if (activity.planTitle) {
-                        details = `Plan: ${activity.planTitle}, Price: $${activity.planPrice} USD`;
-                    }
-                    break;
-                    
-                case 'balance_update_success':
-                    title = 'Balance Updated';
-                    details = `Old Balance: $${activity.oldBalance} USD, New Balance: $${activity.newBalance} USD`;
-                    status = '<div class="activity-status success">Success</div>';
-                    break;
-                    
-                case 'error':
-                    title = 'Error Occurred';
-                    details = activity.details || 'An error occurred';
-                    status = '<div class="activity-status failed">Error</div>';
                     break;
                     
                 default:
@@ -1257,60 +1523,97 @@ body {
             return activityItem;
         }
         
-        // Set up activity filters
-        function setupActivityFilters() {
-            document.querySelectorAll('.activity-filter').forEach(filter => {
-                filter.addEventListener('click', function() {
-                    // Remove active class from all filters
-                    document.querySelectorAll('.activity-filter').forEach(f => {
-                        f.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked filter
-                    this.classList.add('active');
-                    
-                    // Reload activity history with new filter
-                    loadActivityHistory();
-                });
-            });
-        }
-        
         // Set up activity export
         function setupActivityExport() {
             document.getElementById('activity-export').addEventListener('click', function() {
                 const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
                 
-                if (activities.length === 0) {
+                // Filter to only investment and withdrawal activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing';
+                });
+                
+                if (filteredActivities.length === 0) {
                     alert('No activities to export.');
                     return;
                 }
                 
                 // Create CSV content
                 let csvContent = 'data:text/csv;charset=utf-8,';
-                csvContent += 'Date,Time,Type,Page,Details\n';
+                csvContent += 'Date,Time,Type,Details,Status\n';
                 
-                activities.forEach(activity => {
+                filteredActivities.forEach(activity => {
                     const timestamp = new Date(activity.timestamp);
                     const date = timestamp.toLocaleDateString();
                     const time = timestamp.toLocaleTimeString();
                     
                     let details = '';
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            details = JSON.stringify(activity.details).replace(/"/g, '""');
-                        } else {
-                            details = activity.details.replace(/"/g, '""');
-                        }
+                    let status = '';
+                    
+                    // Process different activity types for export
+                    switch (activity.type) {
+                        case 'withdrawal_request':
+                        case 'form_submission':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const method = activity.details.paymentMethod || '';
+                                    details = `Amount: ${amount} USD via ${method}`;
+                                    
+                                    if (activity.details.status === 'success') {
+                                        status = 'Success';
+                                    } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                        status = 'Failed';
+                                        details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
+                                    } else {
+                                        status = 'Pending';
+                                    }
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_attempt':
+                            if (activity.planTitle) {
+                                const amount = activity.totalAmount || '0.00';
+                                details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                                
+                                if (activity.success) {
+                                    status = 'Success';
+                                } else {
+                                    status = 'Failed';
+                                    if (activity.reason) {
+                                        details += ` (Reason: ${activity.reason})`;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_processing':
+                            if (activity.planTitle) {
+                                details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                                status = 'Processing';
+                            }
+                            break;
                     }
                     
-                    csvContent += `${date},${time},${activity.type || ''},${activity.page || ''},"${details}"\n`;
+                    // Escape quotes in details
+                    if (details) {
+                        details = details.replace(/"/g, '""');
+                    }
+                    
+                    csvContent += `${date},${time},${activity.type || ''},"${details}",${status}\n`;
                 });
                 
                 // Create download link
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement('a');
                 link.setAttribute('href', encodedUri);
-                link.setAttribute('download', `activity_history_${new Date().toISOString().split('T')[0]}.csv`);
+                link.setAttribute('download', `investment_activity_${new Date().toISOString().split('T')[0]}.csv`);
                 document.body.appendChild(link);
                 
                 // Trigger download
@@ -1321,17 +1624,17 @@ body {
             });
         }
         
-        // Clean up old activities (older than 7 days)
+        // Clean up old activities (older than retention days)
         function cleanupOldActivities() {
             const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Filter activities to only keep those from the last 7 days
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - ACTIVITY_RETENTION_DAYS);
+            // Filter activities to only keep those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
             const recentActivities = activities.filter(activity => {
                 const activityDate = new Date(activity.timestamp);
-                return activityDate >= sevenDaysAgo;
+                return activityDate >= cutoffDate;
             });
             
             // Save filtered activities back to localStorage
@@ -1351,7 +1654,16 @@ body {
                 }
                 
                 const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-                if (activities.length === 0) {
+                
+                // Filter to only investment and withdrawal activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing';
+                });
+                
+                if (filteredActivities.length === 0) {
                     console.log('No activities to sync');
                     return;
                 }
@@ -1378,7 +1690,7 @@ body {
                 console.log('Activity table field mapping:', fieldMap);
                 
                 // Check if required fields exist
-                const requiredFields = ['user_email', 'activity_type', 'activity_details', 'timestamp', 'page'];
+                const requiredFields = ['user_email', 'activity_type', 'activity_details', 'timestamp', 'status'];
                 const missingFields = requiredFields.filter(field => !fieldMap[field]);
                 
                 if (missingFields.length > 0) {
@@ -1387,7 +1699,7 @@ body {
                 }
                 
                 // Prepare activities for batch upload
-                const activitiesToSync = activities.slice(0, 50); // Limit to 50 most recent activities
+                const activitiesToSync = filteredActivities.slice(0, 20); // Limit to 20 most recent activities
                 
                 // Create rows for each activity
                 for (const activity of activitiesToSync) {
@@ -1413,8 +1725,19 @@ body {
                     // Set timestamp
                     rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp || new Date().toISOString();
                     
-                    // Set page
-                    rowData[`field_${fieldMap['page']}`] = activity.page || '';
+                    // Set status
+                    let status = 'pending';
+                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                        if (activity.details && activity.details.status) {
+                            status = activity.details.status;
+                        }
+                    } else if (activity.type === 'investment_attempt') {
+                        status = activity.success ? 'success' : 'failed';
+                    } else if (activity.type === 'investment_processing') {
+                        status = 'processing';
+                    }
+                    
+                    rowData[`field_${fieldMap['status']}`] = status;
                     
                     // Create row in Baserow
                     try {
