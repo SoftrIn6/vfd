@@ -329,14 +329,15 @@
 
         /* Features Grid */
         .features-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            justify-content: space-between;
             gap: 15px;
             margin: 20px 10px;
             background-color: white;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            flex-wrap: nowrap;
         }
 
         .feature-item {
@@ -346,6 +347,7 @@
             text-decoration: none;
             color: #333;
             transition: transform 0.3s ease;
+            flex: 1;
         }
 
         .feature-item:hover {
@@ -665,7 +667,7 @@
             margin-bottom: 5px;
         }
 
-        /* Animation for balance counter */
+        /* Add this to the existing animation for balance counter */
         @keyframes countUp {
             from {
                 opacity: 0;
@@ -964,9 +966,17 @@
             }
             
             .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 15px;
+                flex-wrap: nowrap;
+                gap: 5px;
+                padding: 15px 10px;
+            }
+            
+            .feature-item {
+                flex: 1;
+            }
+            
+            .feature-name {
+                font-size: 10px;
             }
             
             .promo-subtitle {
@@ -1017,18 +1027,22 @@
             <div class="balance-label">Total Account Balance</div>
             <div class="balance-amount" id="total-assets">$0.00</div>
             <div class="balance-actions">
-                <div class="balance-action" id="add-money" title="Add Money">
+                <a href="recharge.html" class="balance-action" id="add-money" title="Add Money">
                     <i class="fas fa-plus"></i>
-                </div>
-                <div class="balance-action" id="withdraw-money" title="Withdraw">
+                </a>
+                <a href="withdraw.html" class="balance-action" id="withdraw-money" title="Withdraw">
                     <i class="fas fa-arrow-down"></i>
-                </div>
-                <div class="balance-action" id="invest-money" title="Invest">
+                </a>
+                <a href="exchange.html" class="balance-action" id="invest-money" title="Invest">
                     <i class="fas fa-chart-line"></i>
-                </div>
+                </a>
             </div>
             <div class="balance-illustration">
                 <i class="fas fa-coins" style="font-size: 100px;"></i>
+            </div>
+        </div>
+
+        <!-- Financial Data  style="font-size: 100px;"></i>
             </div>
         </div>
 
@@ -1090,7 +1104,7 @@
                 <img src="image/icons8-coins.gif?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
                 <div class="feature-name">Withdraw</div>
             </a>
-            <a href="reviews.html" class="feature-item" id="team">
+            <a href="exchange.html" class="feature-item" id="team">
                 <img src="image/icons8-comments.gif?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
                 <div class="feature-name">Exchange</div>
             </a>
@@ -1398,19 +1412,6 @@
                     // Redirect to login page
                     window.location.href = 'login.html';
                 }
-            });
-            
-            // Action buttons functionality
-            document.getElementById('add-money').addEventListener('click', function() {
-                window.location.href = 'recharge.html';
-            });
-            
-            document.getElementById('withdraw-money').addEventListener('click', function() {
-                window.location.href = 'withdraw.html';
-            });
-            
-            document.getElementById('invest-money').addEventListener('click', function() {
-                window.location.href = 'invest.html';
             });
             
             // Refresh button functionality
@@ -2028,6 +2029,9 @@
                     console.error('No user email found for syncing activities');
                     return;
                 }
+                
+                // Get activities from localStorage
+                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
                 
                 // Filter to include investment, withdrawal, and deposit activities
                 const filteredActivities = activities.filter(activity => {
