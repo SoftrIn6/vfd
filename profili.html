@@ -857,12 +857,12 @@
         .stat-circle-bg {
             fill: none;
             stroke: #f0f0f0;
-            stroke-width: 6;
+            stroke-width: 4;
         }
 
         .stat-circle-progress {
             fill: none;
-            stroke-width: 6;
+            stroke-width: 4;
             stroke-linecap: round;
             transition: stroke-dashoffset 3s ease;
         }
@@ -881,10 +881,10 @@
 
         .stat-percentage {
             position: absolute;
-            top: 40%;
-            left: 38%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 18px;
+            font-size: 12px;
             font-weight: bold;
             color: #333;
         }
@@ -1345,10 +1345,7 @@
             depositTableId: '488476'    // Table ID for new_deposit
         };
 
-        // Check if user is logged in when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set up Intersection Observer for scroll animations
-            setupScrollAnimations();
+      
 
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
