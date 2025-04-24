@@ -918,6 +918,15 @@
             animation: countUpStat 1s ease-out forwards;
         }
 
+        /* Scroll Animation Styles */
+        .balance-action {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .promo-card {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
             .container {
@@ -1316,7 +1325,7 @@
     <script>
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
-        const ACTIVITY_RETENTION_DAYS = 3; // Show activities from last 3 days
+        const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
         
         // Baserow API configuration
         const BASEROW_API = {
@@ -1329,6 +1338,9 @@
 
         // Check if user is logged in when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Set up Intersection Observer for scroll animations
+            setupScrollAnimations();
+
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
@@ -1380,7 +1392,9 @@
             
             // Sign out functionality - Fixed implementation
             document.getElementById('sign-out-btn').addEventListener('click', function() {
+                console.log('Sign out button clicked');
                 if (confirm('Are you sure you want to sign out?')) {
+                    console.log('Sign out confirmed');
                     // Clear authentication data
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('userData');
@@ -1425,142 +1439,108 @@
             cleanupOldActivities();
         });
         
-        // Setup balance animation
-        function setupBalanceAnimation() {
-            const balanceElement = document.getElementById('total-assets');
-            
-            // Function to animate counting up
-            function animateValue(start, end, duration) {
-                balanceElement.classList.remove('animate-count');
+    // Setup scroll animations using Intersection Observer
+    function setupScrollAnimations() {
+        // Sections that should animate when scrolled into view
+        const animatedSections = [
+            { selector: '.balance-card', animationFunction: animateBalanceSection },
+            { selector: '.promo-section', animationFunction: animatePromoSection },
+            { selector: '.weekly-stats-section', animationFunction: animateWeeklyStats },
+            { selector: '.monthly-stats-section', animationFunction: animateMonthlyStats }
+        ];
+        
+        // Create an Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Find the animation function for this section
+                const section = animatedSections.find(s => entry.target.matches(s.selector) || 
+                                                         entry.target.querySelector(s.selector));
                 
-                // Force reflow to restart animation
-                void balanceElement.offsetWidth;
-                
-                balanceElement.classList.add('animate-count');
-                
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                    if (!startTimestamp) startTimestamp = timestamp;
-                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    const currentValue = progress * (end - start) + start;
-                    balanceElement.textContent = '$' + currentValue.toFixed(2);
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    } else {
-                        balanceElement.textContent = '$' + end.toFixed(2);
-                    }
-                };
-                window.requestAnimationFrame(step);
-            }
-            
-            // Store the original updateFinancialValue function
-            const originalUpdateFinancialValue = window.updateFinancialValue;
-            
-            // Override the updateFinancialValue function for total-assets
-            window.updateFinancialValue = function(elementId, value) {
-                if (elementId === 'total-assets') {
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        let formattedValue = '0.00';
-                        
-                        if (value !== undefined && value !== null && value !== '') {
-                            if (!isNaN(parseFloat(value))) {
-                                formattedValue = parseFloat(value).toFixed(2);
-                                
-                                // Get current value without $ sign
-                                const currentValueText = element.textContent.replace('$', '');
-                                const currentValue = parseFloat(currentValueText) || 0;
-                                
-                                // Animate from current value to new value
-                                animateValue(currentValue, parseFloat(formattedValue), 1000);
-                                return;
-                            } else {
-                                formattedValue = value;
-                                if (!formattedValue.includes('.')) {
-                                    formattedValue += '.00';
-                                }
-                            }
-                        }
-                        
-                        // If we can't animate, just set the value
-                        element.textContent = '$' + formattedValue;
-                    }
-                } else if (elementId === 'quantitative-account' || 
-                      elementId === 'smart-account' || 
-                      elementId === 'profit-assets' || 
-                      elementId === 'total-revenue' || 
-                      elementId === 'yesterday-earnings' || 
-                      elementId === 'today-earnings') {
-                // Animate these financial values with a 1 second animation
-                const element = document.getElementById(elementId);
-                if (element) {
-                    let formattedValue = '0.00';
-                    
-                    if (value !== undefined && value !== null && value !== '') {
-                        if (!isNaN(parseFloat(value))) {
-                            formattedValue = parseFloat(value).toFixed(2);
-                            
-                            // Get current value without $ sign
-                            const currentValueText = element.textContent.replace('$', '');
-                            const currentValue = parseFloat(currentValueText) || 0;
-                            
-                            // Add animation class
-                            element.classList.remove('animate-count');
-                            void element.offsetWidth; // Force reflow
-                            element.classList.add('animate-count');
-                            
-                            // Animate from current value to new value
-                            let startTimestamp = null;
-                            const step = (timestamp) => {
-                                if (!startTimestamp) startTimestamp = timestamp;
-                                const progress = Math.min((timestamp - startTimestamp) / 1000, 1);
-                                const currentVal = progress * (parseFloat(formattedValue) - currentValue) + currentValue;
-                                element.textContent = '$' + currentVal.toFixed(2);
-                                if (progress < 1) {
-                                    window.requestAnimationFrame(step);
-                                } else {
-                                    element.textContent = '$' + formattedValue;
-                                }
-                            };
-                            window.requestAnimationFrame(step);
-                            return;
-                        } else {
-                            formattedValue = value;
-                            if (!formattedValue.includes('.')) {
-                                formattedValue += '.00';
-                            }
-                        }
-                    }
-                    
-                    // If we can't animate, just set the value
-                    element.textContent = '$' + formattedValue;
+                if (section && entry.isIntersecting) {
+                    // Call the animation function when section is visible
+                    section.animationFunction(entry.target);
                 }
-            } else {
-                // For other elements, use the original function
-                if (typeof originalUpdateFinancialValue === 'function') {
-                    originalUpdateFinancialValue(elementId, value);
-                } else {
-                    // Fallback if original function is not defined
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        let formattedValue = '0.00';
-                        
-                        if (value !== undefined && value !== null && value !== '') {
-                            if (!isNaN(parseFloat(value))) {
-                                formattedValue = parseFloat(value).toFixed(2);
-                            } else {
-                                formattedValue = value;
-                                if (!formattedValue.includes('.')) {
-                                    formattedValue += '.00';
-                                }
-                            }
-                        }
-                        
-                        element.textContent = '$' + formattedValue;
-                    }
-                }
+            });
+        }, {
+            root: null, // viewport
+            threshold: 0.2, // trigger when 20% of the element is visible
+            rootMargin: '0px'
+        });
+        
+        // Observe all animated sections
+        animatedSections.forEach(section => {
+            const elements = document.querySelectorAll(section.selector);
+            elements.forEach(el => observer.observe(el));
+        });
+    }
+    
+    // Animation functions for each section
+    function animateBalanceSection(section) {
+        // Get the balance amount element
+        const balanceElement = section.querySelector('.balance-amount');
+        if (!balanceElement) return;
+        
+        // Get current value without $ sign
+        const currentValueText = balanceElement.textContent.replace('$', '');
+        const currentValue = parseFloat(currentValueText) || 0;
+        
+        // Add animation class
+        balanceElement.classList.remove('animate-count');
+        void balanceElement.offsetWidth; // Force reflow
+        balanceElement.classList.add('animate-count');
+        
+        // Animate the balance actions
+        const actions = section.querySelectorAll('.balance-action');
+        actions.forEach((action, index) => {
+            action.style.opacity = '0';
+            action.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                action.style.transition = 'all 0.5s ease';
+                action.style.opacity = '1';
+                action.style.transform = 'translateY(0)';
+            }, 300 + (index * 100));
+        });
+    }
+    
+    function animatePromoSection(section) {
+        // Animate each promo card with a staggered delay
+        const cards = section.querySelectorAll('.promo-card');
+        
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 + (index * 100));
+            
+            // Also animate the financial values inside
+            const valueElement = card.querySelector('.promo-subtitle');
+            if (valueElement) {
+                valueElement.classList.remove('animate-count');
+                void valueElement.offsetWidth; // Force reflow
+                valueElement.classList.add('animate-count');
             }
-        };
+        });
+    }
+    
+    function animateWeeklyStats(section) {
+        // Get the user data and regenerate the chart with animation
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        if (userData.email) {
+            generateWeeklyChart(userData, true);
+        }
+    }
+    
+    function animateMonthlyStats(section) {
+        // Get the user data and regenerate the monthly stats with animation
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        if (userData.email) {
+            generateMonthlyStats(userData, true);
+        }
     }
         
         // Fetch user data from Baserow
@@ -1735,12 +1715,14 @@
                 return activityDate >= cutoffDate;
             });
             
-            // Filter to only show investment and withdrawal activities
+            // Filter to show investment, withdrawal, and deposit activities
             const filteredActivities = recentActivities.filter(activity => {
                 return activity.type === 'withdrawal_request' || 
                        activity.type === 'form_submission' || 
                        activity.type === 'investment_attempt' || 
-                       activity.type === 'investment_processing';
+                       activity.type === 'investment_processing' || 
+                       activity.type === 'deposit' ||
+                       activity.type === 'deposit_processing';
             });
             
             // Sort activities by timestamp (newest first)
@@ -1751,22 +1733,15 @@
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display activities or empty message
-            if (filteredActivities.length === 0) {
-                activityList.innerHTML = '<div class="activity-empty">No investment or withdrawal activities found.</div>';
-                document.getElementById('activity-load-more').style.display = 'none';
-                return;
-            }
-            
-            // Display first 3 activities
-            const activitiesToShow = filteredActivities.slice(0, 3);
+            // Display first 5 activities
+            const activitiesToShow = filteredActivities.slice(0, 5);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
                 activityList.appendChild(activityItem);
             });
             
             // Show/hide load more button
-            if (filteredActivities.length > 3) {
+            if (filteredActivities.length > 5) {
                 document.getElementById('activity-load-more').style.display = 'block';
                 document.getElementById('activity-load-more').onclick = () => {
                     // Show all activities
@@ -1819,6 +1794,30 @@
                             if (activity.details.status === 'success') {
                                 status = '<div class="activity-status success">Success</div>';
                             } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                status = '<div class="activity-status failed">Failed</div>';
+                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                            } else {
+                                status = '<div class="activity-status pending">Pending</div>';
+                            }
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'deposit':
+                case 'deposit_processing':
+                    title = activity.type === 'deposit' ? 'Deposit' : 'Deposit Processing';
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const method = activity.details.paymentMethod || '';
+                            details = `Amount: ${amount} USD via ${method}`;
+                            
+                            if (activity.details.status === 'success') {
+                                status = '<div class="activity-status success">Success</div>';
+                            } else if (activity.details.status === 'rejected') {
                                 status = '<div class="activity-status failed">Failed</div>';
                                 details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
                             } else {
@@ -1885,12 +1884,14 @@
             document.getElementById('activity-export').addEventListener('click', function() {
                 const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
                 
-                // Filter to only investment and withdrawal activities
+                // Filter to include investment, withdrawal, and deposit activities
                 const filteredActivities = activities.filter(activity => {
                     return activity.type === 'withdrawal_request' || 
                            activity.type === 'form_submission' || 
                            activity.type === 'investment_attempt' || 
-                           activity.type === 'investment_processing';
+                           activity.type === 'investment_processing' ||
+                           activity.type === 'deposit' ||
+                           activity.type === 'deposit_processing';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -1923,6 +1924,28 @@
                                     if (activity.details.status === 'success') {
                                         status = 'Success';
                                     } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                        status = 'Failed';
+                                        details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
+                                    } else {
+                                        status = 'Pending';
+                                    }
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                            
+                        case 'deposit':
+                        case 'deposit_processing':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const method = activity.details.paymentMethod || '';
+                                    details = `Amount: ${amount} USD via ${method}`;
+                                    
+                                    if (activity.details.status === 'success') {
+                                        status = 'Success';
+                                    } else if (activity.details.status === 'rejected') {
                                         status = 'Failed';
                                         details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
                                     } else {
@@ -2010,14 +2033,14 @@
                     return;
                 }
                 
-                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-                
-                // Filter to only investment and withdrawal activities
+                // Filter to include investment, withdrawal, and deposit activities
                 const filteredActivities = activities.filter(activity => {
                     return activity.type === 'withdrawal_request' || 
                            activity.type === 'form_submission' || 
                            activity.type === 'investment_attempt' || 
-                           activity.type === 'investment_processing';
+                           activity.type === 'investment_processing' ||
+                           activity.type === 'deposit' ||
+                           activity.type === 'deposit_processing';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -2084,13 +2107,13 @@
                     
                     // Set status
                     let status = 'pending';
-                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission' || activity.type === 'deposit') {
                         if (activity.details && activity.details.status) {
                             status = activity.details.status;
                         }
                     } else if (activity.type === 'investment_attempt') {
                         status = activity.success ? 'success' : 'failed';
-                    } else if (activity.type === 'investment_processing') {
+                    } else if (activity.type === 'investment_processing' || activity.type === 'deposit_processing') {
                         status = 'processing';
                     }
                     
@@ -2510,6 +2533,26 @@ function generateMonthlyStats(userData, animate = true) {
         
         return userData;
     };
+    
+    // Additional direct sign out handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const signOutBtn = document.getElementById('sign-out-btn');
+        if (signOutBtn) {
+            signOutBtn.onclick = function() {
+                console.log('Sign out button clicked (direct handler)');
+                if (confirm('Are you sure you want to sign out?')) {
+                    console.log('Sign out confirmed (direct handler)');
+                    // Clear authentication data
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    
+                    // Force redirect to login page
+                    window.location.replace('login.html');
+                }
+                return false; // Prevent any default action
+            };
+        }
+    });
 </script>
 </body>
 </html>
