@@ -1345,7 +1345,10 @@
             depositTableId: '488476'    // Table ID for new_deposit
         };
 
-      
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up Intersection Observer for scroll animations
+            setupScrollAnimations();
 
             const authToken = localStorage.getItem('authToken');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
