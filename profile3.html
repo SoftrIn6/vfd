@@ -2190,8 +2190,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     const yAxis = document.createElement('div');
     yAxis.className = 'chart-y-axis';
     
-    // Find max value for scaling
-    let maxValue = 60; // Default max value
+    // Find max value for scaling - set to $50,000 as 100%
+    const MAX_VALUE = 50000;
+    const DISPLAY_MAX = 60; // Max height in pixels
     
     // Add y-axis labels
     const yAxisValues = ['60', '40', '20', '0'];
@@ -2340,8 +2341,8 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                     amount = parseFloat(activity.totalAmount) || 0;
                 }
                 
-                // Scale amount for visualization (1 unit = $1)
-                const scaledAmount = Math.min(60, amount); // Cap at 60 for display
+                // Calculate percentage of MAX_VALUE and scale to display height
+                const scaledAmount = Math.min(DISPLAY_MAX, (amount / MAX_VALUE) * DISPLAY_MAX);
                 
                 // Update day data based on activity type
                 if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
@@ -2381,8 +2382,8 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                     // Find matching day
                     const dayData = last7Days.find(day => day.date.getTime() === investmentDate.getTime());
                     if (dayData) {
-                        // Scale amount for visualization
-                        const scaledAmount = Math.min(60, investmentAmount);
+                        // Calculate percentage of MAX_VALUE and scale to display height
+                        const scaledAmount = Math.min(DISPLAY_MAX, (investmentAmount / MAX_VALUE) * DISPLAY_MAX);
                         dayData.investment += scaledAmount;
                     }
                 }
@@ -2413,8 +2414,8 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                     // Find matching day
                     const dayData = last7Days.find(day => day.date.getTime() === depositDate.getTime());
                     if (dayData) {
-                        // Scale amount for visualization
-                        const scaledAmount = Math.min(60, depositAmount);
+                        // Calculate percentage of MAX_VALUE and scale to display height
+                        const scaledAmount = Math.min(DISPLAY_MAX, (depositAmount / MAX_VALUE) * DISPLAY_MAX);
                         dayData.deposit += scaledAmount;
                     }
                 }
@@ -2445,8 +2446,8 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                     // Find matching day
                     const dayData = last7Days.find(day => day.date.getTime() === withdrawalDate.getTime());
                     if (dayData) {
-                        // Scale amount for visualization
-                        const scaledAmount = Math.min(60, withdrawalAmount);
+                        // Calculate percentage of MAX_VALUE and scale to display height
+                        const scaledAmount = Math.min(DISPLAY_MAX, (withdrawalAmount / MAX_VALUE) * DISPLAY_MAX);
                         dayData.withdrawal += scaledAmount;
                     }
                 }
@@ -2463,10 +2464,10 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
             const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
             const totalRevenue = parseFloat(userData.total_revenue) || 10;
             
-            // Scale values for visualization
-            const baseInvestment = Math.min(60, smartAccount / 2);
-            const baseDeposit = Math.min(60, quantitativeAccount / 2);
-            const baseWithdrawal = Math.min(60, totalRevenue / 2);
+            // Scale values for visualization based on percentage of MAX_VALUE
+            const baseInvestment = Math.min(DISPLAY_MAX, (smartAccount / MAX_VALUE) * DISPLAY_MAX);
+            const baseDeposit = Math.min(DISPLAY_MAX, (quantitativeAccount / MAX_VALUE) * DISPLAY_MAX);
+            const baseWithdrawal = Math.min(DISPLAY_MAX, (totalRevenue / MAX_VALUE) * DISPLAY_MAX);
             
             // Generate random variations for each day
             last7Days.forEach((day, index) => {
@@ -2541,10 +2542,10 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
         const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
         const totalRevenue = parseFloat(userData.total_revenue) || 10;
         
-        // Scale values for visualization
-        const baseInvestment = Math.min(60, smartAccount / 2);
-        const baseDeposit = Math.min(60, quantitativeAccount / 2);
-        const baseWithdrawal = Math.min(60, totalRevenue / 2);
+        // Scale values for visualization based on percentage of MAX_VALUE
+        const baseInvestment = Math.min(DISPLAY_MAX, (smartAccount / MAX_VALUE) * DISPLAY_MAX);
+        const baseDeposit = Math.min(DISPLAY_MAX, (quantitativeAccount / MAX_VALUE) * DISPLAY_MAX);
+        const baseWithdrawal = Math.min(DISPLAY_MAX, (totalRevenue / MAX_VALUE) * DISPLAY_MAX);
         
         // Generate random variations for each day
         last7Days.forEach((day, index) => {
@@ -2614,6 +2615,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 
 // Find the generateMonthlyStats function and replace it with this updated version that uses real user data:
 function generateMonthlyStats(userData, animate = true, activities = []) {
+    // Define max value for 100% (50,000)
+    const MAX_VALUE = 50000;
+    
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
@@ -2624,7 +2628,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             const thirtyOneDaysAgo = new Date();
             thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
             
-            // Fetch data from invest_activities table for investments
+            // Fetch data from invest_activities table
             const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
                 method: 'GET',
                 headers: {
@@ -2638,7 +2642,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const investData = await investResponse.json();
-            console.log('Investment data from Baserow:', investData);
             
             // Filter for the current user's investments in the last 31 days
             let totalInvestment = 0;
@@ -2671,9 +2674,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                 }
             });
             
-            console.log('Total investment for user in last 31 days:', totalInvestment);
-            
-            // Fetch data from new_deposit table for deposits
+            // Fetch data from new_deposit table
             const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
                 method: 'GET',
                 headers: {
@@ -2687,7 +2688,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const depositData = await depositResponse.json();
-            console.log('Deposit data from Baserow:', depositData);
             
             // Filter for the current user's deposits in the last 31 days
             let totalDeposit = 0;
@@ -2708,7 +2708,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                         depositDate = new Date(item[key]);
                     }
                     
-                    // Look for amount field
+                    // Look for amount field (numeric value)
                     if (!isNaN(parseFloat(item[key]))) {
                         depositAmount = parseFloat(item[key]);
                     }
@@ -2720,9 +2720,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                 }
             });
             
-            console.log('Total deposit for user in last 31 days:', totalDeposit);
-            
-            // Fetch data from total_revenue table for withdrawals
+            // Fetch data from total_revenue table
             const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
                 method: 'GET',
                 headers: {
@@ -2736,7 +2734,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const withdrawalData = await withdrawalResponse.json();
-            console.log('Withdrawal data from Baserow:', withdrawalData);
             
             // Filter for the current user's withdrawals in the last 31 days
             let totalWithdrawal = 0;
@@ -2757,7 +2754,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                         withdrawalDate = new Date(item[key]);
                     }
                     
-                    // Look for amount field
+                    // Look for amount field (numeric value)
                     if (!isNaN(parseFloat(item[key]))) {
                         withdrawalAmount = parseFloat(item[key]);
                     }
@@ -2768,8 +2765,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                     totalWithdrawal += withdrawalAmount;
                 }
             });
-            
-            console.log('Total withdrawal for user in last 31 days:', totalWithdrawal);
             
             return {
                 investment: totalInvestment,
@@ -2788,29 +2783,15 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     
     // Fetch user-specific monthly data
     fetchUserMonthlyData().then(monthlyData => {
-        console.log('Monthly data fetched:', monthlyData);
+        // Calculate actual values from user data and Baserow data
+        const monthlyInvestment = monthlyData.investment || parseFloat(userData.smart_account) || 0;
+        const monthlyDeposit = monthlyData.deposit || parseFloat(userData.quantitative_account) || 0;
+        const monthlyWithdrawal = monthlyData.withdrawal || parseFloat(userData.total_revenue) || 0;
         
-        // Calculate actual values from Baserow data
-        const monthlyInvestment = monthlyData.investment || 0;
-        const monthlyDeposit = monthlyData.deposit || 0;
-        const monthlyWithdrawal = monthlyData.withdrawal || 0;
-        
-        // Ensure we have some minimum values for visualization
-        const minInvestment = Math.max(monthlyInvestment, 10);
-        const minDeposit = Math.max(monthlyDeposit, 5);
-        const minWithdrawal = Math.max(monthlyWithdrawal, 15);
-        
-        // Calculate percentages relative to total monthly activity
-        const monthlyTotal = minInvestment + minDeposit + minWithdrawal;
-        const investmentPercentage = Math.min(100, Math.round((minInvestment / monthlyTotal) * 100)) || 25;
-        const depositPercentage = Math.min(100, Math.round((minDeposit / monthlyTotal) * 100)) || 15;
-        const withdrawalPercentage = Math.min(100, Math.round((minWithdrawal / monthlyTotal) * 100)) || 60;
-        
-        console.log('Monthly stats percentages:', {
-            investment: investmentPercentage,
-            deposit: depositPercentage,
-            withdrawal: withdrawalPercentage
-        });
+        // Calculate percentages relative to MAX_VALUE (50,000)
+        const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / MAX_VALUE) * 100)) || 0;
+        const depositPercentage = Math.min(100, Math.round((monthlyDeposit / MAX_VALUE) * 100)) || 0;
+        const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / MAX_VALUE) * 100)) || 0;
         
         // Update circle progress
         const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2859,7 +2840,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         animateStatValue('deposit-percentage', 0, depositPercentage, '%');
         animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
         
-        // Show actual amounts from Baserow data
         animateStatValue('investment-amount', 0, monthlyInvestment, '$');
         animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
         animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
@@ -2867,16 +2847,14 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         console.error('Error processing monthly stats:', error);
         
         // If there's an error, fall back to using account values
-        const totalAssets = parseFloat(userData.total_assets) || 100;
-        const smartAccount = parseFloat(userData.smart_account) || 20;
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-        const totalRevenue = parseFloat(userData.total_revenue) || 15;
+        const smartAccount = parseFloat(userData.smart_account) || 0;
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
+        const totalRevenue = parseFloat(userData.total_revenue) || 0;
         
-        // Calculate percentages relative to total
-        const total = smartAccount + quantitativeAccount + totalRevenue;
-        const investmentPercentage = Math.min(100, Math.round((smartAccount / total) * 100)) || 25;
-        const depositPercentage = Math.min(100, Math.round((quantitativeAccount / total) * 100)) || 15;
-        const withdrawalPercentage = Math.min(100, Math.round((totalRevenue / total) * 100)) || 60;
+        // Calculate percentages relative to MAX_VALUE (50,000)
+        const investmentPercentage = Math.min(100, Math.round((smartAccount / MAX_VALUE) * 100)) || 0;
+        const depositPercentage = Math.min(100, Math.round((quantitativeAccount / MAX_VALUE) * 100)) || 0;
+        const withdrawalPercentage = Math.min(100, Math.round((totalRevenue / MAX_VALUE) * 100)) || 0;
         
         // Update circle progress
         const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2914,10 +2892,10 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         if (animate) {
             withdrawalCircle.style.strokeDashoffset = circumference;
             setTimeout(() => {
-                withdrawalCircle.style.strokeDashoffset = investmentOffset;
-            }, 300);
+                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+            }, 900);
         } else {
-            withdrawalCircle.style.strokeDashoffset = investmentOffset;
+            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
         }
         
         // Update percentages and amounts with animation
@@ -2931,31 +2909,31 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     });
 }
 
-function animateStatValue(elementId, start, end, prefix = '') {
-    const element = document.getElementById(elementId);
-    if (!element) return;
+// Fix the sign-out button functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Other existing code...
     
-    const duration = 1000; // Animation duration in milliseconds
-    const frameRate = 20; // Number of frames per second
-    const totalFrames = duration / frameRate;
-    let currentFrame = 0;
-    
-    const increment = (end - start) / totalFrames;
-    
-    function updateValue() {
-        currentFrame++;
-        const currentValue = start + increment * currentFrame;
-        
-        if (currentFrame >= totalFrames) {
-            element.textContent = prefix === '$' ? prefix + end.toFixed(2) : end.toFixed(0) + prefix;
-        } else {
-            element.textContent = prefix === '$' ? prefix + currentValue.toFixed(2) : currentValue.toFixed(0) + prefix;
-            requestAnimationFrame(updateValue);
-        }
+    // Sign out functionality - Ensure it's properly attached and working
+    const signOutBtn = document.getElementById('sign-out-btn');
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent any default behavior
+            console.log('Sign out button clicked');
+            
+            if (confirm('Are you sure you want to sign out?')) {
+                console.log('Sign out confirmed');
+                
+                // Clear all authentication data
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                localStorage.removeItem(USER_ACTIVITY_KEY);
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
     }
-    
-    updateValue();
-}
-    </script>
+});
+</script>
 </body>
 </html>
