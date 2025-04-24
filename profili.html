@@ -2259,102 +2259,113 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific data from Baserow for investments, deposits, and withdrawals
-    async function fetchUserActivityData() {
-        try {
-            // Fetch data from invest_activities table
-            const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!investResponse.ok) {
-                throw new Error(`HTTP error! status: ${investResponse.status}`);
+    // Find the fetchUserActivityData function and replace it with this updated version:
+
+async function fetchUserActivityData() {
+    try {
+        // Fetch data from invest_activities table for investments
+        const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
             }
-            
-            const investData = await investResponse.json();
-            
-            // Filter for the current user's investments
-            const userInvestments = investData.results.filter(item => {
-                // Find the email field in the item and check if it matches the user's email
-                for (const key in item) {
-                    if (item[key] === userEmail) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            
-            // Fetch data from new_deposit table
-            const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!depositResponse.ok) {
-                throw new Error(`HTTP error! status: ${depositResponse.status}`);
-            }
-            
-            const depositData = await depositResponse.json();
-            
-            // Filter for the current user's deposits
-            const userDeposits = depositData.results.filter(item => {
-                // Find the email field in the item and check if it matches the user's email
-                for (const key in item) {
-                    if (item[key] === userEmail) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            
-            // Fetch data from total_revenue table
-            const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!withdrawalResponse.ok) {
-                throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
-            }
-            
-            const withdrawalData = await withdrawalResponse.json();
-            
-            // Filter for the current user's withdrawals
-            const userWithdrawals = withdrawalData.results.filter(item => {
-                // Find the email field in the item and check if it matches the user's email
-                for (const key in item) {
-                    if (item[key] === userEmail) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            
-            return {
-                investments: userInvestments,
-                deposits: userDeposits,
-                withdrawals: userWithdrawals
-            };
-        } catch (error) {
-            console.error('Error fetching user activity data:', error);
-            return {
-                investments: [],
-                deposits: [],
-                withdrawals: []
-            };
+        });
+        
+        if (!investResponse.ok) {
+            throw new Error(`HTTP error! status: ${investResponse.status}`);
         }
+        
+        const investData = await investResponse.json();
+        
+        // Filter for the current user's investments
+        const userInvestments = investData.results.filter(item => {
+            // Find the email field in the item and check if it matches the user's email
+            for (const key in item) {
+                if (item[key] === userEmail) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        
+        // Fetch data from new_deposit table for deposits
+        const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!depositResponse.ok) {
+            throw new Error(`HTTP error! status: ${depositResponse.status}`);
+        }
+        
+        const depositData = await depositResponse.json();
+        
+        // Filter for the current user's deposits
+        const userDeposits = depositData.results.filter(item => {
+            // Find the email field in the item and check if it matches the user's email
+            for (const key in item) {
+                if (item[key] === userEmail) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        
+        // Fetch data from account_activity table for withdrawals
+        const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!withdrawalResponse.ok) {
+            throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
+        }
+        
+        const withdrawalData = await withdrawalResponse.json();
+        
+        // Filter for the current user's withdrawals (only withdrawal activities)
+        const userWithdrawals = withdrawalData.results.filter(item => {
+            let isUserWithdrawal = false;
+            let isWithdrawalType = false;
+            
+            // Check if this belongs to the user and is a withdrawal activity
+            for (const key in item) {
+                // Check if this is the user's email
+                if (item[key] === userEmail) {
+                    isUserWithdrawal = true;
+                }
+                
+                // Check if this is a withdrawal activity type
+                if (item[key] === 'withdrawal_request' || item[key] === 'form_submission') {
+                    isWithdrawalType = true;
+                }
+            }
+            
+            return isUserWithdrawal && isWithdrawalType;
+        });
+        
+        return {
+            investments: userInvestments,
+            deposits: userDeposits,
+            withdrawals: userWithdrawals
+        };
+    } catch (error) {
+        console.error('Error fetching user activity data:', error);
+        return {
+            investments: [],
+            deposits: [],
+            withdrawals: []
+        };
     }
-    
+}
+
     // Process activities to get data for each day
     if (activities && activities.length > 0) {
         activities.forEach(activity => {
@@ -2432,12 +2443,12 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                 
                 for (const key in deposit) {
                     // Look for date field
-                    if (typeof deposit[key] === 'string' && deposit[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        depositDate = new Date(deposit[key]);
+                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        depositDate = new Date(investment[key]);
                     }
                     // Look for amount field (numeric value)
-                    else if (!isNaN(parseFloat(deposit[key]))) {
-                        depositAmount = parseFloat(deposit[key]);
+                    else if (!isNaN(parseFloat(investment[key]))) {
+                        depositAmount = parseFloat(investment[key]);
                     }
                 }
                 
@@ -2464,12 +2475,12 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                 
                 for (const key in withdrawal) {
                     // Look for date field
-                    if (typeof withdrawal[key] === 'string' && withdrawal[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        withdrawalDate = new Date(withdrawal[key]);
+                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        withdrawalDate = new Date(investment[key]);
                     }
                     // Look for amount field (numeric value)
-                    else if (!isNaN(parseFloat(withdrawal[key]))) {
-                        withdrawalAmount = parseFloat(withdrawal[key]);
+                    else if (!isNaN(parseFloat(investment[key]))) {
+                        withdrawalAmount = parseFloat(investment[key]);
                     }
                 }
                 
@@ -2654,166 +2665,205 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific data from Baserow for investments, deposits, and withdrawals
-    async function fetchUserMonthlyData() {
-        try {
-            // Get the date 7 days ago (changed from 31 days)
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    // Now replace the fetchUserMonthlyData function in the generateMonthlyStats function:
+
+async function fetchUserMonthlyData() {
+    try {
+        // Get the date 7 days ago
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        // Fetch data from invest_activities table for investments
+        const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!investResponse.ok) {
+            throw new Error(`HTTP error! status: ${investResponse.status}`);
+        }
+        
+        const investData = await investResponse.json();
+        
+        // Filter for the current user's investments in the last 7 days
+        let totalInvestment = 0;
+        investData.results.forEach(item => {
+            // Check if this item belongs to the current user
+            let belongsToUser = false;
+            let investmentDate = null;
+            let investmentAmount = 0;
             
-            // Fetch data from invest_activities table
-            const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
+            for (const key in item) {
+                // Check if this is the user's email
+                if (item[key] === userEmail) {
+                    belongsToUser = true;
                 }
-            });
-            
-            if (!investResponse.ok) {
-                throw new Error(`HTTP error! status: ${investResponse.status}`);
+                
+                // Look for date field
+                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                    investmentDate = new Date(item[key]);
+                }
+                
+                // Look for amount field (numeric value)
+                if (!isNaN(parseFloat(item[key]))) {
+                    investmentAmount = parseFloat(item[key]);
+                }
             }
             
-            const investData = await investResponse.json();
+            // If this investment belongs to the user and is within the last 7 days
+            if (belongsToUser && investmentDate && investmentDate >= sevenDaysAgo) {
+                totalInvestment += investmentAmount;
+            }
+        });
+        
+        // Fetch data from new_deposit table for deposits
+        const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!depositResponse.ok) {
+            throw new Error(`HTTP error! status: ${depositResponse.status}`);
+        }
+        
+        const depositData = await depositResponse.json();
+        
+        // Filter for the current user's deposits in the last 7 days
+        let totalDeposit = 0;
+        depositData.results.forEach(item => {
+            // Check if this item belongs to the current user
+            let belongsToUser = false;
+            let depositDate = null;
+            let depositAmount = 0;
             
-            // Filter for the current user's investments in the last 7 days
-            let totalInvestment = 0;
-            investData.results.forEach(item => {
-                // Check if this item belongs to the current user
-                let belongsToUser = false;
-                let investmentDate = null;
-                let investmentAmount = 0;
-                
-                for (const key in item) {
-                    // Check if this is the user's email
-                    if (item[key] === userEmail) {
-                        belongsToUser = true;
-                    }
-                    
-                    // Look for date field
-                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        investmentDate = new Date(item[key]);
-                    }
-                    
-                    // Look for amount field (numeric value)
-                    if (!isNaN(parseFloat(item[key]))) {
-                        investmentAmount = parseFloat(item[key]);
-                    }
+            for (const key in item) {
+                // Check if this is the user's email
+                if (item[key] === userEmail) {
+                    belongsToUser = true;
                 }
                 
-                // If this investment belongs to the user and is within the last 7 days
-                if (belongsToUser && investmentDate && investmentDate >= sevenDaysAgo) {
-                    totalInvestment += investmentAmount;
+                // Look for date field
+                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                    depositDate = new Date(item[key]);
                 }
-            });
-            
-            // Fetch data from new_deposit table
-            const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
+                
+                // Look for amount field (numeric value)
+                if (!isNaN(parseFloat(item[key]))) {
+                    depositAmount = parseFloat(item[key]);
                 }
-            });
-            
-            if (!depositResponse.ok) {
-                throw new Error(`HTTP error! status: ${depositResponse.status}`);
             }
             
-            const depositData = await depositResponse.json();
+            // If this deposit belongs to the user and is within the last 7 days
+            if (belongsToUser && depositDate && depositDate >= sevenDaysAgo) {
+                totalDeposit += depositAmount;
+            }
+        });
+        
+        // Fetch data from account_activity table for withdrawals
+        const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!withdrawalResponse.ok) {
+            throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
+        }
+        
+        const withdrawalData = await withdrawalResponse.json();
+        
+        // Filter for the current user's withdrawals in the last 7 days (only withdrawal activities)
+        let totalWithdrawal = 0;
+        withdrawalData.results.forEach(item => {
+            // Check if this item belongs to the current user and is a withdrawal
+            let belongsToUser = false;
+            let isWithdrawalType = false;
+            let withdrawalDate = null;
+            let withdrawalAmount = 0;
             
-            // Filter for the current user's deposits in the last 7 days
-            let totalDeposit = 0;
-            depositData.results.forEach(item => {
-                // Check if this item belongs to the current user
-                let belongsToUser = false;
-                let depositDate = null;
-                let depositAmount = 0;
-                
-                for (const key in item) {
-                    // Check if this is the user's email
-                    if (item[key] === userEmail) {
-                        belongsToUser = true;
-                    }
-                    
-                    // Look for date field
-                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        depositDate = new Date(item[key]);
-                    }
-                    
-                    // Look for amount field (numeric value)
-                    if (!isNaN(parseFloat(item[key]))) {
-                        depositAmount = parseFloat(item[key]);
-                    }
+            for (const key in item) {
+                // Check if this is the user's email
+                if (item[key] === userEmail) {
+                    belongsToUser = true;
                 }
                 
-                // If this deposit belongs to the user and is within the last 7 days
-                if (belongsToUser && depositDate && depositDate >= sevenDaysAgo) {
-                    totalDeposit += depositAmount;
+                // Check if this is a withdrawal activity type
+                if (item[key] === 'withdrawal_request' || item[key] === 'form_submission') {
+                    isWithdrawalType = true;
                 }
-            });
-            
-            // Fetch data from total_revenue table
-            const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
+                
+                // Look for date field
+                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                    withdrawalDate = new Date(item[key]);
                 }
-            });
-            
-            if (!withdrawalResponse.ok) {
-                throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
+                
+                // Look for amount field (numeric value)
+                if (!isNaN(parseFloat(item[key]))) {
+                    withdrawalAmount = parseFloat(item[key]);
+                }
             }
             
-            const withdrawalData = await withdrawalResponse.json();
-            
-            // Filter for the current user's withdrawals in the last 7 days
-            let totalWithdrawal = 0;
-            withdrawalData.results.forEach(item => {
-                // Check if this item belongs to the current user
-                let belongsToUser = false;
-                let withdrawalDate = null;
-                let withdrawalAmount = 0;
-                
-                for (const key in item) {
-                    // Check if this is the user's email
-                    if (item[key] === userEmail) {
-                        belongsToUser = true;
-                    }
-                    
-                    // Look for date field
-                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        withdrawalDate = new Date(item[key]);
-                    }
-                    
-                    // Look for amount field (numeric value)
-                    if (!isNaN(parseFloat(item[key]))) {
-                        withdrawalAmount = parseFloat(item[key]);
-                    }
-                }
-                
-                // If this withdrawal belongs to the user and is within the last 7 days
-                if (belongsToUser && withdrawalDate && withdrawalDate >= sevenDaysAgo) {
-                    totalWithdrawal += withdrawalAmount;
-                }
-            });
-            
-            return {
-                investment: totalInvestment,
-                deposit: totalDeposit,
-                withdrawal: totalWithdrawal
-            };
-        } catch (error) {
-            console.error('Error fetching user monthly data:', error);
-            return {
-                investment: 0,
-                deposit: 0,
-                withdrawal: 0
-            };
+            // If this withdrawal belongs to the user, is a withdrawal type, and is within the last 7 days
+            if (belongsToUser && isWithdrawalType && withdrawalDate && withdrawalDate >= sevenDaysAgo) {
+                totalWithdrawal += withdrawalAmount;
+            }
+        });
+        
+        return {
+            investment: totalInvestment,
+            deposit: totalDeposit,
+            withdrawal: totalWithdrawal
+        };
+    } catch (error) {
+        console.error('Error fetching user monthly data:', error);
+        return {
+            investment: 0,
+            deposit: 0,
+            withdrawal: 0
+        };
+    }
+}
+
+// Add a helper function to extract amount from activity data
+function extractAmountFromActivity(activity) {
+    // Check various properties where amount might be stored
+    if (activity.details && activity.details.amount) {
+        return parseFloat(activity.details.amount) || 0;
+    } else if (activity.amount) {
+        return parseFloat(activity.amount) || 0;
+    } else if (activity.totalAmount) {
+        return parseFloat(activity.totalAmount) || 0;
+    }
+    
+    // If no amount is found, look for any numeric property
+    for (const key in activity) {
+        if (!isNaN(parseFloat(activity[key]))) {
+            return parseFloat(activity[key]);
         }
     }
     
+    return 0;
+}
+
+// Add a function to improve date extraction from Baserow data
+function extractDateFromBaserowItem(item) {
+    for (const key in item) {
+        // Look for date field in ISO format
+        if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+            return new Date(item[key]);
+        }
+    }
+    return null;
+}
+
     // Fetch user-specific monthly data
     fetchUserMonthlyData().then(monthlyData => {
         // Calculate actual values from user data and Baserow data
