@@ -1048,14 +1048,14 @@
             <div class="promo-cards">
                 <div class="promo-card">
                     <div class="promo-title">New Deposit</div>
-                    <div class="promo-subtitle" id="quantitative-account">$0.00</div>
+                    <div class="promo-subtitle" id="new-deposit">$0.00</div>
                     <div class="promo-illustration">
                         <i class="fas fa-wallet" style="font-size: 60px;"></i>
                     </div>
                 </div>
                 <div class="promo-card">
-                    <div class="promo-title">Smart Account</div>
-                    <div class="promo-subtitle" id="smart-account">$0.00</div>
+                    <div class="promo-title">Total Profits</div>
+                    <div class="promo-subtitle" id="account-activity">$0.00</div>
                     <div class="promo-illustration">
                         <i class="fas fa-brain" style="font-size: 60px;"></i>
                     </div>
@@ -1601,7 +1601,7 @@
                         total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
                         quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
                         smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                        new_deposit: user[`field_${fieldMap['new_deposit']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['new_deposit']}`] || '0.00',
                         invest_activities: user[`field_${fieldMap['invest_activities']}`] || '0.00',
                         account_activity: user[`field_${fieldMap['account_activity']}`] || '0.00',
                         profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
@@ -1668,11 +1668,14 @@
             // Update financial data with correct element IDs
             updateFinancialValue('total-assets', userData.total_assets);
             updateFinancialValue('quantitative-account', userData.new_deposit);
-            updateFinancialValue('smart-account', userData.invest_activities);
+            updateFinancialValue('invest-activities', userData.invest_activities);
             updateFinancialValue('profit-assets', userData.profit_assets);
-            updateFinancialValue('total-revenue', userData.account_activity);
+            updateFinancialValue('account-activity', userData.account_activity);
             updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
             updateFinancialValue('today-earnings', userData.today_earnings);
+	    updateFinancialValue('quantitative-account', userData.quantitative_account);
+	    updateFinancialValue('smart-account', userData.smart_account);
+	    updateFinancialValue('total-revenue', userData.total_revenue)
         }
         
         // Helper function to update financial values
