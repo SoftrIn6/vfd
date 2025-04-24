@@ -1652,6 +1652,9 @@
                 total_assets: userData.total_assets,
                 quantitative_account: userData.quantitative_account,
                 smart_account: userData.smart_account,
+                account_activity: userData.account_activity,
+                invest_activities: userData.invest_activities,
+                new_deposit: userData.new_deposit,
                 profit_assets: userData.profit_assets,
                 total_revenue: userData.total_revenue,
                 yesterday_earnings: userData.yesterday_earnings,
@@ -1661,10 +1664,10 @@
             
             // Update financial data with correct element IDs
             updateFinancialValue('total-assets', userData.total_assets);
-            updateFinancialValue('quantitative-account', userData.quantitative_account);
-            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('quantitative-account', userData.new_deposit);
+            updateFinancialValue('smart-account', userData.invest_activities);
             updateFinancialValue('profit-assets', userData.profit_assets);
-            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('total-revenue', userData.account_activity);
             updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
             updateFinancialValue('today-earnings', userData.today_earnings);
         }
@@ -2339,9 +2342,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 function generateMonthlyStats(userData, animate = true, activities = []) {
     // Calculate actual values from user data
     const totalAssets = parseFloat(userData.total_assets) || 1;
-    const invest_activities = parseFloat(userData.invest_activities) || 0;
-    const quantitativeAccount = parseFloat(userData.new_deposit) || 0;
-    const totalRevenue = parseFloat(userData.account_activity) || 0;
+    const smartAccount = parseFloat(userData.smart_account) || 0;
+    const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
+    const totalRevenue = parseFloat(userData.total_revenue) || 0;
     
     // Initialize monthly totals
     let monthlyInvestment = smartAccount;
