@@ -2624,7 +2624,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             const thirtyOneDaysAgo = new Date();
             thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
             
-            // Fetch data from invest_activities table
+            // Fetch data from invest_activities table for investments
             const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
                 method: 'GET',
                 headers: {
@@ -2638,6 +2638,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const investData = await investResponse.json();
+            console.log('Investment data from Baserow:', investData);
             
             // Filter for the current user's investments in the last 31 days
             let totalInvestment = 0;
@@ -2670,7 +2671,9 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                 }
             });
             
-            // Fetch data from new_deposit table
+            console.log('Total investment for user in last 31 days:', totalInvestment);
+            
+            // Fetch data from new_deposit table for deposits
             const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
                 method: 'GET',
                 headers: {
@@ -2684,6 +2687,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const depositData = await depositResponse.json();
+            console.log('Deposit data from Baserow:', depositData);
             
             // Filter for the current user's deposits in the last 31 days
             let totalDeposit = 0;
@@ -2704,7 +2708,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                         depositDate = new Date(item[key]);
                     }
                     
-                    // Look for amount field (numeric value)
+                    // Look for amount field
                     if (!isNaN(parseFloat(item[key]))) {
                         depositAmount = parseFloat(item[key]);
                     }
@@ -2716,7 +2720,9 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                 }
             });
             
-            // Fetch data from total_revenue table
+            console.log('Total deposit for user in last 31 days:', totalDeposit);
+            
+            // Fetch data from total_revenue table for withdrawals
             const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
                 method: 'GET',
                 headers: {
@@ -2730,6 +2736,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             }
             
             const withdrawalData = await withdrawalResponse.json();
+            console.log('Withdrawal data from Baserow:', withdrawalData);
             
             // Filter for the current user's withdrawals in the last 31 days
             let totalWithdrawal = 0;
@@ -2750,7 +2757,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                         withdrawalDate = new Date(item[key]);
                     }
                     
-                    // Look for amount field (numeric value)
+                    // Look for amount field
                     if (!isNaN(parseFloat(item[key]))) {
                         withdrawalAmount = parseFloat(item[key]);
                     }
@@ -2761,6 +2768,8 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                     totalWithdrawal += withdrawalAmount;
                 }
             });
+            
+            console.log('Total withdrawal for user in last 31 days:', totalWithdrawal);
             
             return {
                 investment: totalInvestment,
@@ -2779,10 +2788,12 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     
     // Fetch user-specific monthly data
     fetchUserMonthlyData().then(monthlyData => {
-        // Calculate actual values from user data and Baserow data
-        const monthlyInvestment = monthlyData.investment || parseFloat(userData.smart_account) || 0;
-        const monthlyDeposit = monthlyData.deposit || parseFloat(userData.quantitative_account) || 0;
-        const monthlyWithdrawal = monthlyData.withdrawal || parseFloat(userData.total_revenue) || 0;
+        console.log('Monthly data fetched:', monthlyData);
+        
+        // Calculate actual values from Baserow data
+        const monthlyInvestment = monthlyData.investment || 0;
+        const monthlyDeposit = monthlyData.deposit || 0;
+        const monthlyWithdrawal = monthlyData.withdrawal || 0;
         
         // Ensure we have some minimum values for visualization
         const minInvestment = Math.max(monthlyInvestment, 10);
@@ -2794,6 +2805,12 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         const investmentPercentage = Math.min(100, Math.round((minInvestment / monthlyTotal) * 100)) || 25;
         const depositPercentage = Math.min(100, Math.round((minDeposit / monthlyTotal) * 100)) || 15;
         const withdrawalPercentage = Math.min(100, Math.round((minWithdrawal / monthlyTotal) * 100)) || 60;
+        
+        console.log('Monthly stats percentages:', {
+            investment: investmentPercentage,
+            deposit: depositPercentage,
+            withdrawal: withdrawalPercentage
+        });
         
         // Update circle progress
         const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2842,9 +2859,10 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         animateStatValue('deposit-percentage', 0, depositPercentage, '%');
         animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
         
-        animateStatValue('investment-amount', 0, minInvestment, '$');
-        animateStatValue('deposit-amount', 0, minDeposit, '$');
-        animateStatValue('withdrawal-amount', 0, minWithdrawal, '$');
+        // Show actual amounts from Baserow data
+        animateStatValue('investment-amount', 0, monthlyInvestment, '$');
+        animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
+        animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
     }).catch(error => {
         console.error('Error processing monthly stats:', error);
         
@@ -2896,10 +2914,10 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         if (animate) {
             withdrawalCircle.style.strokeDashoffset = circumference;
             setTimeout(() => {
-                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
-            }, 900);
+                withdrawalCircle.style.strokeDashoffset = investmentOffset;
+            }, 300);
         } else {
-            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+            withdrawalCircle.style.strokeDashoffset = investmentOffset;
         }
         
         // Update percentages and amounts with animation
