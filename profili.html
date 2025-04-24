@@ -1602,7 +1602,7 @@
                         quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
                         smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
                         profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
-                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                        account_activity: user[`field_${fieldMap['account_activity']}`] || '0.00',
                         yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
                         today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
                         commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
@@ -1653,7 +1653,7 @@
                 quantitative_account: userData.quantitative_account,
                 smart_account: userData.smart_account,
                 profit_assets: userData.profit_assets,
-                total_revenue: userData.total_revenue,
+                account_activity: userData.account_activity,
                 yesterday_earnings: userData.yesterday_earnings,
                 today_earnings: userData.today_earnings,
                 commission_today: userData.commission_today
@@ -1664,7 +1664,7 @@
             updateFinancialValue('quantitative-account', userData.quantitative_account);
             updateFinancialValue('smart-account', userData.smart_account);
             updateFinancialValue('profit-assets', userData.profit_assets);
-            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('total-revenue', userData.account_activity);
             updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
             updateFinancialValue('today-earnings', userData.today_earnings);
         }
@@ -2228,7 +2228,7 @@ async function fetchUserActivityData() {
             return false;
         });
         
-        // Fetch data from total_revenue table
+        // Fetch data from account_activity table
         const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
             method: 'GET',
             headers: {
@@ -2373,7 +2373,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                 }
             });
             
-            // Fetch data from total_revenue table
+            // Fetch data from account_activity table
             const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
                 method: 'GET',
                 headers: {
@@ -2505,7 +2505,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         // If there's an error, fall back to using account values but with the new percentage calculation
         const smartAccount = parseFloat(userData.smart_account) || 0;
         const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
-        const totalRevenue = parseFloat(userData.total_revenue) || 0;
+        const totalRevenue = parseFloat(userData.account_activity) || 0;
         
         // Calculate percentages based on the new formula (5 units = 1%, max 500 = 100%)
         const MAX_VALUE = 500; // 100%
