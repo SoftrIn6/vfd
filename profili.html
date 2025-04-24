@@ -2263,6 +2263,58 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 
 async function fetchUserActivityData() {
     try {
+        // Get the date 7 days ago
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        sevenDaysAgo.setHours(0, 0, 0, 0);
+        
+        // First, get the field structure from each table to map field names to IDs
+        
+        // For investments table
+        const investFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/488475/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const investFields = await investFieldsResponse.json();
+        const investFieldMap = {};
+        investFields.forEach(field => {
+            investFieldMap[field.name] = field.id;
+        });
+        
+        // For deposits table
+        const depositFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/488476/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const depositFields = await depositFieldsResponse.json();
+        const depositFieldMap = {};
+        depositFields.forEach(field => {
+            depositFieldMap[field.name] = field.id;
+        });
+        
+        // For activity table
+        const activityFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.activityTableId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const activityFields = await activityFieldsResponse.json();
+        const activityFieldMap = {};
+        activityFields.forEach(field => {
+            activityFieldMap[field.name] = field.id;
+        });
+        
         // Fetch data from invest_activities table for investments
         const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
             method: 'GET',
@@ -2278,16 +2330,40 @@ async function fetchUserActivityData() {
         
         const investData = await investResponse.json();
         
-        // Filter for the current user's investments
-        const userInvestments = investData.results.filter(item => {
-            // Find the email field in the item and check if it matches the user's email
-            for (const key in item) {
-                if (item[key] === userEmail) {
-                    return true;
+        // Prepare daily investment data
+        const dailyInvestments = {};
+        const emailFieldId = investFieldMap['email'] || investFieldMap['user_email'];
+        const amountFieldId = investFieldMap['amount'] || investFieldMap['investment_amount'];
+        const dateFieldId = investFieldMap['date'] || investFieldMap['created_at'] || investFieldMap['timestamp'];
+        
+        if (investData.results && investData.results.length > 0) {
+            investData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                if (item[`field_${emailFieldId}`] === userEmail) {
+                    // Get the date
+                    let investmentDate = null;
+                    if (dateFieldId && item[`field_${dateFieldId}`]) {
+                        investmentDate = new Date(item[`field_${dateFieldId}`]);
+                        investmentDate.setHours(0, 0, 0, 0); // Normalize to start of day
+                    }
+                    
+                    // Get the amount
+                    let investmentAmount = 0;
+                    if (amountFieldId && item[`field_${amountFieldId}`]) {
+                        investmentAmount = parseFloat(item[`field_${amountFieldId}`]) || 0;
+                    }
+                    
+                    // If this investment belongs to the user and is within the last 7 days
+                    if (investmentDate && investmentDate >= sevenDaysAgo) {
+                        const dateKey = investmentDate.toISOString().split('T')[0];
+                        if (!dailyInvestments[dateKey]) {
+                            dailyInvestments[dateKey] = 0;
+                        }
+                        dailyInvestments[dateKey] += investmentAmount;
+                    }
                 }
-            }
-            return false;
-        });
+            });
+        }
         
         // Fetch data from new_deposit table for deposits
         const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
@@ -2304,16 +2380,40 @@ async function fetchUserActivityData() {
         
         const depositData = await depositResponse.json();
         
-        // Filter for the current user's deposits
-        const userDeposits = depositData.results.filter(item => {
-            // Find the email field in the item and check if it matches the user's email
-            for (const key in item) {
-                if (item[key] === userEmail) {
-                    return true;
+        // Prepare daily deposit data
+        const dailyDeposits = {};
+        const depEmailFieldId = depositFieldMap['email'] || depositFieldMap['user_email'];
+        const depAmountFieldId = depositFieldMap['amount'] || depositFieldMap['deposit_amount'];
+        const depDateFieldId = depositFieldMap['date'] || depositFieldMap['created_at'] || depositFieldMap['timestamp'];
+        
+        if (depositData.results && depositData.results.length > 0) {
+            depositData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                if (item[`field_${depEmailFieldId}`] === userEmail) {
+                    // Get the date
+                    let depositDate = null;
+                    if (depDateFieldId && item[`field_${depDateFieldId}`]) {
+                        depositDate = new Date(item[`field_${depDateFieldId}`]);
+                        depositDate.setHours(0, 0, 0, 0); // Normalize to start of day
+                    }
+                    
+                    // Get the amount
+                    let depositAmount = 0;
+                    if (depAmountFieldId && item[`field_${depAmountFieldId}`]) {
+                        depositAmount = parseFloat(item[`field_${depAmountFieldId}`]) || 0;
+                    }
+                    
+                    // If this deposit belongs to the user and is within the last 7 days
+                    if (depositDate && depositDate >= sevenDaysAgo) {
+                        const dateKey = depositDate.toISOString().split('T')[0];
+                        if (!dailyDeposits[dateKey]) {
+                            dailyDeposits[dateKey] = 0;
+                        }
+                        dailyDeposits[dateKey] += depositAmount;
+                    }
                 }
-            }
-            return false;
-        });
+            });
+        }
         
         // Fetch data from account_activity table for withdrawals
         const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
@@ -2330,198 +2430,107 @@ async function fetchUserActivityData() {
         
         const withdrawalData = await withdrawalResponse.json();
         
-        // Filter for the current user's withdrawals (only withdrawal activities)
-        const userWithdrawals = withdrawalData.results.filter(item => {
-            let isUserWithdrawal = false;
-            let isWithdrawalType = false;
-            
-            // Check if this belongs to the user and is a withdrawal activity
-            for (const key in item) {
-                // Check if this is the user's email
-                if (item[key] === userEmail) {
-                    isUserWithdrawal = true;
+        // Prepare daily withdrawal data
+        const dailyWithdrawals = {};
+        const wdEmailFieldId = activityFieldMap['user_email'] || activityFieldMap['email'];
+        const wdTypeFieldId = activityFieldMap['activity_type'];
+        const wdDetailsFieldId = activityFieldMap['activity_details'];
+        const wdDateFieldId = activityFieldMap['timestamp'] || activityFieldMap['created_at'] || activityFieldMap['date'];
+        
+        if (withdrawalData.results && withdrawalData.results.length > 0) {
+            withdrawalData.results.forEach(item => {
+                // Check if this item belongs to the current user and is a withdrawal
+                if (item[`field_${wdEmailFieldId}`] === userEmail && 
+                    (item[`field_${wdTypeFieldId}`] === 'withdrawal_request' || 
+                     item[`field_${wdTypeFieldId}`] === 'form_submission')) {
+                    
+                    // Get the date
+                    let withdrawalDate = null;
+                    if (wdDateFieldId && item[`field_${wdDateFieldId}`]) {
+                        withdrawalDate = new Date(item[`field_${wdDateFieldId}`]);
+                        withdrawalDate.setHours(0, 0, 0, 0); // Normalize to start of day
+                    }
+                    
+                    // Get the amount from details (which might be a JSON string)
+                    let withdrawalAmount = 0;
+                    if (wdDetailsFieldId && item[`field_${wdDetailsFieldId}`]) {
+                        try {
+                            const details = JSON.parse(item[`field_${wdDetailsFieldId}`]);
+                            if (details && details.amount) {
+                                withdrawalAmount = parseFloat(details.amount) || 0;
+                            }
+                        } catch (e) {
+                            // If not JSON, try to extract amount from the string
+                            const detailsStr = item[`field_${wdDetailsFieldId}`];
+                            const amountMatch = detailsStr.match(/amount:\s*\$?(\d+(\.\d+)?)/i);
+                            if (amountMatch && amountMatch[1]) {
+                                withdrawalAmount = parseFloat(amountMatch[1]) || 0;
+                            }
+                        }
+                    }
+                    
+                    // If this withdrawal belongs to the user and is within the last 7 days
+                    if (withdrawalDate && withdrawalDate >= sevenDaysAgo) {
+                        const dateKey = withdrawalDate.toISOString().split('T')[0];
+                        if (!dailyWithdrawals[dateKey]) {
+                            dailyWithdrawals[dateKey] = 0;
+                        }
+                        dailyWithdrawals[dateKey] += withdrawalAmount;
+                    }
                 }
-                
-                // Check if this is a withdrawal activity type
-                if (item[key] === 'withdrawal_request' || item[key] === 'form_submission') {
-                    isWithdrawalType = true;
-                }
-            }
-            
-            return isUserWithdrawal && isWithdrawalType;
-        });
+            });
+        }
         
         return {
-            investments: userInvestments,
-            deposits: userDeposits,
-            withdrawals: userWithdrawals
+            dailyInvestments,
+            dailyDeposits,
+            dailyWithdrawals
         };
     } catch (error) {
         console.error('Error fetching user activity data:', error);
         return {
-            investments: [],
-            deposits: [],
-            withdrawals: []
+            dailyInvestments: {},
+            dailyDeposits: {},
+            dailyWithdrawals: {}
         };
     }
 }
 
-    // Process activities to get data for each day
-    if (activities && activities.length > 0) {
-        activities.forEach(activity => {
-            const activityDate = new Date(activity.timestamp);
-            activityDate.setHours(0, 0, 0, 0);
-            
-            // Find matching day
-            const dayData = last7Days.find(day => day.date.getTime() === activityDate.getTime());
-            if (dayData) {
-                // Extract amount from activity
-                let amount = 0;
-                if (activity.details && activity.details.amount) {
-                    amount = parseFloat(activity.details.amount) || 0;
-                } else if (activity.amount) {
-                    amount = parseFloat(activity.amount) || 0;
-                } else if (activity.totalAmount) {
-                    amount = parseFloat(activity.totalAmount) || 0;
-                }
-                
-                // Calculate percentage of MAX_VALUE and scale to display height
-                const scaledAmount = Math.min(DISPLAY_MAX, (amount / MAX_VALUE) * DISPLAY_MAX);
-                
-                // Update day data based on activity type
-                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
-                    dayData.investment += scaledAmount;
-                } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
-                    dayData.withdrawal += scaledAmount;
-                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing') {
-                    dayData.deposit += scaledAmount;
-                }
-            }
-        });
-    }
-    
+// Now update the part in generateWeeklyChart that processes the fetchUserActivityData results:
+
+// After the fetchUserActivityData() call, replace the processing code with:
+
     // Fetch user-specific data from Baserow
     fetchUserActivityData().then(userData => {
-        // Process investment data
-        if (userData.investments && userData.investments.length > 0) {
-            userData.investments.forEach(investment => {
-                // Find the date and amount fields
-                let investmentDate = null;
-                let investmentAmount = 0;
-                
-                for (const key in investment) {
-                    // Look for date field
-                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        investmentDate = new Date(investment[key]);
-                    }
-                    // Look for amount field (numeric value)
-                    else if (!isNaN(parseFloat(investment[key]))) {
-                        investmentAmount = parseFloat(investment[key]);
-                    }
-                }
-                
-                if (investmentDate) {
-                    investmentDate.setHours(0, 0, 0, 0);
-                    
-                    // Find matching day
-                    const dayData = last7Days.find(day => day.date.getTime() === investmentDate.getTime());
-                    if (dayData) {
-                        // Calculate percentage of MAX_VALUE and scale to display height
-                        const scaledAmount = Math.min(DISPLAY_MAX, (investmentAmount / MAX_VALUE) * DISPLAY_MAX);
-                        dayData.investment += scaledAmount;
-                    }
-                }
-            });
-        }
+        console.log('Daily activity data:', userData);
         
-        // Process deposit data
-        if (userData.deposits && userData.deposits.length > 0) {
-            userData.deposits.forEach(deposit => {
-                // Find the date and amount fields
-                let depositDate = null;
-                let depositAmount = 0;
-                
-                for (const key in deposit) {
-                    // Look for date field
-                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        depositDate = new Date(investment[key]);
-                    }
-                    // Look for amount field (numeric value)
-                    else if (!isNaN(parseFloat(investment[key]))) {
-                        depositAmount = parseFloat(investment[key]);
-                    }
-                }
-                
-                if (depositDate) {
-                    depositDate.setHours(0, 0, 0, 0);
-                    
-                    // Find matching day
-                    const dayData = last7Days.find(day => day.date.getTime() === depositDate.getTime());
-                    if (dayData) {
-                        // Calculate percentage of MAX_VALUE and scale to display height
-                        const scaledAmount = Math.min(DISPLAY_MAX, (depositAmount / MAX_VALUE) * DISPLAY_MAX);
-                        dayData.deposit += scaledAmount;
-                    }
-                }
-            });
-        }
+        // Process daily data
+        const { dailyInvestments, dailyDeposits, dailyWithdrawals } = userData;
         
-        // Process withdrawal data
-        if (userData.withdrawals && userData.withdrawals.length > 0) {
-            userData.withdrawals.forEach(withdrawal => {
-                // Find the date and amount fields
-                let withdrawalDate = null;
-                let withdrawalAmount = 0;
-                
-                for (const key in withdrawal) {
-                    // Look for date field
-                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                        withdrawalDate = new Date(investment[key]);
-                    }
-                    // Look for amount field (numeric value)
-                    else if (!isNaN(parseFloat(investment[key]))) {
-                        withdrawalAmount = parseFloat(investment[key]);
-                    }
-                }
-                
-                if (withdrawalDate) {
-                    withdrawalDate.setHours(0, 0, 0, 0);
-                    
-                    // Find matching day
-                    const dayData = last7Days.find(day => day.date.getTime() === withdrawalDate.getTime());
-                    if (dayData) {
-                        // Calculate percentage of MAX_VALUE and scale to display height
-                        const scaledAmount = Math.min(DISPLAY_MAX, (withdrawalAmount / MAX_VALUE) * DISPLAY_MAX);
-                        dayData.withdrawal += scaledAmount;
-                    }
-                }
-            });
-        }
+        // Find the maximum value for scaling
+        const MAX_VALUE = 500; // Maximum value for 100% height
+        const DISPLAY_MAX = 60; // Maximum height in pixels
         
-        // If no real activity data, generate some based on user account values
-        if ((!userData.investments || userData.investments.length === 0) && 
-            (!userData.deposits || userData.deposits.length === 0) && 
-            (!userData.withdrawals || userData.withdrawals.length === 0)) {
-            // Use account values to generate realistic looking data
-            const totalAssets = parseFloat(userData.total_assets) || 100;
-            const smartAccount = parseFloat(userData.smart_account) || 20;
-            const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-            const totalRevenue = parseFloat(userData.total_revenue) || 10;
+        // Update each day's data based on the fetched values
+        last7Days.forEach(dayData => {
+            const dateKey = dayData.date.toISOString().split('T')[0];
             
-            // Scale values for visualization based on percentage of MAX_VALUE
-            const baseInvestment = Math.min(DISPLAY_MAX, (smartAccount / MAX_VALUE) * DISPLAY_MAX);
-            const baseDeposit = Math.min(DISPLAY_MAX, (quantitativeAccount / MAX_VALUE) * DISPLAY_MAX);
-            const baseWithdrawal = Math.min(DISPLAY_MAX, (totalRevenue / MAX_VALUE) * DISPLAY_MAX);
+            // Get investment amount for this day
+            const investmentAmount = dailyInvestments[dateKey] || 0;
+            // Calculate percentage of MAX_VALUE and scale to display height
+            dayData.investment = Math.min(DISPLAY_MAX, (investmentAmount / MAX_VALUE) * DISPLAY_MAX);
             
-            // Generate random variations for each day
-            last7Days.forEach((day, index) => {
-                // Create variations based on day number
-                const variation = (index + 1) / 7;
-                day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
-                day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
-                day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
-            });
-        }
+            // Get deposit amount for this day
+            const depositAmount = dailyDeposits[dateKey] || 0;
+            // Calculate percentage of MAX_VALUE and scale to display height
+            dayData.deposit = Math.min(DISPLAY_MAX, (depositAmount / MAX_VALUE) * DISPLAY_MAX);
+            
+            // Get withdrawal amount for this day
+            const withdrawalAmount = dailyWithdrawals[dateKey] || 0;
+            // Calculate percentage of MAX_VALUE and scale to display height  || 0;
+            // Calculate percentage of MAX_VALUE and scale to display height
+            dayData.withdrawal = Math.min(DISPLAY_MAX, (withdrawalAmount / MAX_VALUE) * DISPLAY_MAX);
+        });
         
         // Generate chart for each day
         last7Days.forEach((dayData, index) => {
@@ -2536,19 +2545,19 @@ async function fetchUserActivityData() {
             // Investment bar (purple)
             const investmentBar = document.createElement('div');
             investmentBar.className = 'chart-bar investment';
-            const investmentHeight = dayData.investment || Math.floor(Math.random() * 40) + 10; // Fallback to random
+            const investmentHeight = dayData.investment || 0;
             investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
             
             // Withdrawal bar (red)
             const withdrawalBar = document.createElement('div');
             withdrawalBar.className = 'chart-bar withdrawal';
-            const withdrawalHeight = dayData.withdrawal || Math.floor(Math.random() * 30) + 5; // Fallback to random
+            const withdrawalHeight = dayData.withdrawal || 0;
             withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
             
             // Deposit bar (green)
             const depositBar = document.createElement('div');
             depositBar.className = 'chart-bar deposit';
-            const depositHeight = dayData.deposit || Math.floor(Math.random() * 35) + 15; // Fallback to random
+            const depositHeight = dayData.deposit || 0;
             depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
             
             // Add bars to group in the correct order
@@ -2672,6 +2681,62 @@ async function fetchUserMonthlyData() {
         // Get the date 7 days ago
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        sevenDaysAgo.setHours(0, 0, 0, 0);
+        
+        console.log('Fetching data for last 7 days starting from:', sevenDaysAgo.toISOString());
+        
+        // First, get the field structure from each table to map field names to IDs
+        
+        // For investments table
+        const investFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/488475/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const investFields = await investFieldsResponse.json();
+        const investFieldMap = {};
+        investFields.forEach(field => {
+            investFieldMap[field.name] = field.id;
+        });
+        
+        console.log('Investment fields mapping:', investFieldMap);
+        
+        // For deposits table
+        const depositFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/488476/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const depositFields = await depositFieldsResponse.json();
+        const depositFieldMap = {};
+        depositFields.forEach(field => {
+            depositFieldMap[field.name] = field.id;
+        });
+        
+        console.log('Deposit fields mapping:', depositFieldMap);
+        
+        // For activity table
+        const activityFieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.activityTableId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${BASEROW_API.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const activityFields = await activityFieldsResponse.json();
+        const activityFieldMap = {};
+        activityFields.forEach(field => {
+            activityFieldMap[field.name] = field.id;
+        });
+        
+        console.log('Activity fields mapping:', activityFieldMap);
         
         // Fetch data from invest_activities table for investments
         const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
@@ -2687,37 +2752,40 @@ async function fetchUserMonthlyData() {
         }
         
         const investData = await investResponse.json();
+        console.log('Investment data fetched:', investData);
         
         // Filter for the current user's investments in the last 7 days
         let totalInvestment = 0;
-        investData.results.forEach(item => {
-            // Check if this item belongs to the current user
-            let belongsToUser = false;
-            let investmentDate = null;
-            let investmentAmount = 0;
-            
-            for (const key in item) {
-                // Check if this is the user's email
-                if (item[key] === userEmail) {
-                    belongsToUser = true;
+        const emailFieldId = investFieldMap['email'] || investFieldMap['user_email'];
+        const amountFieldId = investFieldMap['amount'] || investFieldMap['investment_amount'];
+        const dateFieldId = investFieldMap['date'] || investFieldMap['created_at'] || investFieldMap['timestamp'];
+        
+        if (investData.results && investData.results.length > 0) {
+            investData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                if (item[`field_${emailFieldId}`] === userEmail) {
+                    // Get the date
+                    let investmentDate = null;
+                    if (dateFieldId && item[`field_${dateFieldId}`]) {
+                        investmentDate = new Date(item[`field_${dateFieldId}`]);
+                    }
+                    
+                    // Get the amount
+                    let investmentAmount = 0;
+                    if (amountFieldId && item[`field_${amountFieldId}`]) {
+                        investmentAmount = parseFloat(item[`field_${amountFieldId}`]) || 0;
+                    }
+                    
+                    // If this investment belongs to the user and is within the last 7 days
+                    if (investmentDate && investmentDate >= sevenDaysAgo) {
+                        console.log(`Found investment: ${investmentAmount} on ${investmentDate}`);
+                        totalInvestment += investmentAmount;
+                    }
                 }
-                
-                // Look for date field
-                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                    investmentDate = new Date(item[key]);
-                }
-                
-                // Look for amount field (numeric value)
-                if (!isNaN(parseFloat(item[key]))) {
-                    investmentAmount = parseFloat(item[key]);
-                }
-            }
-            
-            // If this investment belongs to the user and is within the last 7 days
-            if (belongsToUser && investmentDate && investmentDate >= sevenDaysAgo) {
-                totalInvestment += investmentAmount;
-            }
-        });
+            });
+        }
+        
+        console.log('Total investment in last 7 days:', totalInvestment);
         
         // Fetch data from new_deposit table for deposits
         const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
@@ -2733,37 +2801,40 @@ async function fetchUserMonthlyData() {
         }
         
         const depositData = await depositResponse.json();
+        console.log('Deposit data fetched:', depositData);
         
         // Filter for the current user's deposits in the last 7 days
         let totalDeposit = 0;
-        depositData.results.forEach(item => {
-            // Check if this item belongs to the current user
-            let belongsToUser = false;
-            let depositDate = null;
-            let depositAmount = 0;
-            
-            for (const key in item) {
-                // Check if this is the user's email
-                if (item[key] === userEmail) {
-                    belongsToUser = true;
+        const depEmailFieldId = depositFieldMap['email'] || depositFieldMap['user_email'];
+        const depAmountFieldId = depositFieldMap['amount'] || depositFieldMap['deposit_amount'];
+        const depDateFieldId = depositFieldMap['date'] || depositFieldMap['created_at'] || depositFieldMap['timestamp'];
+        
+        if (depositData.results && depositData.results.length > 0) {
+            depositData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                if (item[`field_${depEmailFieldId}`] === userEmail) {
+                    // Get the date
+                    let depositDate = null;
+                    if (depDateFieldId && item[`field_${depDateFieldId}`]) {
+                        depositDate = new Date(item[`field_${depDateFieldId}`]);
+                    }
+                    
+                    // Get the amount
+                    let depositAmount = 0;
+                    if (depAmountFieldId && item[`field_${depAmountFieldId}`]) {
+                        depositAmount = parseFloat(item[`field_${depAmountFieldId}`]) || 0;
+                    }
+                    
+                    // If this deposit belongs to the user and is within the last 7 days
+                    if (depositDate && depositDate >= sevenDaysAgo) {
+                        console.log(`Found deposit: ${depositAmount} on ${depositDate}`);
+                        totalDeposit += depositAmount;
+                    }
                 }
-                
-                // Look for date field
-                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                    depositDate = new Date(item[key]);
-                }
-                
-                // Look for amount field (numeric value)
-                if (!isNaN(parseFloat(item[key]))) {
-                    depositAmount = parseFloat(item[key]);
-                }
-            }
-            
-            // If this deposit belongs to the user and is within the last 7 days
-            if (belongsToUser && depositDate && depositDate >= sevenDaysAgo) {
-                totalDeposit += depositAmount;
-            }
-        });
+            });
+        }
+        
+        console.log('Total deposit in last 7 days:', totalDeposit);
         
         // Fetch data from account_activity table for withdrawals
         const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
@@ -2779,43 +2850,56 @@ async function fetchUserMonthlyData() {
         }
         
         const withdrawalData = await withdrawalResponse.json();
+        console.log('Withdrawal data fetched:', withdrawalData);
         
-        // Filter for the current user's withdrawals in the last 7 days (only withdrawal activities)
+        // Filter for the current user's withdrawals in the last 7 days
         let totalWithdrawal = 0;
-        withdrawalData.results.forEach(item => {
-            // Check if this item belongs to the current user and is a withdrawal
-            let belongsToUser = false;
-            let isWithdrawalType = false;
-            let withdrawalDate = null;
-            let withdrawalAmount = 0;
-            
-            for (const key in item) {
-                // Check if this is the user's email
-                if (item[key] === userEmail) {
-                    belongsToUser = true;
+        const wdEmailFieldId = activityFieldMap['user_email'] || activityFieldMap['email'];
+        const wdTypeFieldId = activityFieldMap['activity_type'];
+        const wdDetailsFieldId = activityFieldMap['activity_details'];
+        const wdDateFieldId = activityFieldMap['timestamp'] || activityFieldMap['created_at'] || activityFieldMap['date'];
+        
+        if (withdrawalData.results && withdrawalData.results.length > 0) {
+            withdrawalData.results.forEach(item => {
+                // Check if this item belongs to the current user and is a withdrawal
+                if (item[`field_${wdEmailFieldId}`] === userEmail && 
+                    (item[`field_${wdTypeFieldId}`] === 'withdrawal_request' || 
+                     item[`field_${wdTypeFieldId}`] === 'form_submission')) {
+                    
+                    // Get the date
+                    let withdrawalDate = null;
+                    if (wdDateFieldId && item[`field_${wdDateFieldId}`]) {
+                        withdrawalDate = new Date(item[`field_${wdDateFieldId}`]);
+                    }
+                    
+                    // Get the amount from details (which might be a JSON string)
+                    let withdrawalAmount = 0;
+                    if (wdDetailsFieldId && item[`field_${wdDetailsFieldId}`]) {
+                        try {
+                            const details = JSON.parse(item[`field_${wdDetailsFieldId}`]);
+                            if (details && details.amount) {
+                                withdrawalAmount = parseFloat(details.amount) || 0;
+                            }
+                        } catch (e) {
+                            // If not JSON, try to extract amount from the string
+                            const detailsStr = item[`field_${wdDetailsFieldId}`];
+                            const amountMatch = detailsStr.match(/amount:\s*\$?(\d+(\.\d+)?)/i);
+                            if (amountMatch && amountMatch[1]) {
+                                withdrawalAmount = parseFloat(amountMatch[1]) || 0;
+                            }
+                        }
+                    }
+                    
+                    // If this withdrawal belongs to the user and is within the last 7 days
+                    if (withdrawalDate && withdrawalDate >= sevenDaysAgo) {
+                        console.log(`Found withdrawal: ${withdrawalAmount} on ${withdrawalDate}`);
+                        totalWithdrawal += withdrawalAmount;
+                    }
                 }
-                
-                // Check if this is a withdrawal activity type
-                if (item[key] === 'withdrawal_request' || item[key] === 'form_submission') {
-                    isWithdrawalType = true;
-                }
-                
-                // Look for date field
-                if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-                    withdrawalDate = new Date(item[key]);
-                }
-                
-                // Look for amount field (numeric value)
-                if (!isNaN(parseFloat(item[key]))) {
-                    withdrawalAmount = parseFloat(item[key]);
-                }
-            }
-            
-            // If this withdrawal belongs to the user, is a withdrawal type, and is within the last 7 days
-            if (belongsToUser && isWithdrawalType && withdrawalDate && withdrawalDate >= sevenDaysAgo) {
-                totalWithdrawal += withdrawalAmount;
-            }
-        });
+            });
+        }
+        
+        console.log('Total withdrawal in last 7 days:', totalWithdrawal);
         
         return {
             investment: totalInvestment,
@@ -2832,41 +2916,15 @@ async function fetchUserMonthlyData() {
     }
 }
 
-// Add a helper function to extract amount from activity data
-function extractAmountFromActivity(activity) {
-    // Check various properties where amount might be stored
-    if (activity.details && activity.details.amount) {
-        return parseFloat(activity.details.amount) || 0;
-    } else if (activity.amount) {
-        return parseFloat(activity.amount) || 0;
-    } else if (activity.totalAmount) {
-        return parseFloat(activity.totalAmount) || 0;
-    }
-    
-    // If no amount is found, look for any numeric property
-    for (const key in activity) {
-        if (!isNaN(parseFloat(activity[key]))) {
-            return parseFloat(activity[key]);
-        }
-    }
-    
-    return 0;
-}
+// Now update the generateMonthlyStats function to properly use this data for the circle progress and percentages:
 
-// Add a function to improve date extraction from Baserow data
-function extractDateFromBaserowItem(item) {
-    for (const key in item) {
-        // Look for date field in ISO format
-        if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
-            return new Date(item[key]);
-        }
-    }
-    return null;
-}
+// Find the part in generateMonthlyStats where it processes the fetchUserMonthlyData results and replace it with:
 
     // Fetch user-specific monthly data
     fetchUserMonthlyData().then(monthlyData => {
-        // Calculate actual values from user data and Baserow data
+        console.log('Monthly data fetched:', monthlyData);
+        
+        // Calculate actual values from Baserow data
         const monthlyInvestment = monthlyData.investment || parseFloat(userData.smart_account) || 0;
         const monthlyDeposit = monthlyData.deposit || parseFloat(userData.quantitative_account) || 0;
         const monthlyWithdrawal = monthlyData.withdrawal || parseFloat(userData.total_revenue) || 0;
