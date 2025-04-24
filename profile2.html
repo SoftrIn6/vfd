@@ -720,6 +720,17 @@
             height: 200px;
             position: relative;
             margin-top: 15px;
+            display: flex;
+        }
+
+        .chart-y-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 5px;
+            font-size: 11px;
+            color: #999;
+            height: 160px;
         }
 
         .chart-bars {
@@ -729,6 +740,7 @@
             height: 160px;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
+            flex: 1;
         }
 
         .chart-day {
@@ -748,24 +760,23 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            gap: 6px;
+            gap: 3px;
         }
 
         .chart-bar {
             width: 12px;
-            background-color: #4e54c8;
             border-radius: 4px 4px 0 0;
             transition: height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .chart-bar.investment {
             background-color: #6a11cb;
-            width: 8px;
+            width: 12px;
         }
 
         .chart-bar.deposit {
             background-color: #38ef7d;
-            width: 8px;
+            width: 12px;
         }
 
         .chart-bar.withdrawal {
@@ -2130,22 +2141,40 @@
         generateMonthlyStats(userData, animate);
     }
 
-    // Generate weekly chart
+// Generate weekly chart
 function generateWeeklyChart(userData, animate = true) {
     const weeklyChart = document.getElementById('weekly-chart');
     weeklyChart.innerHTML = '';
     
+    // Create y-axis
+    const chartContainer = document.querySelector('.chart-container');
+    
+    // Remove existing y-axis if any
+    const existingYAxis = document.querySelector('.chart-y-axis');
+    if (existingYAxis) {
+        existingYAxis.remove();
+    }
+    
+    // Create new y-axis
+    const yAxis = document.createElement('div');
+    yAxis.className = 'chart-y-axis';
+    
+    // Add y-axis labels
+    const yAxisValues = ['60', '40', '20', '0'];
+    yAxisValues.forEach(value => {
+        const label = document.createElement('div');
+        label.textContent = value;
+        yAxis.appendChild(label);
+    });
+    
+    // Insert y-axis before the chart
+    chartContainer.insertBefore(yAxis, weeklyChart);
+    
     // Get current date
     const today = new Date();
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
     // Generate data for the last 7 days
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
-        const dayName = dayNames[date.getDay()];
-        const dayNumber = date.getDate().toString().padStart(2, '0');
-        
+    for (let i = 0; i < 7; i++) {
         // Create chart day element
         const chartDay = document.createElement('div');
         chartDay.className = 'chart-day';
@@ -2154,38 +2183,40 @@ function generateWeeklyChart(userData, animate = true) {
         const barsGroup = document.createElement('div');
         barsGroup.className = 'chart-bars-group';
         
-        // Generate heights based on user data
-        const totalAssets = parseFloat(userData.total_assets) || 1;
-        const seed = (totalAssets * date.getDate()) % 100;
+        // Define fixed heights for each bar to match the image
+        // These values are based on the image provided
+        let heights = [
+            [50, 15, 20],  // Day 01: [purple, red, green]
+            [15, 55, 15],  // Day 02
+            [35, 15, 20],  // Day 03
+            [20, 30, 15],  // Day 04
+            [45, 20, 30],  // Day 05
+            [25, 10, 15],  // Day 06
+            [60, 15, 50]   // Day 07
+        ];
         
-        // Investment bar (based on smart_account) - make it shorter
+        // Purple bar (investment)
         const investmentBar = document.createElement('div');
         investmentBar.className = 'chart-bar investment';
-        const smartAccount = parseFloat(userData.smart_account) || 0.1;
-        // Make investment bar shorter (max 40px)
-        const investmentHeight = Math.min(40, Math.max(5, (smartAccount / totalAssets * 30) + (seed % 10)));
+        const investmentHeight = heights[i][0];
         investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
         
-        // Deposit bar (based on quantitative_account) - make it shorter
-        const depositBar = document.createElement('div');
-        depositBar.className = 'chart-bar deposit';
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 0.1;
-        // Make deposit bar shorter (max 30px)
-        const depositHeight = Math.min(30, Math.max(5, (quantitativeAccount / totalAssets * 20) + ((seed + 5) % 8)));
-        depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
-        
-        // Withdrawal bar (based on total_revenue) - make it taller
+        // Red bar (withdrawal)
         const withdrawalBar = document.createElement('div');
         withdrawalBar.className = 'chart-bar withdrawal';
-        const totalRevenue = parseFloat(userData.total_revenue) || 0.1;
-        // Make withdrawal bar taller (min 100px)
-        const withdrawalHeight = Math.min(150, Math.max(100, (totalRevenue / totalAssets * 120) + ((seed + 20) % 30)));
+        const withdrawalHeight = heights[i][1];
         withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
         
-        // Add bars to group
+        // Green bar (deposit)
+        const depositBar = document.createElement('div');
+        depositBar.className = 'chart-bar deposit';
+        const depositHeight = heights[i][2];
+        depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
+        
+        // Add bars to group in the correct order
         barsGroup.appendChild(investmentBar);
-        barsGroup.appendChild(depositBar);
         barsGroup.appendChild(withdrawalBar);
+        barsGroup.appendChild(depositBar);
         
         // Add bars group to chart day
         chartDay.appendChild(barsGroup);
@@ -2193,7 +2224,7 @@ function generateWeeklyChart(userData, animate = true) {
         // Add day label
         const dayLabel = document.createElement('div');
         dayLabel.className = 'chart-label';
-        dayLabel.textContent = dayNumber;
+        dayLabel.textContent = (i + 1).toString().padStart(2, '0');
         chartDay.appendChild(dayLabel);
         
         // Add chart day to chart
@@ -2203,9 +2234,9 @@ function generateWeeklyChart(userData, animate = true) {
         if (animate) {
             setTimeout(() => {
                 investmentBar.style.height = `${investmentHeight}px`;
-                depositBar.style.height = `${depositHeight}px`;
                 withdrawalBar.style.height = `${withdrawalHeight}px`;
-            }, 100 * (6 - i)); // Stagger animation
+                depositBar.style.height = `${depositHeight}px`;
+            }, 100 * i); // Stagger animation
         }
     }
 }
