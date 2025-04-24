@@ -2339,9 +2339,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 function generateMonthlyStats(userData, animate = true, activities = []) {
     // Calculate actual values from user data
     const totalAssets = parseFloat(userData.total_assets) || 1;
-    const smartAccount = parseFloat(userData.invest_activities) || 0;
-    const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
-    const totalRevenue = parseFloat(userData.total_revenue) || 0;
+    const invest_activities = parseFloat(userData.invest_activities) || 0;
+    const quantitativeAccount = parseFloat(userData.new_deposit) || 0;
+    const totalRevenue = parseFloat(userData.account_activity) || 0;
     
     // Initialize monthly totals
     let monthlyInvestment = smartAccount;
