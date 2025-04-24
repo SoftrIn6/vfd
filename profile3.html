@@ -1885,7 +1885,6 @@
                     return activity.type === 'withdrawal_request' || 
                            activity.type === 'form_submission' || 
                            activity.type === 'investment_attempt' || 
-                           activity.type === 'investment_processing' || === 'investment_attempt' ||
                            activity.type === 'investment_processing' ||
                            activity.type === 'deposit' ||
                            activity.type === 'deposit_processing';
@@ -2191,6 +2190,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     const yAxis = document.createElement('div');
     yAxis.className = 'chart-y-axis';
     
+    // Find max value for scaling
+    let maxValue = 60; // Default max value
+    
     // Add y-axis labels
     const yAxisValues = ['60', '40', '20', '0'];
     yAxisValues.forEach(value => {
@@ -2223,38 +2225,240 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific data from Baserow tables
-    Promise.all([
-        fetchBaserowData('488475', userEmail), // invest_activities table
-        fetchBaserowData('488476', userEmail), // new_deposit table
-        fetchBaserowData('488477', userEmail)  // total_revenue table
-    ]).then(([investmentData, depositData, withdrawalData]) => {
+    // Fetch user-specific data from Baserow for investments, deposits, and withdrawals
+    async function fetchUserActivityData() {
+        try {
+            // Fetch data from invest_activities table
+            const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!investResponse.ok) {
+                throw new Error(`HTTP error! status: ${investResponse.status}`);
+            }
+            
+            const investData = await investResponse.json();
+            
+            // Filter for the current user's investments
+            const userInvestments = investData.results.filter(item => {
+                // Find the email field in the item and check if it matches the user's email
+                for (const key in item) {
+                    if (item[key] === userEmail) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
+            // Fetch data from new_deposit table
+            const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!depositResponse.ok) {
+                throw new Error(`HTTP error! status: ${depositResponse.status}`);
+            }
+            
+            const depositData = await depositResponse.json();
+            
+            // Filter for the current user's deposits
+            const userDeposits = depositData.results.filter(item => {
+                // Find the email field in the item and check if it matches the user's email
+                for (const key in item) {
+                    if (item[key] === userEmail) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
+            // Fetch data from total_revenue table
+            const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!withdrawalResponse.ok) {
+                throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
+            }
+            
+            const withdrawalData = await withdrawalResponse.json();
+            
+            // Filter for the current user's withdrawals
+            const userWithdrawals = withdrawalData.results.filter(item => {
+                // Find the email field in the item and check if it matches the user's email
+                for (const key in item) {
+                    if (item[key] === userEmail) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
+            return {
+                investments: userInvestments,
+                deposits: userDeposits,
+                withdrawals: userWithdrawals
+            };
+        } catch (error) {
+            console.error('Error fetching user activity data:', error);
+            return {
+                investments: [],
+                deposits: [],
+                withdrawals: []
+            };
+        }
+    }
+    
+    // Process activities to get data for each day
+    if (activities && activities.length > 0) {
+        activities.forEach(activity => {
+            const activityDate = new Date(activity.timestamp);
+            activityDate.setHours(0, 0, 0, 0);
+            
+            // Find matching day
+            const dayData = last7Days.find(day => day.date.getTime() === activityDate.getTime());
+            if (dayData) {
+                // Extract amount from activity
+                let amount = 0;
+                if (activity.details && activity.details.amount) {
+                    amount = parseFloat(activity.details.amount) || 0;
+                } else if (activity.amount) {
+                    amount = parseFloat(activity.amount) || 0;
+                } else if (activity.totalAmount) {
+                    amount = parseFloat(activity.totalAmount) || 0;
+                }
+                
+                // Scale amount for visualization (1 unit = $1)
+                const scaledAmount = Math.min(60, amount); // Cap at 60 for display
+                
+                // Update day data based on activity type
+                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
+                    dayData.investment += scaledAmount;
+                } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                    dayData.withdrawal += scaledAmount;
+                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing') {
+                    dayData.deposit += scaledAmount;
+                }
+            }
+        });
+    }
+    
+    // Fetch user-specific data from Baserow
+    fetchUserActivityData().then(userData => {
         // Process investment data
-        if (investmentData && investmentData.results) {
-            investmentData.results.forEach(record => {
-                processTableRecord(record, 'investment', last7Days);
+        if (userData.investments && userData.investments.length > 0) {
+            userData.investments.forEach(investment => {
+                // Find the date and amount fields
+                let investmentDate = null;
+                let investmentAmount = 0;
+                
+                for (const key in investment) {
+                    // Look for date field
+                    if (typeof investment[key] === 'string' && investment[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        investmentDate = new Date(investment[key]);
+                    }
+                    // Look for amount field (numeric value)
+                    else if (!isNaN(parseFloat(investment[key]))) {
+                        investmentAmount = parseFloat(investment[key]);
+                    }
+                }
+                
+                if (investmentDate) {
+                    investmentDate.setHours(0, 0, 0, 0);
+                    
+                    // Find matching day
+                    const dayData = last7Days.find(day => day.date.getTime() === investmentDate.getTime());
+                    if (dayData) {
+                        // Scale amount for visualization
+                        const scaledAmount = Math.min(60, investmentAmount);
+                        dayData.investment += scaledAmount;
+                    }
+                }
             });
         }
         
         // Process deposit data
-        if (depositData && depositData.results) {
-            depositData.results.forEach(record => {
-                processTableRecord(record, 'deposit', last7Days);
+        if (userData.deposits && userData.deposits.length > 0) {
+            userData.deposits.forEach(deposit => {
+                // Find the date and amount fields
+                let depositDate = null;
+                let depositAmount = 0;
+                
+                for (const key in deposit) {
+                    // Look for date field
+                    if (typeof deposit[key] === 'string' && deposit[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        depositDate = new Date(deposit[key]);
+                    }
+                    // Look for amount field (numeric value)
+                    else if (!isNaN(parseFloat(deposit[key]))) {
+                        depositAmount = parseFloat(deposit[key]);
+                    }
+                }
+                
+                if (depositDate) {
+                    depositDate.setHours(0, 0, 0, 0);
+                    
+                    // Find matching day
+                    const dayData = last7Days.find(day => day.date.getTime() === depositDate.getTime());
+                    if (dayData) {
+                        // Scale amount for visualization
+                        const scaledAmount = Math.min(60, depositAmount);
+                        dayData.deposit += scaledAmount;
+                    }
+                }
             });
         }
         
         // Process withdrawal data
-        if (withdrawalData && withdrawalData.results) {
-            withdrawalData.results.forEach(record => {
-                processTableRecord(record, 'withdrawal', last7Days);
+        if (userData.withdrawals && userData.withdrawals.length > 0) {
+            userData.withdrawals.forEach(withdrawal => {
+                // Find the date and amount fields
+                let withdrawalDate = null;
+                let withdrawalAmount = 0;
+                
+                for (const key in withdrawal) {
+                    // Look for date field
+                    if (typeof withdrawal[key] === 'string' && withdrawal[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        withdrawalDate = new Date(withdrawal[key]);
+                    }
+                    // Look for amount field (numeric value)
+                    else if (!isNaN(parseFloat(withdrawal[key]))) {
+                        withdrawalAmount = parseFloat(withdrawal[key]);
+                    }
+                }
+                
+                if (withdrawalDate) {
+                    withdrawalDate.setHours(0, 0, 0, 0);
+                    
+                    // Find matching day
+                    const dayData = last7Days.find(day => day.date.getTime() === withdrawalDate.getTime());
+                    if (dayData) {
+                        // Scale amount for visualization
+                        const scaledAmount = Math.min(60, withdrawalAmount);
+                        dayData.withdrawal += scaledAmount;
+                    }
+                }
             });
         }
         
-        // If no data was found, use account values to generate realistic looking data
-        const hasData = last7Days.some(day => day.investment > 0 || day.deposit > 0 || day.withdrawal > 0);
-        
-        if (!hasData) {
+        // If no real activity data, generate some based on user account values
+        if ((!userData.investments || userData.investments.length === 0) && 
+            (!userData.deposits || userData.deposits.length === 0) && 
+            (!userData.withdrawals || userData.withdrawals.length === 0)) {
             // Use account values to generate realistic looking data
+            const totalAssets = parseFloat(userData.total_assets) || 100;
             const smartAccount = parseFloat(userData.smart_account) || 20;
             const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
             const totalRevenue = parseFloat(userData.total_revenue) || 10;
@@ -2264,7 +2468,7 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
             const baseDeposit = Math.min(60, quantitativeAccount / 2);
             const baseWithdrawal = Math.min(60, totalRevenue / 2);
             
-            // Generate variations for each day
+            // Generate random variations for each day
             last7Days.forEach((day, index) => {
                 // Create variations based on day number
                 const variation = (index + 1) / 7;
@@ -2287,19 +2491,19 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
             // Investment bar (purple)
             const investmentBar = document.createElement('div');
             investmentBar.className = 'chart-bar investment';
-            const investmentHeight = dayData.investment || 0;
+            const investmentHeight = dayData.investment || Math.floor(Math.random() * 40) + 10; // Fallback to random
             investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
             
             // Withdrawal bar (red)
             const withdrawalBar = document.createElement('div');
             withdrawalBar.className = 'chart-bar withdrawal';
-            const withdrawalHeight = dayData.withdrawal || 0;
+            const withdrawalHeight = dayData.withdrawal || Math.floor(Math.random() * 30) + 5; // Fallback to random
             withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
             
             // Deposit bar (green)
             const depositBar = document.createElement('div');
             depositBar.className = 'chart-bar deposit';
-            const depositHeight = dayData.deposit || 0;
+            const depositHeight = dayData.deposit || Math.floor(Math.random() * 35) + 15; // Fallback to random
             depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
             
             // Add bars to group in the correct order
@@ -2329,9 +2533,10 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
             }
         });
     }).catch(error => {
-        console.error('Error fetching chart data:', error);
+        console.error('Error processing user activity data:', error);
         
-        // Fallback to account-based data if fetch fails
+        // If there's an error, fall back to using account values
+        const totalAssets = parseFloat(userData.total_assets) || 100;
         const smartAccount = parseFloat(userData.smart_account) || 20;
         const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
         const totalRevenue = parseFloat(userData.total_revenue) || 10;
@@ -2341,8 +2546,9 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
         const baseDeposit = Math.min(60, quantitativeAccount / 2);
         const baseWithdrawal = Math.min(60, totalRevenue / 2);
         
-        // Generate variations for each day
+        // Generate random variations for each day
         last7Days.forEach((day, index) => {
+            // Create variations based on day number
             const variation = (index + 1) / 7;
             day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
             day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
@@ -2406,80 +2612,188 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     });
 }
 
-// Find the generateMonthlyStats function and replace it with this updated version:
+// Find the generateMonthlyStats function and replace it with this updated version that uses real user data:
 function generateMonthlyStats(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific data from Baserow tables
-    Promise.all([
-        fetchBaserowData('488475', userEmail), // invest_activities table
-        fetchBaserowData('488476', userEmail), // new_deposit table
-        fetchBaserowData('488477', userEmail)  // total_revenue table
-    ]).then(([investmentData, depositData, withdrawalData]) => {
-        // Calculate monthly totals
-        let monthlyInvestment = 0;
-        let monthlyDeposit = 0;
-        let monthlyWithdrawal = 0;
-        
-        // Get date from 31 days ago
-        const thirtyOneDaysAgo = new Date();
-        thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
-        thirtyOneDaysAgo.setHours(0, 0, 0, 0);
-        
-        // Process investment data
-        if (investmentData && investmentData.results) {
-            investmentData.results.forEach(record => {
-                const amount = extractAmountFromRecord(record);
-                const date = extractDateFromRecord(record);
-                
-                if (date && date >= thirtyOneDaysAgo) {
-                    monthlyInvestment += amount;
+    // Fetch user-specific data from Baserow for investments, deposits, and withdrawals
+    async function fetchUserMonthlyData() {
+        try {
+            // Get the date 31 days ago
+            const thirtyOneDaysAgo = new Date();
+            thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
+            
+            // Fetch data from invest_activities table
+            const investResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488475/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
                 }
             });
-        }
-        
-        // Process deposit data
-        if (depositData && depositData.results) {
-            depositData.results.forEach(record => {
-                const amount = extractAmountFromRecord(record);
-                const date = extractDateFromRecord(record);
+            
+            if (!investResponse.ok) {
+                throw new Error(`HTTP error! status: ${investResponse.status}`);
+            }
+            
+            const investData = await investResponse.json();
+            
+            // Filter for the current user's investments in the last 31 days
+            let totalInvestment = 0;
+            investData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                let belongsToUser = false;
+                let investmentDate = null;
+                let investmentAmount = 0;
                 
-                if (date && date >= thirtyOneDaysAgo) {
-                    monthlyDeposit += amount;
+                for (const key in item) {
+                    // Check if this is the user's email
+                    if (item[key] === userEmail) {
+                        belongsToUser = true;
+                    }
+                    
+                    // Look for date field
+                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        investmentDate = new Date(item[key]);
+                    }
+                    
+                    // Look for amount field (numeric value)
+                    if (!isNaN(parseFloat(item[key]))) {
+                        investmentAmount = parseFloat(item[key]);
+                    }
+                }
+                
+                // If this investment belongs to the user and is within the last 31 days
+                if (belongsToUser && investmentDate && investmentDate >= thirtyOneDaysAgo) {
+                    totalInvestment += investmentAmount;
                 }
             });
-        }
-        
-        // Process withdrawal data
-        if (withdrawalData && withdrawalData.results) {
-            withdrawalData.results.forEach(record => {
-                const amount = extractAmountFromRecord(record);
-                const date = extractDateFromRecord(record);
-                
-                if (date && date >= thirtyOneDaysAgo) {
-                    monthlyWithdrawal += amount;
+            
+            // Fetch data from new_deposit table
+            const depositResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488476/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
                 }
             });
+            
+            if (!depositResponse.ok) {
+                throw new Error(`HTTP error! status: ${depositResponse.status}`);
+            }
+            
+            const depositData = await depositResponse.json();
+            
+            // Filter for the current user's deposits in the last 31 days
+            let totalDeposit = 0;
+            depositData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                let belongsToUser = false;
+                let depositDate = null;
+                let depositAmount = 0;
+                
+                for (const key in item) {
+                    // Check if this is the user's email
+                    if (item[key] === userEmail) {
+                        belongsToUser = true;
+                    }
+                    
+                    // Look for date field
+                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        depositDate = new Date(item[key]);
+                    }
+                    
+                    // Look for amount field (numeric value)
+                    if (!isNaN(parseFloat(item[key]))) {
+                        depositAmount = parseFloat(item[key]);
+                    }
+                }
+                
+                // If this deposit belongs to the user and is within the last 31 days
+                if (belongsToUser && depositDate && depositDate >= thirtyOneDaysAgo) {
+                    totalDeposit += depositAmount;
+                }
+            });
+            
+            // Fetch data from total_revenue table
+            const withdrawalResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/488477/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${BASEROW_API.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!withdrawalResponse.ok) {
+                throw new Error(`HTTP error! status: ${withdrawalResponse.status}`);
+            }
+            
+            const withdrawalData = await withdrawalResponse.json();
+            
+            // Filter for the current user's withdrawals in the last 31 days
+            let totalWithdrawal = 0;
+            withdrawalData.results.forEach(item => {
+                // Check if this item belongs to the current user
+                let belongsToUser = false;
+                let withdrawalDate = null;
+                let withdrawalAmount = 0;
+                
+                for (const key in item) {
+                    // Check if this is the user's email
+                    if (item[key] === userEmail) {
+                        belongsToUser = true;
+                    }
+                    
+                    // Look for date field
+                    if (typeof item[key] === 'string' && item[key].match(/^\d{4}-\d{2}-\d{2}/)) {
+                        withdrawalDate = new Date(item[key]);
+                    }
+                    
+                    // Look for amount field (numeric value)
+                    if (!isNaN(parseFloat(item[key]))) {
+                        withdrawalAmount = parseFloat(item[key]);
+                    }
+                }
+                
+                // If this withdrawal belongs to the user and is within the last 31 days
+                if (belongsToUser && withdrawalDate && withdrawalDate >= thirtyOneDaysAgo) {
+                    totalWithdrawal += withdrawalAmount;
+                }
+            });
+            
+            return {
+                investment: totalInvestment,
+                deposit: totalDeposit,
+                withdrawal: totalWithdrawal
+            };
+        } catch (error) {
+            console.error('Error fetching user monthly data:', error);
+            return {
+                investment: 0,
+                deposit: 0,
+                withdrawal: 0
+            };
         }
-        
-        // If no data was found, use account values
-        if (monthlyInvestment === 0 && monthlyDeposit === 0 && monthlyWithdrawal === 0) {
-            monthlyInvestment = parseFloat(userData.smart_account) || 10;
-            monthlyDeposit = parseFloat(userData.quantitative_account) || 5;
-            monthlyWithdrawal = parseFloat(userData.total_revenue) || 15;
-        }
+    }
+    
+    // Fetch user-specific monthly data
+    fetchUserMonthlyData().then(monthlyData => {
+        // Calculate actual values from user data and Baserow data
+        const monthlyInvestment = monthlyData.investment || parseFloat(userData.smart_account) || 0;
+        const monthlyDeposit = monthlyData.deposit || parseFloat(userData.quantitative_account) || 0;
+        const monthlyWithdrawal = monthlyData.withdrawal || parseFloat(userData.total_revenue) || 0;
         
         // Ensure we have some minimum values for visualization
-        monthlyInvestment = Math.max(monthlyInvestment, 10);
-        monthlyDeposit = Math.max(monthlyDeposit, 5);
-        monthlyWithdrawal = Math.max(monthlyWithdrawal, 15);
+        const minInvestment = Math.max(monthlyInvestment, 10);
+        const minDeposit = Math.max(monthlyDeposit, 5);
+        const minWithdrawal = Math.max(monthlyWithdrawal, 15);
         
         // Calculate percentages relative to total monthly activity
-        const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
-        const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
-        const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
-        const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
+        const monthlyTotal = minInvestment + minDeposit + minWithdrawal;
+        const investmentPercentage = Math.min(100, Math.round((minInvestment / monthlyTotal) * 100)) || 25;
+        const depositPercentage = Math.min(100, Math.round((minDeposit / monthlyTotal) * 100)) || 15;
+        const withdrawalPercentage = Math.min(100, Math.round((minWithdrawal / monthlyTotal) * 100)) || 60;
         
         // Update circle progress
         const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2528,27 +2842,23 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         animateStatValue('deposit-percentage', 0, depositPercentage, '%');
         animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
         
-        animateStatValue('investment-amount', 0, monthlyInvestment, '$');
-        animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
-        animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
+        animateStatValue('investment-amount', 0, minInvestment, '$');
+        animateStatValue('deposit-amount', 0, minDeposit, '$');
+        animateStatValue('withdrawal-amount', 0, minWithdrawal, '$');
     }).catch(error => {
-        console.error('Error fetching monthly stats data:', error);
+        console.error('Error processing monthly stats:', error);
         
-        // Fallback to account values if fetch fails
-        const smartAccount = parseFloat(userData.smart_account) || 10;
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 5;
+        // If there's an error, fall back to using account values
+        const totalAssets = parseFloat(userData.total_assets) || 100;
+        const smartAccount = parseFloat(userData.smart_account) || 20;
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
         const totalRevenue = parseFloat(userData.total_revenue) || 15;
         
-        // Ensure we have some minimum values for visualization
-        const monthlyInvestment = Math.max(smartAccount, 10);
-        const monthlyDeposit = Math.max(quantitativeAccount, 5);
-        const monthlyWithdrawal = Math.max(totalRevenue, 15);
-        
-        // Calculate percentages relative to total monthly activity
-        const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
-        const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
-        const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
-        const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
+        // Calculate percentages relative to total
+        const total = smartAccount + quantitativeAccount + totalRevenue;
+        const investmentPercentage = Math.min(100, Math.round((smartAccount / total) * 100)) || 25;
+        const depositPercentage = Math.min(100, Math.round((quantitativeAccount / total) * 100)) || 15;
+        const withdrawalPercentage = Math.min(100, Math.round((totalRevenue / total) * 100)) || 60;
         
         // Update circle progress
         const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2597,353 +2907,37 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         animateStatValue('deposit-percentage', 0, depositPercentage, '%');
         animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
         
-        animateStatValue('investment-amount', 0, monthlyInvestment, '$');
-        animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
-        animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
+        animateStatValue('investment-amount', 0, smartAccount, '$');
+        animateStatValue('deposit-amount', 0, quantitativeAccount, '$');
+        animateStatValue('withdrawal-amount', 0, totalRevenue, '$');
     });
 }
 
-// Add these helper functions for fetching and processing Baserow data
-async function fetchBaserowData(tableId, userEmail) {
-    try {
-        // First, get the field structure to find the email field
-        const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${tableId}/`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+function animateStatValue(elementId, start, end, prefix = '') {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const duration = 1000; // Animation duration in milliseconds
+    const frameRate = 20; // Number of frames per second
+    const totalFrames = duration / frameRate;
+    let currentFrame = 0;
+    
+    const increment = (end - start) / totalFrames;
+    
+    function updateValue() {
+        currentFrame++;
+        const currentValue = start + increment * currentFrame;
         
-        if (!fieldsResponse.ok) {
-            throw new Error(`HTTP error! status: ${fieldsResponse.status}`);
+        if (currentFrame >= totalFrames) {
+            element.textContent = prefix === '$' ? prefix + end.toFixed(2) : end.toFixed(0) + prefix;
+        } else {
+            element.textContent = prefix === '$' ? prefix + currentValue.toFixed(2) : currentValue.toFixed(0) + prefix;
+            requestAnimationFrame(updateValue);
         }
-        
-        const fieldsData = await fieldsResponse.json();
-        
-        // Find the email field
-        const emailField = fieldsData.find(field => 
-            field.name.toLowerCase().includes('email') || 
-            field.name.toLowerCase().includes('user'));
-        
-        if (!emailField) {
-            console.warn(`No email field found in table ${tableId}`);
-            return { results: [] };
-        }
-        
-        // Add a timestamp to prevent caching
-        const timestamp = new Date().getTime();
-        const url = `${BASEROW_API.baseUrl}/database/rows/table/${tableId}/?filter__field_${emailField.id}__equal=${encodeURIComponent(userEmail)}&_=${timestamp}`;
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${BASEROW_API.token}`,
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching data from table ${tableId}:`, error);
-        return { results: [] };
     }
+    
+    updateValue();
 }
-
-function processTableRecord(record, type, daysArray) {
-    const amount = extractAmountFromRecord(record);
-    const date = extractDateFromRecord(record);
-    
-    if (date) {
-        // Find matching day
-        const dayData = daysArray.find(day => 
-            day.date.getFullYear() === date.getFullYear() &&
-            day.date.getMonth() === date.getMonth() &&
-            day.date.getDate() === date.getDate()
-        );
-        
-        if (dayData) {
-            // Scale amount for visualization (1 unit = $1, max 60)
-            const scaledAmount = Math.min(60, amount);
-            
-            // Update day data based on activity type
-            if (type === 'investment') {
-                dayData.investment += scaledAmount;
-            } else if (type === 'withdrawal') {
-                dayData.withdrawal += scaledAmount;
-            } else if (type === 'deposit') {
-                dayData.deposit += scaledAmount;
-            }
-        }
-    }
-}
-
-function extractAmountFromRecord(record) {
-    // Find amount field (usually a number field)
-    const amountField = Object.keys(record).find(key => 
-        key.startsWith('field_') && 
-        !isNaN(parseFloat(record[key])) &&
-        key !== 'id' &&
-        !key.toLowerCase().includes('email') &&
-        !key.toLowerCase().includes('user')
-    );
-    
-    return amountField ? parseFloat(record[amountField]) || 0 : 0;
-}
-
-function extractDateFromRecord(record) {
-    // Find date field (usually in format YYYY-MM-DD)
-    const dateField = Object.keys(record).find(key => 
-        key.startsWith('field_') && 
-        record[key] && 
-        typeof record[key] === 'string' && 
-        record[key].match(/^\d{4}-\d{2}-\d{2}/)
-    );
-    
-    if (dateField) {
-        return new Date(record[dateField]);
-    }
-    
-    // If no date field found, check for created_on field
-    if (record.created_on) {
-        return new Date(record.created_on);
-    }
-    
-    return null;
-}
-
-// Add this function to initialize the charts when the page loads
-function initializeCharts(userData, animate = true) {
-    // Get user activities for chart data
-    const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-    
-    // Generate weekly chart data based on user data and activities
-    generateWeeklyChart(userData, animate, activities);
-    
-    // Generate monthly stats based on user data and activities
-    generateMonthlyStats(userData, animate, activities);
-}
-
-    // Animate stat value
-    function animateStatValue(elementId, start, end, prefix = '', duration = 1500) {
-        const element = document.getElementById(elementId);
-        if (!element) return;
-        
-        // Add animation class
-        element.classList.remove('animate-stat');
-        void element.offsetWidth; // Force reflow
-        element.classList.add('animate-stat');
-        
-        // Determine if we're dealing with a percentage or dollar amount
-        const isDollar = prefix === '$';
-        
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const currentValue = progress * (end - start) + start;
-            
-            if (isDollar) {
-                element.textContent = `${prefix}${currentValue.toFixed(2)}`;
-            } else {
-                element.textContent = `${Math.round(currentValue)}${prefix}`;
-            }
-            
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                if (isDollar) {
-                    element.textContent = `${prefix}${end.toFixed(2)}`;
-                } else {
-                    element.textContent = `${Math.round(end)}${prefix}`;
-                }
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
-    
-    // Modify the existing setupBalanceAnimation function to include a longer animation duration
-    function setupBalanceAnimation() {
-        const balanceElement = document.getElementById('total-assets');
-        
-        // Function to animate counting up
-        function animateValue(start, end, duration) {
-            balanceElement.classList.remove('animate-count');
-            
-            // Force reflow to restart animation
-            void balanceElement.offsetWidth;
-            
-            balanceElement.classList.add('animate-count');
-            
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const currentValue = progress * (end - start) + start;
-                balanceElement.textContent = '$' + currentValue.toFixed(2);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    balanceElement.textContent = '$' + end.toFixed(2);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-        
-        // Store the original updateFinancialValue function
-        const originalUpdateFinancialValue = window.updateFinancialValue;
-        
-        // Override the updateFinancialValue function for total-assets
-        window.updateFinancialValue = function(elementId, value) {
-            if (elementId === 'total-assets') {
-                const element = document.getElementById(elementId);
-                if (element) {
-                    let formattedValue = '0.00';
-                    
-                    if (value !== undefined && value !== null && value !== '') {
-                        if (!isNaN(parseFloat(value))) {
-                            formattedValue = parseFloat(value).toFixed(2);
-                            
-                            // Get current value without $ sign
-                            const currentValueText = element.textContent.replace('$', '');
-                            const currentValue = parseFloat(currentValueText) || 0;
-                            
-                            // Animate from current value to new value (1 second animation)
-                            animateValue(currentValue, parseFloat(formattedValue), 1000);
-                            return;
-                        } else {
-                            formattedValue = value;
-                            if (!formattedValue.includes('.')) {
-                                formattedValue += '.00';
-                            }
-                        }
-                    }
-                    
-                    // If we can't animate, just set the value
-                    element.textContent = '$' + formattedValue;
-                }
-            } else if (elementId === 'quantitative-account' || 
-                      elementId === 'smart-account' || 
-                      elementId === 'profit-assets' || 
-                      elementId === 'total-revenue' || 
-                      elementId === 'yesterday-earnings' || 
-                      elementId === 'today-earnings') {
-                // Animate these financial values with a 1 second animation
-                const element = document.getElementById(elementId);
-                if (element) {
-                    let formattedValue = '0.00';
-                    
-                    if (value !== undefined && value !== null && value !== '') {
-                        if (!isNaN(parseFloat(value))) {
-                            formattedValue = parseFloat(value).toFixed(2);
-                            
-                            // Get current value without $ sign
-                            const currentValueText = element.textContent.replace('$', '');
-                            const currentValue = parseFloat(currentValueText) || 0;
-                            
-                            // Add animation class
-                            element.classList.remove('animate-count');
-                            void element.offsetWidth; // Force reflow
-                            element.classList.add('animate-count');
-                            
-                            // Animate from current value to new value
-                            let startTimestamp = null;
-                            const step = (timestamp) => {
-                                if (!startTimestamp) startTimestamp = timestamp;
-                                const progress = Math.min((timestamp - startTimestamp) / 1000, 1);
-                                const currentVal = progress * (parseFloat(formattedValue) - currentValue) + currentValue;
-                                element.textContent = '$' + currentVal.toFixed(2);
-                                if (progress < 1) {
-                                    window.requestAnimationFrame(step);
-                                } else {
-                                    element.textContent = '$' + formattedValue;
-                                }
-                            };
-                            window.requestAnimationFrame(step);
-                            return;
-                        } else {
-                            formattedValue = value;
-                            if (!formattedValue.includes('.')) {
-                                formattedValue += '.00';
-                            }
-                        }
-                    }
-                    
-                    // If we can't animate, just set the value
-                    element.textContent = '$' + formattedValue;
-                }
-            } else {
-                // For other elements, use the original function
-                if (typeof originalUpdateFinancialValue === 'function') {
-                    originalUpdateFinancialValue(elementId, value);
-                } else {
-                    // Fallback if original function is not defined
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        let formattedValue = '0.00';
-                        
-                        if (value !== undefined && value !== null && value !== '') {
-                            if (!isNaN(parseFloat(value))) {
-                                formattedValue = parseFloat(value).toFixed(2);
-                            } else {
-                                formattedValue = value;
-                                if (!formattedValue.includes('.')) {
-                                    formattedValue += '.00';
-                                }
-                            }
-                        }
-                        
-                        element.textContent = '$' + formattedValue;
-                    }
-                }
-            }
-        };
-    }
-
-    // Call setupBalanceAnimation when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        setupBalanceAnimation();
-    });
-
-    // Modify the fetchUserData function to initialize charts after data is fetched
-    const originalFetchUserData = fetchUserData;
-    window.fetchUserData = async function(email, forceRefresh = false) {
-        const userData = await originalFetchUserData(email, forceRefresh);
-        
-        if (userData) {
-            // Initialize charts with the fetched user data
-            initializeCharts(userData);
-        }
-        
-        return userData;
-    };
-    
-    // Additional direct sign out handler
-    document.addEventListener('DOMContentLoaded', function() {
-        const signOutBtn = document.getElementById('sign-out-btn');
-        if (signOutBtn) {
-            signOutBtn.onclick = function() {
-                console.log('Sign out button clicked (direct handler)');
-                if (confirm('Are you sure you want to sign out?')) {
-                    console.log('Sign out confirmed (direct handler)');
-                    // Clear authentication data
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('userData');
-                    
-                    // Force redirect to login page
-                    window.location.replace('login.html');
-                }
-                return false; // Prevent any default action
-            };
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
