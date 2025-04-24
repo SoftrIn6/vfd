@@ -574,7 +574,7 @@
 
         /* Sign Out Button */
         .sign-out-btn {
-            margin: 20px 10px;
+            margin: 20px 10px 80px; /* Added bottom margin to ensure it doesn't overlap with bottom nav */
             padding: 15px;
             background-color: #ffa500;
             color: white;
@@ -587,6 +587,7 @@
             text-align: center;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
+            display: block; /* Ensure it's a block element */
         }
 
         .sign-out-btn:hover {
@@ -696,23 +697,32 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        
-        .section-subtitle {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
+
+        .statistics-tabs {
+            display: flex;
+            gap: 15px;
             margin-bottom: 20px;
-            position: relative;
-            padding-left: 10px;
-            border-left: 3px solid #ffa500;
         }
-        
-        .section-subtitle::before {
-            display: none;
+
+        .statistics-tab {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f5f5f5;
+            color: #666;
+        }
+
+        .statistics-tab.active {
+            background-color: #ffa500;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
         }
 
         /* Weekly Stats */
-        .weekly-stats-section {
+        .weekly-stats {
             margin-bottom: 30px;
         }
 
@@ -748,29 +758,26 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            gap: 6px;
+            gap: 4px;
         }
 
         .chart-bar {
-            width: 12px;
+            width: 8px;
             background-color: #4e54c8;
             border-radius: 4px 4px 0 0;
-            transition: height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: height 3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .chart-bar.investment {
-            background-color: #6a11cb;
-            width: 8px;
+            background-color: #4e54c8;
         }
 
         .chart-bar.deposit {
             background-color: #38ef7d;
-            width: 8px;
         }
 
         .chart-bar.withdrawal {
             background-color: #ff6b6b;
-            width: 12px;
         }
 
         .chart-legend {
@@ -795,7 +802,7 @@
         }
 
         .legend-color.investment {
-            background-color: #6a11cb;
+            background-color: #4e54c8;
         }
 
         .legend-color.deposit {
@@ -807,17 +814,10 @@
         }
 
         /* Monthly Stats */
-        .monthly-stats-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-        }
-        
         .monthly-stats {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-            padding: 0 10px;
+            margin-top: 30px;
         }
 
         .monthly-stat {
@@ -854,7 +854,7 @@
         }
 
         .stat-circle-progress.investment {
-            stroke: #6a11cb;
+            stroke: #4e54c8;
         }
 
         .stat-circle-progress.withdrawal {
@@ -880,14 +880,12 @@
             font-weight: 500;
             color: #666;
             margin-bottom: 5px;
-            text-align: center;
         }
 
         .stat-amount {
             font-size: 14px;
             font-weight: bold;
             color: #333;
-            text-align: center;
         }
 
         /* Add this to the existing animation for balance counter */
@@ -952,6 +950,328 @@
                 font-size: 16px;
             }
         }
+
+        .chart-bar {
+    width: 12px;
+    border-radius: 2px 2px 0 0;
+    transition: height 3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chart-bar.deposit {
+    background-color: #6a5acd;
+}
+
+.chart-bar.profit {
+    background-color: #ff5252;
+}
+
+.chart-bar.withdrawal {
+    background-color: #4caf50;
+}
+
+/* Update the chart-day class to match the image */
+.chart-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 12%;
+}
+
+.chart-label {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #999;
+}
+
+/* Update the legend colors to match the image */
+.legend-color.deposit {
+    background-color: #6a5acd;
+}
+
+.legend-color.profit {
+    background-color: #ff5252;
+}
+
+.legend-color.withdrawal {
+    background-color: #4caf50;
+}
+
+.chart-bars-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 6px;
+}
+
+/* Monthly Usages Section */
+.monthly-usages-section {
+    margin: 20px 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.monthly-circles-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.monthly-circle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33.33%;
+}
+
+.circle-progress {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #f0f0f0;
+    stroke-width: 8;
+}
+
+.circle-progress-value {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 3s ease-in-out;
+}
+
+.circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.circle-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.circle-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.circle-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Circle colors */
+.deposit-color {
+    color: #6a5acd;
+}
+
+.deposit-color .circle-progress-value {
+    stroke: #6a5acd;
+}
+
+.deposit-color .circle-label-dot {
+    background-color: #6a5acd;
+}
+
+.withdrawal-color {
+    color: #4caf50;
+}
+
+.withdrawal-color .circle-progress-value {
+    stroke: #4caf50;
+}
+
+.withdrawal-color .circle-label-dot {
+    background-color: #4caf50;
+}
+
+.profits-color {
+    color: #ff5252;
+}
+
+.profits-color .circle-progress-value {
+    stroke: #ff5252;
+}
+
+.profits-color .circle-label-dot {
+    background-color: #ff5252;
+}
+
+@keyframes circleAnimation {
+    0% {
+        stroke-dashoffset: 283; /* Full circle circumference */
+    }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 470px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .balance-amount {
+        font-size: 28px;
+    }
+
+    .service-name {
+        font-size: 12px;
+    }
+
+    .sign-out-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .nav-item {
+        font-size: 8px;
+    }
+
+    .nav-item i {
+        font-size: 16px;
+    }
+
+    .promo-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .promo-subtitle {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    .header {
+        padding: 10px;
+    }
+    
+    .logo-text {
+        font-size: 10px;
+    }
+    
+    .header-btn {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .user-name {
+        font-size: 16px;
+    }
+    
+    .balance-amount {
+        font-size: 24px;
+    }
+    
+    .balance-action {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .promo-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .promo-card {
+        height: 90px;
+    }
+    
+    .promo-subtitle {
+        font-size: 14px;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .feature-name {
+        font-size: 10px;
+    }
+    
+    .monthly-circle-item .circle-progress {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .monthly-circle-item .circle-value {
+        font-size: 12px;
+    }
+    
+    .sign-out-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 470px) {
+    .chart-container {
+        height: 250px !important;
+    }
+    
+    .chart-bar {
+        width: 8px !important;
+    }
+    
+    .chart-bars-group {
+        gap: 2px !important;
+    }
+    
+    .monthly-circles-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .monthly-circle-item {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1082,76 +1402,101 @@
         
         <!-- Statistics Section -->
         <div class="statistics-section">
-    <div class="statistics-header">
-        <div class="section-title">Account Statistics</div>
-        <div id="refresh-stats" style="font-size: 13px; color: #ffa500; cursor: pointer; display: flex; align-items: center;">
-            <i class="fas fa-sync-alt"></i>&nbsp; Refresh
+    <div class="chart-container" style="height: 300px; position: relative; margin-top: 5px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-size: 14px; font-weight: 500; color: #5b6b7b;">Account Weekly Stats</div>
+            <div style="cursor: pointer;" id="refresh-stats">
+                <i class="fas fa-sync-alt" style="color: #666;"></i>
+            </div>
         </div>
+        
+        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+    <div style="display: flex; align-items: center;">
+        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #6a5acd; margin-right: 5px;"></div>
+        <span style="font-size: 12px; color: #333;">Investment</span>
     </div>
-    
-    <!-- Weekly Stats -->
-    <div class="weekly-stats-section">
-        <div class="section-subtitle">Weekly Activity Stats</div>
-        <div class="chart-container">
-            <div class="chart-bars" id="weekly-chart">
-                <!-- Chart bars will be generated by JavaScript -->
-            </div>
-        </div>
-        <div class="chart-legend">
-            <div class="legend-item">
-                <div class="legend-color investment"></div>
-                <span>Investment</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color deposit"></div>
-                <span>Deposit</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color withdrawal"></div>
-                <span>Withdrawal</span>
-            </div>
-        </div>
+    <div style="display: flex; align-items: center;">
+        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #ff5252; margin-right: 5px;"></div>
+        <span style="font-size: 12px; color: #333;">Profits</span>
     </div>
-    
-    <!-- Monthly Stats -->
-    <div class="monthly-stats-section">
-        <div class="section-subtitle">Monthly Activity Stats</div>
-        <div class="monthly-stats" id="monthly-stats">
-            <div class="monthly-stat">
-                <div class="stat-circle">
-                    <svg viewBox="0 0 36 36">
-                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
-                        <circle class="stat-circle-progress investment" id="investment-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
-                    </svg>
-                    <div class="stat-percentage" id="investment-percentage">0%</div>
-                </div>
-                <div class="stat-label">Investment</div>
-                <div class="stat-amount" id="investment-amount">$0.00</div>
+    <div style="display: flex; align-items: center;">
+        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #4caf50; margin-right: 5px;"></div>
+        <span style="font-size: 12px; color: #333;">Withdrawal</span>
+    </div>
+</div>
+        
+        <div style="position: relative; height: 220px;">
+            <!-- Y-axis labels -->
+            <div style="position: absolute; left: 0; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; width: 25px; text-align: right; padding-right: 5px;">
+                <div style="font-size: 11px; color: #999;">60</div>
+                <div style="font-size: 11px; color: #999;">40</div>
+                <div style="font-size: 11px; color: #999;">20</div>
+                <div style="font-size: 11px; color: #999;">0</div>
             </div>
             
-            <div class="monthly-stat">
-                <div class="stat-circle">
-                    <svg viewBox="0 0 36 36">
-                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
-                        <circle class="stat-circle-progress deposit" id="deposit-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
-                    </svg>
-                    <div class="stat-percentage" id="deposit-percentage">0%</div>
+            <!-- Chart area -->
+            <div style="position: absolute; left: 30px; right: 0; top: 0; bottom: 20px; border-left: 1px solid #eee; border-bottom: 1px solid #eee;">
+                <div id="weekly-chart" style="display: flex; justify-content: space-between; align-items: flex-end; height: 100%; width: 100%;">
+                    <!-- Chart bars will be generated by JavaScript -->
                 </div>
-                <div class="stat-label">Deposits</div>
-                <div class="stat-amount" id="deposit-amount">$0.00</div>
             </div>
             
-            <div class="monthly-stat">
-                <div class="stat-circle">
-                    <svg viewBox="0 0 36 36">
-                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
-                        <circle class="stat-circle-progress withdrawal" id="withdrawal-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
-                    </svg>
-                    <div class="stat-percentage" id="withdrawal-percentage">0%</div>
-                </div>
-                <div class="stat-label">Withdrawals</div>
-                <div class="stat-amount" id="withdrawal-amount">$0.00</div>
+            <!-- X-axis labels -->
+            <div style="position: absolute; left: 30px; right: 0; bottom: 0; display: flex; justify-content: space-between;">
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">01</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">02</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">03</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">04</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">05</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">06</div>
+                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">07</div>
             </div>
+        </div>
+    </div>
+</div>
+
+        <!-- Monthly Usages Section -->
+        <div class="monthly-usages-section">
+    <div class="section-title">Monthly Usages</div>
+    <div class="monthly-circles-container">
+        <div class="monthly-circle-item deposit-color">
+            <div class="circle-progress">
+                <svg width="80" height="80">
+                    <circle class="circle-bg" cx="40" cy="40" r="36" />
+                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
+                </svg>
+                <div class="circle-text" id="investment-percentage">0%</div>
+            </div>
+            <div class="circle-label">
+                <span class="circle-label-dot"></span> Investments
+            </div>
+            <div class="circle-value" id="investment-amount">$0.00</div>
+        </div>
+        <div class="monthly-circle-item withdrawal-color">
+            <div class="circle-progress">
+                <svg width="80" height="80">
+                    <circle class="circle-bg" cx="40" cy="40" r="36" />
+                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
+                </svg>
+                <div class="circle-text" id="withdrawal-percentage">0%</div>
+            </div>
+            <div class="circle-label">
+                <span class="circle-label-dot"></span> Withdrawals
+            </div>
+            <div class="circle-value" id="withdrawal-amount">$0.00</div>
+        </div>
+        <div class="monthly-circle-item profits-color">
+            <div class="circle-progress">
+                <svg width="80" height="80">
+                    <circle class="circle-bg" cx="40" cy="40" r="36" />
+                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
+                </svg>
+                <div class="circle-text" id="profit-percentage">0%</div>
+            </div>
+            <div class="circle-label">
+                <span class="circle-label-dot"></span> Profits
+            </div>
+            <div class="circle-value" id="profit-amount">$0.00</div>
         </div>
     </div>
 </div>
@@ -1305,7 +1650,7 @@
         </a>
     </nav>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
@@ -2427,5 +2772,8 @@ function generateMonthlyStats(userData, animate = true) {
         return userData;
     };
 </script>
+</body>
+</html>
+
 </body>
 </html>
