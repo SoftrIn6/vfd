@@ -2223,111 +2223,38 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific data from Baserow for investments, deposits, and withdrawals
-    fetchUserActivityData(userEmail)
-        .then(activityData => {
-            // Process the activity data to populate the chart
-            if (activityData && activityData.length > 0) {
-                activityData.forEach(activity => {
-                    const activityDate = new Date(activity.date);
-                    activityDate.setHours(0, 0, 0, 0);
-                    
-                    // Find matching day
-                    const dayData = last7Days.find(day => 
-                        day.date.getTime() === activityDate.getTime());
-                    
-                    if (dayData) {
-                        // Update day data based on activity type
-                        if (activity.type === 'investment') {
-                            dayData.investment += Math.min(60, parseFloat(activity.amount) || 0);
-                        } else if (activity.type === 'withdrawal') {
-                            dayData.withdrawal += Math.min(60, parseFloat(activity.amount) || 0);
-                        } else if (activity.type === 'deposit') {
-                            dayData.deposit += Math.min(60, parseFloat(activity.amount) || 0);
-                        }
-                    }
-                });
-            } else {
-                // If no activity data, use account values to generate realistic data
-                const totalAssets = parseFloat(userData.total_assets) || 100;
-                const smartAccount = parseFloat(userData.smart_account) || 20;
-                const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-                const totalRevenue = parseFloat(userData.total_revenue) || 10;
-                
-                // Scale values for visualization
-                const baseInvestment = Math.min(60, smartAccount / 2);
-                const baseDeposit = Math.min(60, quantitativeAccount / 2);
-                const baseWithdrawal = Math.min(60, totalRevenue / 2);
-                
-                // Generate variations for each day
-                last7Days.forEach((day, index) => {
-                    const variation = (index + 1) / 7;
-                    day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
-                    day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
-                    day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
-                });
-            }
-            
-            // Generate chart for each day
-            last7Days.forEach((dayData, index) => {
-                // Create chart day element
-                const chartDay = document.createElement('div');
-                chartDay.className = 'chart-day';
-                
-                // Create bars group
-                const barsGroup = document.createElement('div');
-                barsGroup.className = 'chart-bars-group';
-                
-                // Investment bar (purple)
-                const investmentBar = document.createElement('div');
-                investmentBar.className = 'chart-bar investment';
-                const investmentHeight = dayData.investment || 0;
-                investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
-                
-                // Withdrawal bar (red)
-                const withdrawalBar = document.createElement('div');
-                withdrawalBar.className = 'chart-bar withdrawal';
-                const withdrawalHeight = dayData.withdrawal || 0;
-                withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
-                
-                // Deposit bar (green)
-                const depositBar = document.createElement('div');
-                depositBar.className = 'chart-bar deposit';
-                const depositHeight = dayData.deposit || 0;
-                depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
-                
-                // Add bars to group in the correct order
-                barsGroup.appendChild(investmentBar);
-                barsGroup.appendChild(withdrawalBar);
-                barsGroup.appendChild(depositBar);
-                
-                // Add bars group to chart day
-                chartDay.appendChild(barsGroup);
-                
-                // Add day label
-                const dayLabel = document.createElement('div');
-                dayLabel.className = 'chart-label';
-                dayLabel.textContent = dayData.day;
-                chartDay.appendChild(dayLabel);
-                
-                // Add chart day to chart
-                weeklyChart.appendChild(chartDay);
-                
-                // Animate bars after a short delay
-                if (animate) {
-                    setTimeout(() => {
-                        investmentBar.style.height = `${investmentHeight}px`;
-                        withdrawalBar.style.height = `${withdrawalHeight}px`;
-                        depositBar.style.height = `${depositHeight}px`;
-                    }, 100 * index); // Stagger animation
-                }
+    // Fetch user-specific data from Baserow tables
+    Promise.all([
+        fetchBaserowData('488475', userEmail), // invest_activities table
+        fetchBaserowData('488476', userEmail), // new_deposit table
+        fetchBaserowData('488477', userEmail)  // total_revenue table
+    ]).then(([investmentData, depositData, withdrawalData]) => {
+        // Process investment data
+        if (investmentData && investmentData.results) {
+            investmentData.results.forEach(record => {
+                processTableRecord(record, 'investment', last7Days);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching user activity data:', error);
-            
-            // Fallback to account-based data if fetch fails
-            const totalAssets = parseFloat(userData.total_assets) || 100;
+        }
+        
+        // Process deposit data
+        if (depositData && depositData.results) {
+            depositData.results.forEach(record => {
+                processTableRecord(record, 'deposit', last7Days);
+            });
+        }
+        
+        // Process withdrawal data
+        if (withdrawalData && withdrawalData.results) {
+            withdrawalData.results.forEach(record => {
+                processTableRecord(record, 'withdrawal', last7Days);
+            });
+        }
+        
+        // If no data was found, use account values to generate realistic looking data
+        const hasData = last7Days.some(day => day.investment > 0 || day.deposit > 0 || day.withdrawal > 0);
+        
+        if (!hasData) {
+            // Use account values to generate realistic looking data
             const smartAccount = parseFloat(userData.smart_account) || 20;
             const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
             const totalRevenue = parseFloat(userData.total_revenue) || 10;
@@ -2339,67 +2266,144 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
             
             // Generate variations for each day
             last7Days.forEach((day, index) => {
+                // Create variations based on day number
                 const variation = (index + 1) / 7;
                 day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
                 day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
                 day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
             });
+        }
+        
+        // Generate chart for each day
+        last7Days.forEach((dayData, index) => {
+            // Create chart day element
+            const chartDay = document.createElement('div');
+            chartDay.className = 'chart-day';
             
-            // Generate chart for each day
-            last7Days.forEach((dayData, index) => {
-                // Create chart day element
-                const chartDay = document.createElement('div');
-                chartDay.className = 'chart-day';
-                
-                // Create bars group
-                const barsGroup = document.createElement('div');
-                barsGroup.className = 'chart-bars-group';
-                
-                // Investment bar (purple)
-                const investmentBar = document.createElement('div');
-                investmentBar.className = 'chart-bar investment';
-                const investmentHeight = dayData.investment;
-                investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
-                
-                // Withdrawal bar (red)
-                const withdrawalBar = document.createElement('div');
-                withdrawalBar.className = 'chart-bar withdrawal';
-                const withdrawalHeight = dayData.withdrawal;
-                withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
-                
-                // Deposit bar (green)
-                const depositBar = document.createElement('div');
-                depositBar.className = 'chart-bar deposit';
-                const depositHeight = dayData.deposit;
-                depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
-                
-                // Add bars to group in the correct order
-                barsGroup.appendChild(investmentBar);
-                barsGroup.appendChild(withdrawalBar);
-                barsGroup.appendChild(depositBar);
-                
-                // Add bars group to chart day
-                chartDay.appendChild(barsGroup);
-                
-                // Add day label
-                const dayLabel = document.createElement('div');
-                dayLabel.className = 'chart-label';
-                dayLabel.textContent = dayData.day;
-                chartDay.appendChild(dayLabel);
-                
-                // Add chart day to chart
-                weeklyChart.appendChild(chartDay);
-                
-                // Animate bars after a short delay
-                if (animate) {
-                    setTimeout(() => {
-                        investmentBar.style.height = `${investmentHeight}px`;
-                        withdrawalBar.style.height = `${withdrawalHeight}px`;
-                        depositBar.style.height = `${depositHeight}px`;
-                    }, 100 * index); // Stagger animation
-                }
-            });
+            // Create bars group
+            const barsGroup = document.createElement('div');
+            barsGroup.className = 'chart-bars-group';
+            
+            // Investment bar (purple)
+            const investmentBar = document.createElement('div');
+            investmentBar.className = 'chart-bar investment';
+            const investmentHeight = dayData.investment || 0;
+            investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
+            
+            // Withdrawal bar (red)
+            const withdrawalBar = document.createElement('div');
+            withdrawalBar.className = 'chart-bar withdrawal';
+            const withdrawalHeight = dayData.withdrawal || 0;
+            withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
+            
+            // Deposit bar (green)
+            const depositBar = document.createElement('div');
+            depositBar.className = 'chart-bar deposit';
+            const depositHeight = dayData.deposit || 0;
+            depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
+            
+            // Add bars to group in the correct order
+            barsGroup.appendChild(investmentBar);
+            barsGroup.appendChild(withdrawalBar);
+            barsGroup.appendChild(depositBar);
+            
+            // Add bars group to chart day
+            chartDay.appendChild(barsGroup);
+            
+            // Add day label
+            const dayLabel = document.createElement('div');
+            dayLabel.className = 'chart-label';
+            dayLabel.textContent = dayData.day;
+            chartDay.appendChild(dayLabel);
+            
+            // Add chart day to chart
+            weeklyChart.appendChild(chartDay);
+            
+            // Animate bars after a short delay
+            if (animate) {
+                setTimeout(() => {
+                    investmentBar.style.height = `${investmentHeight}px`;
+                    withdrawalBar.style.height = `${withdrawalHeight}px`;
+                    depositBar.style.height = `${depositHeight}px`;
+                }, 100 * index); // Stagger animation
+            }
         });
+    }).catch(error => {
+        console.error('Error fetching chart data:', error);
+        
+        // Fallback to account-based data if fetch fails
+        const smartAccount = parseFloat(userData.smart_account) || 20;
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
+        const totalRevenue = parseFloat(userData.total_revenue) || 10;
+        
+        // Scale values for visualization
+        const baseInvestment = Math.min(60, smartAccount / 2);
+        const baseDeposit = Math.min(60, quantitativeAccount / 2);
+        const baseWithdrawal = Math.min(60, totalRevenue / 2);
+        
+        // Generate variations for each day
+        last7Days.forEach((day, index) => {
+            const variation = (index + 1) / 7;
+            day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
+            day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
+            day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
+        });
+        
+        // Generate chart for each day
+        last7Days.forEach((dayData, index) => {
+            // Create chart day element
+            const chartDay = document.createElement('div');
+            chartDay.className = 'chart-day';
+            
+            // Create bars group
+            const barsGroup = document.createElement('div');
+            barsGroup.className = 'chart-bars-group';
+            
+            // Investment bar (purple)
+            const investmentBar = document.createElement('div');
+            investmentBar.className = 'chart-bar investment';
+            const investmentHeight = dayData.investment;
+            investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
+            
+            // Withdrawal bar (red)
+            const withdrawalBar = document.createElement('div');
+            withdrawalBar.className = 'chart-bar withdrawal';
+            const withdrawalHeight = dayData.withdrawal;
+            withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
+            
+            // Deposit bar (green)
+            const depositBar = document.createElement('div');
+            depositBar.className = 'chart-bar deposit';
+            const depositHeight = dayData.deposit;
+            depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
+            
+            // Add bars to group in the correct order
+            barsGroup.appendChild(investmentBar);
+            barsGroup.appendChild(withdrawalBar);
+            barsGroup.appendChild(depositBar);
+            
+            // Add bars group to chart day
+            chartDay.appendChild(barsGroup);
+            
+            // Add day label
+            const dayLabel = document.createElement('div');
+            dayLabel.className = 'chart-label';
+            dayLabel.textContent = dayData.day;
+            chartDay.appendChild(dayLabel);
+            
+            // Add chart day to chart
+            weeklyChart.appendChild(chartDay);
+            
+            // Animate bars after a short delay
+            if (animate) {
+                setTimeout(() => {
+                    investmentBar.style.height = `${investmentHeight}px`;
+                    withdrawalBar.style.height = `${withdrawalHeight}px`;
+                    depositBar.style.height = `${depositHeight}px`;
+                }, 100 * index); // Stagger animation
+            }
+        });
+    });
 }
 
 // Find the generateMonthlyStats function and replace it with this updated version:
@@ -2407,414 +2411,200 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     // Get user email for fetching specific data
     const userEmail = userData.email;
     
-    // Fetch user-specific monthly data from Baserow
-    fetchUserMonthlyData(userEmail)
-        .then(monthlyData => {
-            // Use the fetched data or fallback to calculated values
-            let monthlyInvestment = monthlyData.investment || parseFloat(userData.smart_account) || 0;
-            let monthlyDeposit = monthlyData.deposit || parseFloat(userData.quantitative_account) || 0;
-            let monthlyWithdrawal = monthlyData.withdrawal || parseFloat(userData.total_revenue) || 0;
-            
-            // Ensure we have some minimum values for visualization
-            monthlyInvestment = Math.max(monthlyInvestment, 10);
-            monthlyDeposit = Math.max(monthlyDeposit, 5);
-            monthlyWithdrawal = Math.max(monthlyWithdrawal, 15);
-            
-            // Calculate percentages relative to total monthly activity
-            const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
-            const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
-            const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
-            const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
-            
-            // Update circle progress
-            const circumference = 2 * Math.PI * 15; // 2πr where r=15
-            
-            // Investment circle
-            const investmentCircle = document.getElementById('investment-circle');
-            investmentCircle.style.strokeDasharray = circumference;
-            const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
-            if (animate) {
-                investmentCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    investmentCircle.style.strokeDashoffset = investmentOffset;
-                }, 300);
-            } else {
-                investmentCircle.style.strokeDashoffset = investmentOffset;
-            }
-            
-            // Deposit circle
-            const depositCircle = document.getElementById('deposit-circle');
-            depositCircle.style.strokeDasharray = circumference;
-            const depositOffset = circumference - (depositPercentage / 100 * circumference);
-            if (animate) {
-                depositCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    depositCircle.style.strokeDashoffset = depositOffset;
-                }, 600);
-            } else {
-                depositCircle.style.strokeDashoffset = depositOffset;
-            }
-            
-            // Withdrawal circle
-            const withdrawalCircle = document.getElementById('withdrawal-circle');
-            withdrawalCircle.style.strokeDasharray = circumference;
-            const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
-            if (animate) {
-                withdrawalCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
-                }, 900);
-            } else {
-                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
-            }
-            
-            // Update percentages and amounts with animation
-            animateStatValue('investment-percentage', 0, investmentPercentage, '%');
-            animateStatValue('deposit-percentage', 0, depositPercentage, '%');
-            animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
-            
-            animateStatValue('investment-amount', 0, monthlyInvestment, '$');
-            animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
-            animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
-        })
-        .catch(error => {
-            console.error('Error fetching monthly data:', error);
-            
-            // Fallback to calculated values from user data
-            const totalAssets = parseFloat(userData.total_assets) || 1;
-            const smartAccount = parseFloat(userData.smart_account) || 0;
-            const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
-            const totalRevenue = parseFloat(userData.total_revenue) || 0;
-            
-            // Initialize monthly totals
-            let monthlyInvestment = smartAccount;
-            let monthlyDeposit = quantitativeAccount;
-            let monthlyWithdrawal = totalRevenue;
-            
-            // Ensure we have some minimum values for visualization
-            monthlyInvestment = Math.max(monthlyInvestment, 10);
-            monthlyDeposit = Math.max(monthlyDeposit, 5);
-            monthlyWithdrawal = Math.max(monthlyWithdrawal, 15);
-            
-            // Calculate percentages relative to total monthly activity
-            const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
-            const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
-            const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
-            const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
-            
-            // Update circle progress
-            const circumference = 2 * Math.PI * 15; // 2πr where r=15
-            
-            // Investment circle
-            const investmentCircle = document.getElementById('investment-circle');
-            investmentCircle.style.strokeDasharray = circumference;
-            const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
-            if (animate) {
-                investmentCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    investmentCircle.style.strokeDashoffset = investmentOffset;
-                }, 300);
-            } else {
-                investmentCircle.style.strokeDashoffset = investmentOffset;
-            }
-            
-            // Deposit circle
-            const depositCircle = document.getElementById('deposit-circle');
-            depositCircle.style.strokeDasharray = circumference;
-            const depositOffset = circumference - (depositPercentage / 100 * circumference);
-            if (animate) {
-                depositCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    depositCircle.style.strokeDashoffset = depositOffset;
-                }, 600);
-            } else {
-                depositCircle.style.strokeDashoffset = depositOffset;
-            }
-            
-            // Withdrawal circle
-            const withdrawalCircle = document.getElementById('withdrawal-circle');
-            withdrawalCircle.style.strokeDasharray = circumference;
-            const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
-            if (animate) {
-                withdrawalCircle.style.strokeDashoffset = circumference;
-                setTimeout(() => {
-                    withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
-                }, 900);
-            } else {
-                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
-            }
-            
-            // Update percentages and amounts with animation
-            animateStatValue('investment-percentage', 0, investmentPercentage, '%');
-            animateStatValue('deposit-percentage', 0, depositPercentage, '%');
-            animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
-            
-            animateStatValue('investment-amount', 0, monthlyInvestment, '$');
-            animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
-            animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
-        });
-}
-
-// Add these new functions to fetch user-specific data from Baserow
-async function fetchUserActivityData(userEmail) {
-    try {
-        // First, get the field structure from Baserow for invest_activities table
-        const investTableId = '488475'; // Assuming this is the invest_activities table ID
-        const depositTableId = '488476'; // Assuming this is the new_deposit table ID
-        const withdrawalTableId = '488477'; // Assuming this is the total_revenue table ID
-        
-        // Get activities from the last 7 days
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        sevenDaysAgo.setHours(0, 0, 0, 0);
-        
-        // Fetch investment activities
-        const investActivities = await fetchTableDataForUser(investTableId, userEmail);
-        
-        // Fetch deposit activities
-        const depositActivities = await fetchTableDataForUser(depositTableId, userEmail);
-        
-        // Fetch withdrawal activities
-        const withdrawalActivities = await fetchTableDataForUser(withdrawalTableId, userEmail);
-        
-        // Combine all activities
-        let allActivities = [];
-        
-        // Process investment activities
-        if (investActivities && investActivities.results) {
-            investActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
-                
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= sevenDaysAgo) {
-                        allActivities.push({
-                            type: 'investment',
-                            amount: amount,
-                            date: date
-                        });
-                    }
-                }
-            });
-        }
-        
-        // Process deposit activities
-        if (depositActivities && depositActivities.results) {
-            depositActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
-                
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= sevenDaysAgo) {
-                        allActivities.push({
-                            type: 'deposit',
-                            amount: amount,
-                            date: date
-                        });
-                    }
-                }
-            });
-        }
-        
-        // Process withdrawal activities
-        if (withdrawalActivities && withdrawalActivities.results) {
-            withdrawalActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
-                
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= sevenDaysAgo) {
-                        allActivities.push({
-                            type: 'withdrawal',
-                            amount: amount,
-                            date: date
-                        });
-                    }
-                }
-            });
-        }
-        
-        return allActivities;
-    } catch (error) {
-        console.error('Error fetching user activity data:', error);
-        return [];
-    }
-}
-
-async function fetchUserMonthlyData(userEmail) {
-    try {
-        // First, get the field structure from Baserow for invest_activities table
-        const investTableId = '488475'; // Assuming this is the invest_activities table ID
-        const depositTableId = '488476'; // Assuming this is the new_deposit table ID
-        const withdrawalTableId = '488477'; // Assuming this is the total_revenue table ID
-        
-        // Get activities from the last 31 days
-        const thirtyOneDaysAgo = new Date();
-        thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
-        thirtyOneDaysAgo.setHours(0, 0, 0, 0);
-        
-        // Fetch investment activities
-        const investActivities = await fetchTableDataForUser(investTableId, userEmail);
-        
-        // Fetch deposit activities
-        const depositActivities = await fetchTableDataForUser(depositTableId, userEmail);
-        
-        // Fetch withdrawal activities
-        const withdrawalActivities = await fetchTableDataForUser(withdrawalTableId, userEmail);
-        
+    // Fetch user-specific data from Baserow tables
+    Promise.all([
+        fetchBaserowData('488475', userEmail), // invest_activities table
+        fetchBaserowData('488476', userEmail), // new_deposit table
+        fetchBaserowData('488477', userEmail)  // total_revenue table
+    ]).then(([investmentData, depositData, withdrawalData]) => {
         // Calculate monthly totals
         let monthlyInvestment = 0;
         let monthlyDeposit = 0;
         let monthlyWithdrawal = 0;
         
-        // Process investment activities
-        if (investActivities && investActivities.results) {
-            investActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
+        // Get date from 31 days ago
+        const thirtyOneDaysAgo = new Date();
+        thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
+        thirtyOneDaysAgo.setHours(0, 0, 0, 0);
+        
+        // Process investment data
+        if (investmentData && investmentData.results) {
+            investmentData.results.forEach(record => {
+                const amount = extractAmountFromRecord(record);
+                const date = extractDateFromRecord(record);
                 
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= thirtyOneDaysAgo) {
-                        monthlyInvestment += amount;
-                    }
+                if (date && date >= thirtyOneDaysAgo) {
+                    monthlyInvestment += amount;
                 }
             });
         }
         
-        // Process deposit activities
-        if (depositActivities && depositActivities.results) {
-            depositActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
+        // Process deposit data
+        if (depositData && depositData.results) {
+            depositData.results.forEach(record => {
+                const amount = extractAmountFromRecord(record);
+                const date = extractDateFromRecord(record);
                 
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= thirtyOneDaysAgo) {
-                        monthlyDeposit += amount;
-                    }
+                if (date && date >= thirtyOneDaysAgo) {
+                    monthlyDeposit += amount;
                 }
             });
         }
         
-        // Process withdrawal activities
-        if (withdrawalActivities && withdrawalActivities.results) {
-            withdrawalActivities.results.forEach(activity => {
-                // Find the email and amount fields
-                const emailField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && activity[key] === userEmail);
+        // Process withdrawal data
+        if (withdrawalData && withdrawalData.results) {
+            withdrawalData.results.forEach(record => {
+                const amount = extractAmountFromRecord(record);
+                const date = extractDateFromRecord(record);
                 
-                const amountFields = Object.keys(activity).filter(key => 
-                    key.startsWith('field_') && 
-                    !isNaN(parseFloat(activity[key])) && 
-                    key !== emailField);
-                
-                const dateField = Object.keys(activity).find(key => 
-                    key.startsWith('field_') && 
-                    activity[key] && 
-                    typeof activity[key] === 'string' && 
-                    activity[key].match(/^\d{4}-\d{2}-\d{2}/));
-                
-                if (amountFields.length > 0 && dateField) {
-                    const amount = parseFloat(activity[amountFields[0]]) || 0;
-                    const date = new Date(activity[dateField]);
-                    
-                    if (date >= thirtyOneDaysAgo) {
-                        monthlyWithdrawal += amount;
-                    }
+                if (date && date >= thirtyOneDaysAgo) {
+                    monthlyWithdrawal += amount;
                 }
             });
         }
         
-        return {
-            investment: monthlyInvestment,
-            deposit: monthlyDeposit,
-            withdrawal: monthlyWithdrawal
-        };
-    } catch (error) {
-        console.error('Error fetching user monthly data:', error);
-        return {
-            investment: 0,
-            deposit: 0,
-            withdrawal: 0
-        };
-    }
+        // If no data was found, use account values
+        if (monthlyInvestment === 0 && monthlyDeposit === 0 && monthlyWithdrawal === 0) {
+            monthlyInvestment = parseFloat(userData.smart_account) || 10;
+            monthlyDeposit = parseFloat(userData.quantitative_account) || 5;
+            monthlyWithdrawal = parseFloat(userData.total_revenue) || 15;
+        }
+        
+        // Ensure we have some minimum values for visualization
+        monthlyInvestment = Math.max(monthlyInvestment, 10);
+        monthlyDeposit = Math.max(monthlyDeposit, 5);
+        monthlyWithdrawal = Math.max(monthlyWithdrawal, 15);
+        
+        // Calculate percentages relative to total monthly activity
+        const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
+        const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
+        const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
+        const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
+        
+        // Update circle progress
+        const circumference = 2 * Math.PI * 15; // 2πr where r=15
+        
+        // Investment circle
+        const investmentCircle = document.getElementById('investment-circle');
+        investmentCircle.style.strokeDasharray = circumference;
+        const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
+        if (animate) {
+            investmentCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                investmentCircle.style.strokeDashoffset = investmentOffset;
+            }, 300);
+        } else {
+            investmentCircle.style.strokeDashoffset = investmentOffset;
+        }
+        
+        // Deposit circle
+        const depositCircle = document.getElementById('deposit-circle');
+        depositCircle.style.strokeDasharray = circumference;
+        const depositOffset = circumference - (depositPercentage / 100 * circumference);
+        if (animate) {
+            depositCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                depositCircle.style.strokeDashoffset = depositOffset;
+            }, 600);
+        } else {
+            depositCircle.style.strokeDashoffset = depositOffset;
+        }
+        
+        // Withdrawal circle
+        const withdrawalCircle = document.getElementById('withdrawal-circle');
+        withdrawalCircle.style.strokeDasharray = circumference;
+        const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
+        if (animate) {
+            withdrawalCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+            }, 900);
+        } else {
+            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+        }
+        
+        // Update percentages and amounts with animation
+        animateStatValue('investment-percentage', 0, investmentPercentage, '%');
+        animateStatValue('deposit-percentage', 0, depositPercentage, '%');
+        animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
+        
+        animateStatValue('investment-amount', 0, monthlyInvestment, '$');
+        animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
+        animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
+    }).catch(error => {
+        console.error('Error fetching monthly stats data:', error);
+        
+        // Fallback to account values if fetch fails
+        const smartAccount = parseFloat(userData.smart_account) || 10;
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 5;
+        const totalRevenue = parseFloat(userData.total_revenue) || 15;
+        
+        // Ensure we have some minimum values for visualization
+        const monthlyInvestment = Math.max(smartAccount, 10);
+        const monthlyDeposit = Math.max(quantitativeAccount, 5);
+        const monthlyWithdrawal = Math.max(totalRevenue, 15);
+        
+        // Calculate percentages relative to total monthly activity
+        const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
+        const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
+        const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
+        const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
+        
+        // Update circle progress
+        const circumference = 2 * Math.PI * 15; // 2πr where r=15
+        
+        // Investment circle
+        const investmentCircle = document.getElementById('investment-circle');
+        investmentCircle.style.strokeDasharray = circumference;
+        const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
+        if (animate) {
+            investmentCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                investmentCircle.style.strokeDashoffset = investmentOffset;
+            }, 300);
+        } else {
+            investmentCircle.style.strokeDashoffset = investmentOffset;
+        }
+        
+        // Deposit circle
+        const depositCircle = document.getElementById('deposit-circle');
+        depositCircle.style.strokeDasharray = circumference;
+        const depositOffset = circumference - (depositPercentage / 100 * circumference);
+        if (animate) {
+            depositCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                depositCircle.style.strokeDashoffset = depositOffset;
+            }, 600);
+        } else {
+            depositCircle.style.strokeDashoffset = depositOffset;
+        }
+        
+        // Withdrawal circle
+        const withdrawalCircle = document.getElementById('withdrawal-circle');
+        withdrawalCircle.style.strokeDasharray = circumference;
+        const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
+        if (animate) {
+            withdrawalCircle.style.strokeDashoffset = circumference;
+            setTimeout(() => {
+                withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+            }, 900);
+        } else {
+            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+        }
+        
+        // Update percentages and amounts with animation
+        animateStatValue('investment-percentage', 0, investmentPercentage, '%');
+        animateStatValue('deposit-percentage', 0, depositPercentage, '%');
+        animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
+        
+        animateStatValue('investment-amount', 0, monthlyInvestment, '$');
+        animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
+        animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
+    });
 }
 
-async function fetchTableDataForUser(tableId, userEmail) {
+// Add these helper functions for fetching and processing Baserow data
+async function fetchBaserowData(tableId, userEmail) {
     try {
         // First, get the field structure to find the email field
         const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${tableId}/`, {
@@ -2865,6 +2655,68 @@ async function fetchTableDataForUser(tableId, userEmail) {
         console.error(`Error fetching data from table ${tableId}:`, error);
         return { results: [] };
     }
+}
+
+function processTableRecord(record, type, daysArray) {
+    const amount = extractAmountFromRecord(record);
+    const date = extractDateFromRecord(record);
+    
+    if (date) {
+        // Find matching day
+        const dayData = daysArray.find(day => 
+            day.date.getFullYear() === date.getFullYear() &&
+            day.date.getMonth() === date.getMonth() &&
+            day.date.getDate() === date.getDate()
+        );
+        
+        if (dayData) {
+            // Scale amount for visualization (1 unit = $1, max 60)
+            const scaledAmount = Math.min(60, amount);
+            
+            // Update day data based on activity type
+            if (type === 'investment') {
+                dayData.investment += scaledAmount;
+            } else if (type === 'withdrawal') {
+                dayData.withdrawal += scaledAmount;
+            } else if (type === 'deposit') {
+                dayData.deposit += scaledAmount;
+            }
+        }
+    }
+}
+
+function extractAmountFromRecord(record) {
+    // Find amount field (usually a number field)
+    const amountField = Object.keys(record).find(key => 
+        key.startsWith('field_') && 
+        !isNaN(parseFloat(record[key])) &&
+        key !== 'id' &&
+        !key.toLowerCase().includes('email') &&
+        !key.toLowerCase().includes('user')
+    );
+    
+    return amountField ? parseFloat(record[amountField]) || 0 : 0;
+}
+
+function extractDateFromRecord(record) {
+    // Find date field (usually in format YYYY-MM-DD)
+    const dateField = Object.keys(record).find(key => 
+        key.startsWith('field_') && 
+        record[key] && 
+        typeof record[key] === 'string' && 
+        record[key].match(/^\d{4}-\d{2}-\d{2}/)
+    );
+    
+    if (dateField) {
+        return new Date(record[dateField]);
+    }
+    
+    // If no date field found, check for created_on field
+    if (record.created_on) {
+        return new Date(record.created_on);
+    }
+    
+    return null;
 }
 
 // Add this function to initialize the charts when the page loads
