@@ -1052,7 +1052,7 @@
                     <div class="promo-illustration">
                         <i class="fas fa-wallet" style="font-size: 60px;"></i>
                     </div>
-                </div>
+                </div> New Deposit account-activity
                 <div class="promo-card">
                     <div class="promo-title">Total Profits</div>
                     <div class="promo-subtitle" id="account-activity">$0.00</div>
@@ -1599,6 +1599,8 @@
                         email: email,
                         referralCode: user[`field_${fieldMap['referralCode']}`] || '',
                         total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                        new_deposit: user[`field_${fieldMap['new_deposit']}`] || '0.00',
+                        account_activity: user[`field_${fieldMap['account_activity']}`] || '0.00',
                         quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
                         smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
                         smart_account: user[`field_${fieldMap['new_deposit']}`] || '0.00',
@@ -1667,8 +1669,10 @@
             
             // Update financial data with correct element IDs
             updateFinancialValue('total-assets', userData.total_assets);
-            updateFinancialValue('quantitative-account', userData.new_deposit);
+            updateFinancialValue('quantitative-account', userData.quantitative-accoun);
             updateFinancialValue('invest-activities', userData.invest_activities);
+            updateFinancialValue('new-deposit', userData.new_deposit);
+            updateFinancialValue('account-activity', userData.account_activity);
             updateFinancialValue('profit-assets', userData.profit_assets);
             updateFinancialValue('account-activity', userData.account_activity);
             updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
