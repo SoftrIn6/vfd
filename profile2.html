@@ -574,7 +574,7 @@
 
         /* Sign Out Button */
         .sign-out-btn {
-            margin: 20px 10px 80px; /* Added bottom margin to ensure it doesn't overlap with bottom nav */
+            margin: 20px 10px;
             padding: 15px;
             background-color: #ffa500;
             color: white;
@@ -587,7 +587,6 @@
             text-align: center;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
-            display: block; /* Ensure it's a block element */
         }
 
         .sign-out-btn:hover {
@@ -697,32 +696,23 @@
             align-items: center;
             margin-bottom: 20px;
         }
-
-        .statistics-tabs {
-            display: flex;
-            gap: 15px;
+        
+        .section-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 20px;
+            position: relative;
+            padding-left: 10px;
+            border-left: 3px solid #ffa500;
         }
-
-        .statistics-tab {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: #f5f5f5;
-            color: #666;
-        }
-
-        .statistics-tab.active {
-            background-color: #ffa500;
-            color: white;
-            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
+        
+        .section-subtitle::before {
+            display: none;
         }
 
         /* Weekly Stats */
-        .weekly-stats {
+        .weekly-stats-section {
             margin-bottom: 30px;
         }
 
@@ -758,26 +748,29 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            gap: 4px;
+            gap: 6px;
         }
 
         .chart-bar {
-            width: 8px;
+            width: 12px;
             background-color: #4e54c8;
             border-radius: 4px 4px 0 0;
-            transition: height 3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .chart-bar.investment {
-            background-color: #4e54c8;
+            background-color: #6a11cb;
+            width: 8px;
         }
 
         .chart-bar.deposit {
             background-color: #38ef7d;
+            width: 8px;
         }
 
         .chart-bar.withdrawal {
             background-color: #ff6b6b;
+            width: 12px;
         }
 
         .chart-legend {
@@ -802,7 +795,7 @@
         }
 
         .legend-color.investment {
-            background-color: #4e54c8;
+            background-color: #6a11cb;
         }
 
         .legend-color.deposit {
@@ -814,10 +807,17 @@
         }
 
         /* Monthly Stats */
+        .monthly-stats-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
         .monthly-stats {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 20px;
+            padding: 0 10px;
         }
 
         .monthly-stat {
@@ -854,7 +854,7 @@
         }
 
         .stat-circle-progress.investment {
-            stroke: #4e54c8;
+            stroke: #6a11cb;
         }
 
         .stat-circle-progress.withdrawal {
@@ -880,12 +880,14 @@
             font-weight: 500;
             color: #666;
             margin-bottom: 5px;
+            text-align: center;
         }
 
         .stat-amount {
             font-size: 14px;
             font-weight: bold;
             color: #333;
+            text-align: center;
         }
 
         /* Add this to the existing animation for balance counter */
@@ -950,436 +952,6 @@
                 font-size: 16px;
             }
         }
-
-        .chart-bar {
-    width: 12px;
-    border-radius: 2px 2px 0 0;
-    transition: height 3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.chart-bar.deposit {
-    background-color: #6a5acd;
-}
-
-.chart-bar.profit {
-    background-color: #ff5252;
-}
-
-.chart-bar.withdrawal {
-    background-color: #4caf50;
-}
-
-/* Update the chart-day class to match the image */
-.chart-day {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 12%;
-}
-
-.chart-label {
-    margin-top: 10px;
-    font-size: 11px;
-    color: #999;
-}
-
-/* Update the legend colors to match the image */
-.legend-color.deposit {
-    background-color: #6a5acd;
-}
-
-.legend-color.profit {
-    background-color: #ff5252;
-}
-
-.legend-color.withdrawal {
-    background-color: #4caf50;
-}
-
-.chart-bars-group {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    gap: 6px;
-}
-
-/* Monthly Usages Section */
-.monthly-usages-section {
-    margin: 20px 10px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.monthly-circles-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-}
-
-.monthly-circle-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 33.33%;
-}
-
-.circle-progress {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 10px;
-}
-
-.circle-bg {
-    fill: none;
-    stroke: #f0f0f0;
-    stroke-width: 8;
-}
-
-.circle-progress-value {
-    fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
-    transform: rotate(-90deg);
-    transform-origin: center;
-    transition: stroke-dashoffset 3s ease-in-out;
-}
-
-.circle-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.circle-label {
-    font-size: 12px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-}
-
-.circle-label-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 5px;
-    display: inline-block;
-}
-
-.circle-value {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* Circle colors */
-.deposit-color {
-    color: #6a5acd;
-}
-
-.deposit-color .circle-progress-value {
-    stroke: #6a5acd;
-}
-
-.deposit-color .circle-label-dot {
-    background-color: #6a5acd;
-}
-
-.withdrawal-color {
-    color: #4caf50;
-}
-
-.withdrawal-color .circle-progress-value {
-    stroke: #4caf50;
-}
-
-.withdrawal-color .circle-label-dot {
-    background-color: #4caf50;
-}
-
-.profits-color {
-    color: #ff5252;
-}
-
-.profits-color .circle-progress-value {
-    stroke: #ff5252;
-}
-
-.profits-color .circle-label-dot {
-    background-color: #ff5252;
-}
-
-@keyframes circleAnimation {
-    0% {
-        stroke-dashoffset: 283; /* Full circle circumference */
-    }
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 470px) {
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .section-title {
-        font-size: 16px;
-    }
-
-    .balance-amount {
-        font-size: 28px;
-    }
-
-    .service-name {
-        font-size: 12px;
-    }
-
-    .sign-out-btn {
-        font-size: 14px;
-        padding: 12px;
-    }
-
-    .nav-item {
-        font-size: 8px;
-    }
-
-    .nav-item i {
-        font-size: 16px;
-    }
-
-    .promo-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 15px;
-    }
-    
-    .promo-subtitle {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 375px) {
-    .container {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-    
-    .header {
-        padding: 10px;
-    }
-    
-    .logo-text {
-        font-size: 10px;
-    }
-    
-    .header-btn {
-        padding: 4px 8px;
-        font-size: 10px;
-    }
-    
-    .user-avatar {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .user-name {
-        font-size: 16px;
-    }
-    
-    .balance-amount {
-        font-size: 24px;
-    }
-    
-    .balance-action {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .promo-cards {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-    
-    .promo-card {
-        height: 90px;
-    }
-    
-    .promo-subtitle {
-        font-size: 14px;
-    }
-    
-    .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        padding: 10px;
-    }
-    
-    .feature-icon {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .feature-name {
-        font-size: 10px;
-    }
-    
-    .monthly-circle-item .circle-progress {
-        width: 70px;
-        height: 70px;
-    }
-    
-    .monthly-circle-item .circle-value {
-        font-size: 12px;
-    }
-    
-    .sign-out-btn {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 470px) {
-    .chart-container {
-        height: 250px !important;
-    }
-    
-    .chart-bar {
-        width: 8px !important;
-    }
-    
-    .chart-bars-group {
-        gap: 2px !important;
-    }
-    
-    .monthly-circles-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .monthly-circle-item {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 320px) {
-    .container {
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    
-    .header {
-        padding: 8px;
-    }
-    
-    .logo-img {
-        width: 30px;
-        height: 30px;
-    }
-    
-    .logo-text {
-        font-size: 9px;
-    }
-    
-    .header-btn {
-        padding: 3px 6px;
-        font-size: 9px;
-    }
-    
-    .user-avatar {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .user-name {
-        font-size: 14px;
-    }
-    
-    .user-email {
-        font-size: 11px;
-    }
-    
-    .balance-amount {
-        font-size: 22px;
-    }
-    
-    .balance-action {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .promo-cards {
-        gap: 6px;
-    }
-    
-    .promo-card {
-        height: 80px;
-        padding: 10px;
-    }
-    
-    .promo-title {
-        font-size: 10px;
-    }
-    
-    .promo-subtitle {
-        font-size: 12px;
-    }
-    
-    .features-grid {
-        gap: 6px;
-        padding: 8px;
-    }
-    
-    .feature-icon {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .feature-name {
-        font-size: 9px;
-    }
-    
-    .monthly-circle-item .circle-progress {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .circle-text {
-        font-size: 14px;
-    }
-    
-    .circle-label {
-        font-size: 10px;
-    }
-    
-    .circle-value {
-        font-size: 11px;
-    }
-    
-    .sign-out-btn {
-        font-size: 12px;
-        padding: 8px;
-    }
-    
-    .nav-item {
-        font-size: 7px;
-    }
-    
-    .nav-item i {
-        font-size: 14px;
-    }
-}
     </style>
 </head>
 <body>
@@ -1510,101 +1082,76 @@
         
         <!-- Statistics Section -->
         <div class="statistics-section">
-    <div class="chart-container" style="height: 300px; position: relative; margin-top: 5px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div style="font-size: 14px; font-weight: 500; color: #5b6b7b;">Account Weekly Stats</div>
-            <div style="cursor: pointer;" id="refresh-stats">
-                <i class="fas fa-sync-alt" style="color: #666;"></i>
+    <div class="statistics-header">
+        <div class="section-title">Account Statistics</div>
+        <div id="refresh-stats" style="font-size: 13px; color: #ffa500; cursor: pointer; display: flex; align-items: center;">
+            <i class="fas fa-sync-alt"></i>&nbsp; Refresh
+        </div>
+    </div>
+    
+    <!-- Weekly Stats -->
+    <div class="weekly-stats-section">
+        <div class="section-subtitle">Weekly Activity Stats</div>
+        <div class="chart-container">
+            <div class="chart-bars" id="weekly-chart">
+                <!-- Chart bars will be generated by JavaScript -->
             </div>
         </div>
-        
-        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-    <div style="display: flex; align-items: center;">
-        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #6a5acd; margin-right: 5px;"></div>
-        <span style="font-size: 12px; color: #333;">Investment</span>
-    </div>
-    <div style="display: flex; align-items: center;">
-        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #ff5252; margin-right: 5px;"></div>
-        <span style="font-size: 12px; color: #333;">Profits</span>
-    </div>
-    <div style="display: flex; align-items: center;">
-        <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #4caf50; margin-right: 5px;"></div>
-        <span style="font-size: 12px; color: #333;">Withdrawal</span>
-    </div>
-</div>
-        
-        <div style="position: relative; height: 220px;">
-            <!-- Y-axis labels -->
-            <div style="position: absolute; left: 0; top: 0; height: 100%; display: flex; flex-direction: column; justify-content: space-between; width: 25px; text-align: right; padding-right: 5px;">
-                <div style="font-size: 11px; color: #999;">60</div>
-                <div style="font-size: 11px; color: #999;">40</div>
-                <div style="font-size: 11px; color: #999;">20</div>
-                <div style="font-size: 11px; color: #999;">0</div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="legend-color investment"></div>
+                <span>Investment</span>
             </div>
-            
-            <!-- Chart area -->
-            <div style="position: absolute; left: 30px; right: 0; top: 0; bottom: 20px; border-left: 1px solid #eee; border-bottom: 1px solid #eee;">
-                <div id="weekly-chart" style="display: flex; justify-content: space-between; align-items: flex-end; height: 100%; width: 100%;">
-                    <!-- Chart bars will be generated by JavaScript -->
+            <div class="legend-item">
+                <div class="legend-color deposit"></div>
+                <span>Deposit</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color withdrawal"></div>
+                <span>Withdrawal</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly Stats -->
+    <div class="monthly-stats-section">
+        <div class="section-subtitle">Monthly Activity Stats</div>
+        <div class="monthly-stats" id="monthly-stats">
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress investment" id="investment-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="investment-percentage">0%</div>
                 </div>
+                <div class="stat-label">Investment</div>
+                <div class="stat-amount" id="investment-amount">$0.00</div>
             </div>
             
-            <!-- X-axis labels -->
-            <div style="position: absolute; left: 30px; right: 0; bottom: 0; display: flex; justify-content: space-between;">
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">01</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">02</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">03</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">04</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">05</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">06</div>
-                <div style="font-size: 11px; color: #999; width: 14.28%; text-align: center;">07</div>
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress deposit" id="deposit-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="deposit-percentage">0%</div>
+                </div>
+                <div class="stat-label">Deposits</div>
+                <div class="stat-amount" id="deposit-amount">$0.00</div>
             </div>
-        </div>
-    </div>
-</div>
-
-        <!-- Monthly Usages Section -->
-        <div class="monthly-usages-section">
-    <div class="section-title">Monthly Usages</div>
-    <div class="monthly-circles-container">
-        <div class="monthly-circle-item deposit-color">
-            <div class="circle-progress">
-                <svg width="80" height="80">
-                    <circle class="circle-bg" cx="40" cy="40" r="36" />
-                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
-                </svg>
-                <div class="circle-text" id="investment-percentage">0%</div>
+            
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress withdrawal" id="withdrawal-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="withdrawal-percentage">0%</div>
+                </div>
+                <div class="stat-label">Withdrawals</div>
+                <div class="stat-amount" id="withdrawal-amount">$0.00</div>
             </div>
-            <div class="circle-label">
-                <span class="circle-label-dot"></span> Investments
-            </div>
-            <div class="circle-value" id="investment-amount">$0.00</div>
-        </div>
-        <div class="monthly-circle-item withdrawal-color">
-            <div class="circle-progress">
-                <svg width="80" height="80">
-                    <circle class="circle-bg" cx="40" cy="40" r="36" />
-                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
-                </svg>
-                <div class="circle-text" id="withdrawal-percentage">0%</div>
-            </div>
-            <div class="circle-label">
-                <span class="circle-label-dot"></span> Withdrawals
-            </div>
-            <div class="circle-value" id="withdrawal-amount">$0.00</div>
-        </div>
-        <div class="monthly-circle-item profits-color">
-            <div class="circle-progress">
-                <svg width="80" height="80">
-                    <circle class="circle-bg" cx="40" cy="40" r="36" />
-                    <circle class="circle-progress-value" cx="40" cy="40" r="36" stroke-dasharray="226.195" stroke-dashoffset="226.195" />
-                </svg>
-                <div class="circle-text" id="profit-percentage">0%</div>
-            </div>
-            <div class="circle-label">
-                <span class="circle-label-dot"></span> Profits
-            </div>
-            <div class="circle-value" id="profit-amount">$0.00</div>
         </div>
     </div>
 </div>
@@ -1824,12 +1371,11 @@
                     });
             });
             
-            // Sign out functionality - ensure it's properly set up
+            // Sign out functionality
             document.getElementById('sign-out-btn').addEventListener('click', function() {
                 if (confirm('Are you sure you want to sign out?')) {
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('userData');
-                    localStorage.removeItem('investmentData'); // Also clear investment data
                     window.location.href = 'login.html';
                 }
             });
@@ -1843,7 +1389,7 @@
                 window.location.href = 'withdraw.html';
             });
             
-            document.getElementById('invest-money').addEventListener('click, function() {
+            document.getElementById('invest-money').addEventListener('click', function() {
                 window.location.href = 'invest.html';
             });
             
@@ -1929,56 +1475,6 @@
                         // If we can't animate, just set the value
                         element.textContent = '$' + formattedValue;
                     }
-                } else if (elementId === 'quantitative-account' || 
-                          elementId === 'smart-account' || 
-                          elementId === 'profit-assets' || 
-                          elementId === 'total-revenue' || 
-                          elementId === 'yesterday-earnings' || 
-                          elementId === 'today-earnings') {
-                    // Animate these financial values with a 1 second animation
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        let formattedValue = '0.00';
-                        
-                        if (value !== undefined && value !== null && value !== '') {
-                            if (!isNaN(parseFloat(value))) {
-                                formattedValue = parseFloat(value).toFixed(2);
-                                
-                                // Get current value without $ sign
-                                const currentValueText = element.textContent.replace('$', '');
-                                const currentValue = parseFloat(currentValueText) || 0;
-                                
-                                // Add animation class
-                                element.classList.remove('animate-count');
-                                void element.offsetWidth; // Force reflow
-                                element.classList.add('animate-count');
-                                
-                                // Animate from current value to new value
-                                let startTimestamp = null;
-                                const step = (timestamp) => {
-                                    if (!startTimestamp) startTimestamp = timestamp;
-                                    const progress = Math.min((timestamp - startTimestamp) / 1000, 1);
-                                    const currentVal = progress * (parseFloat(formattedValue) - currentValue) + currentValue;
-                                    element.textContent = '$' + currentVal.toFixed(2);
-                                    if (progress < 1) {
-                                        window.requestAnimationFrame(step);
-                                    } else {
-                                        element.textContent = '$' + formattedValue;
-                                    }
-                                };
-                                window.requestAnimationFrame(step);
-                                return;
-                            } else {
-                                formattedValue = value;
-                                if (!formattedValue.includes('.')) {
-                                    formattedValue += '.00';
-                                }
-                            }
-                        }
-                        
-                        // If we can't animate, just set the value
-                        element.textContent = '$' + formattedValue;
-                    }
                 } else {
                     // For other elements, use the original function
                     if (typeof originalUpdateFinancialValue === 'function') {
@@ -2004,497 +1500,932 @@
                         }
                     }
                 }
-            }
-        };
+            };
+        }
         
         // Fetch user data from Baserow
-        function fetchUserData(email, forceRefresh = false) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // First, get the field structure from Baserow
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const fieldsData = await fieldsResponse.json();
-            console.log('Baserow fields:', fieldsData);
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-            });
-            
-            console.log('Field mapping:', fieldMap);
-            
-            // Get the email field ID
-            const emailFieldId = fieldMap['email'];
-            
-            if (!emailFieldId) {
-                throw new Error('Email field not found in Baserow table');
-            }
-            
-            // Add a timestamp to prevent caching
-            const timestamp = new Date().getTime();
-            const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-            
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('Fetched user data response:', data);
-            
-            if (data.results && data.results.length > 0) {
-                const user = data.results[0];
-                console.log('Found user:', user);
-                
-                // Create a user data object to store in localStorage
-                const userDataToStore = {
-                    id: user.id,
-                    username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                    email: email,
-                    referralCode: user[`field_${fieldMap['referralCode']}`] || '',
-                    total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                    quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                    smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                    profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
-                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                    yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                    today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                    commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                };
-                
-                // Get investment data from localStorage
-                const investmentData = JSON.parse(localStorage.getItem('investmentData') || '{}');
-                
-                // Get investment activities from localStorage
-                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-                const investmentActivities = activities.filter(activity => 
-                    activity.type === 'investment_attempt' || 
-                    activity.type === 'investment_processing'
-                );
-                
-                // Calculate total investment amount from activities
-                let totalInvestmentFromActivities = 0;
-                investmentActivities.forEach(activity => {
-                    if (activity.success && activity.totalAmount) {
-                        totalInvestmentFromActivities += parseFloat(activity.totalAmount) || 0;
-                    } else if (activity.amount) {
-                        totalInvestmentFromActivities += parseFloat(activity.amount) || 0;
+        async function fetchUserData(email, forceRefresh = false) {
+            try {
+                // First, get the field structure from Baserow
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
                     }
                 });
                 
-                // Merge investment data with user data
-                if (investmentData && Object.keys(investmentData).length > 0) {
-                    console.log('Found investment data in localStorage:', investmentData);
-                    
-                    if (investmentData.totalInvestment) {
-                        userDataToStore.totalInvestment = investmentData.totalInvestment;
-                    } else if (totalInvestmentFromActivities > 0) {
-                        userDataToStore.totalInvestment = totalInvestmentFromActivities.toFixed(2);
-                    }
-                    
-                    if (investmentData.activeInvestments) {
-                        userDataToStore.activeInvestments = investmentData.activeInvestments;
-                    }
-                    
-                    if (investmentData.pendingProfit) {
-                        userDataToStore.pendingProfit = investmentData.pendingProfit;
-                    }
-                } else if (totalInvestmentFromActivities > 0) {
-                    // If no investment data but we have activities
-                    userDataToStore.totalInvestment = totalInvestmentFromActivities.toFixed(2);
+                const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Field mapping:', fieldMap);
+                
+                // Get the email field ID
+                const emailFieldId = fieldMap['email'];
+                
+                if (!emailFieldId) {
+                    throw new Error('Email field not found in Baserow table');
                 }
                 
-                console.log('User data to store:', userDataToStore);
+                // Add a timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
                 
-                // Save to localStorage
-                localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
                 
-                // Update UI with user data
-                updateUI(userDataToStore);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
-                // Update charts with the user data
-                initializeCharts(userDataToStore);
+                const data = await response.json();
+                console.log('Fetched user data response:', data);
+                
+                if (data.results && data.results.length > 0) {
+                    const user = data.results[0];
+                    console.log('Found user:', user);
+                    
+                    // Create a user data object to store in localStorage
+                    const userDataToStore = {
+                        id: user.id,
+                        username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
+                        email: email,
+                        referralCode: user[`field_${fieldMap['referralCode']}`] || '',
+                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
+                        quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
+                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
+                        yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
+                        today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                    };
+                    
+                    console.log('User data to store:', userDataToStore);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                    
+                    // Update UI with user data
+                    updateUI(userDataToStore);
+                    
+                    if (forceRefresh) {
+                        alert('Data refreshed successfully!');
+                    }
+                    
+                    return userDataToStore;
+                } else {
+                    console.error('No user data found for email:', email);
+                    
+                    if (forceRefresh) {
+                        alert('No user data found. Please try again or contact support.');
+                    }
+                    
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
                 
                 if (forceRefresh) {
-                    alert('Data refreshed successfully!');
+                    alert('Failed to refresh data. Please try again.');
                 }
                 
-                resolve(userDataToStore);
-            } else {
-                console.error('No user data found for email:', email);
-                
-                if (forceRefresh) {
-                    alert('No user data found. Please try again or contact support.');
-                }
-                
-                resolve(null);
+                return null;
             }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            
-            if (forceRefresh) {
-                alert('Failed to refresh data. Please try again.');
-            }
-            
-            reject(error);
         }
-    });
-}
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = userData.email;
+            
+            // Log all financial data for debugging
+            console.log('Financial data:', {
+                total_assets: userData.total_assets,
+                quantitative_account: userData.quantitative_account,
+                smart_account: userData.smart_account,
+                profit_assets: userData.profit_assets,
+                total_revenue: userData.total_revenue,
+                yesterday_earnings: userData.yesterday_earnings,
+                today_earnings: userData.today_earnings,
+                commission_today: userData.commission_today
+            });
+            
+            // Update financial data
+            updateFinancialValue('total-assets', userData.total_assets);
+            updateFinancialValue('quantitative-account', userData.quantitative_account);
+            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('profit-assets', userData.profit_assets);
+            
+            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+            updateFinancialValue('today-earnings', userData.today_earnings);
+            updateFinancialValue('commission_today', userData.commission_today);
+        }
+        
+        // Helper function to update financial values
+        function updateFinancialValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Format the value
+                let formattedValue = '0.00';
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    // If it's a number or a string that can be converted to a number
+                    if (!isNaN(parseFloat(value))) {
+                        formattedValue = parseFloat(value).toFixed(2);
+                    } else {
+                        formattedValue = value;
+                        // If it doesn't have decimal places, add them
+                        if (!formattedValue.includes('.')) {
+                            formattedValue += '.00';
+                        }
+                    }
+                }
+                
+                // Update the element
+                element.textContent = '$' + formattedValue;
+            }
+        }
+        
+        // Load activity history from localStorage
+        function loadActivityHistory(forceRefresh = false) {
+            const activityList = document.getElementById('activity-list');
+            const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            
+            // Filter activities to only show those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
+            
+            const recentActivities = activities.filter(activity => {
+                const activityDate = new Date(activity.timestamp);
+                return activityDate >= cutoffDate;
+            });
+            
+            // Filter to only show investment and withdrawal activities
+            const filteredActivities = recentActivities.filter(activity => {
+                return activity.type === 'withdrawal_request' || 
+                       activity.type === 'form_submission' || 
+                       activity.type === 'investment_attempt' || 
+                       activity.type === 'investment_processing';
+            });
+            
+            // Sort activities by timestamp (newest first)
+            filteredActivities.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+            
+            // Clear the activity list
+            activityList.innerHTML = '';
+            
+            // Display activities or empty message
+            if (filteredActivities.length === 0) {
+                activityList.innerHTML = '<div class="activity-empty">No investment or withdrawal activities found.</div>';
+                document.getElementById('activity-load-more').style.display = 'none';
+                return;
+            }
+            
+            // Display first 3 activities
+            const activitiesToShow = filteredActivities.slice(0, 3);
+            activitiesToShow.forEach(activity => {
+                const activityItem = createActivityItem(activity);
+                activityList.appendChild(activityItem);
+            });
+            
+            // Show/hide load more button
+            if (filteredActivities.length > 3) {
+                document.getElementById('activity-load-more').style.display = 'block';
+                document.getElementById('activity-load-more').onclick = () => {
+                    // Show all activities
+                    activityList.innerHTML = '';
+                    filteredActivities.forEach(activity => {
+                        const activityItem = createActivityItem(activity);
+                        activityList.appendChild(activityItem);
+                    });
+                    
+                    // Hide load more button
+                    document.getElementById('activity-load-more').style.display = 'none';
+                };
+            } else {
+                document.getElementById('activity-load-more').style.display = 'none';
+            }
+            
+            // If this is a forced refresh, sync with Baserow
+            if (forceRefresh) {
+                syncActivitiesWithBaserow();
+            }
+        }
+        
+        // Create an activity item element
+        function createActivityItem(activity) {
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            
+            // Format timestamp
+            const timestamp = new Date(activity.timestamp);
+            const formattedDate = timestamp.toLocaleDateString();
+            const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Determine activity title, details, and status
+            let title = 'Activity';
+            let details = '';
+            let status = '';
+            
+            // Process different activity types
+            switch (activity.type) {
+                case 'withdrawal_request':
+                case 'form_submission':
+                    title = 'Withdrawal Request';
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const method = activity.details.paymentMethod || '';
+                            details = `Amount: ${amount} USD via ${method}`;
+                            
+                            if (activity.details.status === 'success') {
+                                status = '<div class="activity-status success">Success</div>';
+                            } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                status = '<div class="activity-status failed">Failed</div>';
+                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                            } else {
+                                status = '<div class="activity-status pending">Pending</div>';
+                            }
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'investment_attempt':
+                    title = 'Investment Attempt';
+                    
+                    if (activity.planTitle) {
+                        const amount = activity.totalAmount || '0.00';
+                        details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                        
+                        if (activity.success) {
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            status = '<div class="activity-status failed">Failed</div>';
+                            if (activity.reason) {
+                                details += `<br>Reason: ${activity.reason}`;
+                            }
+                        }
+                    }
+                    break;
+                    
+                case 'investment_processing':
+                    title = 'Investment Processing';
+                    
+                    if (activity.planTitle) {
+                        details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                        status = '<div class="activity-status pending">Processing</div>';
+                    }
+                    break;
+                    
+                default:
+                    title = activity.type ? activity.type.replace(/_/g, ' ') : 'Activity';
+                    title = title.charAt(0).toUpperCase() + title.slice(1);
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            details = JSON.stringify(activity.details);
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+            }
+            
+            activityItem.innerHTML = `
+                <div class="activity-time">${formattedDate} ${formattedTime}</div>
+                <div class="activity-title">${title}</div>
+                <div class="activity-details">${details}</div>
+                ${status}
+            `;
+            
+            return activityItem;
+        }
+        
+        // Set up activity export
+        function setupActivityExport() {
+            document.getElementById('activity-export').addEventListener('click', function() {
+                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                
+                // Filter to only investment and withdrawal activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing';
+                });
+                
+                if (filteredActivities.length === 0) {
+                    alert('No activities to export.');
+                    return;
+                }
+                
+                // Create CSV content
+                let csvContent = 'data:text/csv;charset=utf-8,';
+                csvContent += 'Date,Time,Type,Details,Status\n';
+                
+                filteredActivities.forEach(activity => {
+                    const timestamp = new Date(activity.timestamp);
+                    const date = timestamp.toLocaleDateString();
+                    const time = timestamp.toLocaleTimeString();
+                    
+                    let details = '';
+                    let status = '';
+                    
+                    // Process different activity types for export
+                    switch (activity.type) {
+                        case 'withdrawal_request':
+                        case 'form_submission':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const method = activity.details.paymentMethod || '';
+                                    details = `Amount: ${amount} USD via ${method}`;
+                                    
+                                    if (activity.details.status === 'success') {
+                                        status = 'Success';
+                                    } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                        status = 'Failed';
+                                        details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
+                                    } else {
+                                        status = 'Pending';
+                                    }
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_attempt':
+                            if (activity.planTitle) {
+                                const amount = activity.totalAmount || '0.00';
+                                details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                                
+                                if (activity.success) {
+                                    status = 'Success';
+                                } else {
+                                    status = 'Failed';
+                                    if (activity.reason) {
+                                        details += ` (Reason: ${activity.reason})`;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_processing':
+                            if (activity.planTitle) {
+                                details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                                status = 'Processing';
+                            }
+                            break;
+                    }
+                    
+                    // Escape quotes in details
+                    if (details) {
+                        details = details.replace(/"/g, '""');
+                    }
+                    
+                    csvContent += `${date},${time},${activity.type || ''},"${details}",${status}\n`;
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', `investment_activity_${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                
+                // Clean up
+                document.body.removeChild(link);
+            });
+        }
+        
+        // Clean up old activities (older than retention days)
+        function cleanupOldActivities() {
+            const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            
+            // Filter activities to only keep those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
+            
+            const recentActivities = activities.filter(activity => {
+                const activityDate = new Date(activity.timestamp);
+                return activityDate >= cutoffDate;
+            });
+            
+            // Save filtered activities back to localStorage
+            if (recentActivities.length !== activities.length) {
+                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(recentActivities));
+                console.log(`Cleaned up ${activities.length - recentActivities.length} old activities.`);
+            }
+        }
+        
+        // Sync activities with Baserow
+        async function syncActivitiesWithBaserow() {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (!userData.email) {
+                    console.error('No user email found for syncing activities');
+                    return;
+                }
+                
+                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                
+                // Filter to only investment and withdrawal activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing';
+                });
+                
+                if (filteredActivities.length === 0) {
+                    console.log('No activities to sync');
+                    return;
+                }
+                
+                console.log('Syncing activities with Baserow...');
+                
+                // Get field structure for activity table
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.activityTableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const fieldsData = await fieldsResponse.json();
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Activity table field mapping:', fieldMap);
+                
+                // Check if required fields exist
+                const requiredFields = ['user_email', 'activity_type', 'activity_details', 'timestamp', 'status'];
+                const missingFields = requiredFields.filter(field => !fieldMap[field]);
+                
+                if (missingFields.length > 0) {
+                    console.error('Missing required fields in activity table:', missingFields);
+                    return;
+                }
+                
+                // Prepare activities for batch upload
+                const activitiesToSync = filteredActivities.slice(0, 20); // Limit to 20 most recent activities
+                
+                // Create rows for each activity
+                for (const activity of activitiesToSync) {
+                    const rowData = {};
+                    
+                    // Set user email
+                    rowData[`field_${fieldMap['user_email']}`] = userData.email;
+                    
+                    // Set activity type
+                    rowData[`field_${fieldMap['activity_type']}`] = activity.type || 'unknown';
+                    
+                    // Set activity details
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            rowData[`field_${fieldMap['activity_details']}`] = JSON.stringify(activity.details);
+                        } else {
+                            rowData[`field_${fieldMap['activity_details']}`] = activity.details;
+                        }
+                    } else {
+                        rowData[`field_${fieldMap['activity_details']}`] = '';
+                    }
+                    
+                    // Set timestamp
+                    rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp || new Date().toISOString();
+                    
+                    // Set status
+                    let status = 'pending';
+                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                        if (activity.details && activity.details.status) {
+                            status = activity.details.status;
+                        }
+                    } else if (activity.type === 'investment_attempt') {
+                        status = activity.success ? 'success' : 'failed';
+                    } else if (activity.type === 'investment_processing') {
+                        status = 'processing';
+                    }
+                    
+                    rowData[`field_${fieldMap['status']}`] = status;
+                    
+                    // Create row in Baserow
+                    try {
+                        const createResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Token ${BASEROW_API.token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(rowData)
+                        });
+                        
+                        if (!createResponse.ok) {
+                            console.error('Failed to create activity row:', await createResponse.text());
+                        }
+                    } catch (error) {
+                        console.error('Error creating activity row:', error);
+                    }
+                }
+                
+                console.log('Activity sync completed');
+            } catch (error) {
+                console.error('Error syncing activities with Baserow:', error);
+            }
+        }
+        
+        // Statistics and Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts when user data is loaded
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.email) {
+                initializeCharts(userData);
+            }
+            
+            // Refresh stats button
+            document.getElementById('refresh-stats').addEventListener('click', function() {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    initializeCharts(userData, true);
+                }
+            });
+        });
 
-// Update the updateMonthlyUsageStats function to use the correct data sources
-function updateMonthlyUsageStats(userData) {
-    // Get user data values
-    const totalAssets = parseFloat(userData.total_assets) || 1;
-    
-    // For investments: Use saved activities from localStorage (from invest.html)
-    const investmentAmount = parseFloat(userData.totalInvestment || userData.quantitative_account) || 0;
-    
-    // For withdrawals: Use total_revenue data from Baserow
-    const withdrawalAmount = parseFloat(userData.total_revenue) || 0;
-    
-    // For profits: Use yesterday_earnings data from Baserow
-    const profitsAmount = parseFloat(userData.yesterday_earnings) || 0;
-    
-    // Calculate percentages (capped at 100%)
-    const investmentPercentage = Math.min(Math.round((investmentAmount / totalAssets) * 100), 100) || 0;
-    const withdrawalPercentage = Math.min(Math.round((withdrawalAmount / totalAssets) * 100), 100) || 0;
-    const profitsPercentage = Math.min(Math.round((profitsAmount / totalAssets) * 100), 100) || 0;
-    
-    // Update the text values
-    document.getElementById('investment-percentage').textContent = `${investmentPercentage}%`;
-    document.getElementById('withdrawal-percentage').textContent = `${withdrawalPercentage}%`;
-    document.getElementById('profit-percentage').textContent = `${profitsPercentage}%`;
-    
-    document.getElementById('investment-amount').textContent = `$${investmentAmount.toFixed(2)}`;
-    document.getElementById('withdrawal-amount').textContent = `$${withdrawalAmount.toFixed(2)}`;
-    document.getElementById('profit-amount').textContent = `$${profitsAmount.toFixed(2)}`;
-    
-    // Update the circle progress
-    const radius = 36;
-    const circumference = 2 * Math.PI * radius;
-    
-    const investmentOffset = circumference * (1 - investmentPercentage / 100);
-    const withdrawalOffset = circumference * (1 - withdrawalPercentage / 100);
-    const profitOffset = circumference * (1 - profitsPercentage / 100);
-    
-    // Get the SVG circles
-    const circles = document.querySelectorAll('.circle-progress-value');
-    if (circles.length >= 3) {
-        // Animate the circles
-        setTimeout(() => {
-            circles[0].style.strokeDashoffset = investmentOffset;
-            circles[0].style.transition = 'stroke-dashoffset 2s ease-in-out';
-            
-            circles[1].style.strokeDashoffset = withdrawalOffset;
-            circles[1].style.transition = 'stroke-dashoffset 2s ease-in-out';
-            
-            circles[2].style.strokeDashoffset = profitOffset;
-            circles[2].style.transition = 'stroke-dashoffset 2s ease-in-out';
-        }, 500);
+    // Initialize charts based on user data
+    function initializeCharts(userData, animate = true) {
+        // Generate weekly chart data based on user data
+        generateWeeklyChart(userData, animate);
+        
+        // Generate monthly stats based on user data
+        generateMonthlyStats(userData, animate);
     }
-}
 
-// Update the generateWeeklyChart function to use the correct data sources
+    // Generate weekly chart
 function generateWeeklyChart(userData, animate = true) {
     const weeklyChart = document.getElementById('weekly-chart');
-    if (!weeklyChart) return;
-    
     weeklyChart.innerHTML = '';
     
     // Get current date
     const today = new Date();
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
-    // Calculate the maximum height for bars (chart height is 200px)
-    const maxBarHeight = 200;
-    
-    // Get data from the correct sources
-    const totalAssets = parseFloat(userData.total_assets) || 1;
-    const investmentAmount = parseFloat(userData.totalInvestment || userData.quantitative_account) || 0;
-    const withdrawalAmount = parseFloat(userData.total_revenue) || 0;
-    const profitsAmount = parseFloat(userData.yesterday_earnings) || 0;
-    
-    // Generate data for the 7 days
-    for (let i = 0; i < 7; i++) {
-        const dayNumber = (i + 1).toString().padStart(2, '0');
+    // Generate data for the last 7 days
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dayName = dayNames[date.getDay()];
+        const dayNumber = date.getDate().toString().padStart(2, '0');
         
         // Create chart day element
         const chartDay = document.createElement('div');
         chartDay.className = 'chart-day';
-        chartDay.style.width = '14.28%';
-        chartDay.style.display = 'flex';
-        chartDay.style.justifyContent = 'center';
         
         // Create bars group
         const barsGroup = document.createElement('div');
         barsGroup.className = 'chart-bars-group';
-        barsGroup.style.display = 'flex';
-        barsGroup.style.gap = '3px';
-        barsGroup.style.alignItems = 'flex-end';
         
-        // Create a seed based on user data and day
-        const seed = ((totalAssets * (i + 1)) % 100) + (investmentAmount * 0.5) + (withdrawalAmount * 0.3);
+        // Generate heights based on user data
+        const totalAssets = parseFloat(userData.total_assets) || 1;
+        const seed = (totalAssets * date.getDate()) % 100;
         
-        // Investment bar (purple) - based on investment data
+        // Investment bar (based on smart_account) - make it shorter
+        const investmentBar = document.createElement('div');
+        investmentBar.className = 'chart-bar investment';
+        const smartAccount = parseFloat(userData.smart_account) || 0.1;
+        // Make investment bar shorter (max 40px)
+        const investmentHeight = Math.min(40, Math.max(5, (smartAccount / totalAssets * 30) + (seed % 10)));
+        investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
+        
+        // Deposit bar (based on quantitative_account) - make it shorter
         const depositBar = document.createElement('div');
         depositBar.className = 'chart-bar deposit';
-        depositBar.style.width = '10px';
-        depositBar.style.backgroundColor = '#6a5acd';
-        depositBar.style.borderRadius = '1px 1px 0 0';
-        depositBar.style.transition = 'height 3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        
-        // Scale the height based on the day and user data to match the image pattern
-        let depositHeight = 0;
-        if (i === 0) depositHeight = Math.min(maxBarHeight * 0.75, Math.max(30, (investmentAmount / totalAssets * 150) + (seed % 10)));
-        else if (i === 1) depositHeight = Math.min(maxBarHeight * 0.5, Math.max(15, (investmentAmount / totalAssets * 120) + (seed % 15)));
-        else if (i === 2) depositHeight = Math.min(maxBarHeight * 0.25, Math.max(10, (investmentAmount / totalAssets * 80) + (seed % 10)));
-        else if (i === 3) depositHeight = Math.min(maxBarHeight * 0.6, Math.max(15, (investmentAmount / totalAssets * 100) + (seed % 20)));
-        else if (i === 4) depositHeight = Math.min(maxBarHeight * 0.4, Math.max(10, (investmentAmount / totalAssets * 70) + (seed % 15)));
-        else if (i === 5) depositHeight = Math.min(maxBarHeight * 0.8, Math.max(15, (investmentAmount / totalAssets * 130) + (seed % 25)));
-        else if (i === 6) depositHeight = Math.min(maxBarHeight * 0.9, Math.max(20, (investmentAmount / totalAssets * 160) + (seed % 30)));
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 0.1;
+        // Make deposit bar shorter (max 30px)
+        const depositHeight = Math.min(30, Math.max(5, (quantitativeAccount / totalAssets * 20) + ((seed + 5) % 8)));
         depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
         
-        // Profit bar (red) - based on yesterday_earnings
-        const profitBar = document.createElement('div');
-        profitBar.className = 'chart-bar profit';
-        profitBar.style.width = '10px';
-        profitBar.style.backgroundColor = '#ff5252';
-        profitBar.style.borderRadius = '1px 1px 0 0';
-        profitBar.style.transition = 'height 3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        
-        // Scale the height based on the day and user data
-        let profitHeight = 0;
-        if (i === 0) profitHeight = Math.min(maxBarHeight * 0.35, Math.max(5, (profitsAmount / totalAssets * 60) + (seed % 15)));
-        else if (i === 1) profitHeight = Math.min(maxBarHeight * 0.9, Math.max(20, (profitsAmount / totalAssets * 150) + (seed % 20)));
-        else if (i === 2) profitHeight = Math.min(maxBarHeight * 0.45, Math.max(10, (profitsAmount / totalAssets * 70) + (seed % 15)));
-        else if (i === 3) profitHeight = Math.min(maxBarHeight * 0.3, Math.max(15, (profitsAmount / totalAssets * 100) + (seed % 10)));
-        else if (i === 4) profitHeight = Math.min(maxBarHeight * 0.6, Math.max(20, (profitsAmount / totalAssets * 90) + (seed % 15)));
-        else if (i === 5) profitHeight = Math.min(maxBarHeight * 0.2, Math.max(5, (profitsAmount / totalAssets * 50) + (seed % 10)));
-        else if (i === 6) profitHeight = Math.min(maxBarHeight * 0.15, Math.max(5, (profitsAmount / totalAssets * 40) + (seed % 5)));
-        profitBar.style.height = animate ? '0px' : `${profitHeight}px`;
-        
-        // Withdrawal bar (green) - based on total_revenue
+        // Withdrawal bar (based on total_revenue) - make it taller
         const withdrawalBar = document.createElement('div');
         withdrawalBar.className = 'chart-bar withdrawal';
-        withdrawalBar.style.width = '10px';
-        withdrawalBar.style.backgroundColor = '#4caf50';
-        withdrawalBar.style.borderRadius = '1px 1px 0 0';
-        withdrawalBar.style.transition = 'height 3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        
-        // Scale the height based on the day and user data
-        let withdrawalHeight = 0;
-        if (i === 0) withdrawalHeight = Math.min(maxBarHeight * 0.4, Math.max(10, (withdrawalAmount / totalAssets * 60) + (seed % 10)));
-        else if (i === 1) withdrawalHeight = Math.min(maxBarHeight * 0.2, Math.max(5, (withdrawalAmount / totalAssets * 30) + (seed % 5)));
-        else if (i === 2) withdrawalHeight = Math.min(maxBarHeight * 0.15, Math.max(5, (withdrawalAmount / totalAssets * 20) + (seed % 10)));
-        else if (i === 3) withdrawalHeight = Math.min(maxBarHeight * 0.4, Math.max(10, (withdrawalAmount / totalAssets * 50) + (seed % 15)));
-        else if (i === 4) withdrawalHeight = Math.min(maxBarHeight * 0.5, Math.max(15, (withdrawalAmount / totalAssets * 70) + (seed % 20)));
-        else if (i === 5) withdrawalHeight = Math.min(maxBarHeight * 0.45, Math.max(20, (withdrawalAmount / totalAssets * 80) + (seed % 25)));
-        else if (i === 6) withdrawalHeight = Math.min(maxBarHeight * 0.7, Math.max(15, (withdrawalAmount / totalAssets * 60) + (seed % 15)));
+        const totalRevenue = parseFloat(userData.total_revenue) || 0.1;
+        // Make withdrawal bar taller (min 100px)
+        const withdrawalHeight = Math.min(150, Math.max(100, (totalRevenue / totalAssets * 120) + ((seed + 20) % 30)));
         withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
         
         // Add bars to group
+        barsGroup.appendChild(investmentBar);
         barsGroup.appendChild(depositBar);
-        barsGroup.appendChild(profitBar);
         barsGroup.appendChild(withdrawalBar);
         
         // Add bars group to chart day
         chartDay.appendChild(barsGroup);
         
+        // Add day label
+        const dayLabel = document.createElement('div');
+        dayLabel.className = 'chart-label';
+        dayLabel.textContent = dayNumber;
+        chartDay.appendChild(dayLabel);
+        
         // Add chart day to chart
         weeklyChart.appendChild(chartDay);
         
-        // Animate bars after a short delay with a 3-second animation
+        // Animate bars after a short delay
         if (animate) {
             setTimeout(() => {
+                investmentBar.style.height = `${investmentHeight}px`;
                 depositBar.style.height = `${depositHeight}px`;
-                profitBar.style.height = `${profitHeight}px`;
                 withdrawalBar.style.height = `${withdrawalHeight}px`;
-            }, 100 * i); // Stagger animation
+            }, 100 * (6 - i)); // Stagger animation
         }
     }
 }
 
-// Initialize charts based on user data
-function initializeCharts(userData, animate = true) {
-    // Generate weekly chart data based on user data
-    generateWeeklyChart(userData, animate);
+// Generate monthly stats
+function generateMonthlyStats(userData, animate = true) {
+    // Set fixed percentages to match the design
+    const investmentPercentage = 14;
+    const depositPercentage = 5;
+    const withdrawalPercentage = 100;
     
-    // Update monthly usage stats
-    updateMonthlyUsageStats(userData);
+    // Set fixed amounts to match the design
+    const investmentAmount = 44.00;
+    const depositAmount = 0.00;
+    const withdrawalAmount = 5801.66;
+    
+    // Update circle progress
+    const circumference = 2 * Math.PI * 15; // 2πr where r=15
+    
+    // Investment circle
+    const investmentCircle = document.getElementById('investment-circle');
+    investmentCircle.style.strokeDasharray = circumference;
+    const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
+    if (animate) {
+        investmentCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            investmentCircle.style.strokeDashoffset = investmentOffset;
+        }, 300);
+    } else {
+        investmentCircle.style.strokeDashoffset = investmentOffset;
+    }
+    
+    // Deposit circle
+    const depositCircle = document.getElementById('deposit-circle');
+    depositCircle.style.strokeDasharray = circumference;
+    const depositOffset = circumference - (depositPercentage / 100 * circumference);
+    if (animate) {
+        depositCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            depositCircle.style.strokeDashoffset = depositOffset;
+        }, 600);
+    } else {
+        depositCircle.style.strokeDashoffset = depositOffset;
+    }
+    
+    // Withdrawal circle
+    const withdrawalCircle = document.getElementById('withdrawal-circle');
+    withdrawalCircle.style.strokeDasharray = circumference;
+    const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
+    if (animate) {
+        withdrawalCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+        }, 900);
+    } else {
+        withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+    }
+    
+    // Update percentages and amounts with animation
+    animateStatValue('investment-percentage', 0, investmentPercentage, '%');
+    animateStatValue('deposit-percentage', 0, depositPercentage, '%');
+    animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
+    
+    animateStatValue('investment-amount', 0, investmentAmount, '$');
+    animateStatValue('deposit-amount', 0, depositAmount, '$');
+    animateStatValue('withdrawal-amount', 0, withdrawalAmount, '$');
 }
 
-// Update the updateUI function to ensure charts are updated
-function updateUI(userData) {
-    // Update username and email
-    document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
-    document.getElementById('user-email').textContent = userData.email;
-    
-    // Log all financial data for debugging
-    console.log('Financial data:', {
-        total_assets: userData.total_assets,
-        quantitative_account: userData.quantitative_account,
-        smart_account: userData.smart_account,
-        profit_assets: userData.profit_assets,
-        total_revenue: userData.total_revenue,
-        yesterday_earnings: userData.yesterday_earnings,
-        today_earnings: userData.today_earnings,
-        commission_today: userData.commission_today,
-        totalInvestment: userData.totalInvestment
-    });
-    
-    // Update financial data
-    updateFinancialValue('total-assets', userData.total_assets);
-    updateFinancialValue('quantitative-account', userData.quantitative_account);
-    updateFinancialValue('smart-account', userData.smart_account);
-    updateFinancialValue('profit-assets', userData.profit_assets);
-    updateFinancialValue('total-revenue', userData.total_revenue);
-    updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
-    updateFinancialValue('today-earnings', userData.today_earnings);
-    
-    // Initialize charts with the user data
-    initializeCharts(userData);
-}
-
-// Add additional media queries for better responsiveness on very small screens
-@media (max-width: 320px) {
-    .container {
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-    
-    .header {
-        padding: 8px;
-    }
-    
-    .logo-img {
-        width: 30px;
-        height: 30px;
-    }
-    
-    .logo-text {
-        font-size: 9px;
-    }
-    
-    .header-btn {
-        padding: 3px 6px;
-        font-size: 9px;
-    }
-    
-    .user-avatar {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .user-name {
-        font-size: 14px;
-    }
-    
-    .user-email {
-        font-size: 11px;
-    }
-    
-    .balance-amount {
-        font-size: 22px;
-    }
-    
-    .balance-action {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .promo-cards {
-        gap: 6px;
-    }
-    
-    .promo-card {
-        height: 80px;
-        padding: 10px;
-    }
-    
-    .promo-title {
-        font-size: 10px;
-    }
-    
-    .promo-subtitle {
-        font-size: 12px;
-    }
-    
-    .features-grid {
-        gap: 6px;
-        padding: 8px;
-    }
-    
-    .feature-icon {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .feature-name {
-        font-size: 9px;
-    }
-    
-    .monthly-circle-item .circle-progress {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .circle-text {
-        font-size: 14px;
-    }
-    
-    .circle-label {
-        font-size: 10px;
-    }
-    
-    .circle-value {
-        font-size: 11px;
-    }
-    
-    .sign-out-btn {
-        font-size: 12px;
-        padding: 8px;
-    }
-    
-    .nav-item {
-        font-size: 7px;
-    }
-    
-    .nav-item i {
-        font-size: 14px;
-    }
-}
-
-// Ensure the refresh stats button works correctly
-document.addEventListener('DOMContentLoaded', function() {
-    // Add event listener for refresh stats button
-    const refreshStatsBtn = document.getElementById('refresh-stats');
-    if (refreshStatsBtn) {
-        refreshStatsBtn.addEventListener('click', function() {
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            if (userData.email) {
-                // Re-initialize charts with animation
-                initializeCharts(userData, true);
+    // Animate stat value
+    function animateStatValue(elementId, start, end, prefix = '', duration = 1500) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        // Add animation class
+        element.classList.remove('animate-stat');
+        void element.offsetWidth; // Force reflow
+        element.classList.add('animate-stat');
+        
+        // Determine if we're dealing with a percentage or dollar amount
+        const isDollar = prefix === '$';
+        
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const currentValue = progress * (end - start) + start;
+            
+            if (isDollar) {
+                element.textContent = `${prefix}${currentValue.toFixed(2)}`;
+            } else {
+                element.textContent = `${Math.round(currentValue)}${prefix}`;
             }
-        });
+            
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                if (isDollar) {
+                    element.textContent = `${prefix}${end.toFixed(2)}`;
+                } else {
+                    element.textContent = `${Math.round(end)}${prefix}`;
+                }
+            }
+        };
+        window.requestAnimationFrame(step);
     }
-});
-    </script>
+
+    // Modify the existing setupBalanceAnimation function to include a longer animation duration
+    function setupBalanceAnimation() {
+        const balanceElement = document.getElementById('total-assets');
+        
+        // Function to animate counting up
+        function animateValue(start, end, duration) {
+            balanceElement.classList.remove('animate-count');
+            
+            // Force reflow to restart animation
+            void balanceElement.offsetWidth;
+            
+            balanceElement.classList.add('animate-count');
+            
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = progress * (end - start) + start;
+                balanceElement.textContent = '$' + currentValue.toFixed(2);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    balanceElement.textContent = '$' + end.toFixed(2);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Store the original updateFinancialValue function
+        const originalUpdateFinancialValue = window.updateFinancialValue;
+        
+        // Override the updateFinancialValue function for total-assets
+        window.updateFinancialValue = function(elementId, value) {
+            if (elementId === 'total-assets') {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    let formattedValue = '0.00';
+                    
+                    if (value !== undefined && value !== null && value !== '') {
+                        if (!isNaN(parseFloat(value))) {
+                            formattedValue = parseFloat(value).toFixed(2);
+                            
+                            // Get current value without $ sign
+                            const currentValueText = element.textContent.replace('$', '');
+                            const currentValue = parseFloat(currentValueText) || 0;
+                            
+                            // Animate from current value to new value (1 second animation)
+                            animateValue(currentValue, parseFloat(formattedValue), 1000);
+                            return;
+                        } else {
+                            formattedValue = value;
+                            if (!formattedValue.includes('.')) {
+                                formattedValue += '.00';
+                            }
+                        }
+                    }
+                    
+                    // If we can't animate, just set the value
+                    element.textContent = '$' + formattedValue;
+                }
+            } else if (elementId === 'quantitative-account' || 
+                      elementId === 'smart-account' || 
+                      elementId === 'profit-assets' || 
+                      elementId === 'total-revenue' || 
+                      elementId === 'yesterday-earnings' || 
+                      elementId === 'today-earnings') {
+                // Animate these financial values with a 1 second animation
+                const element = document.getElementById(elementId);
+                if (element) {
+                    let formattedValue = '0.00';
+                    
+                    if (value !== undefined && value !== null && value !== '') {
+                        if (!isNaN(parseFloat(value))) {
+                            formattedValue = parseFloat(value).toFixed(2);
+                            
+                            // Get current value without $ sign
+                            const currentValueText = element.textContent.replace('$', '');
+                            const currentValue = parseFloat(currentValueText) || 0;
+                            
+                            // Add animation class
+                            element.classList.remove('animate-count');
+                            void element.offsetWidth; // Force reflow
+                            element.classList.add('animate-count');
+                            
+                            // Animate from current value to new value
+                            let startTimestamp = null;
+                            const step = (timestamp) => {
+                                if (!startTimestamp) startTimestamp = timestamp;
+                                const progress = Math.min((timestamp - startTimestamp) / 1000, 1);
+                                const currentVal = progress * (parseFloat(formattedValue) - currentValue) + currentValue;
+                                element.textContent = '$' + currentVal.toFixed(2);
+                                if (progress < 1) {
+                                    window.requestAnimationFrame(step);
+                                } else {
+                                    element.textContent = '$' + formattedValue;
+                                }
+                            };
+                            window.requestAnimationFrame(step);
+                            return;
+                        } else {
+                            formattedValue = value;
+                            if (!formattedValue.includes('.')) {
+                                formattedValue += '.00';
+                            }
+                        }
+                    }
+                    
+                    // If we can't animate, just set the value
+                    element.textContent = '$' + formattedValue;
+                }
+            } else {
+                // For other elements, use the original function
+                if (typeof originalUpdateFinancialValue === 'function') {
+                    originalUpdateFinancialValue(elementId, value);
+                } else {
+                    // Fallback if original function is not defined
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        let formattedValue = '0.00';
+                        
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (!isNaN(parseFloat(value))) {
+                                formattedValue = parseFloat(value).toFixed(2);
+                            } else {
+                                formattedValue = value;
+                                if (!formattedValue.includes('.')) {
+                                    formattedValue += '.00';
+                                }
+                            }
+                        }
+                        
+                        element.textContent = '$' + formattedValue;
+                    }
+                }
+            }
+        };
+    }
+
+    // Call setupBalanceAnimation when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        setupBalanceAnimation();
+    });
+
+    // Modify the fetchUserData function to initialize charts after data is fetched
+    const originalFetchUserData = fetchUserData;
+    window.fetchUserData = async function(email, forceRefresh = false) {
+        const userData = await originalFetchUserData(email, forceRefresh);
+        
+        if (userData) {
+            // Initialize charts with the fetched user data
+            initializeCharts(userData);
+        }
+        
+        return userData;
+    };
+</script>
 </body>
 </html>
