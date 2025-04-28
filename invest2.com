@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Investment Platform</title>
+    <title>SOFT R INVESTMENT - Crypto Trading Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -11,35 +11,55 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #FF6B6B;
+            --primary-light: #FFE0E0;
+            --secondary: #4169E1;
+            --secondary-light: #E0E7FF;
+            --success: #4CD964;
+            --warning: #FFC107;
+            --danger: #FF3B30;
+            --dark: #333333;
+            --medium: #666666;
+            --light: #999999;
+            --lighter: #EEEEEE;
+            --white: #FFFFFF;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px;
+            --border-radius-sm: 12px;
+            --border-radius-lg: 24px;
         }
 
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #F8F9FA;
+            color: var(--dark);
             line-height: 1.5;
             overflow-x: hidden;
         }
 
         /* Container */
         .container {
-            width: 700px;
+            width: 100%;
+            max-width: 700px;
             margin: 0 auto;
             padding: 0;
             position: relative;
             min-width: 320px;
-            background-color: #fff;
+            background-color: var(--white);
             min-height: 100vh;
         }
 
         /* Header Styles */
         .header {
-            padding: 15px;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .logo {
@@ -48,295 +68,764 @@
         }
 
         .logo-img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
             border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), #FF9E80);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
         }
 
         .logo-text {
-            font-size: 12px;
-            font-weight: bold;
-            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            letter-spacing: 0.5px;
         }
 
         .header-btns {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .header-btn {
             display: flex;
             align-items: center;
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 12px;
-            color: #ffa500;
-            border: 1px solid #ffa500;
+            background-color: var(--white);
+            border-radius: 24px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transition: all 0.2s ease;
         }
 
         .header-btn.app {
-            background-color: #ffa500;
-            color: #fff;
+            background-color: var(--primary);
+            color: var(--white);
         }
 
         .header-btn i {
-            margin-right: 5px;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            padding: 15px;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .tab {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px 20px;
-            position: relative;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .tab.active {
-            color: #000;
-            border-bottom: 3px solid #ffa500;
-        }
-
-        /* Investment Plans */
-        .investment-plans {
-            padding: 15px;
-            background-color: #fff;
-            margin-bottom: 80px;
-        }
-
-        .plan-card {
-            border: 1px solid #ffa500;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            background-color: #fff;
-        }
-
-        .plan-header {
-            padding: 15px;
-            position: relative;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .plan-title {
-            font-size: 16px;
-            font-weight: bold;
-            position: relative;
-            color: #333;
-        }
-
-        .plan-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .plan-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            padding: 15px;
-        }
-
-        .detail-item {
-            margin-bottom: 10px;
-        }
-
-        .detail-label {
+            margin-right: 6px;
             font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
         }
 
-        .detail-value {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .detail-value.rate {
-            color: #4cd964;
-        }
-
-        /* Plan Detail Page */
-        .plan-detail {
-            display: none;
-            padding: 0;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-
-        .plan-detail-header {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            border-bottom: 1px solid #eee;
-        }
-
-        .back-btn {
-            font-size: 20px;
-            margin-right: 15px;
-            cursor: pointer;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .plan-detail-content {
-            padding: 15px;
-        }
-
-        .plan-detail-card {
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .plan-detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .plan-detail-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background-color: #ffa500;
-        }
-
-        .detail-row {
+        /* Hero Section */
+        .hero-section {
+            padding: 32px 24px;
+            background-color: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
         }
 
-        .detail-row:last-child {
-            border-bottom: none;
+        .hero-text {
+            flex: 1;
+            position: relative;
+            z-index: 2;
         }
 
-        .detail-label-lg {
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
             font-size: 16px;
-            color: #333;
+            color: var(--medium);
+            margin-bottom: 24px;
+            max-width: 90%;
         }
 
-        .detail-value-lg {
-            font-size: 16px;
-            font-weight: bold;
+        .hero-btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .quantity-selector {
-            display: flex;
-            align-items: center;
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
         }
 
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
+        .hero-image {
+            flex: 1;
+            text-align: right;
+            position: relative;
+            z-index: 1;
         }
 
-        .quantity-input {
-            width: 40px;
-            height: 30px;
-            border: 1px solid #ddd;
+        .hero-img {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Partners Section */
+        .partners-section {
+            padding: 32px 24px;
+            background-color: var(--white);
             text-align: center;
-            font-size: 16px;
-            margin: 0 5px;
+            border-bottom: 12px solid #F5F7FA;
         }
 
-        .cycle-selector {
+        .partners-count {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .partners-text {
+            font-size: 14px;
+            color: var(--medium);
+            margin-bottom: 24px;
+        }
+
+        .partners-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .partner-logo {
+            height: 24px;
+            margin: 5px;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .partner-logo:hover {
+            opacity: 1;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin: 20px;
+            padding: 14px 20px;
+            background-color: var(--white);
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .search-icon {
+            color: var(--primary);
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 20px;
+            background-color: var(--white);
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark);
+            padding: 12px 8px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .feature-name {
+            font-size: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: var(--medium);
+        }
+
+        /* Account Cards */
+        .account-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 20px;
+            background-color: var(--white);
+        }
+
+        .account-card {
+            background-color: var(--secondary-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: var(--medium);
+            font-weight: 500;
+        }
+
+        .card-amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+
+        .card-value {
+            font-size: 13px;
+            color: var(--medium);
+        }
+
+        /* Withdrawal Record */
+        .withdrawal-section {
+            padding: 24px 20px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin: 0 20px 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+            margin-top: 8px;
+            border-radius: 2px;
+        }
+
+        .withdrawal-record {
+            margin-bottom: 15px;
+            height: 120px;
+            overflow: hidden;
             position: relative;
         }
 
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-            max-height: 300px;
-            overflow-y: auto;
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
+        .record-email {
+            font-size: 14px;
+            color: var(--medium);
+            font-weight: 500;
         }
 
-        .cycle-option:hover {
-            background-color: #f5f5f5;
+        .record-amount {
+            font-size: 14px;
+            color: var(--success);
+            font-weight: 600;
         }
 
-        .cycle-option:last-child {
-            border-bottom: none;
+        /* Quotes Section */
+        .quotes-section {
+            padding: 24px 20px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin: 0 20px 24px;
+            box-shadow: var(--card-shadow);
         }
 
-        .invest-btn {
-            display: block;
+        .crypto-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .crypto-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crypto-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .crypto-unit {
+            font-size: 13px;
+            color: var(--light);
+            margin-left: 6px;
+        }
+
+        .exchange-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .exchange-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .exchange-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .exchange-name {
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            color: var(--medium);
+            font-weight: 500;
+        }
+
+        .exchange-logo {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+            border-radius: 50%;
+        }
+
+        .exchange-price {
+            font-size: 16px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Crypto Wallet Section */
+        .crypto-wallet-section {
+            padding: 32px 24px;
+            background-color: #F8F9FA;
+            margin: 24px 20px;
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .crypto-wallet-section {
+                flex-direction: row;
+            }
+        }
+
+        .wallet-content {
+            flex: 1;
+        }
+
+        .wallet-section-number {
+            color: var(--secondary);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .wallet-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .wallet-description {
+            font-size: 14px;
+            color: var(--medium);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .wallet-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .wallet-image {
+            flex: 1;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
-            padding: 15px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
+            max-width: 280px;
         }
 
-        .project-rule {
-            margin-top: 20px;
+        .wallet-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .crypto-icon-large {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #F7931A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: white;
+            font-size: 20px;
+        }
+
+        .crypto-info {
+            flex: 1;
+        }
+
+        .crypto-name-large {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .crypto-price {
             font-size: 18px;
-            font-weight: bold;
-            color: #ffa500;
+            font-weight: 700;
+        }
+
+        .crypto-change {
+            margin-left: auto;
+            background-color: #E6F7FF;
+            padding: 4px 8px;
+            border-radius: 12px;
+            color: var(--secondary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .crypto-chart {
+            height: 60px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        /* Stats Section */
+        .platform-stats {
+            padding: 32px 24px;
+            background-color: var(--white);
+            border-top: 12px solid #F5F7FA;
+            border-bottom: 12px solid #F5F7FA;
+            text-align: center;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 24px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--medium);
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 32px 24px;
+            background-color: var(--white);
+            border-top: 12px solid #F5F7FA;
+            border-bottom: 12px solid #F5F7FA;
+            margin-bottom: 24px;
+        }
+
+        .reviews-counter {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .reviews-heading {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .reviews-actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .btn-download {
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(65, 105, 225, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(65, 105, 225, 0.3);
+        }
+
+        .btn-all-reviews {
+            background-color: var(--white);
+            color: var(--dark);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-all-reviews:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .review-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            background-color: var(--white);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .review-quote {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: var(--medium);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+        }
+
+        .author-name {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .username {
+            font-size: 12px;
+            color: var(--light);
+        }
+
+        .review-rating {
+            color: var(--warning);
+            font-size: 14px;
+        }
+
+        /* Institutions Section */
+        .institutions-section {
+            padding: 32px 24px;
+            background-color: var(--white);
+            margin-bottom: 80px;
+            border-radius: var(--border-radius);
+            margin: 0 20px 80px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .institutions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .institution-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            border-radius: 12px;
+            background-color: rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .institution-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .institution-logo {
+            height: 32px;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .institution-item:hover .institution-logo {
+            opacity: 1;
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.4);
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .float-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.5);
         }
 
         /* Bottom Navigation */
@@ -345,14 +834,15 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 700px;
-            min-width: 470px;
-            background-color: #fff;
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--white);
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
-            border-top: 1px solid #eee;
+            padding: 12px 0 8px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
             z-index: 100;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
         }
 
         .nav-item {
@@ -360,234 +850,127 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #999;
+            color: var(--light);
             font-size: 12px;
+            padding: 8px 0;
+            transition: all 0.2s ease;
         }
 
         .nav-item.active {
-            color: #ffa500;
+            color: var(--primary);
         }
 
         .nav-item i {
             font-size: 20px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .nav-item:hover {
+            color: var(--primary);
+        }
+
+        /* Crypto price animation */
+        @keyframes priceChange {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .price-changing {
+            animation: priceChange 0.5s ease;
+        }
+
+        /* Withdrawal record animation */
+        @keyframes slideUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-40px); }
+        }
+
+        .sliding-records {
+            position: absolute;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-        }
-
-        .modal-icon.success {
-            color: #4cd964;
-        }
-
-        .modal-icon.error {
-            color: #ff3b30;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: #666;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 152, 0, 0.3);
-            border-radius: 50%;
-            border-top-color: #ffa500;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Email input styles */
-        .email-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .email-input:focus {
-            border-color: #ffa500;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-        }
-
-        .email-error {
-            color: #ff3b30;
-            margin-bottom: 15px;
-            font-size: 14px;
-            text-align: left;
-            display: none;
-        }
-
-        .modal-btn.secondary {
-            background-color: #f5f5f5;
-            color: #333;
-            margin-top: 10px;
+            transition: transform 0.5s ease;
         }
 
         /* Media Queries for Responsiveness */
-        @media (max-width: 470px) {
-            .container {
-                width: 100%;
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 32px;
             }
             
-            .bottom-nav {
-                width: 100%;
-                min-width: 320px;
+            .hero-subtitle {
+                font-size: 14px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+            
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .feature-name {
+                font-size: 11px;
+            }
+            
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .review-card {
+                padding: 20px;
+            }
+            
+            .institutions-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
             }
         }
 
-        @media (min-width: 471px) {
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .container {
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+                margin: 20px auto;
+                border-radius: 24px;
+                overflow: hidden;
+                min-height: calc(100vh - 40px);
+            }
+        }
+
+        @media (min-width: 1025px) {
             body {
                 display: flex;
                 justify-content: center;
                 align-items: flex-start;
                 min-height: 100vh;
-                background-color: #f0f0f0;
+                padding: 40px 0;
+                background-color: #F0F2F5;
             }
             
             .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+                border-radius: 24px;
+                overflow: hidden;
+                min-height: auto;
             }
-        }
-
-        .cycle-selector {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .cycle-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 200px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .cycle-option {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-
-        .cycle-option:hover {
-            background-color: #f5f5f5;
-        }
-
-        .cycle-option:last-child {
-            border-bottom: none;
-        }
-
-        /* User info styles */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .logout-btn {
-            margin-left: 10px;
-            cursor: pointer;
-            color: #ff3b30;
-            font-size: 12px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Main Page -->
-    <div id="main-page">
+    <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <div class="logo-img">AI</div>
+                <div class="logo-img">
+                    <img src="image/4e0ab918-1d65-40ac-9762-0ad78571cc2c.png?height=40&width=40" alt="Logo" style="width: 24px; height: 24px;">
+                </div>
                 <div class="logo-text">SOFT R INVESTMENT</div>
             </div>
             <div class="header-btns">
-                <div class="user-info" id="user-info">
-                    <div class="user-avatar"><i class="fas fa-user"></i></div>
-                    <div class="user-name" id="user-name">User</div>
-                </div>
-                <a href="https://softrinvestment.com/download-app.html">
+                <a href="https://softrinvestment.com/download-app.html" style="text-decoration: none;">
                     <div class="header-btn app">
                         <i class="fas fa-mobile-alt"></i> App
                     </div>
@@ -598,1064 +981,1060 @@
             </div>
         </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active">Smart investment</div>
-            <div class="tab">Invest Record</div>
-        </div>
-        
-        <div class="investment-plans">
-            <!-- Plan cards will be generated by JavaScript -->
-        </div>
-    </div>
-
-    <!-- Plan Detail Page -->
-    <div id="plan-detail" class="plan-detail">
-        <div class="plan-detail-header">
-            <div class="back-btn" onclick="goBack()">
-                <i class="fas fa-arrow-left"></i>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-text">
+                <div class="hero-title">Money.<br>The Power<br>On Your Side.</div>
+                <div class="hero-subtitle">Invest, Trade, and Real ROI Cryptocurrency.</div>
+                <a href="https://softrinvestment.com/register.html" class="hero-btn" target="_blank" rel="noopener noreferrer">Register Now!!</a>
             </div>
-            <div class="header-title">Smart investment</div>
-        </div>
-
-        <div class="plan-detail-content">
-            <!-- Plan detail content will be generated by JavaScript -->
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div id="modal-loading" style="display: none;">
-                <div class="loading-spinner"></div>
-                <div class="modal-message">Processing your investment...</div>
-            </div>
-            <div id="modal-result" style="display: none;">
-                <div class="modal-icon" id="modal-icon">
-                    <i class="fas fa-check-circle success"></i>
-                </div>
-                <div class="modal-title" id="modal-title">Success</div>
-                <div class="modal-message" id="modal-message">Your investment was successful!</div>
-                <button class="modal-btn" onclick="closeModal()">OK</button>
+            <div class="hero-image">
+                <img src="image/Finance app.gif?height=150&width=150" alt="Hero Image" class="hero-img">
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="sharing-task.html" class="nav-item">
-        <i class="fas fa-chart-pie"></i>
-        <span>Task</span>
-    </a>
-    <a href="invest.html" class="nav-item active">
-        <i class="fas fa-gift"></i>
-        <span>Invest</span>
-    </a>
-    <a href="invite-friends.html" class="nav-item">
-        <i class="fas fa-user-plus"></i>
-        <span>Invite Friends</span>
-    </a>
-    <a href="profile.html" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>Me</span>
-    </a>
-</nav>
+        <!-- Partners Section -->
+        <div class="partners-section">
+            <div class="partners-count">1,50,000+</div>
+            <div class="partners-text">Investing you can trust</div>
+            <div class="partners-logos">
+                <img src="image/93e8e662dbd72e8dc3aa7f89d5dcd5c4 (1).png?height=20&width=40&text=airbnb" alt="Airbnb" class="partner-logo">
+                <img src="image/e935e66b48c23fa5785667d92d5e0833.png?height=20&width=40&text=amazon" alt="Amazon" class="partner-logo">
+                <img src="image/8caefdcde287fd47a60d2b7aea776675.png?height=20&width=40&text=FedEx" alt="FedEx" class="partner-logo">  alt="FedEx" class="partner-logo">
+                <img src="image/4edcc1e3706bacdada00d46799fe5738.png?height=55&width=55&text=Google" alt="Google" class="partner-logo">
+                <img src="image/d8554734ddff4c0c4ed60a4c98c35ae8.png?height=20&width=40&text=Wistma" alt="tesla" class="partner-logo">
+                <img src="image/10634df7dd6d432344208197aa7a8706.png?height=20&width=40&text=OLA" alt="OLA" class="partner-logo">
+                <img src="image/9ad73314198c1b7ad4c7852cbdb50a7f.png?height=20&width=40&text=Wistma" alt="tesla" class="partner-logo">
+                <img src="image/c0e9608804a60958c35d22cf12a9504d.png?height=20&width=40&text=OLA" alt="OLA" class="partner-logo">
+            </div>
+        </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script>
-    // User activity storage
-    const USER_ACTIVITY_KEY = 'userActivityHistory';
-    
-    // Function to save activity to localStorage
-    function saveActivity(activity) {
-        // Get existing activities or initialize empty array
-        const existingActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-        
-        // Add new activity with timestamp
-        const newActivity = {
-            ...activity,
-            timestamp: new Date().toISOString(),
-            page: 'invest'
-        };
-        
-        // Add to beginning of array (most recent first)
-        existingActivities.unshift(newActivity);
-        
-        // Save back to localStorage
-        localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(existingActivities));
-        
-        console.log('Activity saved:', newActivity);
-    }
-    
-    // Function to log page view
-    function logPageView() {
-        saveActivity({
-            type: 'page_view',
-            details: 'Viewed investment page'
-        });
-    }
-    
-    // Function to log plan view
-    function logPlanView(plan) {
-        saveActivity({
-            type: 'plan_view',
-            planId: plan.id,
-            planTitle: plan.title,
-            planPrice: plan.price
-        });
-    }
-    
-    // Function to log investment attempt
-    function logInvestmentAttempt(plan, quantity, duration, totalAmount, success, reason) {
-        saveActivity({
-            type: 'investment_attempt',
-            planId: plan.id,
-            planTitle: plan.title,
-            quantity: quantity,
-            duration: duration.label,
-            interestRate: duration.interestRate,
-            totalAmount: totalAmount,
-            success: success,
-            reason: reason || null
-        });
-    }
-    
-    // Function to log UI interaction
-    function logUIInteraction(action, details) {
-        saveActivity({
-            type: 'ui_interaction',
-            action: action,
-            details: details
-        });
-    }
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
 
-    // Baserow API configuration
-    const BASEROW_API = {
-        token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
-        baseUrl: 'https://api.baserow.io/api',
-        databaseId: '202237',
-        tableId: '488473'
-    };
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <a href="recharge.html" class="feature-item" id="recharge">
+                <img src="image/icons8-stack-of-coins.gif?height=50&width=50" alt="Recharge" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Fund Account</div>
+            </a>
+            <a href="withdraw.html" class="feature-item" id="withdraw">
+                <img src="image/icons8-coins.gif?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Withdraw</div>
+            </a>
+            <a href="help-center.html" class="feature-item" id="help">
+                <img src="image/icons8-online-support (1).gif?height=50&width=50" alt="Help" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Help</div>
+            </a>
+            <a href="reviews.html" class="feature-item" id="team">
+                <img src="image/icons8-comments.gif?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Reviews</div>
+            </a>
+            <a href="contact-us.html" class="feature-item" id="activity">
+                <img src="image/icons8-location.gif?height=50&width=50" alt="Activity" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Contact Us</div>
+            </a>
+            <a href="invite-friends.html" class="feature-item" id="invite">
+                <img src="image/icons8-prize.gif?height=50&width=50" alt="Invite Friends" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Invite Friends</div>
+            </a>
+            <a href="agent-cooperation.html" class="feature-item" id="agent">
+                <img src="image/icons8-handshake.gif?height=50&width=50" alt="Agent Cooperation" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Agent Cooperation</div>
+            </a>
+            <a href="#" class="feature-item" id="news">
+                <img src="image/icons8-notification.gif?height=50&width=50" alt="News" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">News</div>
+            </a>
+        </div>
 
-    // Investment Plans Data - Updated with additional smaller plans
-    const investmentPlans = [
-        { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 2, title: "Investment Plan 2", price: 50, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 3, title: "Investment Plan 3", price: 96, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 4, title: "Investment Plan 4", price: 100, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 5, title: "Investment Plan 5", price: 500, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 6, title: "Investment Plan 6", price: 1650, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 7, title: "Investment Plan 7", price: 2000, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
-        { id: 8, title: "Investment Plan 8", price: 3500, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 9, title: "Investment Plan 9", price: 10000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 10, title: "Investment Plan 10", price: 30000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 11, title: "Investment Plan 11", price: 50000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 12, title: "Investment Plan 12", price: 80000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" },
-        { id: 13, title: "Investment Plan 13", price: 100000, dailyRate: "180.00%", cycle: "12 Hrs - 12 Hrs - 15 Days" }
-    ];
+        <!-- Account Cards -->
+        <div class="account-cards">
+            <div class="account-card">
+                <div class="card-title">Safe and secure</div>
+                <div class="card-amount" id="total-assets">Trusted</div>
+                <div class="card-value">= Regulated</div>
+            </div>
+            <div class="account-card">
+                <div class="card-title">Cryptocurrency</div>
+                <div class="card-amount" id="quantitative-account">Investing</div>
+                <div class="card-value">= Financial planning</div>
+            </div>
+        </div>
 
-    // Investment Duration Options
-    const durationOptions = [
-        { label: "12hrs", value: 0.5, interestRate: 180 },
-        { label: "1 day", value: 1, interestRate: 185 },
-        { label: "2 days", value: 2, interestRate: 190 },
-        { label: "3 days", value: 3, interestRate: 195 },
-        { label: "4 days", value: 4, interestRate: 200 },
-        { label: "5 days", value: 5, interestRate: 205 },
-        { label: "6 days", value: 6, interestRate: 210 },
-        { label: "7 days", value: 7, interestRate: 215 },
-        { label: "8 days", value: 8, interestRate: 220 },
-        { label: "9 days", value: 9, interestRate: 225 },
-        { label: "10 days", value: 10, interestRate: 230 },
-        { label: "11 days", value: 11, interestRate: 235 },
-        { label: "12 days", value: 12, interestRate: 240 },
-        { label: "13 days", value: 13, interestRate: 245 },
-        { label: "14 days", value: 14, interestRate: 250 },
-        { label: "15 days", value: 15, interestRate: 255 }
-    ];
-
-    // Variables to store current investment selection
-    let currentPlan = null;
-    let currentQuantity = 1;
-    let currentDuration = null;
-    let currentUser = null;
-
-    // Initialize the app when document is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        // Log page view
-        logPageView();
-        
-        // Check if user is logged in
-        checkAuthStatus();
-        
-        // Tab switching functionality
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Log tab switch
-                logUIInteraction('tab_switch', `Switched to ${this.textContent} tab`);
-                
-                // For now, just show an alert when switching to Invest Record
-                if (this.textContent === 'Invest Record') {
-                    alert('Invest Record feature coming soon.');
-                    
-                    // Log alert display
-                    logUIInteraction('alert', 'Invest Record feature coming soon alert displayed');
-                    
-                    // Switch back to Smart investment tab
-                    setTimeout(() => {
-                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                        document.querySelectorAll('.tab')[0].classList.add('active');
-                        
-                        // Log auto tab switch back
-                        logUIInteraction('tab_switch', 'Auto-switched back to Smart investment tab');
-                    }, 500);
-                }
-            });
-        });
-        
-        // Add event listeners to bottom navigation
-        setupBottomNavTracking();
-    });
-    
-    // Setup bottom navigation tracking
-    function setupBottomNavTracking() {
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(navItem => {
-            navItem.addEventListener('click', function(e) {
-                // Get the href attribute
-                const destination = this.getAttribute('href');
-                
-                // Log navigation
-                saveActivity({
-                    type: 'navigation',
-                    action: 'bottom_nav_click',
-                    destination: destination,
-                    details: `User navigated to ${destination}`
-                });
-            });
-        });
-    }
-
-    // Check authentication status
-    function checkAuthStatus() {
-        const authToken = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
-        
-        if (!authToken || !userData) {
-            // Log authentication failure
-            saveActivity({
-                type: 'authentication',
-                status: 'failed',
-                details: 'No auth token or user data found'
-            });
-            
-            // Redirect to login page if not logged in
-            window.location.href = 'login.html';
-            return;
-        }
-        
-        try {
-            currentUser = JSON.parse(userData);
-            
-            // Log successful authentication
-            saveActivity({
-                type: 'authentication',
-                status: 'success',
-                username: currentUser.username || currentUser.email.split('@')[0],
-                email: currentUser.email
-            });
-            
-            updateUserInfo();
-            generatePlanCards();
-        } catch (error) {
-            console.error('Error parsing user data:', error);
-            
-            // Log error
-            saveActivity({
-                type: 'error',
-                context: 'authentication',
-                details: 'Error parsing user data',
-                error: error.message
-            });
-            
-            window.location.href = 'login.html';
-        }
-    }
-    
-    // Update user info in header
-    function updateUserInfo() {
-        if (currentUser) {
-            document.getElementById('user-name').textContent = currentUser.username || currentUser.email.split('@')[0];
-            
-            // Log user info update
-            saveActivity({
-                type: 'user_info',
-                username: currentUser.username || currentUser.email.split('@')[0],
-                balance: currentUser.total_assets || '0.00'
-            });
-        }
-    }
-
-    // Generate Plan Cards
-    function generatePlanCards() {
-        const plansContainer = document.querySelector('.investment-plans');
-        plansContainer.innerHTML = '';
-
-        const sortedPlans = [...investmentPlans].sort((a, b) => a.price - b.price);
-
-        sortedPlans.forEach(plan => {
-            const planCard = document.createElement('div');
-            planCard.className = 'plan-card';
-            planCard.setAttribute('data-plan-id', plan.id);
-
-            planCard.innerHTML = `
-                <div class="plan-header">
-                    <div class="plan-title">${plan.title}</div>
+        <!-- Withdrawal Record -->
+        <div class="withdrawal-section">
+            <div class="section-title">Withdrawal Record</div>
+            <div class="withdrawal-record" id="withdrawal-record-container">
+                <div class="sliding-records" id="sliding-records">
+                    <!-- Records will be dynamically populated -->
                 </div>
-                <div class="plan-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Price</div>
-                        <div class="detail-value">${plan.price} USD</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Daily Rate</div>
-                        <div class="detail-value rate">${plan.dailyRate}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Cycle</div>
-                        <div class="detail-value">${plan.cycle}</div>
-                    </div>
-                </div>
-            `;
-            planCard.addEventListener('click', () => showPlanDetail(plan.id));
-            plansContainer.appendChild(planCard);
-        });
+            </div>
+        </div>
         
-        // Log plans generation
-        saveActivity({
-            type: 'plans_loaded',
-            count: sortedPlans.length,
-            details: 'Investment plans loaded and displayed'
-        });
-    }
-
-    // Show Plan Detail
-    function showPlanDetail(planId) {
-        const plan = investmentPlans.find(p => p.id === planId);
-        if (!plan) return;
-
-        // Store current plan
-        currentPlan = plan;
-        currentQuantity = 1;
-        currentDuration = durationOptions[0]; // Default to 12hrs
+        <script defer src="https://www.livecoinwatch.com/static/lcw-widget.js"></script> 
+        <div class="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#000000" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10"></div>
         
-        // Log plan view
-        logPlanView(plan);
-
-        document.getElementById('main-page').style.display = 'none';
-        document.getElementById('plan-detail').style.display = 'block';
-
-        const detailContent = document.querySelector('.plan-detail-content');
-        
-        // Generate initial content
-        updatePlanDetailContent();
-        
-        function updatePlanDetailContent() {
-            const totalInvestment = plan.price * currentQuantity;
-            const selectedInterestRate = currentDuration.interestRate;
-            const estimatedRevenue = (totalInvestment * selectedInterestRate / 100).toFixed(2);
+        <!-- Real-Time Quotes -->
+        <div class="quotes-section">
+            <div class="section-title">Real-Time Quotes</div>
             
-            // Get user balance if available
-            const userBalance = currentUser ? (parseFloat(currentUser.total_assets) || 0).toFixed(2) : '0.00';
-        
-            detailContent.innerHTML = `
-                <div class="plan-detail-card">
-                    <div class="plan-detail-title">${plan.title}</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Available Balance</div>
-                        <div class="detail-value-lg">${userBalance} USD</div>
+            <!-- BTC Quotes -->
+            <div class="crypto-title">
+                <img src="image/005a417d736fb67e213cdf37cfec188d.png?height=20&width=20" alt="BTC" class="crypto-icon" style="background-color: #F7931A; border-radius: 50%;">
+                <div class="crypto-name">BTC</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
                     </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Price</div>
-                        <div class="detail-value-lg">${plan.price} USD</div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="binance">$84905.5</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
                     </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Limit</div>
-                        <div class="detail-value-lg">No Limit(Bought0)</div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="okx">$84908.9</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
                     </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Purchase Quantity</div>
-                        <div class="quantity-selector">
-                            <div class="quantity-btn" id="decrease-btn">−</div>
-                            <input type="text" class="quantity-input" id="quantity-input" value="${currentQuantity}" readonly>
-                            <div class="quantity-btn" id="increase-btn">+</div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="huobi">$84893.09</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="BTC" data-exchange="coinbase">$84905.5</div>
+                </div>
+            </div>
+            
+            <!-- ETH Quotes -->
+            <div class="crypto-title">
+                <img src="image/2ff7e28cfee92509ebf70616cb78df90.png?height=20&width=20" alt="ETH" class="crypto-icon" style="background-color: #627EEA; border-radius: 50%;">
+                <div class="crypto-name">ETH</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="binance">$2017.33</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="okx">$2017.43</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="huobi">$2017.54</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="ETH" data-exchange="coinbase">$2017.75</div>
+                </div>
+            </div>
+            
+            <!-- BNB Quotes -->
+            <div class="crypto-title">
+                <img src="image/bnb-bnb-logo.png?height=20&width=20" alt="BNB" class="crypto-icon" style="background-color: #F0B90B; border-radius: 50%;">
+                <div class="crypto-name">BNB</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="binance">$553.55</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="okx">$553.0</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="huobi">$552.45</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="BNB" data-exchange="coinbase">$553.55</div>
+                </div>
+            </div>
+            
+            <!-- XRP Quotes -->
+            <div class="crypto-title">
+                <img src="image/xrp-xrp-logo.png?height=20&width=20" alt="XRP" class="crypto-icon" style="background-color: #E6007A; border-radius: 50%;">
+                <div class="crypto-name">XRP</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="XRP" data-exchange="binance">$2.0564</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="XRP" data-exchange="okx">$2.0570</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="XRP" data-exchange="huobi">$2.0564</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="XRP" data-exchange="coinbase">$2.0565</div>
+                </div>
+            </div>
+            
+            <!-- Crypto Wallet Section -->
+            <div class="crypto-wallet-section">
+                <div class="wallet-content">
+                    <div class="wallet-section-number">02 — 08</div>
+                    <h2 class="wallet-title">A crypto wallet<br>from the future</h2>
+                    <p class="wallet-description">
+                        Experience the next generation of crypto trading with our advanced wallet technology. Secure, fast, and user-friendly.
+                    </p>
+                    <div class="wallet-features">
+                        <div class="feature-check">
+                            <div class="check-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="feature-text">Lowest fees in market</span>
+                        </div>
+                        <div class="feature-check">
+                            <div class="check-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="feature-text">Fast and secure transactions</span>
+                        </div>
+                        <div class="feature-check">
+                            <div class="check-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="feature-text">256-bit secure encryption</span>
                         </div>
                     </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Duration</div>
-                        <div class="cycle-selector" id="duration-selector">
-                            <div class="detail-value-lg">${currentDuration.label} <i class="fas fa-chevron-down"></i></div>
-                            <div class="cycle-dropdown" id="duration-dropdown">
-                                ${durationOptions.map(option => 
-                                    `<div class="cycle-option" data-value="${option.value}">${option.label} (${option.interestRate}%)</div>`
-                                ).join('')}
+                </div>
+                <div class="wallet-image">
+                    <div class="wallet-card">
+                        <div class="wallet-card-header">
+                            <div class="crypto-icon-large">
+                                <i class="fab fa-bitcoin"></i>
+                            </div>
+                            <div class="crypto-info">
+                                <div class="crypto-name-large">Bitcoin</div>
+                                <div class="crypto-price">$48,798.23</div>
+                            </div>
+                            <div class="crypto-change">
+                                <i class="fas fa-arrow-up" style="font-size: 10px;"></i> 4.66%
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Interest Rate</div>
-                        <div class="detail-value-lg">${selectedInterestRate}%</div>
-                    </div>
-                    
-                    <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USD Invest</button>
-                </div>
-                
-                <div class="plan-detail-card">
-                    <div class="project-rule">Project Rule</div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Repayment</div>
-                        <div class="detail-value-lg">Maturity Principal And Interest</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Unit Price</div>
-                        <div class="detail-value-lg">${plan.price} USD</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Amount</div>
-                        <div class="detail-value-lg">${currentQuantity}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Duration</div>
-                        <div class="detail-value-lg">${currentDuration.label}</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Interest Rate</div>
-                        <div class="detail-value-lg">${selectedInterestRate}%</div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <div class="detail-label-lg">Estimated Revenue</div>
-                        <div class="detail-value-lg">
-                            ${plan.price} * ${currentQuantity} * ${selectedInterestRate}% = ${estimatedRevenue} USD
+                        <div class="crypto-chart">
+                            <svg width="100%" height="100%" viewBox="0 0 200 60" preserveAspectRatio="none" style="overflow: visible;">
+                                <path d="M0,30 C20,40 40,20 60,25 C80,30 100,10 120,15 C140,20 160,5 180,10 C190,15 200,5 200,5" fill="none" stroke="#4169e1" stroke-width="2"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
-            `;
-        
-            // Add event listeners after content is updated
-            document.getElementById('decrease-btn').addEventListener('click', () => {
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                    
-                    // Log quantity decrease
-                    logUIInteraction('quantity_decrease', `Decreased quantity to ${currentQuantity}`);
-                    
-                    updatePlanDetailContent();
-                }
-            });
+            </div>
             
-            document.getElementById('increase-btn').addEventListener('click', () => {
-                currentQuantity++;
-                
-                // Log quantity increase
-                logUIInteraction('quantity_increase', `Increased quantity to ${currentQuantity}`);
-                
-                updatePlanDetailContent();
-            });
+            <!-- ADA Quotes -->
+            <div class="crypto-title">
+                <img src="image/cardano-ada-logo.png?height=20&width=20" alt="ADA" class="crypto-icon" style="background-color: #EF0027; border-radius: 50%;">
+                <div class="crypto-name">ADA</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="ADA" data-exchange="binance">$0.6787</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="ADA" data-exchange="okx">$0.6780</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="ADA" data-exchange="huobi">$0.6785</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="ADA" data-exchange="coinbase">$0.6787</div>
+                </div>
+            </div>
+            
+            <!-- SOL Quotes -->
+            <div class="crypto-title">
+                <img src="image/solana-sol-logo.png?height=20&width=20" alt="SOL" class="crypto-icon" style="background-color: #F00500; border-radius: 50%;">
+                <div class="crypto-name">SOL</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="SOL" data-exchange="binance">$128.78</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="SOL" data-exchange="okx">$128.7689</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="SOL" data-exchange="huobi">$128.805</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="SOL" data-exchange="coinbase">$128.84</div>
+                </div>
+            </div>
+            
+            <!-- DOGE Quotes -->
+            <div class="crypto-title">
+                <img src="image/b648d5bdf2fa459efbf58acb9f9cc8e5.png?height=20&width=20" alt="DOGE" class="crypto-icon" style="background-color: #C2A633; border-radius: 50%;">
+                <div class="crypto-name">DOGE</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="DOGE" data-exchange="binance">$0.17252</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="DOGE" data-exchange="okx">$0.17249</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="DOGE" data-exchange="huobi">$0.17240</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="DOGE" data-exchange="coinbase">$0.17252</div>
+                </div>
+            </div>
+            
+            <!-- DOT Quotes -->
+            <div class="crypto-title">
+                <img src="image/polkadot-new-dot-logo.png?height=20&width=20" alt="DOT" class="crypto-icon" style="background-color: #23292F; border-radius: 50%;">
+                <div class="crypto-name">DOT</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="DOT" data-exchange="binance">$8.57</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="DOT" data-exchange="okx">$8.55</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="DOT" data-exchange="huobi">$8.575</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="DOT" data-exchange="coinbase">$8.58</div>
+                </div>
+            </div>
+            
+            <!-- LTC Quotes -->
+            <div class="crypto-title">
+                <img src="image/litecoin-ltc-logo.png?height=20&width=20" alt="LTC" class="crypto-icon" style="background-color: #345D9D; border-radius: 50%;">
+                <div class="crypto-name">LTC</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="LTC" data-exchange="binance">$86.17</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="LTC" data-exchange="okx">$86.063</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="LTC" data-exchange="huobi">$86.09</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="LTC" data-exchange="coinbase">$86.17</div>
+                </div>
+            </div>
+            
+            <!-- TRX Quotes -->
+            <div class="crypto-title">
+                <img src="image/tron-trx-logo.png?height=20&width=20" alt="TRX" class="crypto-icon" style="background-color: #0033AD; border-radius: 50%;">
+                <div class="crypto-name">TRX</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="TRX" data-exchange="binance">$0.2375</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="TRX" data-exchange="okx">$0.2374</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="TRX" data-exchange="huobi">$0.2370</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="TRX" data-exchange="coinbase">$0.2375</div>
+                </div>
+            </div>
+            
+            <!-- SHIB Quotes -->
+            <div class="crypto-title">
+                <img src="/placeholder.svg?height=20&width=20" alt="SHIB" class="crypto-icon" style="background-color: #14F195; border-radius: 50%;">
+                <div class="crypto-name">SHIB</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="SHIB" data-exchange="binance">$0.00002536</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="SHIB" data-exchange="okx">$0.00002536</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="SHIB" data-exchange="huobi">$0.00002535</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="SHIB" data-exchange="coinbase">$0.00002536</div>
+                </div>
+            </div>
+            
+            <!-- AVAX Quotes -->
+            <div class="crypto-title">
+                <img src="image/avalanche-avax-logo.png?height=20&width=20" alt="AVAX" class="crypto-icon" style="background-color: #E84142; border-radius: 50%;">
+                <div class="crypto-name">AVAX</div>
+                <div class="crypto-unit">/USDT</div>
+            </div>
+            <div class="exchange-grid">
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=16&width=16" alt="Binance" class="exchange-logo">
+                        BINANCE
+                    </div>
+                    <div class="exchange-price" data-crypto="AVAX" data-exchange="binance">$35.2</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/okx-logo.png?height=16&width=16" alt="OKX" class="exchange-logo">
+                        OKX
+                    </div>
+                    <div class="exchange-price" data-crypto="AVAX" data-exchange="okx">$35.19</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/huobi-logo.png?height=16&width=16" alt="HUOBI" class="exchange-logo">
+                        HUOBI
+                    </div>
+                    <div class="exchange-price" data-crypto="AVAX" data-exchange="huobi">$35.017</div>
+                </div>
+                <div class="exchange-card">
+                    <div class="exchange-name">
+                        <img src="image/coinbase-logo (1).png?height=16&width=16" alt="COINBASE" class="exchange-logo">
+                        COINBASE
+                    </div>
+                    <div class="exchange-price" data-crypto="AVAX" data-exchange="coinbase">$35.18</div>
+                </div>
+            </div>
+        </div>
 
-            // Add duration selector functionality
-            const durationSelector = document.getElementById('duration-selector');
-            const durationDropdown = document.getElementById('duration-dropdown');
+        <!-- Platform Stats -->
+        <div class="platform-stats">
+            <div class="section-title">SOFT R INVESTMENT Trading System</div>
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.6;">
+                SOFT R INVESTMENT helps users accurately capture market fluctuations, buy low and sell high through the AI intelligent trading system, and obtain stable returns. Our advanced quantitative trading system helps prevent market manipulation, and provides investors with higher financial security.
+            </p>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-number">+35%/day</div>
+                    <div class="stat-label">Daily ROI</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$218M/6h/24h</div>
+                    <div class="stat-label">Trading Volume</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <div class="reviews-counter">06 — 08</div>
+            <h1 class="reviews-heading">See what people are saying our Coin</h1>
             
-            durationSelector.addEventListener('click', (e) => {
-                e.stopPropagation();
-                durationDropdown.style.display = durationDropdown.style.display === 'block' ? 'none' : 'block';
+            <div class="reviews-actions">
+                <button class="btn-download">Download app</button>
+                <button class="btn-all-reviews">All reviews</button>
+            </div>
+            
+            <div class="reviews-grid">
+                <!-- Review Card 1 -->
+                <div class="review-card">
+                    <div class="review-quote">"Buying crypto was never so easy"</div>
+                    <div class="review-text">
+                        SOFT R INVESTMENT has simplified my crypto trading experience. The platform is intuitive and the AI-powered insights have helped me make better investment decisions.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=40&width=40" alt="John Carter" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">John Carter</div>
+                                <div class="username">@johncarter</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
                 
-                // Log dropdown toggle
-                logUIInteraction('duration_dropdown_toggle', 
-                    durationDropdown.style.display === 'block' ? 'Opened duration dropdown' : 'Closed duration dropdown');
-            });
+                <!-- Review Card 2 -->
+                <div class="review-card">
+                    <div class="review-quote">"The best crypto wallet, period"</div>
+                    <div class="review-text">
+                        I've tried many crypto platforms, but SOFT R INVESTMENT stands out with its security features and user-friendly interface. The AI trading system delivers consistent returns.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=40&width=40" alt="Michael Scott" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Michael Scott</div>
+                                <div class="username">@michscott</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Card 3 -->
+                <div class="review-card">
+                    <div class="review-quote">"Such a great trading experience"</div>
+                    <div class="review-text">
+                        The AI-powered trading system has transformed how I invest in crypto. It accurately captures market fluctuations and helps me maximize profits with minimal effort.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=40&width=40" alt="Sophie Moore" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Sophie Moore</div>
+                                <div class="username">@soph_moore</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Review Card 4 -->
+                <div class="review-card">
+                    <div class="review-quote">"The future of crypto trading"</div>
+                    <div class="review-text">
+                        SOFT R INVESTMENT's intelligent system has helped me achieve consistent returns even in volatile markets. The platform is secure, reliable, and truly revolutionary.
+                    </div>
+                    <div class="review-author">
+                        <div class="author-info">
+                            <img src="image/4f6602605ac45e9fa6b7fde45e7e4d74.png?height=40&width=40" alt="Matt Cannon" class="author-avatar">
+                            <div class="author-name">
+                                <div class="name">Matt Cannon</div>
+                                <div class="username">@matt_cannon</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Cooperative Financial Institutions -->
+        <div class="institutions-section">
+            <div class="section-title">Core Cooperative Financial Institutions</div>
+            <div class="institutions-grid">
+                <div class="institution-item">
+                    <img src="image/tron-trx-logo.png?height=30&width=80&text=Binance" alt="Binance" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/shiba-inu-shib-logo.png?height=30&width=80&text=Kraken" alt="Kraken" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/5bcd89ec73d4e7f57c07f1d6aa518abe.png?height=30&width=80&text=Kucoin" alt="Kucoin" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/coinbase-logo (1).png?height=30&width=80&text=Coinbase" alt="Coinbase" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/okx-logo.png?height=30&width=80&text=OKX" alt="OKX" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/xrp-xrp-logo.png?height=30&width=80&text=Bybit" alt="Bybit" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/huobi-logo.png?height=30&width=80&text=Huobi" alt="Huobi" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/polkadot-new-dot-logo.png?height=30&width=80&text=Bitget" alt="Bitget" class="institution-logo">
+                </div>
+                <div class="institution-item">
+                    <img src="image/solana-sol-logo.png?height=30&width=80&text=Bitstamp" alt="Bitstamp" class="institution-logo">
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Button -->
+        <div class="float-btn">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="sharing-task.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Task</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Invite Friends</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Me</span>
+        </a>
+    </nav>
+
+    <!-- Include Auth Check Script -->
+    <script src="auth/auth-check.js"></script>
+    <script src="auth/session.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if user is logged in
+            const isLoggedIn = true; // Simulating logged in state
             
-            document.querySelectorAll('.cycle-option').forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const value = parseFloat(option.getAttribute('data-value'));
-                    const oldDuration = currentDuration ? currentDuration.label : 'none';
-                    currentDuration = durationOptions.find(d => d.value === value);
-                    durationDropdown.style.display = 'none';
+            // Withdrawal record animation
+            const withdrawalRecords = [
+                { email: 'r***5@gmail.com', amount: '+$68871.83' },
+                { email: 'j***h7@gmail.com', amount: '+$223895.99' },
+                { email: 'q***4@gmail.com', amount: '+$158261.77' },
+                { email: 't***a@gmail.com', amount: '$660.00' },
+                { email: 's***o@gmail.com', amount: '$1200.00' },
+                { email: 'a***a@hotmail.com', amount: '$700.00' },
+                { email: 'l***o@mail.com', amount: '$850.00' },
+                { email: 'n***o@yahoo.com', amount: '$3200.00' },
+                { email: 'z***e@aol.com', amount: '$5500.00' },
+                { email: 't***o@icloud.com', amount: '$400.00' },
+                { email: 'k***o@gmail.com', amount: '$1400.00' },
+                { email: 'n***o@outlook.com', amount: '$2000.00' },
+                { email: 's***o@shaw.ca', amount: '$500.00' },
+                { email: 'r***5@gmail.com', amount: '+$68871.83' },
+                { email: 'j***h7@gmail.com', amount: '+$223895.99' },
+                { email: 'q***4@gmail.com', amount: '+$158261.77' },
+                { email: 'c***@example.com', amount: '+$2067628.48' },
+                { email: 'c***@gmail.com', amount: '+$851506.05' },
+                { email: 'q***@outlook.com', amount: '+$1841345.78' },
+                { email: 'p***@hotmail.com', amount: '+$567432.12' },
+                { email: 'a***@yahoo.com', amount: '+$932145.67' }         
+            ];
+            
+            // Function to create record items
+            function createRecordItems() {
+                const slidingRecords = document.getElementById('sliding-records');
+                slidingRecords.innerHTML = '';
+                
+                withdrawalRecords.forEach(record => {
+                    const recordItem = document.createElement('div');
+                    recordItem.className = 'record-item';
+                    recordItem.innerHTML = `
+                        <div class="record-email">${record.email}</div>
+                        <div class="record-amount">${record.amount}</div>
+                    `;
+                    slidingRecords.appendChild(recordItem);
+                });
+            }
+            
+            // Create initial records
+            createRecordItems();
+            
+            // Function to animate withdrawal records
+            function animateWithdrawalRecords() {
+                const slidingRecords = document.getElementById('sliding-records');
+                
+                // Animate sliding up
+                slidingRecords.style.transition = 'transform 0.5s ease';
+                slidingRecords.style.transform = 'translateY(-40px)';
+                
+                // After animation completes, reset position and rotate records
+                setTimeout(() => {
+                    // Remove transition temporarily
+                    slidingRecords.style.transition = 'none';
+                    slidingRecords.style.transform = 'translateY(0)';
                     
-                    // Log duration selection
-                    logUIInteraction('duration_selection', 
-                        `Changed duration from ${oldDuration} to ${currentDuration.label} (${currentDuration.interestRate}%)`);
+                    // Rotate records array
+                    withdrawalRecords.push(withdrawalRecords.shift());
                     
-                    updatePlanDetailContent();
+                    // Recreate record items with new order
+                    createRecordItems();
+                    
+                    // Wait a bit before next animation
+                    setTimeout(animateWithdrawalRecords, 3000);
+                }, 500);
+            }
+            
+            // Start withdrawal record animation after a delay
+            setTimeout(animateWithdrawalRecords, 3000);
+            
+            // Real-time crypto price simulation
+            function updateCryptoPrices() {
+                const priceElements = document.querySelectorAll('.exchange-price');
+                
+                priceElements.forEach(priceElement => {
+                    const crypto = priceElement.getAttribute('data-crypto');
+                    const currentPrice = parseFloat(priceElement.textContent.replace('$', ''));
+                    
+                    // Different volatility for different cryptos
+                    let volatility = 0.001; // Default
+                    if (crypto === 'BTC') volatility = 0.0005;
+                    if (crypto === 'SHIB') volatility = 0.005;
+                    
+                    const change = (Math.random() * volatility * 2 - volatility) * currentPrice;
+                    let newPrice = (currentPrice + change);
+                    
+                    // Format based on price range
+                    let formattedPrice;
+                    if (newPrice < 0.0001) {
+                        formattedPrice = newPrice.toFixed(8);
+                    } else if (newPrice < 0.01) {
+                        formattedPrice = newPrice.toFixed(6);
+                    } else if (newPrice < 1) {
+                        formattedPrice = newPrice.toFixed(4);
+                    } else if (newPrice < 10) {
+                        formattedPrice = newPrice.toFixed(3);
+                    } else if (newPrice < 100) {
+                        formattedPrice = newPrice.toFixed(2);
+                    } else if (newPrice < 1000) {
+                        formattedPrice = newPrice.toFixed(2);
+                    } else if (newPrice < 10000) {
+                        formattedPrice = newPrice.toFixed(1);
+                    } else {
+                        formattedPrice = newPrice.toFixed(1);
+                    }
+                    
+                    // Add animation class
+                    priceElement.classList.remove('price-changing');
+                    void priceElement.offsetWidth; // Trigger reflow
+                    priceElement.classList.add('price-changing');
+                    
+                    // Update price
+                    priceElement.textContent = '$' + formattedPrice;
+                });
+                
+                // Update every 2 seconds
+                setTimeout(updateCryptoPrices, 2000);
+            }
+            
+            // Start price updates
+            updateCryptoPrices();
+            
+            // Float button scroll to top
+            document.querySelector('.float-btn').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 });
             });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', () => {
-                if (durationDropdown.style.display === 'block') {
-                    durationDropdown.style.display = 'none';
-                    
-                    // Log dropdown close
-                    logUIInteraction('duration_dropdown_close', 'Closed duration dropdown by clicking outside');
-                }
-            });
-
-            // Add invest button click handler
-            document.getElementById('invest-btn').addEventListener('click', () => {
-                // Log invest button click
-                logUIInteraction('invest_button_click', 
-                    `Clicked invest button for ${plan.title} - ${totalInvestment.toFixed(2)} USD`);
-                
-                processInvestment();
-            });
-        }
-    }
-
-    // Process investment directly (user is already logged in)
-    function processInvestment() {
-        // Calculate total investment amount
-        const totalInvestment = currentPlan.price * currentQuantity;
-        
-        // Check if user has enough balance
-        const totalAssets = parseFloat(currentUser.total_assets) || 0;
-        
-        if (totalAssets < totalInvestment) {
-            showModalResult(false, 'Insufficient Balance', `Your balance (${totalAssets.toFixed(2)} USD) is not enough for this investment (${totalInvestment.toFixed(2)} USD).`);
-            
-            // Log insufficient balance
-            logInvestmentAttempt(
-                currentPlan, 
-                currentQuantity, 
-                currentDuration, 
-                totalInvestment, 
-                false, 
-                'Insufficient balance'
-            );
-            
-            return;
-        }
-        
-        // Show loading modal
-        document.getElementById('modal').style.display = 'flex';
-        document.getElementById('modal-loading').style.display = 'block';
-        document.getElementById('modal-result').style.display = 'none';
-        
-        // Log investment processing
-        saveActivity({
-            type: 'investment_processing',
-            planId: currentPlan.id,
-            planTitle: currentPlan.title,
-            amount: totalInvestment.toFixed(2),
-            quantity: currentQuantity,
-            duration: currentDuration.label
         });
-        
-        // Process the investment
-        setTimeout(async () => {
-            try {
-                // Update user balance in Baserow
-                const success = await updateUserBalance(currentUser, totalAssets - totalInvestment);
-                
-                if (success) {
-                    // Update local user data
-                    currentUser.total_assets = (totalAssets - totalInvestment).toFixed(2);
-                    localStorage.setItem('userData', JSON.stringify(currentUser));
-                    
-                    showModalResult(true, 'Investment Successful', `You have successfully invested ${totalInvestment.toFixed(2)} USD in ${currentPlan.title}.`);
-                    
-                    // Log successful investment
-                    logInvestmentAttempt(
-                        currentPlan, 
-                        currentQuantity, 
-                        currentDuration, 
-                        totalInvestment, 
-                        true
-                    );
-                } else {
-                    showModalResult(false, 'Transaction Failed', 'An error occurred while processing your investment. Please try again later.');
-                    
-                    // Log failed investment
-                    logInvestmentAttempt(
-                        currentPlan, 
-                        currentQuantity, 
-                        currentDuration, 
-                        totalInvestment, 
-                        false, 
-                        'Transaction failed'
-                    );
-                }
-            } catch (error) {
-                console.error('Error processing investment:', error);
-                showModalResult(false, 'Investment Failed', 'An error occurred while processing your investment. Please try again later.');
-                
-                // Log error
-                saveActivity({
-                    type: 'error',
-                    context: 'investment_processing',
-                    details: 'Error processing investment',
-                    error: error.message,
-                    planId: currentPlan.id,
-                    amount: totalInvestment.toFixed(2)
-                });
-            }
-        }, 1500);
-    }
 
-    // Fetch user data from Baserow by email
-    async function fetchUserDataByEmail(email) {
-        try {
-            console.log('Fetching user data for email:', email);
-            
-            // Log API request
-            saveActivity({
-                type: 'api_request',
-                endpoint: 'fetch_user_data',
-                email: email
-            });
-            
-            // First try to get rows directly without field mapping
-            const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!directResponse.ok) {
-                throw new Error(`Failed to fetch rows: ${directResponse.status}`);
-            }
-            
-            const allRows = await directResponse.json();
-            console.log('All rows from Baserow:', allRows);
-            
-            // Find the user by email manually
-            const user = allRows.results.find(row => {
-                // Check if email exists and matches (case insensitive)
-                return row.email && row.email.toLowerCase() === email.toLowerCase();
-            });
-            
-            if (user) {
-                console.log('Found user:', user);
-                
-                // Create a user data object
-                const userData = {
-                    id: user.id,
-                    username: user.username || email.split('@')[0],
-                    email: user.email,
-                    total_assets: user.total_assets || '0.00',
-                    smart_account: user.smart_account || '0.00',
-                    profit_assets: user.profit_assets || '0.00',
-                    total_revenue: user.total_revenue || '0.00',
-                    quantitative_account: user.quantitative_account || '0.00',
-                    yesterday_earnings: user.yesterday_earnings || '0.00',
-                    today_earnings: user.today_earnings || '0.00',
-                    commission_today: user.commission_today || '0.00'
-                };
-                
-                // Log user data found
-                saveActivity({
-                    type: 'user_data_found',
-                    userId: userData.id,
-                    email: userData.email,
-                    balance: userData.total_assets
-                });
-                
-                return userData;
-            }
-            
-            // If not found with direct approach, try with field mapping
-            console.log('User not found with direct approach, trying field mapping...');
-            
-            // Get the field structure from Baserow to map field IDs
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (!fieldsResponse.ok) {
-                throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
-            }
-            
-            const fieldsData = await fieldsResponse.json();
-            console.log('Fields data:', fieldsData);
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-                console.log(`Field: ${field.name}, ID: ${field.id}`);
-            });
-            
-            // Get the email field ID
-            const emailFieldId = fieldMap['email'];
-            
-            if (!emailFieldId) {
-                console.error('Email field not found in Baserow table');
-                // Try to find a field that might contain email
-                const possibleEmailFields = fieldsData.filter(field => 
-                    field.name.toLowerCase().includes('email') || 
-                    field.name.toLowerCase().includes('mail') ||
-                    field.name.toLowerCase().includes('e-mail')
-                );
-                
-                if (possibleEmailFields.length > 0) {
-                    console.log('Possible email fields found:', possibleEmailFields);
-                    // Use the first possible email field
-                    const possibleEmailField = possibleEmailFields[0];
-                    console.log(`Using ${possibleEmailField.name} as email field`);
-                    
-                    // Add a timestamp to prevent caching
-                    const timestamp = new Date().getTime();
-                    const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${possibleEmailField.id}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-                    
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Token ${BASEROW_API.token}`,
-                            'Content-Type': 'application/json',
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log('Response with possible email field:', data);
-                    
-                    if (data.results && data.results.length > 0) {
-                        const user = data.results[0];
-                        
-                        // Create a user data object
-                        const userData = {
-                            id: user.id,
-                            username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                            email: email,
-                            total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                            smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                            profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                            total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                            quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                            yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                            today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                            commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                        };
-                        
-                        // Log user data found with alternative method
-                        saveActivity({
-                            type: 'user_data_found_alternative',
-                            userId: userData.id,
-                            email: userData.email,
-                            balance: userData.total_assets,
-                            method: 'possible_email_field'
-                        });
-                        
-                        return userData;
-                    }
-                }
-                
-                throw new Error('Email field not found in Baserow table');
-            }
-            
-            // Add a timestamp to prevent caching
-            const timestamp = new Date().getTime();
-            const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-            
-            console.log('Fetching with URL:', url);
-            
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}`);
-            }
-            
-            const data = await response.json();
-            console.log('Response with email field:', data);
-            
-            if (data.results && data.results.length > 0) {
-                const user = data.results[0];
-                
-                // Create a user data object
-                const userData = {
-                    id: user.id,
-                    username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                    email: email,
-                    total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                    smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                    profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                    total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                    quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                    yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                    today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                    commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                };
-                
-                // Log user data found with field mapping
-                saveActivity({
-                    type: 'user_data_found',
-                    userId: userData.id,
-                    email: userData.email,
-                    balance: userData.total_assets,
-                    method: 'field_mapping'
-                });
-                
-                return userData;
-            } else {
-                console.error('No user data found for email:', email);
-                
-                // Log user not found
-                saveActivity({
-                    type: 'user_not_found',
-                    email: email
-                });
-                
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            
-            // Log error
-            saveActivity({
-                type: 'error',
-                context: 'fetch_user_data',
-                details: 'Error fetching user data',
-                error: error.message,
-                email: email
-            });
-            
-            return null;
-        }
-    }
-
-    // Update user balance in Baserow
-    async function updateUserBalance(userData, newBalance) {
-        try {
-            // Log balance update attempt
-            saveActivity({
-                type: 'balance_update_attempt',
-                userId: userData.id,
-                email: userData.email,
-                oldBalance: userData.total_assets,
-                newBalance: newBalance.toFixed(2)
-            });
-            
-            // First try with user_field_names=true approach
-            try {
-                const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/?user_field_names=true`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'total_assets': newBalance.toFixed(2)
-                    })
-                });
-                
-                if (updateResponse.ok) {
-                    console.log('Successfully updated balance with user_field_names approach');
-                    
-                    // Log successful balance update
-                    saveActivity({
-                        type: 'balance_update_success',
-                        userId: userData.id,
-                        email: userData.email,
-                        oldBalance: userData.total_assets,
-                        newBalance: newBalance.toFixed(2),
-                        method: 'user_field_names'
-                    });
-                    
-                    return true;
-                }
-            } catch (directError) {
-                console.error('Error updating with user_field_names approach:', directError);
-                
-                // Log error with direct approach
-                saveActivity({
-                    type: 'error',
-                    context: 'balance_update_direct',
-                    details: 'Error updating with user_field_names approach',
-                    error: directError.message,
-                    userId: userData.id
-                });
-                
-                // Continue to field mapping approach
-            }
-            
-            // If direct approach fails, try with field mapping
-            // Get the field structure from Baserow to map field IDs
-            const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const fieldsData = await fieldsResponse.json();
-            
-            // Create a mapping of field names to their IDs
-            const fieldMap = {};
-            fieldsData.forEach(field => {
-                fieldMap[field.name] = field.id;
-            });
-            
-            // Get the total_assets field ID
-            const totalAssetsFieldId = fieldMap['total_assets'];
-            
-            if (!totalAssetsFieldId) {
-                throw new Error('Total assets field not found in Baserow table');
-            }
-            
-            // Update the user's balance
-            const updateData = {};
-            updateData[`field_${totalAssetsFieldId}`] = newBalance.toFixed(2);
-            
-            const updateResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userData.id}/`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Token ${BASEROW_API.token}`,
-                    'Content-Type': 'application/json'
+        // Reviews functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample reviews data - can be expanded or loaded from an API
+            const reviewsData = [
+                {
+                    quote: "Buying crypto was never so easy",
+                    text: "SOFT R INVESTMENT has simplified my crypto trading experience. The platform is intuitive and the AI-powered insights have helped me make better investment decisions.",
+                    author: "John Carter",
+                    username: "@johncarter",
+                    rating: 5
                 },
-                body: JSON.stringify(updateData)
-            });
-            
-            if (!updateResponse.ok) {
-                throw new Error(`Failed to update balance: ${updateResponse.status}`);
+                {
+                    quote: "The best crypto wallet, period",
+                    text: "I've tried many crypto platforms, but SOFT R INVESTMENT stands out with its security features and user-friendly interface. The AI trading system delivers consistent returns.",
+                    author: "Michael Scott",
+                    username: "@michscott",
+                    rating: 5
+                },
+                {
+                    quote: "Such a great trading experience",
+                    text: "The AI-powered trading system has transformed how I invest in crypto. It accurately captures market fluctuations and helps me maximize profits with minimal effort.",
+                    author: "Sophie Moore",
+                    username: "@soph_moore",
+                    rating: 5
+                },
+                {
+                    quote: "The future of crypto trading",
+                    text: "SOFT R INVESTMENT's intelligent system has helped me achieve consistent returns even in volatile markets. The platform is secure, reliable, and truly revolutionary.",
+                    author: "Matt Cannon",
+                    username: "@matt_cannon",
+                    rating: 5
+                },
+                {
+                    quote: "Game changer for crypto investors",
+                    text: "Since using SOFT R INVESTMENT, my investment strategy has completely transformed. The AI predictions are remarkably accurate and the interface makes trading effortless.",
+                    author: "Emma Wilson",
+                    username: "@emma_trades",
+                    rating: 5
+                },
+                {
+                    quote: "Best investment I've made",
+                    text: "The returns I've seen through SOFT R INVESTMENT's quantitative trading system have exceeded all my expectations. This platform is truly revolutionary.",
+                    author: "David Chen",
+                    username: "@dchen_crypto",
+                    rating: 5
+                },
+                {
+                    quote: "Secure and profitable",
+                    text: "What impresses me most about SOFT R INVESTMENT is the perfect balance between security and profitability. My investments are safe while generating excellent returns.",
+                    author: "Sarah Johnson",
+                    username: "@sarah_j",
+                    rating: 5
+                },
+                {
+                    quote: "Trading made simple",
+                    text: "SOFT R INVESTMENT has demystified crypto trading for me. The AI does all the heavy lifting while I enjoy the profits. Couldn't ask for a better platform.",
+                    author: "James Wilson",
+                    username: "@jwilson",
+                    rating: 5
+                }
+            ];
+
+            // Function to load more reviews
+            function loadMoreReviews() {
+                const reviewsGrid = document.querySelector('.reviews-grid');
+                if (!reviewsGrid) return; // Exit if element doesn't exist
+                
+                reviewsGrid.innerHTML = ''; // Clear existing reviews
+                
+                // Get current counter values
+                const counterElement = document.querySelector('.reviews-counter');
+                if (!counterElement) return; // Exit if element doesn't exist
+                
+                const counterText = counterElement.textContent;
+                const [start, end] = counterText.split('—').map(num => parseInt(num.trim()));
+                
+                // Display reviews based on counter
+                for (let i = start - 1; i < end; i++) {
+                    if (i < reviewsData.length) {
+                        const review = reviewsData[i];
+                        const stars = '<i class="fas fa-star"></i>'.repeat(review.rating);
+                        
+                        const reviewCard = document.createElement('div');
+                        reviewCard.className = 'review-card';
+                        reviewCard.innerHTML = `
+                            <div class="review-quote">"${review.quote}"</div>
+                            <div class="review-text">${review.text}</div>
+                            <div class="review-author">
+                                <div class="author-info">
+                                    <img src="/placeholder.svg?height=40&width=40" alt="${review.author}" class="author-avatar">
+                                    <div class="author-name">
+                                        <div class="name">${review.author}</div>
+                                        <div class="username">${review.username}</div>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    ${stars}
+                                </div>
+                            </div>
+                        `;
+                        
+                        reviewsGrid.appendChild(reviewCard);
+                    }
+                }
+            }
+
+            // Button functionality for reviews
+            const allReviewsBtn = document.querySelector('.btn-all-reviews');
+            if (allReviewsBtn) {
+                allReviewsBtn.addEventListener('click', function() {
+                    // Navigate to reviews.html page
+                    window.location.href = 'reviews.html';
+                });
             }
             
-            // Log successful balance update with field mapping
-            saveActivity({
-                type: 'balance_update_success',
-                userId: userData.id,
-                email: userData.email,
-                oldBalance: userData.total_assets,
-                newBalance: newBalance.toFixed(2),
-                method: 'field_mapping'
-            });
-            
-            return true;
-        } catch (error) {
-            console.error('Error updating user balance:', error);
-            
-            // Log error
-            saveActivity({
-                type: 'error',
-                context: 'balance_update',
-                details: 'Error updating user balance',
-                error: error.message,
-                userId: userData.id,
-                email: userData.email
-            });
-            
-            return false;
-        }
-    }
-    
-    // Show modal with loading or result
-    function showModal(type) {
-        const modal = document.getElementById('modal');
-        const modalLoading = document.getElementById('modal-loading');
-        const modalResult = document.getElementById('modal-result');
-        
-        modal.style.display = 'flex';
-        
-        // Log modal display
-        saveActivity({
-            type: 'modal_display',
-            modalType: type
+            const downloadBtn = document.querySelector('.btn-download');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function() {
+                    window.location.href = 'https://softrinvestment.com/download-app.html';
+                });
+            }
         });
-        
-        if (type === 'loading') {
-            modalLoading.style.display = 'block';
-            modalResult.style.display = 'none';
-        } else if (type === 'result') {
-            modalLoading.style.display = 'none';
-            modalResult.style.display = 'block';
-        }
-    }
-    
-    // Show modal with result
-    function showModalResult(success, title, message) {
-        const modalIcon = document.getElementById('modal-icon');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        
-        if (success) {
-            modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
-        } else {
-            modalIcon.innerHTML = '<i class="fas fa-times-circle error" style="color: #ff3b30;"></i>';
-        }
-        
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        
-        // Log modal result
-        saveActivity({
-            type: 'modal_result',
-            success: success,
-            title: title,
-            message: message
-        });
-        
-        showModal('result');
-    }
-    
-    // Close modal
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        
-        // Log modal close
-        saveActivity({
-            type: 'modal_close',
-            details: 'User closed modal'
-        });
-    }
-
-    // Go back to main page
-    function goBack() {
-        document.getElementById('plan-detail').style.display = 'none';
-        document.getElementById('main-page').style.display = 'block';
-        
-        // Log navigation back
-        saveActivity({
-            type: 'navigation',
-            action: 'back_button',
-            details: 'User returned to main investment page'
-        });
-    }
-</script>
+    </script>
 </body>
 </html>
