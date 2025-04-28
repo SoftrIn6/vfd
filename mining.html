@@ -991,22 +991,6 @@
             margin-top: 10px;
         }
 
-        .progress-bar-container {
-            width: 100%;
-            height: 10px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
         .current-segment-time {
             font-size: 14px;
             color: var(--light);
@@ -1020,272 +1004,161 @@
             opacity: 0.7;
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
+        /* New styles for email verification and plan selection */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
+            display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .modal.active {
-            display: flex;
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
-        .modal-content {
+        .modal {
             background-color: var(--card-bg);
             border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--card-border);
-            width: 90%;
-            max-width: 600px;
+            max-width: 90%;
+            width: 500px;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
             animation: fadeIn 0.3s ease-out;
         }
 
-        .modal-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--card-border);
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
         }
 
-        .modal-header h2 {
-            margin: 0;
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
             color: var(--primary);
-            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .modal-body {
-            padding: 20px;
+        .modal-content {
+            margin-bottom: 20px;
         }
 
-        .email-input {
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .form-input {
             width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--card-border);
+            padding: 12px 15px;
             border-radius: 5px;
-            color: var(--light);
+            border: 1px solid var(--card-border);
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--text);
             font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
 
-        .email-input:focus {
-            outline: none;
+        .form-input:focus {
             border-color: var(--primary);
         }
 
-        .plans-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .form-input::placeholder {
+            color: rgba(224, 224, 224, 0.5);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-top: 20px;
         }
 
-        .plan-card {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .plan-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-            border-color: var(--primary);
-        }
-
-        .plan-header {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .plan-price {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .plan-details {
-            flex-grow: 1;
-            margin-bottom: 15px;
-        }
-
-        .plan-details p {
-            margin-bottom: 8px;
-        }
-
-        .plan-select-btn {
+        .plan-table {
             width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
 
-/* Email Modal and Plan Selection Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
+        .plan-table th, .plan-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
 
-.modal {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--card-border);
-    width: 90%;
-    max-width: 500px;
-    animation: fadeIn 0.3s ease-out;
-}
+        .plan-table th {
+            color: var(--primary);
+            font-weight: bold;
+        }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--card-border);
-}
+        .plan-table tr:last-child td {
+            border-bottom: none;
+        }
 
-.modal-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--primary);
-}
+        .plan-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
 
-.modal-close {
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--light);
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
+        .plan-table .btn {
+            margin: 0;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
 
-.modal-close:hover {
-    opacity: 1;
-}
-
-.modal-body {
-    margin-bottom: 20px;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--light);
-}
-
-.form-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid var(--card-border);
-    background-color: rgba(0, 0, 0, 0.2);
-    color: var(--light);
-    font-size: 16px;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(247, 147, 26, 0.3);
-}
-
-.plan-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.plan-table th, .plan-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--card-border);
-}
-
-.plan-table th {
-    color: var(--primary);
-    font-weight: bold;
-}
-
-.plan-table tr:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-.plan-table tr.selected {
-    background-color: rgba(247, 147, 26, 0.2);
-    border-left: 3px solid var(--primary);
-}
-
-.plan-price {
-    font-weight: bold;
-    color: var(--primary);
-}
-
-.plan-duration {
-    color: var(--success);
-}
-
-.insufficient-balance {
-    background-color: rgba(217, 83, 79, 0.2);
-    border: 1px solid var(--danger);
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    color: var(--light);
-    text-align: center;
-}
-
-.deposit-btn {
-    background-color: var(--primary);
-    color: var(--dark);
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-top: 15px;
-    font-size: 16px;
-}
-
-.deposit-btn:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-}
+        .error-message {
+            color: var(--danger);
+            background-color: rgba(217, 83, 79, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid var(--danger);
+            text-align: center;
+        }
+        
+        .success-message {
+            color: var(--success);
+            background-color: rgba(92, 184, 92, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid var(--success);
+            text-align: center;
+        }
+        
+        .total-earnings {
+            font-weight: bold;
+            color: var(--success);
+        }
     </style>
 </head>
 <body>
@@ -1489,6 +1362,114 @@
     <!-- Debug Panel -->
     <div class="debug-panel" id="debug-panel">
         <!-- Debug messages will be added by JavaScript -->
+    </div>
+
+    <!-- Email Verification Modal -->
+    <div class="modal-overlay" id="email-modal">
+        <div class="modal">
+            <div class="modal-close" id="email-modal-close">&times;</div>
+            <div class="modal-title">Enter Your Email</div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label" for="email-input">Email Address</label>
+                    <input type="email" class="form-input" id="email-input" placeholder="Enter your email address">
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
+                    <button class="btn btn-secondary" id="email-cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Selection Modal -->
+    <div class="modal-overlay" id="plan-modal">
+        <div class="modal">
+            <div class="modal-close" id="plan-modal-close">&times;</div>
+            <div class="modal-title">Select a Mining Plan</div>
+            <div class="modal-content">
+                <p>Choose a mining plan to start earning Bitcoin:</p>
+                <table class="plan-table">
+                    <thead>
+                        <tr>
+                            <th>Plan</th>
+                            <th>Price</th>
+                            <th>Daily Earnings</th>
+                            <th>Weekly Earnings</th>
+                            <th>Total Earnings</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1-Week Plan</td>
+                            <td>$20 USD</td>
+                            <td>$6 USD</td>
+                            <td>$42 USD</td>
+                            <td class="total-earnings">$48 USD</td>
+                            <td><button class="btn btn-primary buy-plan-btn" data-plan="1-week" data-price="20">Buy Plan</button></td>
+                        </tr>
+                        <tr>
+                            <td>2-Week Plan</td>
+                            <td>$40 USD</td>
+                            <td>$6 USD</td>
+                            <td>$84 USD</td>
+                            <td class="total-earnings">$90 USD</td>
+                            <td><button class="btn btn-primary buy-plan-btn" data-plan="2-week" data-price="40">Buy Plan</button></td>
+                        </tr>
+                        <tr>
+                            <td>3-Week Plan</td>
+                            <td>$60 USD</td>
+                            <td>$6 USD</td>
+                            <td>$126 USD</td>
+                            <td class="total-earnings">$132 USD</td>
+                            <td><button class="btn btn-primary buy-plan-btn" data-plan="3-week" data-price="60">Buy Plan</button></td>
+                        </tr>
+                        <tr>
+                            <td>1-Month Plan</td>
+                            <td>$80 USD</td>
+                            <td>$6 USD</td>
+                            <td>$168 USD</td>
+                            <td class="total-earnings">$174 USD</td>
+                            <td><button class="btn btn-primary buy-plan-btn" data-plan="1-month" data-price="80">Buy Plan</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insufficient Balance Modal -->
+    <div class="modal-overlay" id="balance-modal">
+        <div class="modal">
+            <div class="modal-close" id="balance-modal-close">&times;</div>
+            <div class="modal-title">Insufficient Balance</div>
+            <div class="modal-content">
+                <div class="error-message">
+                    Your account balance is too low to purchase a Bitcoin mining plan. Please click the deposit button below to fund your account.
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-warning" id="deposit-btn">Deposit</button>
+                    <button class="btn btn-secondary" id="balance-cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Purchase Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <div class="modal-close" id="success-modal-close">&times;</div>
+            <div class="modal-title">Purchase Successful</div>
+            <div class="modal-content">
+                <div class="success-message">
+                    Your mining plan has been purchased successfully! You can now start mining Bitcoin.
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-success" id="start-mining-now-btn">Start Mining Now</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1736,6 +1717,11 @@
                 this.segmentProgress = 0;
                 this.segmentStartTime = null;
                 
+                // User data
+                this.userEmail = '';
+                this.userPlan = '';
+                this.userBalance = 0;
+                
                 // Initialize segments
                 this.initializeSegments();
             }
@@ -1783,11 +1769,36 @@
                     }
                 }
                 
+                // Check if user has a saved plan
+                const savedPlan = localStorage.getItem('userPlan');
+                if (savedPlan) {
+                    try {
+                        const planData = JSON.parse(savedPlan);
+                        this.userPlan = planData.plan;
+                        this.userEmail = planData.email;
+                        debug(`Loaded saved plan: ${this.userPlan} for ${this.userEmail}`, 'info');
+                    } catch (error) {
+                        debug('Error loading saved plan: ' + error.message, 'error');
+                        localStorage.removeItem('userPlan');
+                    }
+                }
+                
                 this.updateSegmentsUI();
             }
 
             saveSegments() {
                 localStorage.setItem('miningSegments', JSON.stringify(this.segments));
+            }
+            
+            savePlan(email, plan) {
+                this.userEmail = email;
+                this.userPlan = plan;
+                localStorage.setItem('userPlan', JSON.stringify({
+                    email: email,
+                    plan: plan,
+                    purchaseDate: Date.now()
+                }));
+                debug(`Saved plan: ${plan} for ${email}`, 'info');
             }
 
             startMining() {
@@ -1960,8 +1971,44 @@
                 // Stop mining
                 this.stopMining();
                 
+                // Update user balance in Baserow
+                this.updateUserBalance(1); // $1 per segment
+                
                 showToast(`Mining segment ${this.currentSegment + 1} completed! Earned $1 worth of BTC.`, 'success');
                 debug(`Mining segment ${this.currentSegment + 1} completed`, 'success');
+            }
+            
+            updateUserBalance(amount) {
+                // Update user balance in Baserow
+                if (this.userEmail) {
+                    debug(`Updating balance for ${this.userEmail} with +$${amount}`, 'info');
+                    
+                    // Simulate API call to Baserow to update balance
+                    fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Token YOUR_API_TOKEN'
+                        },
+                        body: JSON.stringify({
+                            // Find the user by email and update their balance
+                            // This is a simplified example - in a real implementation,
+                            // you would need to get the row ID first
+                            'email': this.userEmail,
+                            'total_assets': { 'add': amount }
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            debug(`Balance updated successfully for ${this.userEmail}`, 'success');
+                        } else {
+                            debug(`Failed to update balance for ${this.userEmail}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        debug(`Error updating balance: ${error.message}`, 'error');
+                    });
+                }
             }
 
             updateSegmentsUI() {
@@ -2137,10 +2184,70 @@
         const segmentTimeRemaining = document.getElementById('segment-time-remaining');
         const nextSegmentTime = document.getElementById('next-segment-time');
 
+        // Email verification and plan selection elements
+        const emailModal = document.getElementById('email-modal');
+        const emailModalClose = document.getElementById('email-modal-close');
+        const emailInput = document.getElementById('email-input');
+        const emailProceedBtn = document.getElementById('email-proceed-btn');
+        const emailCancelBtn = document.getElementById('email-cancel-btn');
+        
+        const planModal = document.getElementById('plan-modal');
+        const planModalClose = document.getElementById('plan-modal-close');
+        const buyPlanButtons = document.querySelectorAll('.buy-plan-btn');
+        
+        const balanceModal = document.getElementById('balance-modal');
+        const balanceModalClose = document.getElementById('balance-modal-close');
+        const depositBtn = document.getElementById('deposit-btn');
+        const balanceCancelBtn = document.getElementById('balance-cancel-btn');
+        
+        const successModal = document.getElementById('success-modal');
+        const successModalClose = document.getElementById('success-modal-close');
+        const startMiningNowBtn = document.getElementById('start-mining-now-btn');
+
+        // User data
+        let currentUserEmail = '';
+        let userBalance = 3849413; // Initial balance from Baserow
+        
+        // Predefined list of approved emails
+        const approvedEmails = [
+            'user@example.com',
+            'admin@example.com',
+            'test@example.com',
+            'demo@example.com',
+            'mining@example.com'
+        ];
+
         // Event listeners
-        startMiningButton.addEventListener('click', startMining);
+        startMiningButton.addEventListener('click', showEmailVerification);
         stopMiningButton.addEventListener('click', stopMining);
         difficultySlider.addEventListener('input', updateDifficulty);
+
+        // Email modal event listeners
+        emailModalClose.addEventListener('click', closeEmailModal);
+        emailCancelBtn.addEventListener('click', closeEmailModal);
+        emailProceedBtn.addEventListener('click', verifyEmail);
+
+        // Plan modal event listeners
+        planModalClose.addEventListener('click', closePlanModal);
+        buyPlanButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const plan = this.getAttribute('data-plan');
+                const price = parseInt(this.getAttribute('data-price'));
+                buyPlan(plan, price);
+            });
+        });
+
+        // Balance modal event listeners
+        balanceModalClose.addEventListener('click', closeBalanceModal);
+        balanceCancelBtn.addEventListener('click', closeBalanceModal);
+        depositBtn.addEventListener('click', redirectToDeposit);
+        
+        // Success modal event listeners
+        successModalClose.addEventListener('click', closeSuccessModal);
+        startMiningNowBtn.addEventListener('click', function() {
+            closeSuccessModal();
+            startMining();
+        });
 
         // Debug panel toggle (press D key)
         document.addEventListener('keydown', function(event) {
@@ -2170,6 +2277,185 @@
                 }
             });
         });
+
+        // Show email verification modal
+        function showEmailVerification() {
+            // Check if user already has a plan
+            const savedPlan = localStorage.getItem('userPlan');
+            if (savedPlan) {
+                try {
+                    const planData = JSON.parse(savedPlan);
+                    currentUserEmail = planData.email;
+                    debug(`User already has a plan: ${planData.plan}`, 'info');
+                    startMining();
+                    return;
+                } catch (error) {
+                    debug('Error loading saved plan: ' + error.message, 'error');
+                    localStorage.removeItem('userPlan');
+                }
+            }
+            
+            emailModal.classList.add('active');
+            emailInput.focus();
+            debug('Email verification modal opened', 'info');
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            emailModal.classList.remove('active');
+            emailInput.value = '';
+            debug('Email verification modal closed', 'info');
+        }
+
+        // Verify email
+        function verifyEmail() {
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showToast('Please enter your email address', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            currentUserEmail = email;
+            
+            // Check if email is in approved list
+            if (approvedEmails.includes(email.toLowerCase())) {
+                // Email is approved, start mining
+                closeEmailModal();
+                startMining();
+                debug(`Email verified: ${email}`, 'success');
+            } else {
+                // Email not approved, show plan selection
+                closeEmailModal();
+                showPlanSelection();
+                debug(`Email not in approved list: ${email}`, 'info');
+            }
+        }
+
+        // Show plan selection modal
+        function showPlanSelection() {
+            planModal.classList.add('active');
+            debug('Plan selection modal opened', 'info');
+        }
+
+        // Close plan modal
+        function closePlanModal() {
+            planModal.classList.remove('active');
+            debug('Plan selection modal closed', 'info');
+        }
+
+        // Buy plan
+        function buyPlan(plan, price) {
+            debug(`Attempting to buy ${plan} plan for $${price}`, 'info');
+            
+            // Check user balance in Baserow
+            checkUserBalance(currentUserEmail, price).then(hasBalance => {
+                if (hasBalance) {
+                    // User has enough balance, deduct the price
+                    deductFromBalance(currentUserEmail, price).then(success => {
+                        if (success) {
+                            // Save plan details to local storage
+                            miner.savePlan(currentUserEmail, plan);
+                            
+                            // Show success modal
+                            closePlanModal();
+                            showSuccessModal();
+                            debug(`Plan purchased: ${plan}`, 'success');
+                        } else {
+                            showToast('Error processing payment. Please try again.', 'error');
+                            debug('Error deducting from balance', 'error');
+                        }
+                    });
+                } else {
+                    // User doesn't have enough balance, show deposit modal
+                    closePlanModal();
+                    showBalanceModal();
+                    debug(`Insufficient balance for ${plan} plan`, 'warning');
+                }
+            });
+        }
+
+        // Check user balance
+        async function checkUserBalance(email, requiredAmount) {
+            debug(`Checking balance for ${email}, required: $${requiredAmount}`, 'info');
+            
+            // In a real implementation, you would fetch the user's balance from Baserow
+            // For this example, we'll use the userBalance variable
+            return userBalance >= requiredAmount;
+        }
+        
+        // Deduct from user balance
+        async function deductFromBalance(email, amount) {
+            debug(`Deducting $${amount} from ${email}'s balance`, 'info');
+            
+            // In a real implementation, you would update the user's balance in Baserow
+            // For this example, we'll update the userBalance variable
+            userBalance -= amount;
+            
+            // Simulate API call to Baserow
+            try {
+                // This is a simplified example - in a real implementation,
+                // you would need to get the row ID first
+                fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token YOUR_API_TOKEN'
+                    },
+                    body: JSON.stringify({
+                        'email': email,
+                        'total_assets': userBalance
+                    })
+                });
+                
+                debug(`Balance updated to $${userBalance}`, 'success');
+                return true;
+            } catch (error) {
+                debug(`Error updating balance: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        // Show success modal
+        function showSuccessModal() {
+            successModal.classList.add('active');
+            debug('Success modal opened', 'info');
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            successModal.classList.remove('active');
+            debug('Success modal closed', 'info');
+        }
+
+        // Show insufficient balance modal
+        function showBalanceModal() {
+            balanceModal.classList.add('active');
+            debug('Insufficient balance modal opened', 'info');
+        }
+
+        // Close balance modal
+        function closeBalanceModal() {
+            balanceModal.classList.remove('active');
+            debug('Insufficient balance modal closed', 'info');
+        }
+
+        // Redirect to deposit page
+        function redirectToDeposit() {
+            debug('Redirecting to deposit page', 'info');
+            window.location.href = 'https://www.bg.cn';
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
 
         // Start mining
         function startMining() {
@@ -2615,302 +2901,23 @@
             
             // Show welcome toast
             showToast('Welcome to Bitcoin Mining Simulator! Each $1 segment takes 1 hour to mine.', 'info');
+            
+            // Check if user already has a plan
+            const savedPlan = localStorage.getItem('userPlan');
+            if (savedPlan) {
+                try {
+                    const planData = JSON.parse(savedPlan);
+                    currentUserEmail = planData.email;
+                    debug(`User already has a plan: ${planData.plan}`, 'info');
+                    showToast(`Welcome back! You have an active ${planData.plan} plan.`, 'info');
+                } catch (error) {
+                    debug('Error loading saved plan: ' + error.message, 'error');
+                }
+            }
         }
 
         // Start the application when the DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
-
-        // Email verification and plan selection functionality
-        let userEmail = '';
-        let selectedPlan = null;
-
-        // Whitelist of emails that can mine without purchasing a plan
-        const whitelistedEmails = [
-            'admin@example.com',
-            'test@example.com',
-            'premium@example.com'
-        ];
-
-        // Mock function to check user balance in Baserow
-        function checkUserBalance(email) {
-            // In a real implementation, this would make an API call to Baserow
-            // For demo purposes, we'll return a fixed amount
-            return 10; // $10 USD (not enough for any plan)
-        }
-
-        // Override the original startMining function
-        const originalStartMining = startMining;
-        startMining = function() {
-            // Show email modal instead of starting mining directly
-            document.getElementById('email-modal').style.display = 'flex';
-        };
-
-        // Email modal close button
-        document.getElementById('email-modal-close').addEventListener('click', function() {
-            document.getElementById('email-modal').style.display = 'none';
-        });
-
-        // Email proceed button
-        document.getElementById('email-proceed-btn').addEventListener('click', function() {
-            const emailInput = document.getElementById('email-input');
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                showToast('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            userEmail = email;
-            document.getElementById('email-modal').style.display = 'none';
-            
-            // Check if email is whitelisted
-            if (whitelistedEmails.includes(email.toLowerCase())) {
-                // Email is whitelisted, allow mining
-                showToast('Welcome back! You can start mining now.', 'success');
-                originalStartMining();
-            } else {
-                // Email is not whitelisted, show plan selection
-                document.getElementById('plan-modal').style.display = 'flex';
-            }
-        });
-
-        // Plan modal close button
-        document.getElementById('plan-modal-close').addEventListener('click', function() {
-            document.getElementById('plan-modal').style.display = 'none';
-        });
-
-        // Plan selection
-        const planRows = document.querySelectorAll('.plan-row');
-        planRows.forEach(row => {
-            row.addEventListener('click', function() {
-                // Remove selected class from all rows
-                planRows.forEach(r => r.classList.remove('selected'));
-                
-                // Add selected class to clicked row
-                this.classList.add('selected');
-                
-                // Enable buy button
-                document.getElementById('buy-plan-btn').disabled = false;
-                
-                // Store selected plan
-                selectedPlan = {
-                    name: this.querySelector('td:first-child').textContent,
-                    price: parseInt(this.getAttribute('data-price')),
-                    plan: this.getAttribute('data-plan')
-                };
-            });
-        });
-
-        // Buy plan button
-        document.getElementById('buy-plan-btn').addEventListener('click', function() {
-            if (!selectedPlan) {
-                showToast('Please select a plan first', 'error');
-                return;
-            }
-            
-            // Check user balance
-            const balance = checkUserBalance(userEmail);
-            
-            if (balance >= selectedPlan.price) {
-                // User has enough balance, allow mining
-                document.getElementById('plan-modal').style.display = 'none';
-                showToast(`Successfully purchased ${selectedPlan.name}!`, 'success');
-                originalStartMining();
-            } else {
-                // User doesn't have enough balance, show insufficient balance modal
-                document.getElementById('plan-modal').style.display = 'none';
-                document.getElementById('balance-modal').style.display = 'flex';
-            }
-        });
-
-        // Balance modal close button
-        document.getElementById('balance-modal-close').addEventListener('click', function() {
-            document.getElementById('balance-modal').style.display = 'none';
-        });
-
-        // Debug function to test the flow
-        function debugFlow(email) {
-            userEmail = email;
-            if (whitelistedEmails.includes(email.toLowerCase())) {
-                debug(`Email ${email} is whitelisted, allowing mining`, 'success');
-            } else {
-                debug(`Email ${email} is not whitelisted, showing plans`, 'info');
-                // Check balance for a selected plan
-                const balance = checkUserBalance(email);
-                debug(`User balance: $${balance}`, 'info');
-            }
-        }
-
-        // Add debug command
-        debugFlow('test@example.com');
     </script>
-
-    <!-- Email Modal -->
-    <div class="modal" id="email-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Enter Your Email</h2>
-            </div>
-            <div class="modal-body">
-                <p>Please enter your email address to start mining:</p>
-                <input type="email" id="user-email" placeholder="your@email.com" class="email-input">
-                <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Plans Modal -->
-    <div class="modal" id="plans-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Choose a Mining Plan</h2>
-            </div>
-            <div class="modal-body">
-                <p>Select a plan to start mining Bitcoin:</p>
-                <div class="plans-container">
-                    <div class="plan-card" data-plan="1week" data-price="20">
-                        <div class="plan-header">1 Week Plan</div>
-                        <div class="plan-price">$20 USD</div>
-                        <div class="plan-details">
-                            <p>Mine $6 USD daily</p>
-                            <p>Duration: 1 Week</p>
-                            <p>Total Earnings: $42</p>
-                        </div>
-                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
-                    </div>
-                    <div class="plan-card" data-plan="2week" data-price="40">
-                        <div class="plan-header">2 Week Plan</div>
-                        <div class="plan-price">$40 USD</div>
-                        <div class="plan-details">
-                            <p>Mine $6 USD daily</p>
-                            <p>Duration: 2 Weeks</p>
-                            <p>Total Earnings: $84</p>
-                        </div>
-                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
-                    </div>
-                    <div class="plan-card" data-plan="3week" data-price="60">
-                        <div class="plan-header">3 Week Plan</div>
-                        <div class="plan-price">$60 USD</div>
-                        <div class="plan-details">
-                            <p>Mine $6 USD daily</p>
-                            <p>Duration: 3 Weeks</p>
-                            <p>Total Earnings: $126</p>
-                        </div>
-                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
-                    </div>
-                    <div class="plan-card" data-plan="1month" data-price="80">
-                        <div class="plan-header">1 Month Plan</div>
-                        <div class="plan-price">$80 USD</div>
-                        <div class="plan-details">
-                            <p>Mine $6 USD daily</p>
-                            <p>Duration: 1 Month</p>
-                            <p>Total Earnings: $180</p>
-                        </div>
-                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Insufficient Balance Modal -->
-    <div class="modal" id="insufficient-balance-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Insufficient Balance</h2>
-            </div>
-            <div class="modal-body">
-                <p>Your account balance is too low to purchase a BITCOIN MINING plan. Please click deposit button below to fund account.</p>
-                <button class="btn btn-primary" id="deposit-btn">Deposit</button>
-            </div>
-        </div>
-    </div>
-
-<!-- Email Modal -->
-<div class="modal-overlay" id="email-modal" style="display: none;">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Enter Your Email</div>
-            <div class="modal-close" id="email-modal-close">&times;</div>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="form-label" for="email-input">Email Address</label>
-                <input type="email" class="form-input" id="email-input" placeholder="Enter your email address">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
-        </div>
-    </div>
-</div>
-
-<!-- Plan Selection Modal -->
-<div class="modal-overlay" id="plan-modal" style="display: none;">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Choose Mining Plan</div>
-            <div class="modal-close" id="plan-modal-close">&times;</div>
-        </div>
-        <div class="modal-body">
-            <p>Select a mining plan to start earning Bitcoin:</p>
-            <table class="plan-table">
-                <thead>
-                    <tr>
-                        <th>Plan</th>
-                        <th>Price</th>
-                        <th>Earnings</th>
-                        <th>Duration</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="plan-row" data-plan="1week" data-price="20">
-                        <td>1 Week Plan</td>
-                        <td class="plan-price">$20 USD</td>
-                        <td>$6 USD daily</td>
-                        <td class="plan-duration">1 Week</td>
-                    </tr>
-                    <tr class="plan-row" data-plan="2week" data-price="40">
-                        <td>2 Week Plan</td>
-                        <td class="plan-price">$40 USD</td>
-                        <td>$6 USD daily</td>
-                        <td class="plan-duration">2 Weeks</td>
-                    </tr>
-                    <tr class="plan-row" data-plan="3week" data-price="60">
-                        <td>3 Week Plan</td>
-                        <td class="plan-price">$60 USD</td>
-                        <td>$6 USD daily</td>
-                        <td class="plan-duration">3 Weeks</td>
-                    </tr>
-                    <tr class="plan-row" data-plan="1month" data-price="80">
-                        <td>1 Month Plan</td>
-                        <td class="plan-price">$80 USD</td>
-                        <td>$6 USD daily</td>
-                        <td class="plan-duration">1 Month</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" id="buy-plan-btn" disabled>Buy Plan</button>
-        </div>
-    </div>
-</div>
-
-<!-- Insufficient Balance Modal -->
-<div class="modal-overlay" id="balance-modal" style="display: none;">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Insufficient Balance</div>
-            <div class="modal-close" id="balance-modal-close">&times;</div>
-        </div>
-        <div class="modal-body">
-            <div class="insufficient-balance">
-                Your account balance is too low to purchase a BITCOIN MINING plan. Please click deposit button below to fund account.
-            </div>
-            <a href="https://www.bg.cn" target="_blank" class="deposit-btn">Deposit Funds</a>
-        </div>
-    </div>
-</div>
 </body>
 </html>
