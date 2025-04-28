@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitcoin Mining Simulator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
     <style>
         :root {
             --primary: #f7931a;
@@ -96,30 +96,6 @@
             background-color: var(--success);
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background-color: var(--card-bg);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            margin-left: auto;
-        }
-
-        .user-avatar {
-            width: 24px;
-            height: 24px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 12px;
-            color: var(--dark);
-        }
-
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -136,7 +112,7 @@
                 align-items: flex-start;
             }
             
-            .network-status, .user-info {
+            .network-status {
                 align-self: flex-start;
             }
         }
@@ -1015,6 +991,22 @@
             margin-top: 10px;
         }
 
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
         .current-segment-time {
             font-size: 14px;
             color: var(--light);
@@ -1028,303 +1020,449 @@
             opacity: 0.7;
         }
 
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
             background-color: var(--card-bg);
             border-radius: 10px;
             border: 1px solid var(--card-border);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .login-title {
-            font-size: 24px;
-            font-weight: bold;
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .modal-header h2 {
+            margin: 0;
             color: var(--primary);
-            margin-bottom: 20px;
-            text-align: center;
+            font-size: 20px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .modal-body {
+            padding: 20px;
         }
 
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--light);
-        }
-
-        .form-input {
+        .email-input {
             width: 100%;
             padding: 10px;
-            border-radius: 5px;
-            border: 1px solid var(--card-border);
+            margin: 15px 0;
             background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 5px;
             color: var(--light);
             font-size: 16px;
         }
 
-        .form-input:focus {
+        .email-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(247, 147, 26, 0.2);
         }
 
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary);
-            color: var(--dark);
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .login-footer {
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-top: 20px;
-            text-align: center;
-            font-size: 14px;
-            color: var(--light);
-            opacity: 0.7;
         }
 
-        .login-footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .login-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .sign-out-btn {
-            background-color: transparent;
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
+        .plan-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .sign-out-btn:hover {
-            background-color: var(--danger);
-            color: var(--light);
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
         }
+
+        .plan-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .plan-price {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .plan-details {
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .plan-details p {
+            margin-bottom: 8px;
+        }
+
+        .plan-select-btn {
+            width: 100%;
+        }
+
+/* Email Modal and Plan Selection Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--card-border);
+    width: 90%;
+    max-width: 500px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.modal-close {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--light);
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--light);
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid var(--card-border);
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--light);
+    font-size: 16px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(247, 147, 26, 0.3);
+}
+
+.plan-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.plan-table th, .plan-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.plan-table th {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.plan-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.plan-table tr.selected {
+    background-color: rgba(247, 147, 26, 0.2);
+    border-left: 3px solid var(--primary);
+}
+
+.plan-price {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.plan-duration {
+    color: var(--success);
+}
+
+.insufficient-balance {
+    background-color: rgba(217, 83, 79, 0.2);
+    border: 1px solid var(--danger);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: var(--light);
+    text-align: center;
+}
+
+.deposit-btn {
+    background-color: var(--primary);
+    color: var(--dark);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.deposit-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
     </style>
 </head>
 <body>
-    <div id="login-page" style="display: none;">
-        <div class="login-container">
-            <div class="login-title">Bitcoin Mining Simulator</div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="btn login-btn">Sign In</button>
-                <div class="login-footer">
-                    Don't have an account? <a href="#" id="register-link">Register</a>
-                </div>
-            </form>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">₿</div>
+                <div class="logo-text">Bitcoin Mining Simulator</div>
+            </div>
+            <div class="network-status">
+                <div class="status-indicator"></div>
+                <span id="network-status-text">Connected</span>
+            </div>
+        </header>
+
+        <div class="network-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="network-difficulty">4</div>
+                <div class="stat-label">Difficulty</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="network-hashrate">0 H/s</div>
+                <div class="stat-label">Network Hashrate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="blocks-mined">0</div>
+                <div class="stat-label">Blocks Mined</div>
+            </div>
         </div>
-    </div>
 
-    <div id="app-page" style="display: none;">
-        <div class="container">
-            <header>
-                <div class="logo">
-                    <div class="logo-icon">₿</div>
-                    <div class="logo-text">Bitcoin Mining Simulator</div>
-                </div>
-                <div class="network-status">
-                    <div class="status-indicator"></div>
-                    <span id="network-status-text">Connected</span>
-                </div>
-                <div class="user-info">
-                    <div class="user-avatar" id="user-avatar">U</div>
-                    <span id="user-email">user@example.com</span>
-                    <button id="sign-out-btn" class="sign-out-btn">Sign Out</button>
-                </div>
-            </header>
+        <div class="blockchain-visualization" id="blockchain-visualization">
+            <!-- Visualization will be populated by JavaScript -->
+        </div>
 
-            <div class="network-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="network-difficulty">4</div>
-                    <div class="stat-label">Difficulty</div>
+        <div class="dashboard">
+            <div class="left-column">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Mining Control</div>
+                    </div>
+                    <div class="mining-section">
+                        <div class="mining-status">
+                            <div class="mining-indicator" id="mining-indicator"></div>
+                            <span id="mining-status">Idle</span>
+                        </div>
+                        <div class="mining-stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="hashrate">0 H/s</div>
+                                <div class="stat-label">Hashrate</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="nonce">0</div>
+                                <div class="stat-label">Current Nonce</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="difficulty-slider">Mining Difficulty</label>
+                            <input type="range" class="difficulty-slider" id="difficulty-slider"  min="1" max="6" value="4">
+                            <div class="difficulty-value" id="difficulty-value">4</div>
+                        </div>
+                        
+                        <div class="current-segment-info">
+                            <div class="current-segment-title">Current Mining Segment: <span id="current-segment">1</span> of 6</div>
+                            <div class="current-segment-progress">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="segment-progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="current-segment-time" id="segment-time-remaining">Time remaining: 01:00:00</div>
+                            <div class="next-segment-time" id="next-segment-time">Next segment available in: 00:00:00</div>
+                        </div>
+                        
+                        <div class="mining-segments">
+                            <div class="segment-container" id="segment-container">
+                                <!-- Segments will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="mining-reward">
+                            <div class="mining-reward-value" id="mining-reward">0.000000 BTC</div>
+                            <div class="mining-reward-label">Total Mined Today</div>
+                        </div>
+                        <div class="mining-actions">
+                            <button class="btn btn-success" id="start-mining-btn">Start Mining</button>
+                            <button class="btn btn-danger" id="stop-mining-btn" disabled>Stop Mining</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="network-hashrate">0 H/s</div>
-                    <div class="stat-label">Network Hashrate</div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Proof-of-Work Visualization</div>
+                    </div>
+                    <div class="pow-visualization" id="pow-visualization">
+                        <h3>Current Mining Process</h3>
+                        <div class="pow-step">
+                            <div class="pow-step-title">Block Data:</div>
+                            <div class="pow-step-content" id="pow-block-data">...</div>
+                        </div>
+                        <div class="pow-step">
+                            <div class="pow-step-title">Target:</div>
+                            <div class="pow-step-content">Hash must start with <span class="pow-target" id="pow-target">0000</span></div>
+                        </div>
+                        <div class="pow-step">
+                            <div class="pow-step-title">Current Hash:</div>
+                            <div class="pow-step-content"><span class="pow-hash" id="pow-current-hash">...</span></div>
+                        </div>
+                        <div class="pow-step">
+                            <div class="pow-step-title">Result:</div>
+                            <div class="pow-step-content" id="pow-result">Searching for valid hash...</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="blocks-mined">0</div>
-                    <div class="stat-label">Blocks Mined</div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Mining Explanation</div>
+                    </div>
+                    <div class="mining-explanation">
+                        <h3>What is Bitcoin Mining?</h3>
+                        <p>Bitcoin mining is the process of adding transaction records to Bitcoin's public ledger of past transactions (the blockchain). This ledger of past transactions is called the blockchain as it is a chain of blocks.</p>
+                        
+                        <h3>How Proof-of-Work Functions</h3>
+                        <p>The proof-of-work system requires miners to find a number called a "nonce". When this nonce is combined with the block data and hashed, it produces a hash that meets specific criteria - typically starting with a certain number of zeros.</p>
+                        
+                        <p>The steps are:</p>
+                        <ol>
+                            <li>Take the block data (previous hash, timestamp, transactions, etc.)</li>
+                            <li>Add a nonce (starting from 0)</li>
+                            <li>Calculate the SHA-256 hash of this combined data</li>
+                            <li>Check if the hash meets the difficulty target (starts with a specific number of zeros)</li>
+                            <li>If not, increment the nonce and try again</li>
+                        </ol>
+                        
+                        <p>This process requires significant computational power, which secures the network by making it economically impractical to attack.</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="blockchain-visualization" id="blockchain-visualization">
-                <!-- Visualization will be populated by JavaScript -->
-            </div>
+            <div class="right-column">
+                <div class="card">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="blockchain">Blockchain</div>
+                        <div class="tab" data-tab="merkle">Merkle Tree</div>
+                        <div class="tab" data-tab="whitepaper">Whitepaper</div>
+                    </div>
 
-            <div class="dashboard">
-                <div class="left-column">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Mining Control</div>
-                        </div>
-                        <div class="mining-section">
-                            <div class="mining-status">
-                                <div class="mining-indicator" id="mining-indicator"></div>
-                                <span id="mining-status">Idle</span>
-                            </div>
-                            <div class="mining-stats">
-                                <div class="stat-card">
-                                    <div class="stat-value" id="hashrate">0 H/s</div>
-                                    <div class="stat-label">Hashrate</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="nonce">0</div>
-                                    <div class="stat-label">Current Nonce</div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="difficulty-slider">Mining Difficulty</label>
-                                <input type="range" class="difficulty-slider" id="difficulty-slider"  min="1" max="6" value="4">
-                                <div class="difficulty-value" id="difficulty-value">4</div>
-                            </div>
-                            
-                            <div class="current-segment-info">
-                                <div class="current-segment-title">Current Mining Segment: <span id="current-segment">1</span> of 6</div>
-                                <div class="current-segment-progress">
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar" id="segment-progress-bar" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                                <div class="current-segment-time" id="segment-time-remaining">Time remaining: 01:00:00</div>
-                                <div class="next-segment-time" id="next-segment-time">Next segment available in: 00:00:00</div>
-                            </div>
-                            
-                            <div class="mining-segments">
-                                <div class="segment-container" id="segment-container">
-                                    <!-- Segments will be populated by JavaScript -->
-                                </div>
-                            </div>
-                            
-                            <div class="mining-reward">
-                                <div class="mining-reward-value" id="mining-reward">0.000000 BTC</div>
-                                <div class="mining-reward-label">Total Mined Today</div>
-                            </div>
-                            <div class="mining-actions">
-                                <button class="btn btn-success" id="start-mining-btn">Start Mining</button>
-                                <button class="btn btn-danger" id="stop-mining-btn" disabled>Stop Mining</button>
-                            </div>
+                    <div class="tab-content active" id="blockchain-tab">
+                        <div class="blockchain-section" id="blockchain-container">
+                            <!-- Blockchain will be populated by JavaScript -->
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Proof-of-Work Visualization</div>
-                        </div>
-                        <div class="pow-visualization" id="pow-visualization">
-                            <h3>Current Mining Process</h3>
-                            <div class="pow-step">
-                                <div class="pow-step-title">Block Data:</div>
-                                <div class="pow-step-content" id="pow-block-data">...</div>
-                            </div>
-                            <div class="pow-step">
-                                <div class="pow-step-title">Target:</div>
-                                <div class="pow-step-content">Hash must start with <span class="pow-target" id="pow-target">0000</span></div>
-                            </div>
-                            <div class="pow-step">
-                                <div class="pow-step-title">Current Hash:</div>
-                                <div class="pow-step-content"><span class="pow-hash" id="pow-current-hash">...</span></div>
-                            </div>
-                            <div class="pow-step">
-                                <div class="pow-step-title">Result:</div>
-                                <div class="pow-step-content" id="pow-result">Searching for valid hash...</div>
-                            </div>
+                    <div class="tab-content" id="merkle-tab">
+                        <div class="merkle-tree" id="merkle-tree">
+                            <!-- Merkle tree will be populated by JavaScript -->
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Mining Explanation</div>
-                        </div>
-                        <div class="mining-explanation">
-                            <h3>What is Bitcoin Mining?</h3>
-                            <p>Bitcoin mining is the process of adding transaction records to Bitcoin's public ledger of past transactions (the blockchain). This ledger of past transactions is called the blockchain as it is a chain of blocks.</p>
-                            
-                            <h3>How Proof-of-Work Functions</h3>
-                            <p>The proof-of-work system requires miners to find a number called a "nonce". When this nonce is combined with the block data and hashed, it produces a hash that meets specific criteria - typically starting with a certain number of zeros.</p>
-                            
-                            <p>The steps are:</p>
-                            <ol>
-                                <li>Take the block data (previous hash, timestamp, transactions, etc.)</li>
-                                <li>Add a nonce (starting from 0)</li>
-                                <li>Calculate the SHA-256 hash of this combined data</li>
-                                <li>Check if the hash meets the difficulty target (starts with a specific number of zeros)</li>
-                                <li>If not, increment the nonce and try again</li>
-                            </ol>
-                            
-                            <p>This process requires significant computational power, which secures the network by making it economically impractical to attack.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="right-column">
-                    <div class="card">
-                        <div class="tabs">
-                            <div class="tab active" data-tab="blockchain">Blockchain</div>
-                            <div class="tab" data-tab="merkle">Merkle Tree</div>
-                            <div class="tab" data-tab="whitepaper">Whitepaper</div>
-                        </div>
-
-                        <div class="tab-content active" id="blockchain-tab">
-                            <div class="blockchain-section" id="blockchain-container">
-                                <!-- Blockchain will be populated by JavaScript -->
-                            </div>
-                        </div>
-
-                        <div class="tab-content" id="merkle-tab">
-                            <div class="merkle-tree" id="merkle-tree">
-                                <!-- Merkle tree will be populated by JavaScript -->
-                            </div>
-                        </div>
-
-                        <div class="tab-content" id="whitepaper-tab">
-                            <div class="whitepaper-section">
-                                <div class="whitepaper-title">Bitcoin: A Peer-to-Peer Electronic Cash System</div>
-                                <div class="whitepaper-author">Satoshi Nakamoto</div>
-                                <div class="whitepaper-content">
-                                    <p>
-                                        A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. We propose a solution to the double-spending problem using a peer-to-peer network.
-                                    </p>
-                                    <p>
-                                        The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power.
-                                    </p>
-                                    <h2>4. Proof-of-Work</h2>
-                                    <p>
-                                        To implement a distributed timestamp server on a peer-to-peer basis, we will need to use a proof-of-work system similar to Adam Back's Hashcash, rather than newspaper or Usenet posts. The proof-of-work involves scanning for a value that when hashed, such as with SHA-256, the hash begins with a number of zero bits. The average work required is exponential in the number of zero bits required and can be verified by executing a single hash.
-                                    </p>
-                                    <p>
-                                        For our timestamp network, we implement the proof-of-work by incrementing a nonce in the block until a value is found that gives the block's hash the required zero bits. Once the CPU effort has been expended to make it satisfy the proof-of-work, the block cannot be changed without redoing the work. As later blocks are chained after it, the work to change the block would include redoing all the blocks after it.
-                                    </p>
-                                </div>
+                    <div class="tab-content" id="whitepaper-tab">
+                        <div class="whitepaper-section">
+                            <div class="whitepaper-title">Bitcoin: A Peer-to-Peer Electronic Cash System</div>
+                            <div class="whitepaper-author">Satoshi Nakamoto</div>
+                            <div class="whitepaper-content">
+                                <p>
+                                    A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. We propose a solution to the double-spending problem using a peer-to-peer network.
+                                </p>
+                                <p>
+                                    The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power.
+                                </p>
+                                <h2>4. Proof-of-Work</h2>
+                                <p>
+                                    To implement a distributed timestamp server on a peer-to-peer basis, we will need to use a proof-of-work system similar to Adam Back's Hashcash, rather than newspaper or Usenet posts. The proof-of-work involves scanning for a value that when hashed, such as with SHA-256, the hash begins with a number of zero bits. The average work required is exponential in the number of zero bits required and can be verified by executing a single hash.
+                                </p>
+                                <p>
+                                    For our timestamp network, we implement the proof-of-work by incrementing a nonce in the block until a value is found that gives the block's hash the required zero bits. Once the CPU effort has been expended to make it satisfy the proof-of-work, the block cannot be changed without redoing the work. As later blocks are chained after it, the work to change the block would include redoing all the blocks after it.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -1353,21 +1491,7 @@
         <!-- Debug messages will be added by JavaScript -->
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        // Baserow API configuration
-        const BASEROW_API = {
-            token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
-            baseUrl: 'https://api.baserow.io/api',
-            databaseId: '202237',
-            tableId: '488473',
-            activityTableId: '488474'
-        };
-
-        // User data storage
-        let userData = null;
-        const USER_MINING_KEY_PREFIX = 'btcMining_';
-        
         // Bitcoin Mining Simulator Implementation
         class MerkleTree {
             constructor(transactions) {
@@ -1586,7 +1710,7 @@
         }
 
         class Miner {
-            constructor(blockchain, userEmail) {
+            constructor(blockchain) {
                 this.blockchain = blockchain;
                 this.mining = false;
                 this.hashrate = 0;
@@ -1594,10 +1718,9 @@
                 this.hashCount = 0;
                 this.blocksMined = 0;
                 this.totalMined = 0;
-                this.minerAddress = userEmail || 'MinerAddress';
+                this.minerAddress = 'MinerAddress';
                 this.currentNonce = 0;
                 this.currentHash = '';
-                this.userEmail = userEmail;
                 
                 // Segment-based mining (6 segments of $1 each)
                 this.segments = [
@@ -1621,8 +1744,8 @@
                 // First segment is unlocked by default
                 this.segments[0].locked = false;
                 
-                // Check if any segments were previously started for this user
-                const savedSegments = localStorage.getItem(this.getUserStorageKey('segments'));
+                // Check if any segments were previously started
+                const savedSegments = localStorage.getItem('miningSegments');
                 if (savedSegments) {
                     try {
                         const parsedSegments = JSON.parse(savedSegments);
@@ -1651,38 +1774,20 @@
                             }
                         }
                         
-                        // Load total mined
-                        const savedTotalMined = localStorage.getItem(this.getUserStorageKey('totalMined'));
-                        if (savedTotalMined) {
-                            this.totalMined = parseFloat(savedTotalMined);
-                        } else {
-                            // Calculate total mined from completed segments
-                            this.totalMined = this.segments.filter(segment => segment.completed)
-                                .reduce((total, segment) => total + this.blockchain.miningReward, 0);
-                        }
-                        
-                        // Load blocks mined
-                        const savedBlocksMined = localStorage.getItem(this.getUserStorageKey('blocksMined'));
-                        if (savedBlocksMined) {
-                            this.blocksMined = parseInt(savedBlocksMined);
-                        }
+                        // Calculate total mined
+                        this.totalMined = this.segments.filter(segment => segment.completed)
+                            .reduce((total, segment) => total + this.blockchain.miningReward, 0);
                     } catch (error) {
                         debug('Error loading saved segments: ' + error.message, 'error');
-                        localStorage.removeItem(this.getUserStorageKey('segments'));
+                        localStorage.removeItem('miningSegments');
                     }
                 }
                 
                 this.updateSegmentsUI();
             }
 
-            getUserStorageKey(key) {
-                return `${USER_MINING_KEY_PREFIX}${this.userEmail}_${key}`;
-            }
-
             saveSegments() {
-                localStorage.setItem(this.getUserStorageKey('segments'), JSON.stringify(this.segments));
-                localStorage.setItem(this.getUserStorageKey('totalMined'), this.totalMined.toString());
-                localStorage.setItem(this.getUserStorageKey('blocksMined'), this.blocksMined.toString());
+                localStorage.setItem('miningSegments', JSON.stringify(this.segments));
             }
 
             startMining() {
@@ -1804,9 +1909,6 @@
                         const timeElapsed = (endTime - this.startTime) / 1000; // in seconds
                         this.hashrate = Math.round(this.hashCount / timeElapsed);
                         
-                        // Save state
-                        this.saveSegments();
-                        
                         // Reset for next block
                         this.startTime = Date.now();
                         this.hashCount = 0;
@@ -1826,8 +1928,6 @@
                     }
                 } catch (error) {
                     debug('Mining error: ' + error.message, 'error');
-                    showToast('Mining error: '  {
-                    debug('Mining error: ' + error.message, 'error');
                     showToast('Mining error: ' + error.message, 'error');
                     this.stopMining();
                 }
@@ -1843,9 +1943,6 @@
                 
                 // Add reward
                 this.totalMined += this.blockchain.miningReward;
-                
-                // Update Baserow with the mined amount
-                this.updateBaserowTotalAssets();
                 
                 // Unlock next segment if available
                 if (this.currentSegment + 1 < this.segments.length) {
@@ -1865,34 +1962,6 @@
                 
                 showToast(`Mining segment ${this.currentSegment + 1} completed! Earned $1 worth of BTC.`, 'success');
                 debug(`Mining segment ${this.currentSegment + 1} completed`, 'success');
-                
-                // Log mining activity
-                this.logMiningActivity();
-            }
-
-            updateBaserowTotalAssets() {
-                if (!this.userEmail || !userData) return;
-                
-                // Update user's total_assets in Baserow
-                updateUserTotalAssets(userData.id, this.totalMined);
-            }
-
-            logMiningActivity() {
-                if (!this.userEmail) return;
-                
-                // Create mining activity record
-                const activity = {
-                    type: 'bitcoin_mining',
-                    timestamp: new Date().toISOString(),
-                    details: {
-                        amount: this.blockchain.miningReward,
-                        segmentId: this.currentSegment + 1,
-                        status: 'success'
-                    }
-                };
-                
-                // Add to activity history
-                addUserActivity(activity);
             }
 
             updateSegmentsUI() {
@@ -2045,8 +2114,8 @@
         }
 
         // Initialize blockchain
-        let bitcoin;
-        let miner;
+        const bitcoin = new Blockchain();
+        const miner = new Miner(bitcoin);
 
         // DOM elements
         const startMiningButton = document.getElementById('start-mining-btn');
@@ -2067,19 +2136,11 @@
         const segmentProgressBar = document.getElementById('segment-progress-bar');
         const segmentTimeRemaining = document.getElementById('segment-time-remaining');
         const nextSegmentTime = document.getElementById('next-segment-time');
-        const loginPage = document.getElementById('login-page');
-        const appPage = document.getElementById('app-page');
-        const loginForm = document.getElementById('login-form');
-        const signOutBtn = document.getElementById('sign-out-btn');
-        const userEmailElement = document.getElementById('user-email');
-        const userAvatarElement = document.getElementById('user-avatar');
 
         // Event listeners
         startMiningButton.addEventListener('click', startMining);
         stopMiningButton.addEventListener('click', stopMining);
         difficultySlider.addEventListener('input', updateDifficulty);
-        loginForm.addEventListener('submit', handleLogin);
-        signOutBtn.addEventListener('click', handleSignOut);
 
         // Debug panel toggle (press D key)
         document.addEventListener('keydown', function(event) {
@@ -2109,163 +2170,6 @@
                 }
             });
         });
-
-        // Handle login
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                showToast('Please enter both email and password', 'error');
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                // For demo purposes, we'll just check if the email is valid
-                if (!isValidEmail(email)) {
-                    hideLoading();
-                    showToast('Please enter a valid email address', 'error');
-                    return;
-                }
-                
-                // Create auth token (in a real app, this would come from the server)
-                const authToken = btoa(`${email}:${password}`);
-                localStorage.setItem('authToken', authToken);
-                
-                // Fetch user data from Baserow
-                const user = await fetchUserData(email);
-                
-                if (user) {
-                    // Store user data
-                    userData = user;
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    
-                    // Initialize the app with user data
-                    initializeApp(email);
-                    
-                    // Show app page
-                    loginPage.style.display = 'none';
-                    appPage.style.display = 'block';
-                } else {
-                    // Create new user in Baserow
-                    const newUser = await createUser(email);
-                    
-                    if (newUser) {
-                        userData = newUser;
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        
-                        // Initialize the app with user data
-                        initializeApp(email);
-                        
-                        // Show app page
-                        loginPage.style.display = 'none';
-                        appPage.style.display = 'block';
-                    } else {
-                        showToast('Failed to create user account', 'error');
-                    }
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                showToast('Login failed: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // Handle sign out
-        function handleSignOut() {
-            if (confirm('Are you sure you want to sign out?')) {
-                // Stop mining if active
-                if (miner && miner.mining) {
-                    miner.stopMining();
-                }
-                
-                // Clear auth data
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
-                userData = null;
-                
-                // Show login page
-                appPage.style.display = 'none';
-                loginPage.style.display = 'block';
-                
-                showToast('Signed out successfully', 'info');
-            }
-        }
-
-        // Check if user is logged in
-        function checkAuth() {
-            const authToken = localStorage.getItem('authToken');
-            const storedUserData = localStorage.getItem('userData');
-            
-            if (authToken && storedUserData) {
-                try {
-                    userData = JSON.parse(storedUserData);
-                    
-                    // Initialize the app with user data
-                    initializeApp(userData.email);
-                    
-                    // Show app page
-                    loginPage.style.display = 'none';
-                    appPage.style.display = 'block';
-                } catch (error) {
-                    console.error('Error parsing user data:', error);
-                    showLoginPage();
-                }
-            } else {
-                showLoginPage();
-            }
-        }
-
-        // Show login page
-        function showLoginPage() {
-            loginPage.style.display = 'block';
-            appPage.style.display = 'none';
-        }
-
-        // Initialize app with user data
-        function initializeApp(email) {
-            // Update UI with user info
-            userEmailElement.textContent = email;
-            userAvatarElement.textContent = email.charAt(0).toUpperCase();
-            
-            // Initialize blockchain
-            bitcoin = new Blockchain();
-            miner = new Miner(bitcoin, email);
-            
-            // Update UI
-            updateBlockchainDisplay();
-            updateMiningReward();
-            
-            // Set initial difficulty
-            difficultySlider.value = bitcoin.difficulty;
-            difficultyValueElement.textContent = bitcoin.difficulty;
-            networkDifficultyElement.textContent = bitcoin.difficulty;
-            
-            // Mine a genesis block with a reward
-            const genesisBlock = new Block(Date.now(), [new Transaction('Coinbase', 'Genesis', 50)], '0');
-            genesisBlock.mineBlock(bitcoin.difficulty);
-            bitcoin.chain[0] = genesisBlock;
-            
-            // Update UI
-            updateBlockchainDisplay();
-            updateMerkleTreeDisplay();
-            
-            // Start segment unlock timer
-            startSegmentUnlockTimer();
-            
-            debug('Bitcoin mining simulator initialized for user: ' + email, 'success');
-            
-            // Show debug panel by default to help users
-            debugPanel.classList.add('active');
-            
-            // Show welcome toast
-            showToast(`Welcome to Bitcoin Mining Simulator, ${email}! Each $1 segment takes 1 hour to mine.`, 'info');
-        }
 
         // Start mining
         function startMining() {
@@ -2676,294 +2580,337 @@
 
         function startSegmentUnlockTimer() {
             segmentUnlockTimer = setInterval(() => {
-                if (miner) {
-                    miner.checkSegmentUnlocks();
-                    miner.updateNextSegmentTime();
-                }
+                miner.checkSegmentUnlocks();
+                miner.updateNextSegmentTime();
             }, 1000);
         }
 
-        // Baserow API functions
-        async function fetchUserData(email) {
-            try {
-                // First, get the field structure from Baserow
-                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const fieldsData = await fieldsResponse.json();
-                
-                // Create a mapping of field names to their IDs
-                const fieldMap = {};
-                fieldsData.forEach(field => {
-                    fieldMap[field.name] = field.id;
-                });
-                
-                // Get the email field ID
-                const emailFieldId = fieldMap['email'];
-                
-                if (!emailFieldId) {
-                    throw new Error('Email field not found in Baserow table');
-                }
-                
-                // Add a timestamp to prevent caching
-                const timestamp = new Date().getTime();
-                const url = `${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?filter__field_${emailFieldId}__equal=${encodeURIComponent(email)}&_=${timestamp}`;
-                
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.results && data.results.length > 0) {
-                    const user = data.results[0];
-                    
-                    // Create a user data object
-                    const userDataToReturn = {
-                        id: user.id,
-                        username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
-                        email: email,
-                        referralCode: user[`field_${fieldMap['referralCode']}`] || '',
-                        total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                        quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
-                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
-                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
-                        yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
-                        today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
-                    };
-                    
-                    return userDataToReturn;
-                } else {
-                    return null;
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                return null;
-            }
-        }
-
-        async function createUser(email) {
-            try {
-                // First, get the field structure from Baserow
-                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const fieldsData = await fieldsResponse.json();
-                
-                // Create a mapping of field names to their IDs
-                const fieldMap = {};
-                fieldsData.forEach(field => {
-                    fieldMap[field.name] = field.id;
-                });
-                
-                // Prepare user data
-                const rowData = {};
-                rowData[`field_${fieldMap['email']}`] = email;
-                rowData[`field_${fieldMap['username']}`] = email.split('@')[0];
-                rowData[`field_${fieldMap['total_assets']}`] = '0.00';
-                rowData[`field_${fieldMap['quantitative_account']}`] = '0.00';
-                rowData[`field_${fieldMap['smart_account']}`] = '0.00';
-                rowData[`field_${fieldMap['profit_assets']}`] = '5.00';
-                rowData[`field_${fieldMap['total_revenue']}`] = '0.00';
-                rowData[`field_${fieldMap['yesterday_earnings']}`] = '0.00';
-                rowData[`field_${fieldMap['today_earnings']}`] = '0.00';
-                rowData[`field_${fieldMap['commission_today']}`] = '0.00';
-                
-                // Create user in Baserow
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(rowData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Create a user data object
-                const userDataToReturn = {
-                    id: data.id,
-                    username: email.split('@')[0],
-                    email: email,
-                    referralCode: '',
-                    total_assets: '0.00',
-                    quantitative_account: '0.00',
-                    smart_account: '0.00',
-                    profit_assets: '5.00',
-                    total_revenue: '0.00',
-                    yesterday_earnings: '0.00',
-                    today_earnings: '0.00',
-                    commission_today: '0.00'
-                };
-                
-                return userDataToReturn;
-            } catch (error) {
-                console.error('Error creating user:', error);
-                return null;
-            }
-        }
-
-        async function updateUserTotalAssets(userId, totalMined) {
-            if (!userId) return;
-            
-            try {
-                // First, get the field structure from Baserow
-                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const fieldsData = await fieldsResponse.json();
-                
-                // Create a mapping of field names to their IDs
-                const fieldMap = {};
-                fieldsData.forEach(field => {
-                    fieldMap[field.name] = field.id;
-                });
-                
-                // Prepare update data
-                const rowData = {};
-                rowData[`field_${fieldMap['total_assets']}`] = totalMined.toFixed(8);
-                
-                // Update user in Baserow
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/${userId}/`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(rowData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                debug(`Updated user's total_assets to ${totalMined.toFixed(8)} BTC`, 'success');
-                return true;
-            } catch (error) {
-                console.error('Error updating user total assets:', error);
-                return false;
-            }
-        }
-
-        // User activity functions
-        const USER_ACTIVITY_KEY = 'userActivityHistory';
-
-        function addUserActivity(activity) {
-            try {
-                // Get existing activities
-                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-                
-                // Add new activity
-                activities.push(activity);
-                
-                // Save back to localStorage
-                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
-                
-                // Sync with Baserow
-                syncActivityWithBaserow(activity);
-                
-                return true;
-            } catch (error) {
-                console.error('Error adding user activity:', error);
-                return false;
-            }
-        }
-
-        async function syncActivityWithBaserow(activity) {
-            if (!userData || !userData.email) return;
-            
-            try {
-                // Get field structure for activity table
-                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.activityTableId}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const fieldsData = await fieldsResponse.json();
-                
-                // Create a mapping of field names to their IDs
-                const fieldMap = {};
-                fieldsData.forEach(field => {
-                    fieldMap[field.name] = field.id;
-                });
-                
-                // Prepare activity data
-                const rowData = {};
-                rowData[`field_${fieldMap['user_email']}`] = userData.email;
-                rowData[`field_${fieldMap['activity_type']}`] = activity.type;
-                rowData[`field_${fieldMap['activity_details']}`] = JSON.stringify(activity.details);
-                rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp;
-                rowData[`field_${fieldMap['status']}`] = activity.details.status || 'success';
-                
-                // Create activity in Baserow
-                const response = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(rowData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                debug('Activity synced with Baserow', 'success');
-                return true;
-            } catch (error) {
-                console.error('Error syncing activity with Baserow:', error);
-                return false;
-            }
-        }
-
-        // Helper functions
-        function isValidEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
         // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is logged in
-            checkAuth();
+        function init() {
+            // Update UI
+            updateBlockchainDisplay();
+            updateMiningReward();
+            
+            // Set initial difficulty
+            difficultySlider.value = bitcoin.difficulty;
+            difficultyValueElement.textContent = bitcoin.difficulty;
+            networkDifficultyElement.textContent = bitcoin.difficulty;
+            
+            // Mine a genesis block with a reward
+            const genesisBlock = new Block(Date.now(), [new Transaction('Coinbase', 'Genesis', 50)], '0');
+            genesisBlock.mineBlock(bitcoin.difficulty);
+            bitcoin.chain[0] = genesisBlock;
+            
+            // Update UI
+            updateBlockchainDisplay();
+            updateMerkleTreeDisplay();
+            
+            // Start segment unlock timer
+            startSegmentUnlockTimer();
+            
+            debug('Bitcoin mining simulator initialized and ready', 'success');
+            
+            // Show debug panel by default to help users
+            debugPanel.classList.add('active');
+            
+            // Show welcome toast
+            showToast('Welcome to Bitcoin Mining Simulator! Each $1 segment takes 1 hour to mine.', 'info');
+        }
+
+        // Start the application when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Email verification and plan selection functionality
+        let userEmail = '';
+        let selectedPlan = null;
+
+        // Whitelist of emails that can mine without purchasing a plan
+        const whitelistedEmails = [
+            'admin@example.com',
+            'test@example.com',
+            'premium@example.com'
+        ];
+
+        // Mock function to check user balance in Baserow
+        function checkUserBalance(email) {
+            // In a real implementation, this would make an API call to Baserow
+            // For demo purposes, we'll return a fixed amount
+            return 10; // $10 USD (not enough for any plan)
+        }
+
+        // Override the original startMining function
+        const originalStartMining = startMining;
+        startMining = function() {
+            // Show email modal instead of starting mining directly
+            document.getElementById('email-modal').style.display = 'flex';
+        };
+
+        // Email modal close button
+        document.getElementById('email-modal-close').addEventListener('click', function() {
+            document.getElementById('email-modal').style.display = 'none';
         });
+
+        // Email proceed button
+        document.getElementById('email-proceed-btn').addEventListener('click', function() {
+            const emailInput = document.getElementById('email-input');
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            userEmail = email;
+            document.getElementById('email-modal').style.display = 'none';
+            
+            // Check if email is whitelisted
+            if (whitelistedEmails.includes(email.toLowerCase())) {
+                // Email is whitelisted, allow mining
+                showToast('Welcome back! You can start mining now.', 'success');
+                originalStartMining();
+            } else {
+                // Email is not whitelisted, show plan selection
+                document.getElementById('plan-modal').style.display = 'flex';
+            }
+        });
+
+        // Plan modal close button
+        document.getElementById('plan-modal-close').addEventListener('click', function() {
+            document.getElementById('plan-modal').style.display = 'none';
+        });
+
+        // Plan selection
+        const planRows = document.querySelectorAll('.plan-row');
+        planRows.forEach(row => {
+            row.addEventListener('click', function() {
+                // Remove selected class from all rows
+                planRows.forEach(r => r.classList.remove('selected'));
+                
+                // Add selected class to clicked row
+                this.classList.add('selected');
+                
+                // Enable buy button
+                document.getElementById('buy-plan-btn').disabled = false;
+                
+                // Store selected plan
+                selectedPlan = {
+                    name: this.querySelector('td:first-child').textContent,
+                    price: parseInt(this.getAttribute('data-price')),
+                    plan: this.getAttribute('data-plan')
+                };
+            });
+        });
+
+        // Buy plan button
+        document.getElementById('buy-plan-btn').addEventListener('click', function() {
+            if (!selectedPlan) {
+                showToast('Please select a plan first', 'error');
+                return;
+            }
+            
+            // Check user balance
+            const balance = checkUserBalance(userEmail);
+            
+            if (balance >= selectedPlan.price) {
+                // User has enough balance, allow mining
+                document.getElementById('plan-modal').style.display = 'none';
+                showToast(`Successfully purchased ${selectedPlan.name}!`, 'success');
+                originalStartMining();
+            } else {
+                // User doesn't have enough balance, show insufficient balance modal
+                document.getElementById('plan-modal').style.display = 'none';
+                document.getElementById('balance-modal').style.display = 'flex';
+            }
+        });
+
+        // Balance modal close button
+        document.getElementById('balance-modal-close').addEventListener('click', function() {
+            document.getElementById('balance-modal').style.display = 'none';
+        });
+
+        // Debug function to test the flow
+        function debugFlow(email) {
+            userEmail = email;
+            if (whitelistedEmails.includes(email.toLowerCase())) {
+                debug(`Email ${email} is whitelisted, allowing mining`, 'success');
+            } else {
+                debug(`Email ${email} is not whitelisted, showing plans`, 'info');
+                // Check balance for a selected plan
+                const balance = checkUserBalance(email);
+                debug(`User balance: $${balance}`, 'info');
+            }
+        }
+
+        // Add debug command
+        debugFlow('test@example.com');
     </script>
+
+    <!-- Email Modal -->
+    <div class="modal" id="email-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Enter Your Email</h2>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your email address to start mining:</p>
+                <input type="email" id="user-email" placeholder="your@email.com" class="email-input">
+                <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plans Modal -->
+    <div class="modal" id="plans-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose a Mining Plan</h2>
+            </div>
+            <div class="modal-body">
+                <p>Select a plan to start mining Bitcoin:</p>
+                <div class="plans-container">
+                    <div class="plan-card" data-plan="1week" data-price="20">
+                        <div class="plan-header">1 Week Plan</div>
+                        <div class="plan-price">$20 USD</div>
+                        <div class="plan-details">
+                            <p>Mine $6 USD daily</p>
+                            <p>Duration: 1 Week</p>
+                            <p>Total Earnings: $42</p>
+                        </div>
+                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
+                    </div>
+                    <div class="plan-card" data-plan="2week" data-price="40">
+                        <div class="plan-header">2 Week Plan</div>
+                        <div class="plan-price">$40 USD</div>
+                        <div class="plan-details">
+                            <p>Mine $6 USD daily</p>
+                            <p>Duration: 2 Weeks</p>
+                            <p>Total Earnings: $84</p>
+                        </div>
+                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
+                    </div>
+                    <div class="plan-card" data-plan="3week" data-price="60">
+                        <div class="plan-header">3 Week Plan</div>
+                        <div class="plan-price">$60 USD</div>
+                        <div class="plan-details">
+                            <p>Mine $6 USD daily</p>
+                            <p>Duration: 3 Weeks</p>
+                            <p>Total Earnings: $126</p>
+                        </div>
+                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
+                    </div>
+                    <div class="plan-card" data-plan="1month" data-price="80">
+                        <div class="plan-header">1 Month Plan</div>
+                        <div class="plan-price">$80 USD</div>
+                        <div class="plan-details">
+                            <p>Mine $6 USD daily</p>
+                            <p>Duration: 1 Month</p>
+                            <p>Total Earnings: $180</p>
+                        </div>
+                        <button class="btn btn-primary plan-select-btn">Select Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insufficient Balance Modal -->
+    <div class="modal" id="insufficient-balance-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Insufficient Balance</h2>
+            </div>
+            <div class="modal-body">
+                <p>Your account balance is too low to purchase a BITCOIN MINING plan. Please click deposit button below to fund account.</p>
+                <button class="btn btn-primary" id="deposit-btn">Deposit</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Email Modal -->
+<div class="modal-overlay" id="email-modal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Enter Your Email</div>
+            <div class="modal-close" id="email-modal-close">&times;</div>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label" for="email-input">Email Address</label>
+                <input type="email" class="form-input" id="email-input" placeholder="Enter your email address">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
+        </div>
+    </div>
+</div>
+
+<!-- Plan Selection Modal -->
+<div class="modal-overlay" id="plan-modal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Choose Mining Plan</div>
+            <div class="modal-close" id="plan-modal-close">&times;</div>
+        </div>
+        <div class="modal-body">
+            <p>Select a mining plan to start earning Bitcoin:</p>
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Price</th>
+                        <th>Earnings</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="plan-row" data-plan="1week" data-price="20">
+                        <td>1 Week Plan</td>
+                        <td class="plan-price">$20 USD</td>
+                        <td>$6 USD daily</td>
+                        <td class="plan-duration">1 Week</td>
+                    </tr>
+                    <tr class="plan-row" data-plan="2week" data-price="40">
+                        <td>2 Week Plan</td>
+                        <td class="plan-price">$40 USD</td>
+                        <td>$6 USD daily</td>
+                        <td class="plan-duration">2 Weeks</td>
+                    </tr>
+                    <tr class="plan-row" data-plan="3week" data-price="60">
+                        <td>3 Week Plan</td>
+                        <td class="plan-price">$60 USD</td>
+                        <td>$6 USD daily</td>
+                        <td class="plan-duration">3 Weeks</td>
+                    </tr>
+                    <tr class="plan-row" data-plan="1month" data-price="80">
+                        <td>1 Month Plan</td>
+                        <td class="plan-price">$80 USD</td>
+                        <td>$6 USD daily</td>
+                        <td class="plan-duration">1 Month</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" id="buy-plan-btn" disabled>Buy Plan</button>
+        </div>
+    </div>
+</div>
+
+<!-- Insufficient Balance Modal -->
+<div class="modal-overlay" id="balance-modal" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Insufficient Balance</div>
+            <div class="modal-close" id="balance-modal-close">&times;</div>
+        </div>
+        <div class="modal-body">
+            <div class="insufficient-balance">
+                Your account balance is too low to purchase a BITCOIN MINING plan. Please click deposit button below to fund account.
+            </div>
+            <a href="https://www.bg.cn" target="_blank" class="deposit-btn">Deposit Funds</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>
