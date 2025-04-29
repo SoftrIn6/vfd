@@ -1301,24 +1301,24 @@
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="sharing-task.html" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Task</span>
-        </a>
-        <a href="invest.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
+    <img src="image/buy-a-house.gif" alt="Invite Icon" style="width:24px; height:24px;">
+    <span>Home</span>
         </a>
         <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
+    <img src="image/multitasking.gif" alt="Invite Icon" style="width:24px; height:24px;">
+    <span>Task</span>
         </a>
-        <a href="profile.html" class="nav-item active">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
+        <a href="invite-friends.html" class="nav-item">
+    <img src="image/money-growth.gif" alt="Invite Icon" style="width:24px; height:24px;">
+    <span>Invest</span>
+        </a>
+        <a href="invite-friends.html" class="nav-item">
+    <img src="image/database.gif" alt="Invite Icon" style="width:24px; height:24px;">
+    <span>Mine BTC</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+    <img src="image/profile.gif" alt="Invite Icon" style="width:24px; height:24px;">
+    <span>My Account</span>
         </a>
     </nav>
 
@@ -1732,23 +1732,13 @@
             const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
             const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
             const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
-
-            // Add this code right after to ensure we're also checking for any investment-specific activities:
-            // Check for additional investment activities that might be stored with different keys
-            const investmentActivities = JSON.parse(localStorage.getItem('investmentActivities') || '[]');
-            const investmentHistory = JSON.parse(localStorage.getItem('investmentHistory') || '[]');
-            const investmentTransactions = JSON.parse(localStorage.getItem('investmentTransactions') || '[]');
-
-            // Then modify the allActivities array to include these new sources:
+            
             // Combine all activities
             const allActivities = [
                 ...recentActivities,
                 ...bankActivities,
                 ...cryptoActivities,
                 ...investActivities,
-                ...investmentActivities,
-                ...investmentHistory,
-                ...investmentTransactions,
                 ...stakeActivities,
                 ...miningActivities
             ];
@@ -1921,10 +1911,10 @@
                     break;
                     
                 case 'investment_attempt':
-                    title = 'Investment';
+                    title = 'Investment Attempt';
                     
                     if (activity.planTitle) {
-                        const amount = activity.totalAmount || activity.amount || '0.00';
+                        const amount = activity.totalAmount || '0.00';
                         details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
                         
                         if (activity.success) {
@@ -1935,29 +1925,6 @@
                                 details += `<br>Reason: ${activity.reason}`;
                             }
                         }
-                    }
-                    break;
-
-                // Add these additional cases to handle more investment activity types:
-                case 'investment':
-                case 'investment_made':
-                case 'plan_purchase':
-                    title = 'Investment';
-                    
-                    if (activity.planTitle || activity.plan) {
-                        const planName = activity.planTitle || activity.plan || 'Investment Plan';
-                        const amount = activity.totalAmount || activity.amount || activity.investmentAmount || '0.00';
-                        details = `Plan: ${planName}, Amount: ${amount} USD`;
-                        status = '<div class="activity-status success">Success</div>';
-                    } else if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            const plan = activity.details.plan || 'Investment Plan';
-                            details = `Plan: ${plan}, Amount: ${amount} USD`;
-                        } else {
-                            details = activity.details;
-                        }
-                        status = '<div class="activity-status success">Success</div>';
                     }
                     break;
                     
@@ -2856,26 +2823,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
             };
         }
     });
-
-// Check specifically for investment activities when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if there are any new investment activities from invest.html
-    const checkForNewInvestmentActivities = () => {
-        const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
-        const investmentActivities = JSON.parse(localStorage.getItem('investmentActivities') || '[]');
-        const investmentHistory = JSON.parse(localStorage.getItem('investmentHistory') || '[]');
-        
-        // If we have any investment activities, refresh the activity display
-        if (investActivities.length > 0 || investmentActivities.length > 0 || investmentHistory.length > 0) {
-            console.log('Found investment activities, refreshing display');
-            loadActivityHistory();
-        }
-    };
-    
-    // Check for investment activities immediately and then every 5 seconds
-    checkForNewInvestmentActivities();
-    setInterval(checkForNewInvestmentActivities, 5000);
-});
 </script>
 </body>
 </html>
