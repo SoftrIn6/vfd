@@ -1392,45 +1392,22 @@
             });
             
             // Sign out functionality - Fixed implementation
-            document.addEventListener('DOMContentLoaded', function () {
-        const signOutBtn = document.getElementById('sign-out-btn');
+            document.getElementById('sign-out-btn').addEventListener('click', function () {
+    console.log('Sign out button clicked');
+    if (confirm('Are you sure you want to sign out?')) {
+        console.log('Sign out confirmed');
 
-        if (signOutBtn) {
-            signOutBtn.addEventListener('click', function () {
-                console.log('Sign out button clicked');
+        // Clear all relevant localStorage/sessionStorage items
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('userBalance');
+        localStorage.removeItem('activityHistory');
 
-                if (confirm('Are you sure you want to sign out?')) {
-                    console.log('Sign out confirmed');
 
-                    // Debug: show what is in localStorage before clearing
-                    console.log('localStorage before sign out:', { ...localStorage });
-
-                    // Safely remove only user-related keys
-                    try {
-                        localStorage.removeItem('authToken');
-                        localStorage.removeItem('userData');
-                        localStorage.removeItem('userBalance');
-                        localStorage.removeItem('activityHistory');
-
-                        // Optional: Clear sessionStorage
-                        sessionStorage.clear();
-
-                        // Optional: Clear any global variables
-                        window.userBalance = null;
-                        window.activityHistory = [];
-
-                        console.log('User data cleared. Redirecting to login...');
-                        window.location.href = 'login.html';
-                    } catch (error) {
-                        console.error('Error during logout:', error);
-                        alert('Logout failed. Check console for details.');
-                    }
-                }
-            });
-        } else {
-            console.warn('Sign out button not found!');
-        }
-    });
+        // Redirect to login page
+        window.location.href = 'login.html';
+    }
+});
         
     // Setup scroll animations using Intersection Observer
     function setupScrollAnimations() {
