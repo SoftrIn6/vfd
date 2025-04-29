@@ -1251,7 +1251,9 @@ img, video {
   width: 100%;
   min-width: 0;
 }
-/* Responsive fix for Proof-of-Work Visualization and Merkle Tree */
+
+    
+/* === Responsive Fixes for Mobile Overflow === */
 .pow-step-content,
 .merkle-leaf,
 .vis-block,
@@ -1264,7 +1266,6 @@ img, video {
     box-sizing: border-box;
 }
 
-/* Flex containers allow wrapping on mobile */
 .segment-container,
 .merkle-node,
 .blockchain-visualization {
@@ -1272,14 +1273,12 @@ img, video {
     justify-content: center;
 }
 
-/* Visual blocks fit container */
 .vis-block {
     min-width: 80px;
     max-width: 100px;
     flex: 1 1 auto;
 }
 
-/* Whitepaper responsiveness */
 .whitepaper-section {
     padding: 10px;
     overflow-x: auto;
@@ -1291,12 +1290,10 @@ img, video {
     text-align: justify;
 }
 
-/* Card sections prevent overflow */
 .card {
     overflow-x: auto;
 }
 
-/* Mobile-specific tweaks */
 @media (max-width: 480px) {
     .whitepaper-title {
         font-size: 18px;
@@ -1323,8 +1320,7 @@ img, video {
     }
 }
 
-
-    </style>
+</style>
 </head>
 <body>
     <div class="container">
