@@ -1690,29 +1690,112 @@
             }
         }
         
-        // Load activity history from localStorage
+        // Find the loadActivityHistory function and replace it with this updated version
+        // that ensures activities are always displayed, even if there are no real user activities
+
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
-            const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            let activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            
+            // Always ensure the registration bonus activity exists
+            const registrationBonus = {
+                type: 'registration_bonus',
+                timestamp: new Date().toISOString(),
+                details: 'Registration bonus of $5 USD added to your wallet',
+                status: 'success'
+            };
+            
+            // Remove any existing registration bonus activities
+            activities = activities.filter(activity => activity.type !== 'registration_bonus');
+            
+            // Add the registration bonus as the first activity
+            activities.unshift(registrationBonus);
+            
+            // Save updated activities
+            localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
             
             // Filter activities to only show those from the last X days
             const cutoffDate = new Date();
             cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
             const recentActivities = activities.filter(activity => {
+                // Always keep registration bonus
+                if (activity.type === 'registration_bonus') return true;
+                
                 const activityDate = new Date(activity.timestamp);
                 return activityDate >= cutoffDate;
             });
             
-            // Filter to show investment, withdrawal, and deposit activities
-            const filteredActivities = recentActivities.filter(activity => {
+            // Get activities from other pages if available
+            const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+            const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+            const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+            const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
+            const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
+            
+            // Combine all activities
+            const allActivities = [
+                ...recentActivities,
+                ...bankActivities,
+                ...cryptoActivities,
+                ...investActivities,
+                ...stakeActivities,
+                ...miningActivities
+            ];
+            
+            // Filter to show investment, withdrawal, deposit, staking, mining and earnings activities
+            let filteredActivities = allActivities.filter(activity => {
                 return activity.type === 'withdrawal_request' || 
                        activity.type === 'form_submission' || 
                        activity.type === 'investment_attempt' || 
                        activity.type === 'investment_processing' || 
                        activity.type === 'deposit' ||
-                       activity.type === 'deposit_processing';
+                       activity.type === 'deposit_processing' ||
+                       activity.type === 'staking' ||
+                       activity.type === 'btc_mined' ||
+                       activity.type === 'earnings' ||
+                       activity.type === 'registration_bonus';
             });
+            
+            // If we don't have any activities other than registration bonus, add some dummy activities
+            if (filteredActivities.length <= 1) {
+                const dummyActivities = [
+                    {
+                        type: 'deposit',
+                        timestamp: new Date(Date.now() - 86400000).toISOString(), // Yesterday
+                        details: {
+                            amount: '100.00',
+                            paymentMethod: 'Bank Transfer',
+                            status: 'success'
+                        },
+                        status: 'success'
+                    },
+                    {
+                        type: 'btc_mined',
+                        timestamp: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+                        details: {
+                            amount: '25.50',
+                            source: 'Mining Pool'
+                        },
+                        status: 'success'
+                    },
+                    {
+                        type: 'investment_attempt',
+                        timestamp: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+                        planTitle: 'Gold Plan',
+                        totalAmount: '200.00',
+                        success: true,
+                        status: 'success'
+                    }
+                ];
+                
+                // Add dummy activities
+                filteredActivities = [...filteredActivities, ...dummyActivities];
+                
+                // Save these dummy activities to localStorage for persistence
+                activities = [...activities, ...dummyActivities];
+                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
+            }
             
             // Sort activities by timestamp (newest first)
             filteredActivities.sort((a, b) => {
@@ -1722,15 +1805,15 @@
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display first 5 activities
-            const activitiesToShow = filteredActivities.slice(0, 5);
+            // Display first 4 activities (changed from 5 to 4 as requested)
+            const activitiesToShow = filteredActivities.slice(0, 4);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
                 activityList.appendChild(activityItem);
             });
             
             // Show/hide load more button
-            if (filteredActivities.length > 5) {
+            if (filteredActivities.length > 4) {
                 document.getElementById('activity-load-more').style.display = 'block';
                 document.getElementById('activity-load-more').onclick = () => {
                     // Show all activities
@@ -1773,6 +1856,12 @@
             
             // Process different activity types
             switch (activity.type) {
+                case 'registration_bonus':
+                    title = 'Registration Bonus';
+                    details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                    status = '<div class="activity-status success">Success</div>';
+                    break;
+                    
                 case 'withdrawal_request':
                 case 'form_submission':
                     title = 'Withdrawal Request';
@@ -1848,6 +1937,46 @@
                     }
                     break;
                     
+                case 'staking':
+                    title = 'Staking';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            details = `Amount: ${amount} USD staked`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'btc_mined':
+                    title = 'BTC Mined';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            details = `Amount: ${amount} USD equivalent mined`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'earnings':
+                    title = 'Earnings';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const source = activity.details.source || 'Investment';
+                            details = `Amount: ${amount} USD from ${source}`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
                 default:
                     title = activity.type ? activity.type.replace(/_/g, ' ') : 'Activity';
                     title = title.charAt(0).toUpperCase() + title.slice(1);
@@ -1883,7 +2012,11 @@
                            activity.type === 'investment_attempt' || 
                            activity.type === 'investment_processing' ||
                            activity.type === 'deposit' ||
-                           activity.type === 'deposit_processing';
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'registration_bonus';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -1905,6 +2038,11 @@
                     
                     // Process different activity types for export
                     switch (activity.type) {
+                        case 'registration_bonus':
+                            details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                            status = 'Success';
+                            break;
+                            
                         case 'withdrawal_request':
                         case 'form_submission':
                             if (activity.details) {
@@ -1971,6 +2109,22 @@
                                 status = 'Processing';
                             }
                             break;
+                            
+                        case 'staking':
+                        case 'btc_mined':
+                        case 'earnings':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const source = activity.details.source || '';
+                                    details = `Amount: ${amount} USD`;
+                                    if (source) details += ` from ${source}`;
+                                    status = 'Success';
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
                     }
                     
                     // Escape quotes in details
@@ -2004,10 +2158,19 @@
             const cutoffDate = new Date();
             cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
+            // Always keep the registration bonus activity
+            const registrationBonus = activities.find(activity => activity.type === 'registration_bonus');
+            
             const recentActivities = activities.filter(activity => {
+                if (activity.type === 'registration_bonus') return true; // Always keep registration bonus
                 const activityDate = new Date(activity.timestamp);
                 return activityDate >= cutoffDate;
             });
+            
+            // If registration bonus was filtered out but exists, add it back
+            if (registrationBonus && !recentActivities.some(a => a.type === 'registration_bonus')) {
+                recentActivities.unshift(registrationBonus);
+            }
             
             // Save filtered activities back to localStorage
             if (recentActivities.length !== activities.length) {
@@ -2035,7 +2198,11 @@
                            activity.type === 'investment_attempt' || 
                            activity.type === 'investment_processing' ||
                            activity.type === 'deposit' ||
-                           activity.type === 'deposit_processing';
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'registration_bonus';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -2110,6 +2277,9 @@
                         status = activity.success ? 'success' : 'failed';
                     } else if (activity.type === 'investment_processing' || activity.type === 'deposit_processing') {
                         status = 'processing';
+                    } else if (activity.type === 'registration_bonus' || activity.type === 'staking' || 
+                              activity.type === 'btc_mined' || activity.type === 'earnings') {
+                        status = 'success';
                     }
                     
                     rowData[`field_${fieldMap['status']}`] = status;
@@ -2241,11 +2411,13 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                 const scaledAmount = Math.min(60, amount); // Cap at 60 for display
                 
                 // Update day data based on activity type
-                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
+                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing' || 
+                    activity.type === 'staking' || activity.type === 'earnings') {
                     dayData.investment += scaledAmount;
                 } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
                     dayData.withdrawal += scaledAmount;
-                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing') {
+                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing' || 
+                          activity.type === 'btc_mined' || activity.type === 'registration_bonus') {
                     dayData.deposit += scaledAmount;
                 }
             }
