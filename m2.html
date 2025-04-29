@@ -1251,6 +1251,78 @@ img, video {
   width: 100%;
   min-width: 0;
 }
+/* Responsive fix for Proof-of-Work Visualization and Merkle Tree */
+.pow-step-content,
+.merkle-leaf,
+.vis-block,
+.segment {
+    font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Flex containers allow wrapping on mobile */
+.segment-container,
+.merkle-node,
+.blockchain-visualization {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Visual blocks fit container */
+.vis-block {
+    min-width: 80px;
+    max-width: 100px;
+    flex: 1 1 auto;
+}
+
+/* Whitepaper responsiveness */
+.whitepaper-section {
+    padding: 10px;
+    overflow-x: auto;
+    word-wrap: break-word;
+}
+
+.whitepaper-content {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    text-align: justify;
+}
+
+/* Card sections prevent overflow */
+.card {
+    overflow-x: auto;
+}
+
+/* Mobile-specific tweaks */
+@media (max-width: 480px) {
+    .whitepaper-title {
+        font-size: 18px;
+    }
+
+    .modal {
+        padding: 15px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+    }
+
+    .segment {
+        max-width: 70px;
+    }
+
+    .pow-step {
+        padding: 8px;
+    }
+
+    .pow-step-title {
+        font-size: 14px;
+    }
+}
+
 
     </style>
 </head>
