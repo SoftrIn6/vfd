@@ -1766,15 +1766,15 @@
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display first 5 activities
-            const activitiesToShow = filteredActivities.slice(0, 5);
+            // Display first 4 activities
+            const activitiesToShow = filteredActivities.slice(0, 4);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
                 activityList.appendChild(activityItem);
             });
             
             // Show/hide load more button
-            if (filteredActivities.length > 5) {
+            if (filteredActivities.length > 4) {
                 document.getElementById('activity-load-more').style.display = 'block';
                 document.getElementById('activity-load-more').onclick = () => {
                     // Show all activities
