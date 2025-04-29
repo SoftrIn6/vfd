@@ -21,8 +21,8 @@
         }
 
         * {
-            margin: 10;
-            padding: 10;
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -33,8 +33,6 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            padding-bottom: 1200px; /* Adds 100px space at the bottom */
-
         }
 
         .container {
@@ -76,7 +74,7 @@
         }
 
         .logo-text {
-            font-size: 15px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--primary);
         }
@@ -122,7 +120,7 @@
         .card {
             background-color: var(--card-bg);
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--card-border);
             margin-bottom: 20px;
@@ -144,7 +142,7 @@
         }
 
         .card-title {
-            font-size: 14px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--primary);
         }
@@ -215,13 +213,13 @@
         .mining-section {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 15px;
         }
 
         .mining-status {
             display: flex;
             align-items: center;
-            gap: 1px;
+            gap: 10px;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.2);
             border-radius: 5px;
@@ -229,8 +227,8 @@
         }
 
         .mining-indicator {
-            width: 5px;
-            height: 5px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             background-color: var(--warning);
         }
@@ -254,13 +252,13 @@
         }
 
         .stat-value {
-            font-size: 10px;
+            font-size: 20px;
             font-weight: bold;
             color: var(--primary);
         }
 
         .stat-label {
-            font-size: 9px;
+            font-size: 12px;
             color: var(--light);
             opacity: 0.7;
         }
@@ -835,77 +833,29 @@
             transition: width 0.3s ease;
         }
 
-        .mining-segments {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .mining-limit {
             margin-top: 15px;
-        }
-
-        .segment-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .segment {
-            width: 80px;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.2);
             border-radius: 5px;
             border: 1px solid var(--card-border);
             text-align: center;
-            position: relative;
-            transition: all 0.3s ease;
         }
 
-        .segment.active {
-            background-color: rgba(247, 147, 26, 0.2);
-            border-color: var(--primary);
-        }
-
-        .segment.completed {
-            background-color: rgba(92, 184, 92, 0.2);
-            border-color: var(--success);
-        }
-
-        .segment.locked {
-            background-color: rgba(77, 77, 77, 0.2);
-            opacity: 0.7;
-        }
-
-        .segment-value {
-            font-size: 16px;
+        .mining-limit-value {
+            font-size: 18px;
             font-weight: bold;
             color: var(--primary);
         }
 
-        .segment.completed .segment-value {
-            color: var(--success);
-        }
-
-        .segment.locked .segment-value {
-            color: var(--secondary);
-        }
-
-        .segment-label {
+        .mining-limit-label {
             font-size: 12px;
             color: var(--light);
             opacity: 0.7;
         }
 
-        .segment-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background-color: var(--primary);
-            width: 0%;
-        }
-
-        .segment.active .segment-progress {
-            animation: pulse 1s infinite;
+        .mining-limit-progress {
+            margin-top: 10px;
         }
 
         .mining-reward {
@@ -972,228 +922,6 @@
         .pow-nomatch {
             color: var(--danger);
         }
-
-        .current-segment-info {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            border: 1px solid var(--card-border);
-            text-align: center;
-        }
-
-        .current-segment-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .current-segment-progress {
-            margin-top: 10px;
-        }
-
-        .current-segment-time {
-            font-size: 14px;
-            color: var(--light);
-            margin-top: 10px;
-        }
-
-        .next-segment-time {
-            font-size: 14px;
-            color: var(--light);
-            margin-top: 5px;
-            opacity: 0.7;
-        }
-
- /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 470px;
-            min-width: 470px;
-            background-color: #fff;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            padding: 10px 10;
-            border-top: 1px solid #eee;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .nav-item.active {
-            color: #ffa500;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        /* New styles for email verification and plan selection */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--card-border);
-            max-width: 90%;
-            width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-close:hover {
-            opacity: 1;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .modal-content {
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--text);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 5px;
-            border: 1px solid var(--card-border);
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--text);
-            font-size: 10px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus {
-            border-color: var(--primary);
-        }
-
-        .form-input::placeholder {
-            color: rgba(224, 224, 224, 0.5);
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .plan-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 12px 0;
-        }
-
-        .plan-table th, .plan-table td {
-            padding: 9px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .plan-table th {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .plan-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .plan-table tr:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .plan-table .btn {
-            margin: 0;
-            padding: 8px 12px;
-            font-size: 9px;
-        }
-
-        .error-message {
-            color: var(--danger);
-            background-color: rgba(217, 83, 79, 0.1);
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 1px solid var(--danger);
-            text-align: center;
-        }
-        
-        .success-message {
-            color: var(--success);
-            background-color: rgba(92, 184, 92, 0.1);
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 1px solid var(--success);
-            text-align: center;
-        }
-        
-        .total-earnings {
-            font-weight: bold;
-            color: var(--success);
-        }
     </style>
 </head>
 <body>
@@ -1251,27 +979,19 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="difficulty-slider">Mining Difficulty</label>
-                            <input type="range" class="difficulty-slider" id="difficulty-slider"  min="1" max="6" value="4">
+                            <input type="range" class="difficulty-slider" id="difficulty-slider" min="1" max="6" value="4">
                             <div class="difficulty-value" id="difficulty-value">4</div>
                         </div>
-                        
-                        <div class="current-segment-info">
-                            <div class="current-segment-title">Current Mining Segment: <span id="current-segment">1</span> of 6</div>
-                            <div class="current-segment-progress">
+                        <div class="mining-limit">
+                            <div class="mining-limit-value" id="mining-limit-value">0.000064 BTC / 0.000064 BTC</div>
+                            <div class="mining-limit-label">Daily Mining Limit (6 USD)</div>
+                            <div class="mining-limit-progress">
                                 <div class="progress-bar-container">
-                                    <div class="progress-bar" id="segment-progress-bar" style="width: 0%"></div>
+                                    <div class="progress-bar" id="mining-limit-progress-bar" style="width: 0%"></div>
                                 </div>
                             </div>
-                            <div class="current-segment-time" id="segment-time-remaining">Time remaining: 01:00:00</div>
-                            <div class="next-segment-time" id="next-segment-time">Next segment available in: 00:00:00</div>
+                            <div class="mining-limit-label" id="mining-limit-reset">Resets in 24:00:00</div>
                         </div>
-                        
-                        <div class="mining-segments">
-                            <div class="segment-container" id="segment-container">
-                                <!-- Segments will be populated by JavaScript -->
-                            </div>
-                        </div>
-                        
                         <div class="mining-reward">
                             <div class="mining-reward-value" id="mining-reward">0.000000 BTC</div>
                             <div class="mining-reward-label">Total Mined Today</div>
@@ -1399,143 +1119,6 @@
         <!-- Debug messages will be added by JavaScript -->
     </div>
 
-    <!-- Email Verification Modal -->
-    <div class="modal-overlay" id="email-modal">
-        <div class="modal">
-            <div class="modal-close" id="email-modal-close">&times;</div>
-            <div class="modal-title">Enter Your Email</div>
-            <div class="modal-content">
-                <div class="form-group">
-                    <label class="form-label" for="email-input">Email Address</label>
-                    <input type="email" class="form-input" id="email-input" placeholder="Enter your email address">
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" id="email-proceed-btn">Proceed</button>
-                    <button class="btn btn-secondary" id="email-cancel-btn">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Plan Selection Modal -->
-    <div class="modal-overlay" id="plan-modal">
-        <div class="modal">
-            <div class="modal-close" id="plan-modal-close">&times;</div>
-            <div class="modal-title">Select a Mining Plan</div>
-            <div class="modal-content">
-                <p>Choose a mining plan to start earning Bitcoin:</p>
-                <table class="plan-table">
-                    <thead>
-                        <tr>
-                            <th>Plan</th>
-                            <th>Price</th>
-                            <th>Daily Earnings</th>
-                            <th>Weekly Earnings</th>
-                            <th>Total Earnings</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1-Week Plan</td>
-                            <td>$20 USD</td>
-                            <td>$6 USD</td>
-                            <td>$42 USD</td>
-                            <td class="total-earnings">$48 USD</td>
-                            <td><button class="btn btn-primary buy-plan-btn" data-plan="1-week" data-price="20">Buy Plan</button></td>
-                        </tr>
-                        <tr>
-                            <td>2-Week Plan</td>
-                            <td>$40 USD</td>
-                            <td>$6 USD</td>
-                            <td>$84 USD</td>
-                            <td class="total-earnings">$90 USD</td>
-                            <td><button class="btn btn-primary buy-plan-btn" data-plan="2-week" data-price="40">Buy Plan</button></td>
-                        </tr>
-                        <tr>
-                            <td>3-Week Plan</td>
-                            <td>$60 USD</td>
-                            <td>$6 USD</td>
-                            <td>$126 USD</td>
-                            <td class="total-earnings">$132 USD</td>
-                            <td><button class="btn btn-primary buy-plan-btn" data-plan="3-week" data-price="60">Buy Plan</button></td>
-                        </tr>
-                        <tr>
-                            <td>1-Month Plan</td>
-                            <td>$80 USD</td>
-                            <td>$6 USD</td>
-                            <td>$168 USD</td>
-                            <td class="total-earnings">$174 USD</td>
-                            <td><button class="btn btn-primary buy-plan-btn" data-plan="1-month" data-price="80">Buy Plan</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Insufficient Balance Modal -->
-    <div class="modal-overlay" id="balance-modal">
-        <div class="modal">
-            <div class="modal-close" id="balance-modal-close">&times;</div>
-            <div class="modal-title">Insufficient Balance</div>
-            <div class="modal-content">
-                <div class="error-message">
-                    Your account balance is too low to purchase a Bitcoin mining plan. Please click the deposit button below to fund your account.
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-warning" id="deposit-btn">Deposit</button>
-                    <button class="btn btn-secondary" id="balance-cancel-btn">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Purchase Success Modal -->
-    <div class="modal-overlay" id="success-modal">
-        <div class="modal">
-            <div class="modal-close" id="success-modal-close">&times;</div>
-            <div class="modal-title">Purchase Successful</div>
-            <div class="modal-content">
-                <div class="success-message">
-                    Your mining plan has been purchased successfully! You can now start mining Bitcoin.
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-success" id="start-mining-now-btn">Start Mining Now</button>
-                </div>
-            </div>
-        </div>
-    </div>
-  <!-- Float Button -->
-        <div class="float-btn">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="sharing-task.html" class="nav-item">
-            <i class="fas fa-chart-pie"></i>
-            <span>Task</span>
-        </a>
-        <a href="invest.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>Invest</span>
-        </a>
-        <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Me</span>
-        </a>
-    </nav>
-
     <script>
         // Bitcoin Mining Simulator Implementation
         class MerkleTree {
@@ -1659,7 +1242,7 @@
             constructor() {
                 this.chain = [this.createGenesisBlock()];
                 this.difficulty = 4;
-                this.miningReward = 0.0000106667; // $1 worth of BTC (1/6 of daily limit)
+                this.miningReward = 0.000064; // 6 USD worth of BTC
                 this.blockTime = 10000; // Target time between blocks in ms
                 this.lastBlockTime = Date.now();
                 
@@ -1763,153 +1346,36 @@
                 this.hashCount = 0;
                 this.blocksMined = 0;
                 this.totalMined = 0;
+                this.dailyLimit = 0.000064; // 6 USD worth of BTC
+                this.dailyMined = 0;
+                this.lastResetTime = Date.now();
+                this.resetInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
                 this.minerAddress = 'MinerAddress';
                 this.currentNonce = 0;
                 this.currentHash = '';
-                
-                // Segment-based mining (6 segments of $1 each)
-                this.segments = [
-                    { id: 1, value: 1, completed: false, active: false, locked: false, startTime: null, endTime: null },
-                    { id: 2, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 3, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 4, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 5, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 6, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null }
-                ];
-                this.currentSegment = 0;
-                this.segmentDuration = 60 * 60 * 1000; // 1 hour in milliseconds
-                this.segmentProgress = 0;
-                this.segmentStartTime = null;
-                
-                // User data
-                this.userEmail = '';
-                this.userPlan = '';
-                this.userBalance = 0;
-                
-                // Initialize segments
-                this.initializeSegments();
-            }
-
-            initializeSegments() {
-                // First segment is unlocked by default
-                this.segments[0].locked = false;
-                
-                // Check if any segments were previously started
-                const savedSegments = localStorage.getItem('miningSegments');
-                if (savedSegments) {
-                    try {
-                        const parsedSegments = JSON.parse(savedSegments);
-                        this.segments = parsedSegments;
-                        
-                        // Find current active segment
-                        const activeSegment = this.segments.find(segment => segment.active);
-                        if (activeSegment) {
-                            this.currentSegment = activeSegment.id - 1;
-                            this.segmentStartTime = activeSegment.startTime;
-                            
-                            // Calculate progress
-                            const now = Date.now();
-                            const elapsed = now - this.segmentStartTime;
-                            this.segmentProgress = Math.min(elapsed / this.segmentDuration, 1);
-                            
-                            // If segment should be completed
-                            if (this.segmentProgress >= 1) {
-                                this.completeCurrentSegment();
-                            }
-                        } else {
-                            // Find the next uncompleted segment
-                            const nextSegment = this.segments.find(segment => !segment.completed && !segment.locked);
-                            if (nextSegment) {
-                                this.currentSegment = nextSegment.id - 1;
-                            }
-                        }
-                        
-                        // Calculate total mined
-                        this.totalMined = this.segments.filter(segment => segment.completed)
-                            .reduce((total, segment) => total + this.blockchain.miningReward, 0);
-                    } catch (error) {
-                        debug('Error loading saved segments: ' + error.message, 'error');
-                        localStorage.removeItem('miningSegments');
-                    }
-                }
-                
-                // Check if user has a saved plan
-                const savedPlan = localStorage.getItem('userPlan');
-                if (savedPlan) {
-                    try {
-                        const planData = JSON.parse(savedPlan);
-                        this.userPlan = planData.plan;
-                        this.userEmail = planData.email;
-                        debug(`Loaded saved plan: ${this.userPlan} for ${this.userEmail}`, 'info');
-                    } catch (error) {
-                        debug('Error loading saved plan: ' + error.message, 'error');
-                        localStorage.removeItem('userPlan');
-                    }
-                }
-                
-                this.updateSegmentsUI();
-            }
-
-            saveSegments() {
-                localStorage.setItem('miningSegments', JSON.stringify(this.segments));
-            }
-            
-            savePlan(email, plan) {
-                this.userEmail = email;
-                this.userPlan = plan;
-                localStorage.setItem('userPlan', JSON.stringify({
-                    email: email,
-                    plan: plan,
-                    purchaseDate: Date.now()
-                }));
-                debug(`Saved plan: ${plan} for ${email}`, 'info');
             }
 
             startMining() {
-                // Check if all segments are completed
-                const allCompleted = this.segments.every(segment => segment.completed);
-                if (allCompleted) {
-                    showToast('All mining segments completed for today. Try again tomorrow.', 'warning');
+                if (this.dailyMined >= this.dailyLimit) {
+                    showToast('Daily mining limit reached. Try again tomorrow.', 'warning');
                     return false;
                 }
-                
-                // Find the next available segment
-                const nextSegment = this.segments.find(segment => !segment.completed && !segment.locked);
-                if (!nextSegment) {
-                    showToast('No available mining segments. Wait for the next segment to unlock.', 'warning');
-                    return false;
-                }
-                
-                this.currentSegment = nextSegment.id - 1;
-                this.segments[this.currentSegment].active = true;
-                this.segmentStartTime = Date.now();
-                this.segments[this.currentSegment].startTime = this.segmentStartTime;
-                this.segmentProgress = 0;
-                
+
                 this.mining = true;
                 this.startTime = Date.now();
                 this.hashCount = 0;
-                
-                // Save segments state
-                this.saveSegments();
                 
                 // Start mining animation
                 startMiningAnimation();
                 
                 this.mineNextBlock();
                 
-                debug(`Mining started for segment ${this.currentSegment + 1}`, 'info');
+                debug('Mining started', 'info');
                 return true;
             }
 
             stopMining() {
                 this.mining = false;
-                
-                // Update segment state
-                if (this.currentSegment >= 0 && this.currentSegment < this.segments.length) {
-                    this.segments[this.currentSegment].active = false;
-                    this.saveSegments();
-                }
                 
                 // Stop mining animation
                 stopMiningAnimation();
@@ -1921,17 +1387,10 @@
                 if (!this.mining) return;
                 
                 try {
-                    // Check if segment is completed
-                    const now = Date.now();
-                    const elapsed = now - this.segmentStartTime;
-                    this.segmentProgress = Math.min(elapsed / this.segmentDuration, 1);
-                    
-                    // Update UI
-                    updateSegmentProgress(this.segmentProgress);
-                    
-                    // If segment is completed
-                    if (this.segmentProgress >= 1) {
-                        this.completeCurrentSegment();
+                    // Check if daily limit reached
+                    if (this.dailyMined >= this.dailyLimit) {
+                        showToast('Daily mining limit reached. Try again tomorrow.', 'warning');
+                        this.stopMining();
                         return;
                     }
 
@@ -1968,13 +1427,16 @@
                     if (block.hash.substring(0, this.blockchain.difficulty) === target) {
                         // Block successfully mined
                         this.blocksMined++;
+                        this.dailyMined += this.blockchain.miningReward;
+                        this.totalMined += this.blockchain.miningReward;
                         
                         // Add block to blockchain
                         this.blockchain.chain.push(block);
                         
-                        showToast(`Block mined successfully!`, 'success');
+                        showToast(`Block mined successfully! Earned ${this.blockchain.miningReward.toFixed(8)} BTC`, 'success');
                         updateBlockchainDisplay();
                         updateMerkleTreeDisplay();
+                        updateMiningLimitDisplay();
                         
                         // Play mining success animation
                         playMiningSuccessAnimation();
@@ -2008,160 +1470,30 @@
                 }
             }
 
-            completeCurrentSegment() {
-                if (this.currentSegment < 0 || this.currentSegment >= this.segments.length) return;
-                
-                // Mark current segment as completed
-                this.segments[this.currentSegment].completed = true;
-                this.segments[this.currentSegment].active = false;
-                this.segments[this.currentSegment].endTime = Date.now();
-                
-                // Add reward
-                this.totalMined += this.blockchain.miningReward;
-                
-                // Unlock next segment if available
-                if (this.currentSegment + 1 < this.segments.length) {
-                    this.segments[this.currentSegment + 1].locked = false;
-                    this.segments[this.currentSegment + 1].startTime = Date.now() + this.segmentDuration; // Available in 1 hour
-                }
-                
-                // Save segments state
-                this.saveSegments();
-                
-                // Update UI
-                this.updateSegmentsUI();
-                updateMiningReward();
-                
-                // Stop mining
-                this.stopMining();
-                
-                // Update user balance in Baserow
-                this.updateUserBalance(1); // $1 per segment
-                
-                showToast(`Mining segment ${this.currentSegment + 1} completed! Earned $1 worth of BTC.`, 'success');
-                debug(`Mining segment ${this.currentSegment + 1} completed`, 'success');
-            }
-            
-            updateUserBalance(amount) {
-                // Update user balance in Baserow
-                if (this.userEmail) {
-                    debug(`Updating balance for ${this.userEmail} with +$${amount}`, 'info');
-                    
-                    // Simulate API call to Baserow to update balance
-                    fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Token YOUR_API_TOKEN'
-                        },
-                        body: JSON.stringify({
-                            // Find the user by email and update their balance
-                            // This is a simplified example - in a real implementation,
-                            // you would need to get the row ID first
-                            'email': this.userEmail,
-                            'total_assets': { 'add': amount }
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            debug(`Balance updated successfully for ${this.userEmail}`, 'success');
-                        } else {
-                            debug(`Failed to update balance for ${this.userEmail}`, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        debug(`Error updating balance: ${error.message}`, 'error');
-                    });
+            checkDailyReset() {
+                const currentTime = Date.now();
+                if (currentTime - this.lastResetTime >= this.resetInterval) {
+                    this.dailyMined = 0;
+                    this.lastResetTime = currentTime;
+                    updateMiningLimitDisplay();
+                    debug('Daily mining limit reset', 'info');
                 }
             }
 
-            updateSegmentsUI() {
-                const segmentContainer = document.getElementById('segment-container');
-                segmentContainer.innerHTML = '';
+            getTimeUntilReset() {
+                const currentTime = Date.now();
+                const timeElapsed = currentTime - this.lastResetTime;
+                const timeRemaining = this.resetInterval - timeElapsed;
                 
-                this.segments.forEach((segment, index) => {
-                    const segmentElement = document.createElement('div');
-                    segmentElement.className = 'segment';
-                    
-                    if (segment.completed) {
-                        segmentElement.classList.add('completed');
-                    } else if (segment.active) {
-                        segmentElement.classList.add('active');
-                    } else if (segment.locked) {
-                        segmentElement.classList.add('locked');
-                    }
-                    
-                    segmentElement.innerHTML = `
-                        <div class="segment-value">$${segment.value}</div>
-                        <div class="segment-label">${segment.completed ? 'Completed' : segment.active ? 'Mining' : segment.locked ? 'Locked' : 'Available'}</div>
-                        ${segment.active ? `<div class="segment-progress" style="width: ${this.segmentProgress * 100}%"></div>` : ''}
-                    `;
-                    
-                    segmentContainer.appendChild(segmentElement);
-                });
-                
-                // Update current segment info
-                document.getElementById('current-segment').textContent = this.currentSegment + 1;
-                
-                // Update next segment time
-                this.updateNextSegmentTime();
-            }
-
-            updateNextSegmentTime() {
-                // Find the next locked segment
-                const nextLockedSegment = this.segments.find(segment => segment.locked && segment.startTime);
-                
-                if (nextLockedSegment) {
-                    const now = Date.now();
-                    const timeRemaining = Math.max(0, nextLockedSegment.startTime - now);
-                    
-                    if (timeRemaining > 0) {
-                        const hours = Math.floor(timeRemaining / (60 * 60 * 1000));
-                        const minutes = Math.floor((timeRemaining % (60 * 60 * 1000)) / (60 * 1000));
-                        const seconds = Math.floor((timeRemaining % (60 * 1000)) / 1000);
-                        
-                        document.getElementById('next-segment-time').textContent = `Next segment available in: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                    } else {
-                        // Unlock the segment
-                        nextLockedSegment.locked = false;
-                        this.saveSegments();
-                        this.updateSegmentsUI();
-                    }
-                } else {
-                    document.getElementById('next-segment-time').textContent = 'All segments available';
-                }
-            }
-
-            checkSegmentUnlocks() {
-                let updated = false;
-                
-                this.segments.forEach(segment => {
-                    if (segment.locked && segment.startTime && Date.now() >= segment.startTime) {
-                        segment.locked = false;
-                        updated = true;
-                    }
-                });
-                
-                if (updated) {
-                    this.saveSegments();
-                    this.updateSegmentsUI();
-                    showToast('New mining segment unlocked!', 'success');
-                }
-            }
-
-            getTimeRemainingInSegment() {
-                if (!this.segmentStartTime || this.currentSegment < 0 || !this.segments[this.currentSegment].active) {
+                if (timeRemaining <= 0) {
+                    this.checkDailyReset();
                     return '00:00:00';
                 }
                 
-                const now = Date.now();
-                const elapsed = now - this.segmentStartTime;
-                const remaining = Math.max(0, this.segmentDuration - elapsed);
-                
                 // Convert to hours, minutes, seconds
-                const hours = Math.floor(remaining / (60 * 60 * 1000));
-                const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
-                const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
+                const hours = Math.floor(timeRemaining / (60 * 60 * 1000));
+                const minutes = Math.floor((timeRemaining % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((timeRemaining % (60 * 1000)) / 1000);
                 
                 return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
@@ -2174,27 +1506,16 @@
                 return this.blocksMined;
             }
 
-            getTotalMined() {
-                return this.totalMined;
+            getDailyMined() {
+                return this.dailyMined;
             }
 
-            resetSegments() {
-                this.segments = [
-                    { id: 1, value: 1, completed: false, active: false, locked: false, startTime: null, endTime: null },
-                    { id: 2, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 3, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 4, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 5, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null },
-                    { id: 6, value: 1, completed: false, active: false, locked: true, startTime: null, endTime: null }
-                ];
-                this.currentSegment = 0;
-                this.totalMined = 0;
-                this.saveSegments();
-                this.updateSegmentsUI();
-                updateMiningReward();
-                
-                showToast('Mining segments reset for a new day', 'info');
-                debug('Mining segments reset', 'info');
+            getDailyLimit() {
+                return this.dailyLimit;
+            }
+
+            getTotalMined() {
+                return this.totalMined;
             }
         }
 
@@ -2242,76 +1563,16 @@
         const loadingOverlay = document.getElementById('loading-overlay');
         const miningAnimation = document.getElementById('mining-animation');
         const debugPanel = document.getElementById('debug-panel');
+        const miningLimitValue = document.getElementById('mining-limit-value');
+        const miningLimitProgressBar = document.getElementById('mining-limit-progress-bar');
+        const miningLimitReset = document.getElementById('mining-limit-reset');
         const miningReward = document.getElementById('mining-reward');
         const nonceElement = document.getElementById('nonce');
-        const segmentProgressBar = document.getElementById('segment-progress-bar');
-        const segmentTimeRemaining = document.getElementById('segment-time-remaining');
-        const nextSegmentTime = document.getElementById('next-segment-time');
-
-        // Email verification and plan selection elements
-        const emailModal = document.getElementById('email-modal');
-        const emailModalClose = document.getElementById('email-modal-close');
-        const emailInput = document.getElementById('email-input');
-        const emailProceedBtn = document.getElementById('email-proceed-btn');
-        const emailCancelBtn = document.getElementById('email-cancel-btn');
-        
-        const planModal = document.getElementById('plan-modal');
-        const planModalClose = document.getElementById('plan-modal-close');
-        const buyPlanButtons = document.querySelectorAll('.buy-plan-btn');
-        
-        const balanceModal = document.getElementById('balance-modal');
-        const balanceModalClose = document.getElementById('balance-modal-close');
-        const depositBtn = document.getElementById('deposit-btn');
-        const balanceCancelBtn = document.getElementById('balance-cancel-btn');
-        
-        const successModal = document.getElementById('success-modal');
-        const successModalClose = document.getElementById('success-modal-close');
-        const startMiningNowBtn = document.getElementById('start-mining-now-btn');
-
-        // User data
-        let currentUserEmail = '';
-        let userBalance = 3849413; // Initial balance from Baserow
-        
-        // Predefined list of approved emails
-        const approvedEmails = [
-            'user@example.com',
-            'admin@example.com',
-            'test@example.com',
-            'demo@example.com',
-            'mining@example.com'
-        ];
 
         // Event listeners
-        startMiningButton.addEventListener('click', showEmailVerification);
+        startMiningButton.addEventListener('click', startMining);
         stopMiningButton.addEventListener('click', stopMining);
         difficultySlider.addEventListener('input', updateDifficulty);
-
-        // Email modal event listeners
-        emailModalClose.addEventListener('click', closeEmailModal);
-        emailCancelBtn.addEventListener('click', closeEmailModal);
-        emailProceedBtn.addEventListener('click', verifyEmail);
-
-        // Plan modal event listeners
-        planModalClose.addEventListener('click', closePlanModal);
-        buyPlanButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const plan = this.getAttribute('data-plan');
-                const price = parseInt(this.getAttribute('data-price'));
-                buyPlan(plan, price);
-            });
-        });
-
-        // Balance modal event listeners
-        balanceModalClose.addEventListener('click', closeBalanceModal);
-        balanceCancelBtn.addEventListener('click', closeBalanceModal);
-        depositBtn.addEventListener('click', redirectToDeposit);
-        
-        // Success modal event listeners
-        successModalClose.addEventListener('click', closeSuccessModal);
-        startMiningNowBtn.addEventListener('click', function() {
-            closeSuccessModal();
-            startMining();
-        });
 
         // Debug panel toggle (press D key)
         document.addEventListener('keydown', function(event) {
@@ -2342,185 +1603,6 @@
             });
         });
 
-        // Show email verification modal
-        function showEmailVerification() {
-            // Check if user already has a plan
-            const savedPlan = localStorage.getItem('userPlan');
-            if (savedPlan) {
-                try {
-                    const planData = JSON.parse(savedPlan);
-                    currentUserEmail = planData.email;
-                    debug(`User already has a plan: ${planData.plan}`, 'info');
-                    startMining();
-                    return;
-                } catch (error) {
-                    debug('Error loading saved plan: ' + error.message, 'error');
-                    localStorage.removeItem('userPlan');
-                }
-            }
-            
-            emailModal.classList.add('active');
-            emailInput.focus();
-            debug('Email verification modal opened', 'info');
-        }
-
-        // Close email modal
-        function closeEmailModal() {
-            emailModal.classList.remove('active');
-            emailInput.value = '';
-            debug('Email verification modal closed', 'info');
-        }
-
-        // Verify email
-        function verifyEmail() {
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                showToast('Please enter your email address', 'error');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showToast('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            currentUserEmail = email;
-            
-            // Check if email is in approved list
-            if (approvedEmails.includes(email.toLowerCase())) {
-                // Email is approved, start mining
-                closeEmailModal();
-                startMining();
-                debug(`Email verified: ${email}`, 'success');
-            } else {
-                // Email not approved, show plan selection
-                closeEmailModal();
-                showPlanSelection();
-                debug(`Email not in approved list: ${email}`, 'info');
-            }
-        }
-
-        // Show plan selection modal
-        function showPlanSelection() {
-            planModal.classList.add('active');
-            debug('Plan selection modal opened', 'info');
-        }
-
-        // Close plan modal
-        function closePlanModal() {
-            planModal.classList.remove('active');
-            debug('Plan selection modal closed', 'info');
-        }
-
-        // Buy plan
-        function buyPlan(plan, price) {
-            debug(`Attempting to buy ${plan} plan for $${price}`, 'info');
-            
-            // Check user balance in Baserow
-            checkUserBalance(currentUserEmail, price).then(hasBalance => {
-                if (hasBalance) {
-                    // User has enough balance, deduct the price
-                    deductFromBalance(currentUserEmail, price).then(success => {
-                        if (success) {
-                            // Save plan details to local storage
-                            miner.savePlan(currentUserEmail, plan);
-                            
-                            // Show success modal
-                            closePlanModal();
-                            showSuccessModal();
-                            debug(`Plan purchased: ${plan}`, 'success');
-                        } else {
-                            showToast('Error processing payment. Please try again.', 'error');
-                            debug('Error deducting from balance', 'error');
-                        }
-                    });
-                } else {
-                    // User doesn't have enough balance, show deposit modal
-                    closePlanModal();
-                    showBalanceModal();
-                    debug(`Insufficient balance for ${plan} plan`, 'warning');
-                }
-            });
-        }
-
-        // Check user balance
-        async function checkUserBalance(email, requiredAmount) {
-            debug(`Checking balance for ${email}, required: $${requiredAmount}`, 'info');
-            
-            // In a real implementation, you would fetch the user's balance from Baserow
-            // For this example, we'll use the userBalance variable
-            return userBalance >= requiredAmount;
-        }
-        
-        // Deduct from user balance
-        async function deductFromBalance(email, amount) {
-            debug(`Deducting $${amount} from ${email}'s balance`, 'info');
-            
-            // In a real implementation, you would update the user's balance in Baserow
-            // For this example, we'll update the userBalance variable
-            userBalance -= amount;
-            
-            // Simulate API call to Baserow
-            try {
-                // This is a simplified example - in a real implementation,
-                // you would need to get the row ID first
-                fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Token YOUR_API_TOKEN'
-                    },
-                    body: JSON.stringify({
-                        'email': email,
-                        'total_assets': userBalance
-                    })
-                });
-                
-                debug(`Balance updated to $${userBalance}`, 'success');
-                return true;
-            } catch (error) {
-                debug(`Error updating balance: ${error.message}`, 'error');
-                return false;
-            }
-        }
-
-        // Show success modal
-        function showSuccessModal() {
-            successModal.classList.add('active');
-            debug('Success modal opened', 'info');
-        }
-        
-        // Close success modal
-        function closeSuccessModal() {
-            successModal.classList.remove('active');
-            debug('Success modal closed', 'info');
-        }
-
-        // Show insufficient balance modal
-        function showBalanceModal() {
-            balanceModal.classList.add('active');
-            debug('Insufficient balance modal opened', 'info');
-        }
-
-        // Close balance modal
-        function closeBalanceModal() {
-            balanceModal.classList.remove('active');
-            debug('Insufficient balance modal closed', 'info');
-        }
-
-        // Redirect to deposit page
-        function redirectToDeposit() {
-            debug('Redirecting to deposit page', 'info');
-            window.location.href = 'https://www.bg.cn';
-        }
-
-        // Validate email format
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
         // Start mining
         function startMining() {
             const started = miner.startMining();
@@ -2537,8 +1619,8 @@
                 // Start hashrate update interval
                 startHashrateInterval();
                 
-                // Start segment timer
-                startSegmentTimer();
+                // Start mining limit reset timer
+                startMiningLimitTimer();
             }
         }
 
@@ -2557,8 +1639,8 @@
             // Stop hashrate update interval
             clearInterval(hashrateInterval);
             
-            // Stop segment timer
-            clearInterval(segmentTimer);
+            // Stop mining limit reset timer
+            clearInterval(miningLimitTimer);
         }
 
         // Update difficulty
@@ -2568,20 +1650,6 @@
             bitcoin.difficulty = difficulty;
             networkDifficultyElement.textContent = difficulty;
             document.getElementById('pow-target').textContent = Array(difficulty + 1).join('0');
-        }
-
-        // Update segment progress
-        function updateSegmentProgress(progress) {
-            segmentProgressBar.style.width = `${progress * 100}%`;
-            segmentTimeRemaining.textContent = `Time remaining: ${miner.getTimeRemainingInSegment()}`;
-            
-            // Update segment UI
-            miner.updateSegmentsUI();
-        }
-
-        // Update mining reward
-        function updateMiningReward() {
-            miningReward.textContent = `${miner.getTotalMined().toFixed(8)} BTC`;
         }
 
         // Update blockchain display
@@ -2768,6 +1836,25 @@
             }
         }
 
+        // Update mining limit display
+        function updateMiningLimitDisplay() {
+            const dailyMined = miner.getDailyMined();
+            const dailyLimit = miner.getDailyLimit();
+            const percentage = (dailyMined / dailyLimit) * 100;
+            
+            miningLimitValue.textContent = `${dailyMined.toFixed(8)} BTC / ${dailyLimit.toFixed(8)} BTC`;
+            miningLimitProgressBar.style.width = `${percentage}%`;
+            miningReward.textContent = `${dailyMined.toFixed(8)} BTC`;
+            
+            // Check if limit reached
+            if (dailyMined >= dailyLimit) {
+                showToast('Daily mining limit reached. Try again tomorrow.', 'warning');
+                if (miner.mining) {
+                    stopMining();
+                }
+            }
+        }
+
         // Show loading overlay
         function showLoading() {
             loadingOverlay.classList.add('active');
@@ -2899,8 +1986,7 @@
         // Hashrate update interval
         let hashrateInterval;
         let miningParticleInterval;
-        let segmentTimer;
-        let segmentUnlockTimer;
+        let miningLimitTimer;
         
         function startHashrateInterval() {
             hashrateInterval = setInterval(() => {
@@ -2911,27 +1997,10 @@
             }, 1000);
         }
 
-        function startSegmentTimer() {
-            segmentTimer = setInterval(() => {
-                if (miner.mining) {
-                    const now = Date.now();
-                    const elapsed = now - miner.segmentStartTime;
-                    const progress = Math.min(elapsed / miner.segmentDuration, 1);
-                    
-                    updateSegmentProgress(progress);
-                    
-                    // If segment is completed
-                    if (progress >= 1) {
-                        miner.completeCurrentSegment();
-                    }
-                }
-            }, 1000);
-        }
-
-        function startSegmentUnlockTimer() {
-            segmentUnlockTimer = setInterval(() => {
-                miner.checkSegmentUnlocks();
-                miner.updateNextSegmentTime();
+        function startMiningLimitTimer() {
+            miningLimitTimer = setInterval(() => {
+                miner.checkDailyReset();
+                miningLimitReset.textContent = `Resets in ${miner.getTimeUntilReset()}`;
             }, 1000);
         }
 
@@ -2939,7 +2008,7 @@
         function init() {
             // Update UI
             updateBlockchainDisplay();
-            updateMiningReward();
+            updateMiningLimitDisplay();
             
             // Set initial difficulty
             difficultySlider.value = bitcoin.difficulty;
@@ -2955,8 +2024,8 @@
             updateBlockchainDisplay();
             updateMerkleTreeDisplay();
             
-            // Start segment unlock timer
-            startSegmentUnlockTimer();
+            // Start mining limit timer
+            startMiningLimitTimer();
             
             debug('Bitcoin mining simulator initialized and ready', 'success');
             
@@ -2964,20 +2033,7 @@
             debugPanel.classList.add('active');
             
             // Show welcome toast
-            showToast('Welcome to Bitcoin Mining Simulator! Each $1 segment takes 1 hour to mine.', 'info');
-            
-            // Check if user already has a plan
-            const savedPlan = localStorage.getItem('userPlan');
-            if (savedPlan) {
-                try {
-                    const planData = JSON.parse(savedPlan);
-                    currentUserEmail = planData.email;
-                    debug(`User already has a plan: ${planData.plan}`, 'info');
-                    showToast(`Welcome back! You have an active ${planData.plan} plan.`, 'info');
-                } catch (error) {
-                    debug('Error loading saved plan: ' + error.message, 'error');
-                }
-            }
+            showToast('Welcome to Bitcoin Mining Simulator! Click "Start Mining" to begin.', 'info');
         }
 
         // Start the application when the DOM is loaded
