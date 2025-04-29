@@ -1693,34 +1693,73 @@
         // Load activity history from localStorage
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
-            const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            
+            // Get all activities from different pages
+            const allActivities = [];
+            
+            // Get activities from main activity history
+            const mainActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            allActivities.push(...mainActivities);
+            
+            // Get activities from bank.html
+            const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+            allActivities.push(...bankActivities);
+            
+            // Get activities from crypto.html
+            const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+            allActivities.push(...cryptoActivities);
+            
+            // Get activities from invest.html
+            const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+            allActivities.push(...investActivities);
+            
+            // Get activities from stake.html
+            const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
+            allActivities.push(...stakeActivities);
+            
+            // Get activities from mining.html
+            const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
+            allActivities.push(...miningActivities);
             
             // Filter activities to only show those from the last X days
             const cutoffDate = new Date();
             cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
-            const recentActivities = activities.filter(activity => {
-                const activityDate = new Date(activity.timestamp);
+            const recentActivities = allActivities.filter(activity => {
+                const activityDate = new Date(activity.timestamp || activity.date || new Date());
                 return activityDate >= cutoffDate;
             });
             
-            // Filter to show investment, withdrawal, and deposit activities
+            // Filter to show all required activity types
             const filteredActivities = recentActivities.filter(activity => {
                 return activity.type === 'withdrawal_request' || 
                        activity.type === 'form_submission' || 
                        activity.type === 'investment_attempt' || 
                        activity.type === 'investment_processing' || 
                        activity.type === 'deposit' ||
-                       activity.type === 'deposit_processing';
+                       activity.type === 'deposit_processing' ||
+                       activity.type === 'earnings' ||
+                       activity.type === 'staking' ||
+                       activity.type === 'btc_mined' ||
+                       activity.type === 'transfer' ||
+                       activity.type === 'investment';
             });
             
             // Sort activities by timestamp (newest first)
             filteredActivities.sort((a, b) => {
-                return new Date(b.timestamp) - new Date(a.timestamp);
+                const dateA = new Date(a.timestamp || a.date || new Date());
+                const dateB = new Date(b.timestamp || b.date || new Date());
+                return dateB - dateA;
             });
             
             // Clear the activity list
             activityList.innerHTML = '';
+            
+            if (filteredActivities.length === 0) {
+                activityList.innerHTML = '<div class="activity-empty">No recent activities found.</div>';
+                document.getElementById('activity-load-more').style.display = 'none';
+                return [];
+            }
             
             // Display first 5 activities
             const activitiesToShow = filteredActivities.slice(0, 5);
@@ -1762,7 +1801,7 @@
             activityItem.className = 'activity-item';
             
             // Format timestamp
-            const timestamp = new Date(activity.timestamp);
+            const timestamp = new Date(activity.timestamp || activity.date || new Date());
             const formattedDate = timestamp.toLocaleDateString();
             const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
@@ -1779,21 +1818,26 @@
                     
                     if (activity.details) {
                         if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            const method = activity.details.paymentMethod || '';
+                            const amount = activity.details.amount || activity.amount || '0.00';
+                            const method = activity.details.paymentMethod || activity.method || '';
                             details = `Amount: ${amount} USD via ${method}`;
                             
-                            if (activity.details.status === 'success') {
+                            if (activity.details.status === 'success' || activity.status === 'success') {
                                 status = '<div class="activity-status success">Success</div>';
-                            } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                            } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required' || activity.status === 'rejected') {
                                 status = '<div class="activity-status failed">Failed</div>';
-                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                                details += `<br>Reason: ${activity.details.reason || activity.reason || 'Unknown'}`;
                             } else {
                                 status = '<div class="activity-status pending">Pending</div>';
                             }
                         } else {
                             details = activity.details;
                         }
+                    } else if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        status = activity.status ? 
+                            `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>` : 
+                            '<div class="activity-status pending">Pending</div>';
                     }
                     break;
                     
@@ -1818,33 +1862,100 @@
                         } else {
                             details = activity.details;
                         }
+                    } else if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        status = activity.status ? 
+                            `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>` : 
+                            '<div class="activity-status pending">Pending</div>';
                     }
                     break;
                     
                 case 'investment_attempt':
-                    title = 'Investment Attempt';
+                case 'investment':
+                    title = activity.type === 'investment' ? 'Investment' : 'Investment Attempt';
                     
-                    if (activity.planTitle) {
-                        const amount = activity.totalAmount || '0.00';
-                        details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                    if (activity.planTitle || activity.plan) {
+                        const amount = activity.totalAmount || activity.amount || '0.00';
+                        details = `Plan: ${activity.planTitle || activity.plan}, Amount: ${amount} USD`;
                         
-                        if (activity.success) {
+                        if (activity.success || activity.status === 'success') {
                             status = '<div class="activity-status success">Success</div>';
+                        } else if (activity.status === 'pending') {
+                            status = '<div class="activity-status pending">Pending</div>';
                         } else {
                             status = '<div class="activity-status failed">Failed</div>';
                             if (activity.reason) {
                                 details += `<br>Reason: ${activity.reason}`;
                             }
                         }
+                    } else if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        status = activity.status ? 
+                            `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>` : 
+                            '<div class="activity-status success">Success</div>';
                     }
                     break;
                     
                 case 'investment_processing':
                     title = 'Investment Processing';
                     
-                    if (activity.planTitle) {
-                        details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                    if (activity.planTitle || activity.plan) {
+                        details = `Plan: ${activity.planTitle || activity.plan}, Amount: ${activity.amount} USD`;
                         status = '<div class="activity-status pending">Processing</div>';
+                    } else if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        status = '<div class="activity-status pending">Processing</div>';
+                    }
+                    break;
+                    
+                case 'earnings':
+                    title = 'Earnings';
+                    if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        if (activity.source) {
+                            details += `<br>Source: ${activity.source}`;
+                        }
+                        status = '<div class="activity-status success">Success</div>';
+                    }
+                    break;
+                    
+                case 'staking':
+                    title = 'Staking';
+                    if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        if (activity.duration) {
+                            details += `<br>Duration: ${activity.duration}`;
+                        }
+                        if (activity.rate) {
+                            details += `<br>Rate: ${activity.rate}%`;
+                        }
+                        status = activity.status ? 
+                            `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>` : 
+                            '<div class="activity-status success">Active</div>';
+                    }
+                    break;
+                    
+                case 'btc_mined':
+                    title = 'BTC Mined';
+                    if (activity.amount) {
+                        details = `Amount: ${activity.amount} BTC`;
+                        if (activity.usdValue) {
+                            details += `<br>USD Value: $${activity.usdValue}`;
+                        }
+                        status = '<div class="activity-status success">Success</div>';
+                    }
+                    break;
+                    
+                case 'transfer':
+                    title = 'Transfer';
+                    if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                        if (activity.from && activity.to) {
+                            details += `<br>From: ${activity.from} To: ${activity.to}`;
+                        }
+                        status = activity.status ? 
+                            `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>` : 
+                            '<div class="activity-status success">Success</div>';
                     }
                     break;
                     
@@ -1858,6 +1969,12 @@
                         } else {
                             details = activity.details;
                         }
+                    } else if (activity.amount) {
+                        details = `Amount: ${activity.amount} USD`;
+                    }
+                    
+                    if (activity.status) {
+                        status = `<div class="activity-status ${activity.status === 'success' ? 'success' : activity.status === 'pending' ? 'pending' : 'failed'}">${activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}</div>`;
                     }
             }
             
@@ -1874,16 +1991,46 @@
         // Set up activity export
         function setupActivityExport() {
             document.getElementById('activity-export').addEventListener('click', function() {
-                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                // Get all activities from different pages
+                const allActivities = [];
                 
-                // Filter to include investment, withdrawal, and deposit activities
-                const filteredActivities = activities.filter(activity => {
+                // Get activities from main activity history
+                const mainActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                allActivities.push(...mainActivities);
+                
+                // Get activities from bank.html
+                const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+                allActivities.push(...bankActivities);
+                
+                // Get activities from crypto.html
+                const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+                allActivities.push(...cryptoActivities);
+                
+                // Get activities from invest.html
+                const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+                allActivities.push(...investActivities);
+                
+                // Get activities from stake.html
+                const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
+                allActivities.push(...stakeActivities);
+                
+                // Get activities from mining.html
+                const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
+                allActivities.push(...miningActivities);
+                
+                // Filter to include all required activity types
+                const filteredActivities = allActivities.filter(activity => {
                     return activity.type === 'withdrawal_request' || 
                            activity.type === 'form_submission' || 
                            activity.type === 'investment_attempt' || 
                            activity.type === 'investment_processing' ||
                            activity.type === 'deposit' ||
-                           activity.type === 'deposit_processing';
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'transfer' ||
+                           activity.type === 'investment';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -1896,12 +2043,14 @@
                 csvContent += 'Date,Time,Type,Details,Status\n';
                 
                 filteredActivities.forEach(activity => {
-                    const timestamp = new Date(activity.timestamp);
+                    const timestamp = new Date(activity.timestamp || activity.date || new Date());
                     const date = timestamp.toLocaleDateString();
                     const time = timestamp.toLocaleTimeString();
                     
                     let details = '';
                     let status = '';
+                    let type = activity.type ? activity.type.replace(/_/g, ' ') : 'Activity';
+                    type = type.charAt(0).toUpperCase() + type.slice(1);
                     
                     // Process different activity types for export
                     switch (activity.type) {
@@ -1924,6 +2073,9 @@
                                 } else {
                                     details = activity.details;
                                 }
+                            } else if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : 'Pending';
                             }
                             break;
                             
@@ -1946,31 +2098,99 @@
                                 } else {
                                     details = activity.details;
                                 }
+                            } else if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : 'Pending';
                             }
                             break;
                             
                         case 'investment_attempt':
-                            if (activity.planTitle) {
-                                const amount = activity.totalAmount || '0.00';
-                                details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                        case 'investment':
+                            if (activity.planTitle || activity.plan) {
+                                const amount = activity.totalAmount || activity.amount || '0.00';
+                                details = `Plan: ${activity.planTitle || activity.plan}, Amount: ${amount} USD`;
                                 
-                                if (activity.success) {
+                                if (activity.success || activity.status === 'success') {
                                     status = 'Success';
+                                } else if (activity.status === 'pending') {
+                                    status = 'Pending';
                                 } else {
                                     status = 'Failed';
                                     if (activity.reason) {
                                         details += ` (Reason: ${activity.reason})`;
                                     }
                                 }
+                            } else if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : 'Success';
                             }
                             break;
                             
                         case 'investment_processing':
-                            if (activity.planTitle) {
-                                details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                            if (activity.planTitle || activity.plan) {
+                                details = `Plan: ${activity.planTitle || activity.plan}, Amount: ${activity.amount} USD`;
+                                status = 'Processing';
+                            } else if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
                                 status = 'Processing';
                             }
                             break;
+                            
+                        case 'earnings':
+                            if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                if (activity.source) {
+                                    details += ` (Source: ${activity.source})`;
+                                }
+                                status = 'Success';
+                            }
+                            break;
+                            
+                        case 'staking':
+                            if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                if (activity.duration) {
+                                    details += ` (Duration: ${activity.duration})`;
+                                }
+                                if (activity.rate) {
+                                    details += ` (Rate: ${activity.rate}%)`;
+                                }
+                                status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : 'Active';
+                            }
+                            break;
+                            
+                        case 'btc_mined':
+                            if (activity.amount) {
+                                details = `Amount: ${activity.amount} BTC`;
+                                if (activity.usdValue) {
+                                    details += ` (USD Value: $${activity.usdValue})`;
+                                }
+                                status = 'Success';
+                            }
+                            break;
+                            
+                        case 'transfer':
+                            if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                                if (activity.from && activity.to) {
+                                    details += ` (From: ${activity.from} To: ${activity.to})`;
+                                }
+                                status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : 'Success';
+                            }
+                            break;
+                            
+                        default:
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    details = JSON.stringify(activity.details);
+                                } else {
+                                    details = activity.details;
+                                }
+                            } else if (activity.amount) {
+                                details = `Amount: ${activity.amount} USD`;
+                            }
+                            
+                            status = activity.status ? activity.status.charAt(0).toUpperCase() + activity.status.slice(1) : '';
                     }
                     
                     // Escape quotes in details
@@ -1978,7 +2198,7 @@
                         details = details.replace(/"/g, '""');
                     }
                     
-                    csvContent += `${date},${time},${activity.type || ''},"${details}",${status}\n`;
+                    csvContent += `${date},${time},${type},"${details}",${status}\n`;
                 });
                 
                 // Create download link
@@ -2005,7 +2225,7 @@
             cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
             const recentActivities = activities.filter(activity => {
-                const activityDate = new Date(activity.timestamp);
+                const activityDate = new Date(activity.timestamp || activity.date || new Date());
                 return activityDate >= cutoffDate;
             });
             
@@ -2025,17 +2245,46 @@
                     return;
                 }
                 
-                // Get activities from localStorage
-                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                // Get all activities from different pages
+                const allActivities = [];
                 
-                // Filter to include investment, withdrawal, and deposit activities
-                const filteredActivities = activities.filter(activity => {
+                // Get activities from main activity history
+                const mainActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+                allActivities.push(...mainActivities);
+                
+                // Get activities from bank.html
+                const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+                allActivities.push(...bankActivities);
+                
+                // Get activities from crypto.html
+                const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+                allActivities.push(...cryptoActivities);
+                
+                // Get activities from invest.html
+                const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+                allActivities.push(...investActivities);
+                
+                // Get activities from stake.html
+                const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
+                allActivities.push(...stakeActivities);
+                
+                // Get activities from mining.html
+                const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
+                allActivities.push(...miningActivities);
+                
+                // Filter to include all required activity types
+                const filteredActivities = allActivities.filter(activity => {
                     return activity.type === 'withdrawal_request' || 
                            activity.type === 'form_submission' || 
                            activity.type === 'investment_attempt' || 
                            activity.type === 'investment_processing' ||
                            activity.type === 'deposit' ||
-                           activity.type === 'deposit_processing';
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'transfer' ||
+                           activity.type === 'investment';
                 });
                 
                 if (filteredActivities.length === 0) {
@@ -2093,23 +2342,63 @@
                         } else {
                             rowData[`field_${fieldMap['activity_details']}`] = activity.details;
                         }
+                    } else if (activity.amount) {
+                        let details = `Amount: ${activity.amount}`;
+                        if (activity.type === 'btc_mined') {
+                            details += ' BTC';
+                            if (activity.usdValue) {
+                                details += `, USD Value: $${activity.usdValue}`;
+                            }
+                        } else {
+                            details += ' USD';
+                        }
+                        
+                        if (activity.plan || activity.planTitle) {
+                            details += `, Plan: ${activity.plan || activity.planTitle}`;
+                        }
+                        
+                        if (activity.source) {
+                            details += `, Source: ${activity.source}`;
+                        }
+                        
+                        if (activity.duration) {
+                            details += `, Duration: ${activity.duration}`;
+                        }
+                        
+                        if (activity.rate) {
+                            details += `, Rate: ${activity.rate}%`;
+                        }
+                        
+                        if (activity.from && activity.to) {
+                            details += `, From: ${activity.from}, To: ${activity.to}`;
+                        }
+                        
+                        rowData[`field_${fieldMap['activity_details']}`] = details;
                     } else {
                         rowData[`field_${fieldMap['activity_details']}`] = '';
                     }
                     
                     // Set timestamp
-                    rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp || new Date().toISOString();
+                    rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp || activity.date || new Date().toISOString();
                     
                     // Set status
                     let status = 'pending';
-                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission' || activity.type === 'deposit') {
+                    if (activity.status) {
+                        status = activity.status;
+                    } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission' || activity.type === 'deposit') {
                         if (activity.details && activity.details.status) {
                             status = activity.details.status;
                         }
-                    } else if (activity.type === 'investment_attempt') {
+                    } else if (activity.type === 'investment_attempt' || activity.type === 'investment') {
                         status = activity.success ? 'success' : 'failed';
                     } else if (activity.type === 'investment_processing' || activity.type === 'deposit_processing') {
                         status = 'processing';
+                    } else if (activity.type === 'earnings' || activity.type === 'btc_mined') {
+                        status = 'success';
+                    } else if (activity.type === 'staking') {
+                        status = 'active';
+                    } else if (activity.type === 'transfer') {
+                        status = 'success';
                     }
                     
                     rowData[`field_${fieldMap['status']}`] = status;
@@ -2159,7 +2448,7 @@
     // Initialize charts based on user data
     function initializeCharts(userData, animate = true) {
         // Get user activities for chart data
-        const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+        const activities = loadActivityHistory();
         
         // Generate weekly chart data based on user data and activities
         generateWeeklyChart(userData, animate, activities);
@@ -2221,7 +2510,7 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     // Process activities to get data for each day
     if (activities && activities.length > 0) {
         activities.forEach(activity => {
-            const activityDate = new Date(activity.timestamp);
+            const activityDate = new Date(activity.timestamp || activity.date || new Date());
             activityDate.setHours(0, 0, 0, 0);
             
             // Find matching day
@@ -2241,11 +2530,21 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                 const scaledAmount = Math.min(60, amount); // Cap at 60 for display
                 
                 // Update day data based on activity type
-                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
+                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing' || activity.type === 'investment') {
                     dayData.investment += scaledAmount;
                 } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
                     dayData.withdrawal += scaledAmount;
                 } else if (activity.type === 'deposit' || activity.type === 'deposit_processing') {
+                    dayData.deposit += scaledAmount;
+                } else if (activity.type === 'btc_mined') {
+                    // Convert BTC to USD value if available, otherwise use a default value
+                    const usdValue = activity.usdValue ? parseFloat(activity.usdValue) : 0;
+                    dayData.investment += Math.min(60, usdValue);
+                } else if (activity.type === 'earnings') {
+                    dayData.investment += scaledAmount;
+                } else if (activity.type === 'staking') {
+                    dayData.investment += scaledAmount;
+                } else if (activity.type === 'transfer') {
                     dayData.deposit += scaledAmount;
                 }
             }
