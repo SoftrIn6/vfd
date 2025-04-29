@@ -1327,6 +1327,7 @@
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
         const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
+        const BENCHMARK_VALUE = 500; // $500 benchmark value for trend calculation
         
         // Baserow API configuration
         const BASEROW_API = {
@@ -2332,61 +2333,62 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 
 // Generate monthly stats based on user data and activities
 function generateMonthlyStats(userData, animate = true, activities = []) {
-    // Calculate actual values from user data
-    const totalAssets = parseFloat(userData.total_assets) || 1;
-    const smartAccount = parseFloat(userData.smart_account) || 0;
-    const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
-    const totalRevenue = parseFloat(userData.total_revenue) || 0;
+    // Calculate financial metrics for trend calculation
+    const newDeposit = parseFloat(userData.quantitative_account) || 0;
+    const totalWithdrawals = parseFloat(userData.total_revenue) || 0;
+    const investmentEarning = parseFloat(userData.yesterday_earnings) || 0;
     
-    // Initialize monthly totals
-    let monthlyInvestment = smartAccount;
-    let monthlyDeposit = quantitativeAccount;
-    let monthlyWithdrawal = totalRevenue;
+    // Calculate total of the three values
+    const totalAmount = newDeposit + totalWithdrawals + investmentEarning;
     
-    // If we have activities, calculate actual monthly totals
-    if (activities && activities.length > 0) {
-        // Get activities from the last 31 days
-        const thirtyOneDaysAgo = new Date();
-        thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31);
+    // Calculate percentages based on the $500 benchmark
+    let investmentPercentage, depositPercentage, withdrawalPercentage;
+    
+    // If total is >= $500, display as 100%
+    if (totalAmount >= BENCHMARK_VALUE) {
+        // Distribute the 100% among the three metrics based on their relative proportions
+        const total = newDeposit + totalWithdrawals + investmentEarning;
+        investmentPercentage = Math.round((investmentEarning / total) * 100) || 33;
+        depositPercentage = Math.round((newDeposit / total) * 100) || 33;
+        withdrawalPercentage = Math.round((totalWithdrawals / total) * 100) || 34;
         
-        const monthlyActivities = activities.filter(activity => {
-            const activityDate = new Date(activity.timestamp);
-            return activityDate >= thirtyOneDaysAgo;
-        });
+        // Ensure they sum to 100%
+        const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
+        if (sum < 100) {
+            investmentPercentage += (100 - sum);
+        } else if (sum > 100) {
+            investmentPercentage -= (sum - 100);
+        }
+    } else if (totalAmount >= 5 && totalAmount < BENCHMARK_VALUE) {
+        // Calculate percentage based on the lookup (i.e. $5 = 1%, $10 = 2%, ... $495 = 99%)
+        const overallPercentage = Math.round((totalAmount / BENCHMARK_VALUE) * 100);
         
-        // Calculate totals from activities
-        monthlyActivities.forEach(activity => {
-            // Extract amount from activity
-            let amount = 0;
-            if (activity.details && activity.details.amount) {
-                amount = parseFloat(activity.details.amount) || 0;
-            } else if (activity.amount) {
-                amount = parseFloat(activity.amount) || 0;
-            } else if (activity.totalAmount) {
-                amount = parseFloat(activity.totalAmount) || 0;
-            }
+        // Distribute the overall percentage among the three metrics based on their relative proportions
+        const total = newDeposit + totalWithdrawals + investmentEarning;
+        if (total > 0) {
+            investmentPercentage = Math.round((investmentEarning / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            depositPercentage = Math.round((newDeposit / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            withdrawalPercentage = Math.round((totalWithdrawals / total) * overallPercentage) || Math.round(overallPercentage / 3);
             
-            // Update monthly totals based on activity type
-            if (activity.type === 'investment_attempt' || activity.type === 'investment_processing') {
-                monthlyInvestment += amount;
-            } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
-                monthlyWithdrawal += amount;
-            } else if (activity.type === 'deposit' || activity.type === 'deposit_processing') {
-                monthlyDeposit += amount;
+            // Ensure they sum to the overall percentage
+            const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
+            if (sum < overallPercentage) {
+                investmentPercentage += (overallPercentage - sum);
+            } else if (sum > overallPercentage) {
+                investmentPercentage -= (sum - overallPercentage);
             }
-        });
+        } else {
+            // If all values are 0, distribute evenly
+            investmentPercentage = Math.round(overallPercentage / 3);
+            depositPercentage = Math.round(overallPercentage / 3);
+            withdrawalPercentage = overallPercentage - investmentPercentage - depositPercentage;
+        }
+    } else {
+        // If total is less than $5, set minimal percentages
+        investmentPercentage = 1;
+        depositPercentage = 1;
+        withdrawalPercentage = 1;
     }
-    
-    // Ensure we have some minimum values for visualization
-    monthlyInvestment = Math.max(monthlyInvestment, smartAccount || 10);
-    monthlyDeposit = Math.max(monthlyDeposit, quantitativeAccount || 5);
-    monthlyWithdrawal = Math.max(monthlyWithdrawal, totalRevenue || 15);
-    
-    // Calculate percentages relative to total monthly activity
-    const monthlyTotal = monthlyInvestment + monthlyDeposit + monthlyWithdrawal;
-    const investmentPercentage = Math.min(100, Math.round((monthlyInvestment / monthlyTotal) * 100)) || 25;
-    const depositPercentage = Math.min(100, Math.round((monthlyDeposit / monthlyTotal) * 100)) || 15;
-    const withdrawalPercentage = Math.min(100, Math.round((monthlyWithdrawal / monthlyTotal) * 100)) || 60;
     
     // Update circle progress
     const circumference = 2 * Math.PI * 15; // 2πr where r=15
@@ -2430,14 +2432,10 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
     }
     
-    // Update percentages and amounts with animation
+    // Update percentages with animation
     animateStatValue('investment-percentage', 0, investmentPercentage, '%');
     animateStatValue('deposit-percentage', 0, depositPercentage, '%');
     animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
-    
-    animateStatValue('investment-amount', 0, monthlyInvestment, '$');
-    animateStatValue('deposit-amount', 0, monthlyDeposit, '$');
-    animateStatValue('withdrawal-amount', 0, monthlyWithdrawal, '$');
 }
 
     // Animate stat value
