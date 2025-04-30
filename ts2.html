@@ -1326,7 +1326,7 @@
     <script>
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
-        const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
+        const ACTIVITY_RETENTION_DAYS = 1; // Show activities from last 1 days
         const BENCHMARK_VALUE = 500; // $500 benchmark value for trend calculation
         const INVEST_ACTIVITY_KEY = 'ACTIVITY_LOG'; // Key for invest.html activities
         
@@ -2630,29 +2630,6 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
                     dayData.deposit += scaledAmount;
                 }
             }
-        });
-    }
-    
-    // If no real activity data, generate some based on user account values
-    if (!activities || activities.length === 0) {
-        // Use account values to generate realistic looking data
-        const totalAssets = parseFloat(userData.total_assets) || 100;
-        const smartAccount = parseFloat(userData.smart_account) || 20;
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-        const totalRevenue = parseFloat(userData.total_revenue) || 10;
-        
-        // Scale values for visualization
-        const baseInvestment = Math.min(60, smartAccount / 2);
-        const baseDeposit = Math.min(60, quantitativeAccount / 2);
-        const baseWithdrawal = Math.min(60, totalRevenue / 2);
-        
-        // Generate random variations for each day
-        last7Days.forEach((day, index) => {
-            // Create variations based on day number
-            const variation = (index + 1) / 7;
-            day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
-            day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
-            day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
         });
     }
     
