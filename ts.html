@@ -1985,8 +1985,8 @@
             let details = '';
             let status = '';
             
-            // Process different activity types
-               switch (activity.type) {
+             // Process different activity types
+            switch (activity.type) {
                 case 'registration_bonus':
                     title = 'Registration Bonus';
                     details = activity.details || 'Registration bonus of $5 USD added to your wallet';
@@ -2042,7 +2042,6 @@
                     break;
                     
                 case 'investment_attempt':
-                case 'investment_processing':
                     title = 'Investment Attempt';
                     
                     if (activity.planTitle) {
@@ -2068,77 +2067,44 @@
                         status = '<div class="activity-status pending">Processing</div>';
                     }
                     break;
-                
-                case 'page_visit':
-                    title = 'Page Visit';
                     
-                    if (activity.page) {
-                        let pageName = activity.page.charAt(0).toUpperCase() + activity.page.slice(1);
-                        details = `Visited ${pageName} Page`;
-                        status = '<div class="activity-status success">Viewed</div>';
-                    }
-                    break;
-                
-                case 'btc_mining':
-                    title = 'BTC Mining';
-                    
+                case 'staking':
+                    title = 'Staking';
                     if (activity.details) {
                         if (typeof activity.details === 'object') {
                             const amount = activity.details.amount || '0.00';
-                            details = `Mined: ${amount} USD worth of BTC`;
+                            details = `Amount: ${amount} USD staked`;
                             status = '<div class="activity-status success">Success</div>';
                         } else {
                             details = activity.details;
                         }
                     }
                     break;
-                
-                case 'staking':
-                    title = 'Staking';
                     
+                case 'btc_mined':
+                    title = 'BTC Mined';
                     if (activity.details) {
                         if (typeof activity.details === 'object') {
                             const amount = activity.details.amount || '0.00';
-                            const coin = activity.details.coin || 'Crypto';
-                            details = `Staked: ${amount} USD worth of ${coin}`;
-                            
-                            if (activity.details.status === 'active') {
-                                status = '<div class="activity-status success">Active</div>';
-                            } else if (activity.details.status === 'completed') {
-                                status = '<div class="activity-status success">Completed</div>';
-                            } else {
-                                status = '<div class="activity-status pending">Processing</div>';
-                            }
+                            details = `Amount: ${amount} USD equivalent mined`;
+                            status = '<div class="activity-status success">Success</div>';
                         } else {
                             details = activity.details;
                         }
                     }
                     break;
-                
-                case 'invest_activity':
-                    // Handle invest.html specific activities
-                    if (activity.action === 'viewPlan') {
-                        title = 'Investment Plan View';
-                        details = `Viewed plan: ${activity.details?.planTitle || 'Unknown Plan'}`;
-                        status = '<div class="activity-status success">Viewed</div>';
-                    } else if (activity.action === 'investAttempt') {
-                        title = 'Investment Attempt';
-                        details = `Plan: ${activity.details?.planTitle || 'Unknown Plan'}, Amount: ${activity.details?.amount || '0.00'} USD`;
-                        status = '<div class="activity-status pending">Processing</div>';
-                    } else if (activity.action === 'investSuccess') {
-                        title = 'Investment Success';
-                        details = `Plan: ${activity.details?.planTitle || 'Unknown Plan'}, Amount: ${activity.details?.amount || '0.00'} USD`;
-                        status = '<div class="activity-status success">Success</div>';
-                    } else if (activity.action === 'investFailed') {
-                        title = 'Investment Failed';
-                        details = `Plan: ${activity.details?.planTitle || 'Unknown Plan'}, Amount: ${activity.details?.amount || '0.00'} USD`;
-                        status = '<div class="activity-status failed">Failed</div>';
-                        if (activity.details?.reason) {
-                            details += `<br>Reason: ${activity.details.reason}`;
+                    
+                case 'earnings':
+                    title = 'Earnings';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const source = activity.details.source || 'Investment';
+                            details = `Amount: ${amount} USD from ${source}`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
                         }
-                    } else {
-                        title = 'Investment Activity';
-                        details = `Action: ${activity.action || 'Unknown'}`;
                     }
                     break;
                     
