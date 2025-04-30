@@ -1760,7 +1760,7 @@
                 ...stakeActivities,
                 ...miningActivities
             ];
-            
+        
             
             // If we have no activities other than registration bonus, show a message instead of generating dummy activities
             if (filteredActivities.length <= 1) {
@@ -1852,7 +1852,6 @@
                     break;
                     
                 case 'withdrawal_request':
-                case 'form_submission':
                     title = 'Withdrawal Request';
                     
                     if (activity.details) {
@@ -1876,7 +1875,6 @@
                     break;
                     
                 case 'deposit':
-                case 'deposit_processing':
                     title = activity.type === 'deposit' ? 'Deposit' : 'Deposit Processing';
                     
                     if (activity.details) {
