@@ -1761,7 +1761,44 @@
                 }
             }
         }
+        // If we don't have any activities other than registration bonus, generate some personalized dummy activities
+            if (filteredActivities.length <= 1) {
+                // Use user data to create personalized dummy activities
+                const dummyActivities = generatePersonalizedDummyActivities(userData);
+                
+                // Add dummy activities
+                filteredActivities = [...filteredActivities, ...dummyActivities];
+                
+                // Save these dummy activities to localStorage for persistence
+                activities = [...activities, ...dummyActivities];
+                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+            }
         
+        // Generate personalized dummy activities based on user data
+        function generatePersonalizedDummyActivities(userData) {
+            const dummyActivities = [];
+            const now = new Date();
+            
+            // Use user's financial data to create realistic activities
+            const depositAmount = parseFloat(userData.quantitative_account) || 100;
+            const miningAmount = parseFloat(userData.smart_account) || 25;
+            const investmentAmount = parseFloat(userData.yesterday_earnings) * 10 || 200;
+            
+            // Create deposit activity (1-7days ago)
+            const depositDate = new Date(now);
+            depositDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 1);
+            dummyActivities.push({
+                type: 'deposit',
+                timestamp: depositDate.toISOString(),
+                details: {
+                    amount: depositAmount.toFixed(2),
+                    paymentMethod: Math.random() > 0.5 ? 'Registration Bonus' : 'Register Bonus', status: 'success'
+                },
+                status: 'success'
+            });
+            
+            return dummyActivities;
+        }
         // Convert invest activity to profile activity format
         function convertInvestActivityToProfileFormat(investActivity) {
             // Default profile activity structure
@@ -1968,86 +2005,6 @@
             
             // Return the filtered activities for use in charts
             return filteredActivities;
-        }
-         // If we don't have any activities other than registration bonus, generate some personalized dummy activities
-            if (filteredActivities.length <= 1) {
-                // Use user data to create personalized dummy activities
-                const dummyActivities = generatePersonalizedDummyActivities(userData);
-                
-                // Add dummy activities
-                filteredActivities = [...filteredActivities, ...dummyActivities];
-                
-                // Save these dummy activities to localStorage for persistence
-                activities = [...activities, ...dummyActivities];
-                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
-            }
-            
-            // Sort activities by timestamp (newest first)
-            filteredActivities.sort((a, b) => {
-                return new Date(b.timestamp) - new Date(a.timestamp);
-            });
-            
-            // Clear the activity list
-            activityList.innerHTML = '';
-            
-            // Display first 4 activities (changed from 5 to 4 as requested)
-            const activitiesToShow = filteredActivities.slice(0, 4);
-            activitiesToShow.forEach(activity => {
-                const activityItem = createActivityItem(activity);
-                activityList.appendChild(activityItem);
-            });
-            
-            // Show/hide load more button
-            if (filteredActivities.length > 4) {
-                document.getElementById('activity-load-more').style.display = 'block';
-                document.getElementById('activity-load-more').onclick = () => {
-                    // Show all activities
-                    activityList.innerHTML = '';
-                    filteredActivities.forEach(activity => {
-                        const activityItem = createActivityItem(activity);
-                        activityList.appendChild(activityItem);
-                    });
-                    
-                    // Hide load more button
-                    document.getElementById('activity-load-more').style.display = 'none';
-                };
-            } else {
-                document.getElementById('activity-load-more').style.display = 'none';
-            }
-            
-            // If this is a forced refresh, sync with Baserow
-            if (forceRefresh) {
-                syncActivitiesWithBaserow(userData.email);
-            }
-            
-            // Return the filtered activities for use in charts
-            return filteredActivities;
-        }
-        
-        // Generate personalized dummy activities based on user data
-        function generatePersonalizedDummyActivities(userData) {
-            const dummyActivities = [];
-            const now = new Date();
-            
-            // Use user's financial data to create realistic activities
-            const depositAmount = parseFloat(userData.quantitative_account) || 100;
-            const miningAmount = parseFloat(userData.smart_account) || 25;
-            const investmentAmount = parseFloat(userData.yesterday_earnings) * 10 || 200;
-            
-            // Create deposit activity (1-7days ago)
-            const depositDate = new Date(now);
-            depositDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 1);
-            dummyActivities.push({
-                type: 'deposit',
-                timestamp: depositDate.toISOString(),
-                details: {
-                    amount: depositAmount.toFixed(2),
-                    paymentMethod: Math.random() > 0.5 ? 'Registration Bonus' : 'Register Bonus', status: 'success'
-                },
-                status: 'success'
-            });
-            
-            return dummyActivities;
         }
         
         // Create an activity item element
