@@ -1775,7 +1775,10 @@
                        activity.type === 'registration_bonus';
             });
             
-          
+            // If we have no activities other than registration bonus, show a message instead of generating dummy activities
+            if (filteredActivities.length <= 1) {
+                // Clear the activity list
+                activityList.innerHTML = '';
                 
                 // Show registration bonus
                 const registrationBonusItem = createActivityItem(registrationBonus);
