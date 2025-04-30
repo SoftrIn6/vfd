@@ -2399,59 +2399,39 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
     
     // Process activities to get data for each day
     if (activities && activities.length > 0) {
-    activities.forEach(activity => {
-        const activityDate = new Date(activity.timestamp);
-        activityDate.setHours(0, 0, 0, 0);
-        
-        // Find matching day
-        const dayData = last7Days.find(day => day.date.getTime() === activityDate.getTime());
-        if (dayData) {
-            // Extract amount from activity
-            let amount = 0;
-            if (activity.type === 'registration_bonus') {
-                // Always use $5 for registration bonus
-                amount = 5;
-            } else if (activity.details && activity.details.amount) {
-                amount = parseFloat(activity.details.amount) || 0;
-            } else if (activity.amount) {
-                amount = parseFloat(activity.amount) || 0;
-            } else if (activity.totalAmount) {
-                amount = parseFloat(activity.totalAmount) || 0;
-            }
+        activities.forEach(activity => {
+            const activityDate = new Date(activity.timestamp);
+            activityDate.setHours(0, 0, 0, 0);
             
-            // Scale amount for visualization (1 unit = $1)
-            const scaledAmount = Math.min(60, amount); // Cap at 60 for display
-            
-            // Update day data based on activity type
-            if (activity.type === 'investment_attempt' || activity.type === 'investment_processing' || 
-                activity.type === 'staking' || activity.type === 'earnings') {
-                dayData.investment += scaledAmount;
-            } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
-                dayData.withdrawal += scaledAmount;
-            } else if (activity.type === 'deposit' || activity.type === 'deposit_processing' || 
-                      activity.type === 'btc_mined' || activity.type === 'registration_bonus') {
-                dayData.deposit += scaledAmount;
+            // Find matching day
+            const dayData = last7Days.find(day => day.date.getTime() === activityDate.getTime());
+            if (dayData) {
+                // Extract amount from activity
+                let amount = 0;
+                if (activity.details && activity.details.amount) {
+                    amount = parseFloat(activity.details.amount) || 0;
+                } else if (activity.amount) {
+                    amount = parseFloat(activity.amount) || 0;
+                } else if (activity.totalAmount) {
+                    amount = parseFloat(activity.totalAmount) || 0;
+                }
+                
+                // Scale amount for visualization (1 unit = $1)
+                const scaledAmount = Math.min(60, amount); // Cap at 60 for display
+                
+                // Update day data based on activity type
+                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing' || 
+                    activity.type === 'staking' || activity.type === 'earnings') {
+                    dayData.investment += scaledAmount;
+                } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                    dayData.withdrawal += scaledAmount;
+                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing' || 
+                          activity.type === 'btc_mined' || activity.type === 'registration_bonus') {
+                    dayData.deposit += scaledAmount;
+                }
             }
-        }
-    });
-}
-
-// Make sure registration bonus is shown in the chart
-// Find the registration date from user data
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-if (userData.registration_date) {
-    const registrationDate = new Date(userData.registration_date);
-    registrationDate.setHours(0, 0, 0, 0);
-    
-    // Find matching day in the last 7 days
-    const registrationDayData = last7Days.find(day => day.date.getTime() === registrationDate.getTime());
-    
-    // If registration date is within the last 7 days, ensure the bonus is shown
-    if (registrationDayData && !activities.some(a => a.type === 'registration_bonus')) {
-        // Add $5 to deposit for registration bonus
-        registrationDayData.deposit += 5; // $5 registration bonus
+        });
     }
-}
     
     // Generate chart for each day
     last7Days.forEach((dayData, index) => {
