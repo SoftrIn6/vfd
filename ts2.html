@@ -1761,19 +1761,6 @@
                 ...miningActivities
             ];
             
-            // Filter to show investment, withdrawal, deposit, staking, mining and earnings activities
-            let filteredActivities = allActivities.filter(activity => {
-                return activity.type === 'withdrawal_request' || 
-                       activity.type === 'form_submission' || 
-                       activity.type === 'investment_attempt' || 
-                       activity.type === 'investment_processing' || 
-                       activity.type === 'deposit' ||
-                       activity.type === 'deposit_processing' ||
-                       activity.type === 'staking' ||
-                       activity.type === 'btc_mined' ||
-                       activity.type === 'earnings' ||
-                       activity.type === 'registration_bonus';
-            });
             
             // If we have no activities other than registration bonus, show a message instead of generating dummy activities
             if (filteredActivities.length <= 1) {
