@@ -1330,7 +1330,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Constants
-        const USER_ACTIVITY_KEY_PREFIX = 'userActivityHistory_'; // Prefix for user-specific activity storage
         const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
         const BENCHMARK_VALUE = 500; // $500 benchmark value for trend calculation
         const REGISTRATION_BONUS_KEY = 'registrationBonusTimestamp'; // Key for storing registration timestamp
@@ -1696,25 +1695,28 @@
             }
         }
         
-        // Get user-specific activity key
-        function getUserActivityKey() {
+        // Get user-specific activity storage key
+        function getUserActivityKey(email) {
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            if (!userData.email) {
-                console.error('No user email found for activity key');
-                return USER_ACTIVITY_KEY_PREFIX + 'anonymous';
-            }
-            return USER_ACTIVITY_KEY_PREFIX + userData.email;
+            const userEmail = email || userData.email || 'anonymous';
+            return `userActivities_${userEmail}`;
         }
         
-        // Load user-specific activity history
+        // Load user activity history
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
-            const userActivityKey = getUserActivityKey();
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!userData.email) {
+                console.error('No user email found for loading activities');
+                return;
+            }
+            
+            const userActivityKey = getUserActivityKey(userData.email);
             let activities = JSON.parse(localStorage.getItem(userActivityKey) || '[]');
             
             // Check if registration bonus exists for this user
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            const userRegistrationKey = REGISTRATION_BONUS_KEY + '_' + userData.email;
+            const userRegistrationKey = `${REGISTRATION_BONUS_KEY}_${userData.email}`;
             let registrationTimestamp = localStorage.getItem(userRegistrationKey);
             
             // If no registration timestamp exists, create one and save it
@@ -1731,7 +1733,7 @@
             const registrationBonus = {
                 type: 'registration_bonus',
                 timestamp: registrationTimestamp,
-                details: 'Registration bonus of $5 USD added to your wallet',
+                details: '$5 Registration Bonus added to your wallet',
                 status: 'success'
             };
             
@@ -1756,16 +1758,15 @@
                 return activityDate >= cutoffDate;
             });
             
-            // Get user-specific activities from other pages if available
-            const bankActivitiesKey = 'bankActivities_' + userData.email;
-            const cryptoActivitiesKey = 'cryptoActivities_' + userData.email;
-            const investActivitiesKey = 'investActivities_' + userData.email;
-            const stakeActivitiesKey = 'stakeActivities_' + userData.email;
-            const miningActivitiesKey = 'miningActivities_' + userData.email;
+            // Get user-specific activities from other pages
+            const bankActivitiesKey = `bankActivities_${userData.email}`;
+            const cryptoActivitiesKey = `cryptoActivities_${userData.email}`;
+            const investActivitiesKey = `investActivities_${userData.email}`;
+            const stakeActivitiesKey = `stakeActivities_${userData.email}`;
+            const miningActivitiesKey = `miningActivities_${userData.email}`;
             
             const bankActivities = JSON.parse(localStorage.getItem(bankActivitiesKey) || '[]');
             const cryptoActivities = JSON.parse(localStorage.getItem(cryptoActivitiesKey) || '[]');
-            const investActivities = JSON.parse(localStorage  || '[]');
             const investActivities = JSON.parse(localStorage.getItem(investActivitiesKey) || '[]');
             const stakeActivities = JSON.parse(localStorage.getItem(stakeActivitiesKey) || '[]');
             const miningActivities = JSON.parse(localStorage.getItem(miningActivitiesKey) || '[]');
@@ -1794,9 +1795,10 @@
                        activity.type === 'registration_bonus';
             });
             
-            // If we don't have any activities other than registration bonus, add some user-specific dummy activities
+            // If we don't have any activities other than registration bonus, create some user-specific sample activities
             if (filteredActivities.length <= 1) {
-                const dummyActivities = [
+                // Create sample activities with timestamps spread over the last few days
+                const sampleActivities = [
                     {
                         type: 'deposit',
                         timestamp: new Date(Date.now() - 86400000).toISOString(), // Yesterday
@@ -1826,11 +1828,11 @@
                     }
                 ];
                 
-                // Add dummy activities
-                filteredActivities = [...filteredActivities, ...dummyActivities];
+                // Add sample activities to filtered activities
+                filteredActivities = [...filteredActivities, ...sampleActivities];
                 
-                // Save these dummy activities to user-specific localStorage for persistence
-                activities = [...activities, ...dummyActivities];
+                // Save these sample activities to user-specific localStorage for persistence
+                activities = [...activities, ...sampleActivities];
                 localStorage.setItem(userActivityKey, JSON.stringify(activities));
             }
             
@@ -1842,7 +1844,7 @@
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display first 4 activities (changed from 5 to 4 as requested)
+            // Display first 4 activities
             const activitiesToShow = filteredActivities.slice(0, 4);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
@@ -1869,7 +1871,7 @@
             
             // If this is a forced refresh, sync with Baserow
             if (forceRefresh) {
-                syncActivitiesWithBaserow();
+                syncActivitiesWithBaserow(userData.email);
             }
             
             // Return the filtered activities for use in charts
@@ -1895,7 +1897,7 @@
             switch (activity.type) {
                 case 'registration_bonus':
                     title = 'Registration Bonus';
-                    details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                    details = activity.details || '$5 Registration Bonus added to your wallet';
                     status = '<div class="activity-status success">Success</div>';
                     break;
                     
@@ -2040,7 +2042,13 @@
         // Set up activity export
         function setupActivityExport() {
             document.getElementById('activity-export').addEventListener('click', function() {
-                const userActivityKey = getUserActivityKey();
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (!userData.email) {
+                    alert('User data not found. Please log in again.');
+                    return;
+                }
+                
+                const userActivityKey = getUserActivityKey(userData.email);
                 const activities = JSON.parse(localStorage.getItem(userActivityKey) || '[]');
                 
                 // Filter to include investment, withdrawal, and deposit activities
@@ -2077,7 +2085,7 @@
                     // Process different activity types for export
                     switch (activity.type) {
                         case 'registration_bonus':
-                            details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                            details = activity.details || '$5 Registration Bonus added to your wallet';
                             status = 'Success';
                             break;
                             
@@ -2190,7 +2198,10 @@
         
         // Clean up old activities (older than retention days)
         function cleanupOldActivities() {
-            const userActivityKey = getUserActivityKey();
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (!userData.email) return;
+            
+            const userActivityKey = getUserActivityKey(userData.email);
             const activities = JSON.parse(localStorage.getItem(userActivityKey) || '[]');
             
             // Filter activities to only keep those from the last X days
@@ -2219,7 +2230,7 @@
         }
         
         // Sync activities with Baserow
-        async function syncActivitiesWithBaserow() {
+        async function syncActivitiesWithBaserow(email) {
             try {
                 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
                 if (!userData.email) {
@@ -2228,7 +2239,7 @@
                 }
                 
                 // Get activities from localStorage
-                const userActivityKey = getUserActivityKey();
+                const userActivityKey = getUserActivityKey(email || userData.email);
                 const activities = JSON.parse(localStorage.getItem(userActivityKey) || '[]');
                 
                 // Filter to include investment, withdrawal, and deposit activities
@@ -2369,7 +2380,7 @@
     // Initialize charts based on user data
     function initializeCharts(userData, animate = true) {
         // Get user activities for chart data
-        const userActivityKey = getUserActivityKey();
+        const userActivityKey = getUserActivityKey(userData.email);
         const activities = JSON.parse(localStorage.getItem(userActivityKey) || '[]');
         
         // Generate weekly chart data based on user data and activities
