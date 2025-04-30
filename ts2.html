@@ -1770,7 +1770,79 @@
                        activity.type === 'registration_bonus';
             });
             
+            // If we don't have any activities other than , generate registration bonus
+            if (filteredActivities.length <= 1) {
+                // Use user data to create personalized dummy activities
+                const dummyActivities = generatePersonalizedDummyActivities(userData);
+                
+                // Add dummy activities
+                filteredActivities = [...filteredActivities, ...dummyActivities];
+                
+                // Save these dummy activities to localStorage for persistence
+                activities = [...activities, ...dummyActivities];
+                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+            }
+            
+            // Sort activities by timestamp (newest first)
+            filteredActivities.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+            
+            // Clear the activity list
+            activityList.innerHTML = '';
+            
+            // Display first 4 activities (changed from 5 to 4 as requested)
+            const activitiesToShow = filteredActivities.slice(0, 4);
+            activitiesToShow.forEach(activity => {
+                const activityItem = createActivityItem(activity);
+                activityList.appendChild(activityItem);
+            });
+            
+            // Show/hide load more button
+            if (filteredActivities.length > 4) {
+                document.getElementById('activity-load-more').style.display = 'block';
+                document.getElementById('activity-load-more').onclick = () => {
+                    // Show all activities
+                    activityList.innerHTML = '';
+                    filteredActivities.forEach(activity => {
+                        const activityItem = createActivityItem(activity);
+                        activityList.appendChild(activityItem);
+                    });
+                    
+                    // Hide load more button
+                    document.getElementById('activity-load-more').style.display = 'none';
+                };
+            } else {
+                document.getElementById('activity-load-more').style.display = 'none';
+            }
+            
+            // If this is a forced refresh, sync with Baserow
+            if (forceRefresh) {
+                syncActivitiesWithBaserow(userData.email);
+            }
+            
+            // Return the filtered activities for use in charts
+            return filteredActivities;
+        }
         
+        // Generate personalized dummy activities based on user data
+        function generatePersonalizedDummyActivities(userData) {
+            const dummyActivities = [];
+            const now = new Date();
+            
+            // Use user's financial data to create realistic activities
+            const depositAmount = parseFloat(userData.quantitative_account) || 0;
+            const miningAmount = parseFloat(userData.smart_account) || 5;
+            const investmentAmount = parseFloat(userData.yesterday_earnings) * 0 || 00;
+            
+            // Create bonus activity (1-2 days ago)
+            const registrationBonus = {
+                type: 'registration_bonus',
+                timestamp: registrationDate,
+                details: 'Registration bonus of $5 USD added to your wallet',
+                status: 'success'
+            });
+            
         // Create an activity item element
         function createActivityItem(activity) {
             const activityItem = document.createElement('div');
@@ -1788,149 +1860,11 @@
             
             // Process different activity types
             switch (activity.type) {
-                case 'registration_bonus':
-                    title = 'Registration Bonus';
-                    details = activity.details || 'Registration bonus of $5 USD added to your wallet';
-                    status = '<div class="activity-status success">Success</div>';
-                    break;
-                    
-                case 'withdrawal_request':
-                case 'form_submission':
-                    title = 'Withdrawal Request';
-                    
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            const method = activity.details.paymentMethod || '';
-                            details = `Amount: ${amount} USD via ${method}`;
-                            
-                            if (activity.details.status === 'success') {
-                                status = '<div class="activity-status success">Success</div>';
-                            } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
-                                status = '<div class="activity-status failed">Failed</div>';
-                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
-                            } else {
-                                status = '<div class="activity-status pending">Pending</div>';
-                            }
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-                    break;
-                    
-                case 'deposit':
-                case 'deposit_processing':
-                    title = activity.type === 'deposit' ? 'Deposit' : 'Deposit Processing';
-                    
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            const method = activity.details.paymentMethod || '';
-                            details = `Amount: ${amount} USD via ${method}`;
-                            
-                            if (activity.details.status === 'success') {
-                                status = '<div class="activity-status success">Success</div>';
-                            } else if (activity.details.status === 'rejected') {
-                                status = '<div class="activity-status failed">Failed</div>';
-                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
-                            } else {
-                                status = '<div class="activity-status pending">Pending</div>';
-                            }
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-                    break;
-                    
-                case 'investment_attempt':
-                    title = 'Investment Attempt';
-                    
-                    if (activity.planTitle) {
-                        const amount = activity.totalAmount || '0.00';
-                        details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
-                        
-                        if (activity.success) {
-                            status = '<div class="activity-status success">Success</div>';
-                        } else {
-                            status = '<div class="activity-status failed">Failed</div>';
-                            if (activity.reason) {
-                                details += `<br>Reason: ${activity.reason}`;
-                            }
-                        }
-                    }
-                    break;
-                    
-                case 'investment_processing':
-                    title = 'Investment Processing';
-                    
-                    if (activity.planTitle) {
-                        details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
-                        status = '<div class="activity-status pending">Processing</div>';
-                    }
-                    break;
-                    
-                case 'staking':
-                    title = 'Staking';
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            details = `Amount: ${amount} USD staked`;
-                            status = '<div class="activity-status success">Success</div>';
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-                    break;
-                    
-                case 'btc_mined':
-                    title = 'BTC Mined';
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            details = `Amount: ${amount} USD equivalent mined`;
-                            status = '<div class="activity-status success">Success</div>';
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-                    break;
-                    
-                case 'earnings':
-                    title = 'Earnings';
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            const amount = activity.details.amount || '0.00';
-                            const source = activity.details.source || 'Investment';
-                            details = `Amount: ${amount} USD from ${source}`;
-                            status = '<div class="activity-status success">Success</div>';
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-                    break;
-                    
-                default:
-                    title = activity.type ? activity.type.replace(/_/g, ' ') : 'Activity';
-                    title = title.charAt(0).toUpperCase() + title.slice(1);
-                    
-                    if (activity.details) {
-                        if (typeof activity.details === 'object') {
-                            details = JSON.stringify(activity.details);
-                        } else {
-                            details = activity.details;
-                        }
-                    }
-            }
-            
-            activityItem.innerHTML = `
-                <div class="activity-time">${formattedDate} ${formattedTime}</div>
-                <div class="activity-title">${title}</div>
-                <div class="activity-details">${details}</div>
-                ${status}
-            `;
-            
-            return activityItem;
-        }
+                const registrationBonus = {
+                type: 'registration_bonus',
+                timestamp: registrationDate,
+                details: 'Registration bonus of $5 USD added to your wallet',
+                status: 'success'
         
         // Set up activity export
         function setupActivityExport() {
