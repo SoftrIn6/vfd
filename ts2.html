@@ -1331,7 +1331,7 @@
     <script>
         // Constants
         const USER_ACTIVITY_KEY = 'userActivityHistory';
-        const ACTIVITY_RETENTION_DAYS = 2; // Show activities from last 2 days
+        const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
         const BENCHMARK_VALUE = 500; // $500 benchmark value for trend calculation
         
         // Baserow API configuration
@@ -1696,10 +1696,15 @@
             }
         }
         
-        // Updated loadActivityHistory function to show personalized activities for each user
+        // Updated loadActivityHistory function to show ONLY the registration bonus and actual user activities
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            if (!userData.email) {
+                console.error('No user email found for loading activities');
+                return;
+            }
             
             // Get user-specific activity key
             const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
@@ -1770,17 +1775,28 @@
                        activity.type === 'registration_bonus';
             });
             
-            // If we don't have any activities other than , generate registration bonus
+            // If we have no activities other than registration bonus, show a message instead of generating dummy activities
             if (filteredActivities.length <= 1) {
-                // Use user data to create personalized dummy activities
-                const dummyActivities = generatePersonalizedDummyActivities(userData);
+                // Clear the activity list
+                activityList.innerHTML = '';
                 
-                // Add dummy activities
-                filteredActivities = [...filteredActivities, ...dummyActivities];
+                // Show registration bonus
+                const registrationBonusItem = createActivityItem(registrationBonus);
+                activityList.appendChild(registrationBonusItem);
                 
-                // Save these dummy activities to localStorage for persistence
-                activities = [...activities, ...dummyActivities];
-                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+                // Add a message that no other activities exist yet
+                const noActivitiesMessage = document.createElement('div');
+                noActivitiesMessage.className = 'activity-item';
+                noActivitiesMessage.innerHTML = `
+                    <div class="activity-title">No Recent Activities</div>
+                    <div class="activity-details">You haven't performed any activities yet. Start by making a deposit, investment, or mining BTC.</div>
+                `;
+                activityList.appendChild(noActivitiesMessage);
+                
+                // Hide load more button
+                document.getElementById('activity-load-more').style.display = 'none';
+                
+                return filteredActivities;
             }
             
             // Sort activities by timestamp (newest first)
@@ -1791,7 +1807,7 @@
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display first 4 activities (changed from 5 to 4 as requested)
+            // Display first 4 activities
             const activitiesToShow = filteredActivities.slice(0, 4);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
@@ -1823,52 +1839,6 @@
             
             // Return the filtered activities for use in charts
             return filteredActivities;
-        }
-        
-        // Generate personalized dummy activities based on user data
-        function generatePersonalizedDummyActivities(userData) {
-            const dummyActivities = [];
-            const now = new Date();
-            
-            // Use user's financial data to create realistic activities
-            const depositAmount = parseFloat(userData.quantitative_account) || 0;
-            const miningAmount = parseFloat(userData.smart_account) || 5;
-            const investmentAmount = parseFloat(userData.yesterday_earnings) * 0 || 00;
-            
-            // Create bonus activity (1-2 days ago)
-            const registrationBonus = {
-                type: 'registration_bonus',
-                timestamp: registrationDate,
-                details: 'Registration bonus of $5 USD added to your wallet',
-                status: 'success'
-            });
-            
-            // Create mining activity (2-3 days ago)
-            const miningDate = new Date(now);
-            miningDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 2);
-            dummyActivities.push({
-                type: 'btc_mined',
-                timestamp: miningDate.toISOString(),
-                details: {
-                    amount: miningAmount.toFixed(2),
-                    source: 'Mining Pool'
-                },
-                status: 'success'
-            });
-            
-            // Create investment activity (3-5 days ago)
-            const investmentDate = new Date(now);
-            investmentDate.setDate(now.getDate() - Math.floor(Math.random() * 3) - 3);
-            dummyActivities.push({
-                type: 'investment_attempt',
-                timestamp: investmentDate.toISOString(),
-                planTitle: Math.random() > 0.5 ? 'Gold Plan' : 'Silver Plan',
-                totalAmount: investmentAmount.toFixed(2),
-                success: true,
-                status: 'success'
-            });
-            
-            return dummyActivities;
         }
         
         // Create an activity item element
@@ -2463,29 +2433,6 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
         });
     }
     
-    // If no real activity data, generate some based on user account values
-    if (!activities || activities.length === 0) {
-        // Use account values to generate realistic looking data
-        const totalAssets = parseFloat(userData.total_assets) || 100;
-        const smartAccount = parseFloat(userData.smart_account) || 20;
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-        const totalRevenue = parseFloat(userData.total_revenue) || 10;
-        
-        // Scale values for visualization
-        const baseInvestment = Math.min(60, smartAccount / 2);
-        const baseDeposit = Math.min(60, quantitativeAccount / 2);
-        const baseWithdrawal = Math.min(60, totalRevenue / 2);
-        
-        // Generate random variations for each day
-        last7Days.forEach((day, index) => {
-            // Create variations based on day number
-            const variation = (index + 1) / 7;
-            day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
-            day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
-            day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
-        });
-    }
-    
     // Generate chart for each day
     last7Days.forEach((dayData, index) => {
         // Create chart day element
@@ -2499,19 +2446,19 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
         // Investment bar (purple)
         const investmentBar = document.createElement('div');
         investmentBar.className = 'chart-bar investment';
-        const investmentHeight = dayData.investment || Math.floor(Math.random() * 40) + 10; // Fallback to random
+        const investmentHeight = dayData.investment || 0; // Use actual value, no fallback
         investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
         
         // Withdrawal bar (red)
         const withdrawalBar = document.createElement('div');
         withdrawalBar.className = 'chart-bar withdrawal';
-        const withdrawalHeight = dayData.withdrawal || Math.floor(Math.random() * 30) + 5; // Fallback to random
+        const withdrawalHeight = dayData.withdrawal || 0; // Use actual value, no fallback
         withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
         
         // Deposit bar (green)
         const depositBar = document.createElement('div');
         depositBar.className = 'chart-bar deposit';
-        const depositHeight = dayData.deposit || Math.floor(Math.random() * 35) + 15; // Fallback to random
+        const depositHeight = dayData.deposit || 0; // Use actual value, no fallback
         depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
         
         // Add bars to group in the correct order
