@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sharing Task - Soft R Investment</title>
+    <title>Profile - SOFT RINVESTMENT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset & Base Styles */
@@ -23,13 +23,14 @@
 
         /* Container */
         .container {
-            width: 700px;
+            width: 100%;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 0;
+            padding: 0 15px;
             position: relative;
-            min-width: 320px;
             background-color: #fff;
             min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
         }
 
         /* Header Styles */
@@ -39,310 +40,608 @@
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            position: relative;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .back-btn {
-            font-size: 20px;
-            color: #333;
-            cursor: pointer;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* User info styles */
-        .user-info {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-left: auto;
-            margin-right: 10px;
+        }
+
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .header-btn.app {
+            background-color: #ffa500;
+            color: #fff;
+        }
+
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 165, 0, 0.2);
+        }
+
+        /* User Profile */
+        .user-profile {
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            border-radius: 15px;
+            margin: 15px 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .user-avatar {
-            width: 30px;
-            height: 30px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background-color: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* Task Card */
-        .task-card {
-            background-color: #fff;
-            border-radius: 15px;
-            margin: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-right: 15px;
+            border: 2px solid #ffa500;
             overflow: hidden;
         }
 
-        /* Task Header */
-        .task-header {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #eee;
+        .user-avatar i {
+            font-size: 28px;
+            color: #ffa500;
         }
 
-        .task-title {
-            font-size: 20px;
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 18px;
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
         }
 
-        .task-subtitle {
-            font-size: 14px;
+        .user-email {
+            font-size: 13px;
             color: #666;
-        }
-
-        /* Task Details */
-        .task-details {
-            padding: 20px;
-        }
-
-        .detail-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
         }
 
-        .detail-label {
-            font-size: 16px;
-            color: #666;
-        }
-
-        .detail-value {
-            font-size: 16px;
-            font-weight: bold;
+        .user-copy {
+            margin-left: 8px;
             color: #ffa500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        /* Task Instructions */
-        .task-instructions {
-            padding: 20px;
-            background-color: #f9f9f9;
+        .user-copy:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffa500;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-icon:hover {
+            background-color: #ffa500;
+            color: white;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            margin: 15px 10px;
+            padding: 25px;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            border-radius: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.3);
+        }
+
+        .balance-label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .balance-actions {
+            display: flex;
+            gap: 15px;
             margin-top: 15px;
-            border-radius: 10px;
         }
 
-        .instructions-title {
+        .balance-action {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .balance-action:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .balance-action i {
+            font-size: 20px;
+        }
+
+        .balance-illustration {
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+        }
+
+        /* Promo Cards / Financial Data */
+        .promo-section {
+            margin: 20px 10px;
+        }
+
+        .section-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             color: #333;
+            position: relative;
+            padding-left: 12px;
         }
 
-        .instruction-step {
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 18px;
+            background-color: #ffa500;
+            border-radius: 2px;
+        }
+
+        .promo-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .promo-card {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            height: 100px;
             display: flex;
-            margin-bottom: 15px;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 15px rgba(54, 209, 220, 0.2);
+            transition: transform 0.3s ease;
         }
 
-        .step-number {
-            width: 25px;
-            height: 25px;
+        .promo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .promo-card:nth-child(2) {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
+
+        .promo-card:nth-child(3) {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+        }
+
+        .promo-card:nth-child(4) {
+            background: linear-gradient(135deg, #fc4a1a, #f7b733);
+        }
+
+        .promo-card:nth-child(5) {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
+
+        .promo-card:nth-child(6) {
+            background: linear-gradient(135deg, #ee0979, #ff6a00);
+        }
+
+        .promo-title {
+            font-weight: 500;
+            font-size: 12px;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        .promo-subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .promo-illustration {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.2;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 20px 10px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            flex-wrap: nowrap;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s ease;
+            flex: 1;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 8px;
+            object-fit: contain;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-name {
+            font-size: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Activity Section */
+        .activity-section {
+            margin: 20px 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            transition: background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .activity-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .activity-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .activity-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .activity-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .activity-status.success {
+            background-color: #e6f7ee;
+            color: #4cd964;
+        }
+
+        .activity-status.failed {
+            background-color: #ffeeee;
+            color: #ff3b30;
+        }
+
+        .activity-status.pending {
+            background-color: #fff8e1;
+            color: #ffa500;
+        }
+
+        .activity-empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .activity-load-more {
+            text-align: center;
+            padding: 15px;
+            color: #ffa500;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 10px;
+        }
+
+        .activity-load-more:hover {
+            color: #ff8c00;
+            background-color: #fff8e1;
+            border-radius: 0 0 15px 15px;
+        }
+
+        /* App Services */
+        .services-section {
+            margin: 20px 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            color: #333;
+        }
+
+        .service-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ffa500;
+            border-radius: 1.5px;
+        }
+
+        .service-list {
+            margin-top: 20px;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .service-item:hover {
+            padding-left: 5px;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fff8e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ffa500;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover .service-icon {
+            background-color: #ffa500;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.2);
+        }
+
+        .service-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .service-arrow {
+            color: #ccc;
+            transition: transform 0.3s ease;
+        }
+
+        .service-item:hover .service-arrow {
+            transform: translateX(5px);
+            color: #ffa500;
+        }
+
+        /* Sign Out Button */
+        .sign-out-btn {
+            margin: 20px 10px 70px;
+            padding: 15px;
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            width: calc(100% - 20px);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.2);
+        }
+
+        .sign-out-btn:hover {
+            background-color: #ff8c00;
+            box-shadow: 0 6px 15px rgba(255, 165, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Float button */
+        .float-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
             background-color: #ffa500;
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            flex: 1;
-            color: #333;
-        }
-
-        /* Share Link */
-        .share-link-container {
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #ffa500;
-        }
-
-        .share-link-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .share-link {
-            font-weight: bold;
-            word-break: break-all;
-            color: #333;
-        }
-
-        .copy-btn {
-            display: inline-block;
-            padding: 8px 15px;
-            background-color: #ffa500;
-            color: white;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
             cursor: pointer;
-            border: none;
+            transition: all 0.3s ease;
         }
 
-        /* Upload Section */
-        .upload-section {
-            margin: 20px 0;
+        .float-btn:hover {
+            background-color: #ff8c00;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .upload-title {
+        .float-btn i {
             font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .upload-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .upload-box {
-            aspect-ratio: 1/1;
-            background-color: #f9f9f9;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-box:hover {
-            border-color: #ffa500;
-        }
-
-        .upload-icon {
-            font-size: 24px;
-            color: #999;
-            margin-bottom: 5px;
-        }
-
-        .upload-text {
-            font-size: 12px;
-            color: #999;
-            text-align: center;
-        }
-
-        .upload-preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .upload-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Form Section */
-        .form-section {
-            margin: 20px 0;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-
-        /* Submit Button */
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #ffa500;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background-color: #ff9000;
-            transform: translateY(-2px);
-        }
-
-        .submit-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         /* Bottom Navigation */
         .bottom-nav {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 700px;
-            min-width: 320px;
             background-color: #fff;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            padding: 10px 0;
+            padding: 12px 0 8px;
             border-top: 1px solid #eee;
             z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .nav-item {
@@ -351,7 +650,14 @@
             align-items: center;
             text-decoration: none;
             color: #999;
-            font-size: 12px;
+            font-size: 10px;
+            font-weight: bold; /* <-- This makes the text bold */
+
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #ffa500;
         }
 
         .nav-item.active {
@@ -359,270 +665,638 @@
         }
 
         .nav-item i {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 5px;
         }
 
-        /* Login Page Styles */
-        #login-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            background-color: #fff;
+        /* Add this to the existing animation for balance counter */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .login-logo {
+        .animate-count {
+            animation: countUp 1s ease-out forwards;
+        }
+
+        /* Statistics Section */
+        .statistics-section {
+            margin: 20px 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .statistics-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 10px;
+            border-left: 3px solid #ffa500;
+        }
+        
+        .section-subtitle::before {
+            display: none;
+        }
+
+        /* Weekly Stats */
+        .weekly-stats-section {
             margin-bottom: 30px;
         }
 
-        .login-logo-img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            border-radius: 50%;
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-top: 15px;
+            display: flex;
+        }
+
+        .chart-y-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 5px;
+            font-size: 11px;
+            color: #999;
+            height: 160px;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 160px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            flex: 1;
+        }
+
+        .chart-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 12%;
+        }
+
+        .chart-label {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .chart-bars-group {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 3px;
+        }
+
+        .chart-bar {
+            width: 12px;
+            border-radius: 4px 4px 0 0;
+            transition: height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chart-bar.investment {
+            background-color: #6a11cb;
+            width: 12px;
+        }
+
+        .chart-bar.deposit {
+            background-color: #38ef7d;
+            width: 12px;
+        }
+
+        .chart-bar.withdrawal {
+            background-color: #ff6b6b;
+            width: 12px;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .login-form {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-
-        .login-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #333;
-        }
-
-        .login-error {
-            color: #ff3b30;
-            margin-bottom: 15px;
-            font-size: 14px;
-            text-align: center;
-            display: none;
-        }
-
-        .login-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #ffa500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .register-link {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 14px;
+            font-size: 12px;
             color: #666;
         }
 
-        .register-link a {
-            color: #ffa500;
-            text-decoration: none;
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+
+        .legend-color.investment {
+            background-color: #6a11cb;
+        }
+
+        .legend-color.deposit {
+            background-color: #38ef7d;
+        }
+
+        .legend-color.withdrawal {
+            background-color: #ff6b6b;
+        }
+
+        /* Monthly Stats */
+        .monthly-stats-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .monthly-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .monthly-stat {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-circle {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin-bottom: 15px;
+            
+        }
+
+        .stat-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .stat-circle-bg {
+            fill: none;
+            stroke: #f0f0f0;
+            stroke-width: 6;
+        }
+
+        .stat-circle-progress {
+            fill: none;
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 3s ease;
+        }
+
+        .stat-circle-progress.investment {
+            stroke: #6a11cb;
+        }
+
+        .stat-circle-progress.withdrawal {
+            stroke: #ff6b6b;
+        }
+
+        .stat-circle-progress.deposit {
+            stroke: #38ef7d;
+        }
+
+        .stat-percentage {
+            position: absolute;
+            top: 40%;
+            left: 38%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
             font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .stat-amount {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Add this to the existing animation for balance counter */
+        @keyframes countUpStat {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-stat {
+            animation: countUpStat 1s ease-out forwards;
+        }
+
+        /* Scroll Animation Styles */
+        .balance-action {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .promo-card {
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         /* Media Queries for Responsiveness */
-        @media (max-width: 700px) {
+        @media (max-width: 470px) {
             .container {
-                width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
             }
-            
-            .bottom-nav {
-                width: 100%;
-            }
-        }
 
-        @media (max-width: 500px) {
-            .upload-container {
+            .section-title {
+                font-size: 16px;
+            }
+
+            .balance-amount {
+                font-size: 28px;
+            }
+
+            .service-name {
+                font-size: 12px;
+            }
+
+            .sign-out-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .nav-item {
+                font-size: 8px;
+            }
+
+            .nav-item i {
+                font-size: 16px;
+            }
+
+            .promo-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
-        }
-
-        @media (min-width: 701px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                min-height: 100vh;
-                background-color: #f0f0f0;
+            
+            .features-grid {
+                flex-wrap: nowrap;
+                gap: 5px;
+                padding: 15px 10px;
             }
             
-            .container {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            .feature-item {
+                flex: 1;
             }
-        }
-
-        .logout-btn {
-            margin-left: 10px;
-            cursor: pointer;
-            color: #ff3b30;
-            font-size: 14px;
+            
+            .feature-name {
+                font-size: 10px;
+            }
+            
+            .promo-subtitle {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Main Content -->
-        <div id="main-content">
-            <!-- Header -->
-            <div class="header">
-                <div class="back-btn">
-                    <i class="fas fa-chevron-left"></i>
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-img">
+                    <i class="fas fa-chart-line" style="color: white; font-size: 18px;"></i>
                 </div>
-                <div class="header-title">Sharing Task</div>
-                <div class="user-info" id="user-info">
-                    <div class="user-avatar"><i class="fas fa-user"></i></div>
-                    <div class="user-name" id="user-name">User</div>
+                <div class="logo-text">SOFT RINVESTMENT</div>
+            </div>
+            <div class="header-btns">
+                <a href="https://softrinvestment.com/download-app.html" class="header-btn app">
+                    <i class="fas fa-mobile-alt"></i>&nbsp; App
+                </a>
+                <div class="header-btn">
+                    <i class="fas fa-globe"></i>&nbsp; English
                 </div>
             </div>
+        </div>
 
-            <!-- Task Card -->
-            <div class="task-card">
-                <!-- Task Header -->
-                <div class="task-header">
-                    <div class="task-title">Daily Sharing Reward</div>
-                    <div class="task-subtitle">Share Soft R Investment and earn rewards</div>
-                </div>
-
-                <!-- Task Details -->
-                <div class="task-details">
-                    <div class="detail-row">
-                        <div class="detail-label">Task Benefits</div>
-                        <div class="detail-value">6.00 USDT</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Review Date</div>
-                        <div class="detail-value" id="review-date">Within 24 hours</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Status</div>
-                        <div class="detail-value">Available</div>
-                    </div>
-                </div>
-
-                <!-- Task Instructions -->
-                <div class="task-instructions">
-                    <div class="instructions-title">Task Steps</div>
-                    
-                    <div class="instruction-step">
-                        <div class="step-number">1</div>
-                        <div class="step-text">Take a screenshot of our website (home page, task page, or profile page)</div>
-                    </div>
-                    
-                    <div class="instruction-step">
-                        <div class="step-number">2</div>
-                        <div class="step-text">Share the screenshot along with our registration link to at least 5 Facebook Groups or to 10 facebook or instagram or tiktok friends , 4 Telegram groups, 4 WhatsApp groups, or 10 friends on social media</div>
-                    </div>
-                    
-                    <div class="instruction-step">
-                        <div class="step-number">3</div>
-                        <div class="step-text">Take screenshots of all your shares as proof (minimum 3 screenshots required)</div>
-                    </div>
-                    
-                    <div class="instruction-step">
-                        <div class="step-number">4</div>
-                        <div class="step-text">Upload all screenshots below and submit the form to receive your reward</div>
-                    </div>
-                    
-                    <div class="instruction-step">
-                        <div class="step-number">5</div>
-                        <div class="step-text">Important: All screenshots must be clearly visible and show both the shared content and the platform where it was shared. Failure to follow instructions will result in rejection.</div>
-                    </div>
-                </div>
-
-                <!-- Share Link -->
-                <div class="task-details">
-                    <div class="share-link-container">
-                        <div class="share-link-label">Share this link along with your screenshots:</div>
-                        <div class="share-link" id="share-link">https://softrinvestment.com/register.html</div>
-                        <button class="copy-btn" id="copy-btn">Copy Link</button>
-                    </div>
-
-                    <!-- Upload Section -->
-                    <div class="upload-section">
-                        <div class="upload-title">Upload Your Screenshots</div>
-                        <div class="upload-container">
-                            <div class="upload-box" id="upload-box-1">
-                                <i class="fas fa-camera upload-icon"></i>
-                                <div class="upload-text">Upload Screenshot 1</div>
-                                <img src="/placeholder.svg" class="upload-preview" id="preview-1">
-                                <input type="file" class="upload-input" id="upload-1" accept="image/*">
-                            </div>
-                            <div class="upload-box" id="upload-box-2">
-                                <i class="fas fa-camera upload-icon"></i>
-                                <div class="upload-text">Upload Screenshot 2</div>
-                                <img src="/placeholder.svg" class="upload-preview" id="preview-2">
-                                <input type="file" class="upload-input" id="upload-2" accept="image/*">
-                            </div>
-                            <div class="upload-box" id="upload-box-3">
-                                <i class="fas fa-camera upload-icon"></i>
-                                <div class="upload-text">Upload Screenshot 3</div>
-                                <img src="/placeholder.svg" class="upload-preview" id="preview-3">
-                                <input type="file" class="upload-input" id="upload-3" accept="image/*">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Section -->
-                    <form class="form-section" id="sharing-form" action="https://formsubmit.co/aidmyfin@gmail.com" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="_subject" value="Soft R Investment - Sharing Task Submission">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_next" value="https://softrinvestment.com/sharing-success.html">
-                        
-                        <div class="form-group">
-                            <label for="username" class="form-label">Your Username</label>
-                            <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="form-label">Your Email</label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone" class="form-label">Your Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter your phone number" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="platforms" class="form-label">Where Did You Share?</label>
-                            <input type="text" id="platforms" name="platforms" class="form-input" placeholder="e.g., Facebook, Telegram, WhatsApp, etc." required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="comments" class="form-label">Additional Comments (Optional)</label>
-                            <input type="text" id="comments" name="comments" class="form-input" placeholder="Any additional information">
-                        </div>
-                        
-                        <button type="submit" class="submit-btn" id="submit-btn" disabled>Submit Task</button>
-                    </form>
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="username">Loading...</div>
+                <div class="user-email" id="user-email">
+                    Loading...
+                    <i class="fas fa-copy user-copy" id="copy-email"></i>
                 </div>
             </div>
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-label">Total Account Balance</div>
+            <div class="balance-amount" id="total-assets">$0.00</div>
+            <div class="balance-actions">
+                <a href="recharge.html" class="balance-action" id="add-money" title="Add Money">
+                    <i class="fas fa-plus"></i>
+                </a>
+                <a href="withdraw.html" class="balance-action" id="withdraw-money" title="Withdraw">
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+                <a href="exchange.html" class="balance-action" id="invest-money" title="Invest">
+                    <i class="fas fa-chart-line"></i>
+                </a>
+            </div>
+            <div class="balance-illustration">
+                <i class="fas fa-coins" style="font-size: 100px;"></i>
+            </div>
+        </div>
+
+        <!-- Financial Data Cards (Previously Promo Section) -->
+        <div class="promo-section">
+            <div class="section-title">Account Details</div>
+            <div class="promo-cards">
+                <div class="promo-card">
+                    <div class="promo-title">New Deposit</div>
+                    <div class="promo-subtitle" id="quantitative-account">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-wallet" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">BTC Mined</div>
+                    <div class="promo-subtitle" id="smart-account">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-brain" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Registration Bonus</div>
+                    <div class="promo-subtitle" id="profit-assets">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-gift" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Total Withdrawals</div>                    <div class="promo-subtitle" id="total-revenue">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-money-bill-wave" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Investment Earnings</div>
+                    <div class="promo-subtitle" id="yesterday-earnings">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-calendar-day" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="promo-title">Stake Earnings</div>
+                    <div class="promo-subtitle" id="today-earnings">$0.00</div>
+                    <div class="promo-illustration">
+                        <i class="fas fa-chart-line" style="font-size: 60px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+         <div class="features-grid">
+            <a href="recharge.html" class="feature-item" id="recharge">
+                <img src="image/icons8-stack-of-coins.gif?height=50&width=50" alt="Recharge" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Fund Account</div>
+            </a>
+            <a href="withdraw.html" class="feature-item" id="withdraw">
+                <img src="image/icons8-coins.gif?height=50&width=50" alt="Withdraw" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Withdraw</div>
+            </a>
+            <a href="exchange.html" class="feature-item" id="team">
+                <img src="image/cryptocurrency (1).gif?height=50&width=50" alt="Team" class="feature-icon" style="background-color: #fff; border-radius: 10px;">
+                <div class="feature-name">Exchange</div>
+            </a>
+        </div>
+        
+        <!-- Statistics Section -->
+        <div class="statistics-section">
+    <div class="statistics-header">
+        <div class="section-title">Account Statistics</div>
+        <div id="refresh-stats" style="font-size: 13px; color: #ffa500; cursor: pointer; display: flex; align-items: center;">
+            <i class="fas fa-sync-alt"></i>&nbsp; Refresh
+        </div>
+    </div>
+    
+    <!-- Weekly Stats -->
+    <div class="weekly-stats-section">
+        <div class="section-subtitle">Weekly Activity Stats</div>
+        <div class="chart-container">
+            <div class="chart-bars" id="weekly-chart">
+                <!-- Chart bars will be generated by JavaScript -->
+            </div>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="legend-color investment"></div>
+                <span>Investment</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color deposit"></div>
+                <span>Deposit</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color withdrawal"></div>
+                <span>Withdrawal</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly Stats -->
+    <div class="monthly-stats-section">
+        <div class="section-subtitle">Over View</div>
+        <div class="monthly-stats" id="monthly-stats">
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress investment" id="investment-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="investment-percentage">0%</div>
+                </div>
+                <div class="stat-label">Investment</div>
+
+            </div>
+            
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress deposit" id="deposit-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="deposit-percentage">0%</div>
+                </div>
+                <div class="stat-label">Deposits</div>
+            </div>
+            
+            <div class="monthly-stat">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 36 36">
+                        <circle class="stat-circle-bg" cx="18" cy="18" r="15"></circle>
+                        <circle class="stat-circle-progress withdrawal" id="withdrawal-circle" cx="18" cy="18" r="15" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                    </svg>
+                    <div class="stat-percentage" id="withdrawal-percentage">0%</div>
+                </div>
+                <div class="stat-label">Withdrawals</div>
+            </div>
+        </div>
+    </div>
+</div>
+        
+        <!-- Activity Section -->
+        <div class="activity-section">
+            <div class="activity-header">
+                <div class="section-title">Recent Activities</div>
+                <div id="activity-export" style="font-size: 13px; color: #ffa500; cursor: pointer; display: flex; align-items: center;">
+                    <i class="fas fa-download"></i>&nbsp; Export
+                </div>
+            </div>
+            
+            <div class="activity-list" id="activity-list">
+                <!-- Activity items will be generated by JavaScript -->
+                <div class="activity-empty">Loading activity data...</div>
+            </div>
+            
+            <div class="activity-load-more" id="activity-load-more" style="display: none;">
+                Show More
+            </div>
+        </div>
+
+        <!-- App Services -->
+        <div class="services-section">
+            <div class="service-title">App Services</div>
+            <div class="service-list">
+                <a href="https://softrinvestment.com/help-center.html" class="service-item" id="detail-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="service-name">Help</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/how-to-invest.html" class="service-item" id="transfer-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="service-name">How to Invest</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/faq.html" class="service-item" id="news-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="service-name">Frequently Asked Questions</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/invest.html" class="service-item" id="security-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="service-name">Investment Plan</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/sharing-task.html" class="service-item" id="tutorial-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="service-name">Tasks</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/contact-us.html" class="service-item" id="problem-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="service-name">Contact Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://softrinvestment.com/about-us.html" class="service-item" id="about-service">
+                    <div class="service-info">
+                        <div class="service-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="service-name">About Us</div>
+                    </div>
+                    <div class="service-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sign Out Button -->
+        <button class="sign-out-btn" id="sign-out-btn" type="button">Sign Out</button>
+
+        <!-- Float Button -->
+        <div class="float-btn" id="refresh-btn">
+            <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
@@ -632,7 +1306,7 @@
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-        <a href="sharing-task.html" class="nav-item active">
+        <a href="sharing-task.html" class="nav-item">
             <i class="fas fa-chart-pie"></i>
             <span>Task</span>
         </a>
@@ -640,11 +1314,14 @@
             <i class="fas fa-gift"></i>
             <span>Invest</span>
         </a>
-        <a href="invite-friends.html" class="nav-item">
-            <i class="fas fa-user-plus"></i>
-            <span>Invite Friends</span>
+        <a href="mining.html" class="nav-item">
+  <span style="display: flex; align-items: center; gap: 4px; color: #b0b0b0; position: relative;">
+    <i class="fas fa-hammer" style="font-size: 1.7em; position: relative; top: -6px; right: -9px;"></i>
+    <i class="fab fa-bitcoin" style="font-size: 1.7em; position: relative; top: 5px; right: 4px;"></i>
+  </span>
+  <span>Mine BTC</span>
         </a>
-        <a href="profile.html" class="nav-item">
+        <a href="profile.html" class="nav-item active">
             <i class="fas fa-user"></i>
             <span>Me</span>
         </a>
@@ -652,213 +1329,218 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
+        // Constants
+        const USER_ACTIVITY_KEY = 'userActivityHistory';
+        const ACTIVITY_RETENTION_DAYS = 7; // Show activities from last 7 days
+        const BENCHMARK_VALUE = 500; // $500 benchmark value for trend calculation
+        
         // Baserow API configuration
         const BASEROW_API = {
             token: '6u6gYOsipnV3NwAkcKpGn4D6bsZbEk1M',
             baseUrl: 'https://api.baserow.io/api',
             databaseId: '202237',
-            tableId: '488473'
+            tableId: '488473',
+            activityTableId: '488474' // Table ID for account_activity
         };
 
-        // Check authentication status when page loads
+        // Check if user is logged in when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            
-            // Back button functionality
-            document.querySelector('.back-btn').addEventListener('click', function() {
-                window.location.href = 'index.html';
-            });
-            
-            // Copy link functionality
-            document.getElementById('copy-btn').addEventListener('click', function() {
-                const shareLink = document.getElementById('share-link').textContent;
-                navigator.clipboard.writeText(shareLink).then(function() {
-                    document.getElementById('copy-btn').textContent = 'Copied!';
-                    setTimeout(function() {
-                        document.getElementById('copy-btn').textContent = 'Copy Link';
-                    }, 2000);
-                });
-            });
-            
-            // Image upload preview
-            function handleFileUpload(fileInput, previewId, boxId) {
-                fileInput.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        const preview = document.getElementById(previewId);
-                        const uploadBox = document.getElementById(boxId);
-                        
-                        reader.onload = function(e) {
-                            preview.src = e.target.result;
-                            preview.style.display = 'block';
-                            uploadBox.querySelector('.upload-icon').style.display = 'none';
-                            uploadBox.querySelector('.upload-text').style.display = 'none';
-                        }
-                        
-                        reader.readAsDataURL(file);
-                        checkFormValidity();
-                    }
-                });
-            }
-            
-            handleFileUpload(document.getElementById('upload-1'), 'preview-1', 'upload-box-1');
-            handleFileUpload(document.getElementById('upload-2'), 'preview-2', 'upload-box-2');
-            handleFileUpload(document.getElementById('upload-3'), 'preview-3', 'upload-box-3');
-            
-            // Form validation
-            function checkFormValidity() {
-                const upload1 = document.getElementById('upload-1').files.length > 0;
-                const upload2 = document.getElementById('upload-2').files.length > 0;
-                const upload3 = document.getElementById('upload-3').files.length > 0;
-                const username = document.getElementById('username').value.trim() !== '';
-                const email = document.getElementById('email').value.trim() !== '';
-                const phone = document.getElementById('phone').value.trim() !== '';
-                const platforms = document.getElementById('platforms').value.trim() !== '';
-                
-                const submitBtn = document.getElementById('submit-btn');
-                
-                if (upload1 && upload2 && upload3 && username && email && phone && platforms) {
-                    submitBtn.disabled = false;
-                } else {
-                    submitBtn.disabled = true;
-                }
-            }
-            
-            // Add event listeners for form inputs
-            document.getElementById('username').addEventListener('input', checkFormValidity);
-            document.getElementById('email').addEventListener('input', checkFormValidity);
-            document.getElementById('phone').addEventListener('input', checkFormValidity);
-            document.getElementById('platforms').addEventListener('input', checkFormValidity);
-            
-            // Set current date for review
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            document.getElementById('review-date').textContent = tomorrow.toLocaleDateString('en-US', options);
-            
-            // Form submission handling
-            document.getElementById('sharing-form').addEventListener('submit', function(e) {
-                // FormSubmit will handle the actual submission
-                // This is just for any additional client-side logic
-                
-                // Auto-fill user data if logged in
-                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                if (userData.email) {
-                    document.getElementById('email').value = userData.email;
-                    document.getElementById('username').value = userData.username || userData.email.split('@')[0];
-                }
-                
-                // For FormSubmit to work properly, we don't prevent default
-                // e.preventDefault();
-            });
-        });
+            // Set up Intersection Observer for scroll animations
+            setupScrollAnimations();
 
-        function checkAuthStatus() {
             const authToken = localStorage.getItem('authToken');
-            const userData = localStorage.getItem('userData');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
-            if (!authToken || !userData) {
+            if (!authToken || !userData.email) {
                 // Redirect to login page if not logged in
                 window.location.href = 'login.html';
                 return;
             }
             
-            try {
-                const user = JSON.parse(userData);
-                // Show main content if logged in
-                showMainContent(user);
-                
-                // Auto-fill form with user data
-                document.getElementById('username').value = user.username || user.email.split('@')[0];
-                document.getElementById('email').value = user.email;
-                if (user.phone) {
-                    document.getElementById('phone').value = user.phone;
-                }
-            } catch (error) {
-                console.error('Error parsing user data:', error);
-                window.location.href = 'login.html';
+            // Initialize UI with cached data first
+            if (userData) {
+                updateUI(userData);
             }
-        }
-
-        // Show main content
-        function showMainContent(userData) {
-            document.getElementById('main-content').style.display = 'block';
             
-            // Update user info in header
-            document.getElementById('user-name').textContent = userData.username || userData.email.split('@')[0];
+            // Fetch fresh user data from Baserow
+            fetchUserData(userData.email);
             
-            // Add logout functionality
-            const userInfo = document.getElementById('user-info');
-            if (!userInfo.querySelector('.logout-btn')) {
-                const logoutBtn = document.createElement('div');
-                logoutBtn.className = 'logout-btn';
-                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-                logoutBtn.title = 'Logout';
-                logoutBtn.addEventListener('click', function() {
+            // Load user activity history
+            loadActivityHistory();
+            
+            // Set up activity export
+            setupActivityExport();
+            
+            // Set up refresh interval (every 30 seconds)
+            setInterval(() => {
+                const currentUserData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (currentUserData.email) {
+                    fetchUserData(currentUserData.email);
+                    
+                    // Also refresh activity data
+                    loadActivityHistory();
+                }
+            }, 30000);
+            
+            // Set up balance animation
+            setupBalanceAnimation();
+            
+            // Copy email functionality
+            document.getElementById('copy-email').addEventListener('click', function() {
+                const email = document.getElementById('user-email').textContent;
+                navigator.clipboard.writeText(email)
+                    .then(() => {
+                        alert('Email copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+            });
+            
+            // Sign out functionality - Fixed implementation
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                console.log('Sign out button clicked');
+                if (confirm('Are you sure you want to sign out?')) {
+                    console.log('Sign out confirmed');
+                    // Clear authentication data
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('userData');
+                    
+                    // Redirect to login page
                     window.location.href = 'login.html';
+                }
+            });
+            
+            // Refresh button functionality
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 });
-                userInfo.appendChild(logoutBtn);
+                
+                // Force data refresh
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    fetchUserData(userData.email, true);
+                    
+                    // Also refresh activity data
+                    loadActivityHistory(true);
+                }
+            });
+            
+            // Clean up old activities (older than retention days)
+            cleanupOldActivities();
+        });
+        
+    // Setup scroll animations using Intersection Observer
+    function setupScrollAnimations() {
+        // Sections that should animate when scrolled into view
+        const animatedSections = [
+            { selector: '.balance-card', animationFunction: animateBalanceSection },
+            { selector: '.promo-section', animationFunction: animatePromoSection },
+            { selector: '.weekly-stats-section', animationFunction: animateWeeklyStats },
+            { selector: '.monthly-stats-section', animationFunction: animateMonthlyStats }
+        ];
+        
+        // Create an Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Find the animation function for this section
+                const section = animatedSections.find(s => entry.target.matches(s.selector) || 
+                                                         entry.target.querySelector(s.selector));
+                
+                if (section && entry.isIntersecting) {
+                    // Call the animation function when section is visible
+                    section.animationFunction(entry.target);
+                }
+            });
+        }, {
+            root: null, // viewport
+            threshold: 0.2, // trigger when 20% of the element is visible
+            rootMargin: '0px'
+        });
+        
+        // Observe all animated sections
+        animatedSections.forEach(section => {
+            const elements = document.querySelectorAll(section.selector);
+            elements.forEach(el => observer.observe(el));
+        });
+    }
+    
+    // Animation functions for each section
+    function animateBalanceSection(section) {
+        // Get the balance amount element
+        const balanceElement = section.querySelector('.balance-amount');
+        if (!balanceElement) return;
+        
+        // Get current value without $ sign
+        const currentValueText = balanceElement.textContent.replace('$', '');
+        const currentValue = parseFloat(currentValueText) || 0;
+        
+        // Add animation class
+        balanceElement.classList.remove('animate-count');
+        void balanceElement.offsetWidth; // Force reflow
+        balanceElement.classList.add('animate-count');
+        
+        // Animate the balance actions
+        const actions = section.querySelectorAll('.balance-action');
+        actions.forEach((action, index) => {
+            action.style.opacity = '0';
+            action.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                action.style.transition = 'all 0.5s ease';
+                action.style.opacity = '1';
+                action.style.transform = 'translateY(0)';
+            }, 300 + (index * 100));
+        });
+    }
+    
+    function animatePromoSection(section) {
+        // Animate each promo card with a staggered delay
+        const cards = section.querySelectorAll('.promo-card');
+        
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 + (index * 100));
+            
+            // Also animate the financial values inside
+            const valueElement = card.querySelector('.promo-subtitle');
+            if (valueElement) {
+                valueElement.classList.remove('animate-count');
+                void valueElement.offsetWidth; // Force reflow
+                valueElement.classList.add('animate-count');
             }
+        });
+    }
+    
+    function animateWeeklyStats(section) {
+        // Get the user data and regenerate the chart with animation
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        if (userData.email) {
+            generateWeeklyChart(userData, true);
         }
-
-        // Fetch user data from Baserow by email
-        async function fetchUserDataByEmail(email, hashedPassword) {
+    }
+    
+    function animateMonthlyStats(section) {
+        // Get the user data and regenerate the monthly stats with animation
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        if (userData.email) {
+            generateMonthlyStats(userData, true);
+        }
+    }
+        
+        // Fetch user data from Baserow
+        async function fetchUserData(email, forceRefresh = false) {
             try {
-                // First try to get rows directly without field mapping
-                const directResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.tableId}/?user_field_names=true`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Token ${BASEROW_API.token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!directResponse.ok) {
-                    throw new Error(`Failed to fetch rows: ${directResponse.status}`);
-                }
-                
-                const allRows = await directResponse.json();
-                
-                // Find the user by email manually
-                const user = allRows.results.find(row => {
-                    // Check if email exists and matches (case insensitive)
-                    return row.email && row.email.toLowerCase() === email.toLowerCase();
-                });
-                
-                if (user) {
-                    // Verify password
-                    if (user.password !== hashedPassword) {
-                        console.error('Password mismatch');
-                        return null;
-                    }
-                    
-                    // Create a user data object
-                    const userData = {
-                        id: user.id,
-                        username: user.username || email.split('@')[0],
-                        email: user.email,
-                        total_assets: user.total_assets || '0.00',
-                        smart_account: user.smart_account || '0.00',
-                        profit_assets: user.profit_assets || '0.00',
-                        total_revenue: user.total_revenue || '0.00',
-                        quantitative_account: user.quantitative_account || '0.00',
-                        yesterday_earnings: user.yesterday_earnings || '0.00',
-                        today_earnings: user.today_earnings || '0.00',
-                        commission_today: user.commission_today || '0.00'
-                    };
-                    
-                    return userData;
-                }
-                
-                // If not found with direct approach, try with field mapping
-                console.log('User not found with direct approach, trying field mapping...');
-                
-                // Get the field structure from Baserow to map field IDs
+                // First, get the field structure from Baserow
                 const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.tableId}/`, {
                     method: 'GET',
                     headers: {
@@ -867,11 +1549,8 @@
                     }
                 });
                 
-                if (!fieldsResponse.ok) {
-                    throw new Error(`Failed to fetch fields: ${fieldsResponse.status}`);
-                }
-                
                 const fieldsData = await fieldsResponse.json();
+                console.log('Baserow fields:', fieldsData);
                 
                 // Create a mapping of field names to their IDs
                 const fieldMap = {};
@@ -879,9 +1558,10 @@
                     fieldMap[field.name] = field.id;
                 });
                 
-                // Get the email and password field IDs
+                console.log('Field mapping:', fieldMap);
+                
+                // Get the email field ID
                 const emailFieldId = fieldMap['email'];
-                const passwordFieldId = fieldMap['password'];
                 
                 if (!emailFieldId) {
                     throw new Error('Email field not found in Baserow table');
@@ -896,51 +1576,1298 @@
                     headers: {
                         'Authorization': `Token ${BASEROW_API.token}`,
                         'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache'
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
                     }
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`API request failed with status ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const data = await response.json();
+                console.log('Fetched user data response:', data);
                 
                 if (data.results && data.results.length > 0) {
                     const user = data.results[0];
+                    console.log('Found user:', user);
                     
-                    // Verify password
-                    const storedPassword = user[`field_${passwordFieldId}`];
-                    if (storedPassword !== hashedPassword) {
-                        console.error('Password mismatch');
-                        return null;
-                    }
-                    
-                    // Create a user data object
-                    const userData = {
+                    // Create a user data object to store in localStorage
+                    const userDataToStore = {
                         id: user.id,
                         username: user[`field_${fieldMap['username']}`] || email.split('@')[0],
                         email: email,
+                        referralCode: user[`field_${fieldMap['referralCode']}`] || '',
                         total_assets: user[`field_${fieldMap['total_assets']}`] || '0.00',
-                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
-                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '0.00',
-                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
                         quantitative_account: user[`field_${fieldMap['quantitative_account']}`] || '0.00',
+                        smart_account: user[`field_${fieldMap['smart_account']}`] || '0.00',
+                        profit_assets: user[`field_${fieldMap['profit_assets']}`] || '5.00',
+                        total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
                         yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
                         today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00',
+                        registration_date: user[`field_${fieldMap['created_on']}`] || new Date().toISOString()
                     };
                     
-                    return userData;
+                    console.log('User data to store:', userDataToStore);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userData', JSON.stringify(userDataToStore));
+                    
+                    // Update UI with user data
+                    updateUI(userDataToStore);
+                    
+                    if (forceRefresh) {
+                        alert('Data refreshed successfully!');
+                    }
+                    
+                    return userDataToStore;
                 } else {
                     console.error('No user data found for email:', email);
+                    
+                    if (forceRefresh) {
+                        alert('No user data found. Please try again or contact support.');
+                    }
+                    
                     return null;
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
+                
+                if (forceRefresh) {
+                    alert('Failed to refresh data. Please try again.');
+                }
+                
                 return null;
             }
         }
-    </script>
+        
+        // Update UI with user data
+        function updateUI(userData) {
+            // Update username and email
+            document.getElementById('username').textContent = userData.username || userData.email.split('@')[0];
+            document.getElementById('user-email').textContent = userData.email;
+            
+            // Log all financial data for debugging
+            console.log('Financial data:', {
+                total_assets: userData.total_assets,
+                quantitative_account: userData.quantitative_account,
+                smart_account: userData.smart_account,
+                profit_assets: userData.profit_assets,
+                total_revenue: userData.total_revenue,
+                yesterday_earnings: userData.yesterday_earnings,
+                today_earnings: userData.today_earnings,
+                commission_today: userData.commission_today
+            });
+            
+            // Update financial data with correct element IDs
+            updateFinancialValue('total-assets', userData.total_assets);
+            updateFinancialValue('quantitative-account', userData.quantitative_account);
+            updateFinancialValue('smart-account', userData.smart_account);
+            updateFinancialValue('profit-assets', userData.profit_assets);
+            updateFinancialValue('total-revenue', userData.total_revenue);
+            updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
+            updateFinancialValue('today-earnings', userData.today_earnings);
+        }
+        
+        // Helper function to update financial values
+        function updateFinancialValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Format the value
+                let formattedValue = '0.00';
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    // If it's a number or a string that can be converted to a number
+                    if (!isNaN(parseFloat(value))) {
+                        formattedValue = parseFloat(value).toFixed(2);
+                    } else {
+                        formattedValue = value;
+                        // If it doesn't have decimal places, add them
+                        if (!formattedValue.includes('.')) {
+                            formattedValue += '.00';
+                        }
+                    }
+                }
+                
+                // Update the element
+                element.textContent = '$' + formattedValue;
+            }
+        }
+        
+        // Updated loadActivityHistory function to show personalized activities for each user
+        function loadActivityHistory(forceRefresh = false) {
+            const activityList = document.getElementById('activity-list');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            // Get user-specific activity key
+            const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
+            
+            // Get user activities from localStorage
+            let activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+            
+            // Get registration date from user data or use current date as fallback
+            const registrationDate = userData.registration_date || new Date().toISOString();
+            
+            // Create registration bonus activity with the user's actual registration date
+            const registrationBonus = {
+                type: 'registration_bonus',
+                timestamp: registrationDate,
+                details: 'Registration bonus of $5 USD added to your wallet',
+                status: 'success'
+            };
+            
+            // Remove any existing registration bonus activities
+            activities = activities.filter(activity => activity.type !== 'registration_bonus');
+            
+            // Add the registration bonus as the first activity
+            activities.unshift(registrationBonus);
+            
+            // Save updated activities to user-specific storage
+            localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+            
+            // Filter activities to only show those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
+            
+            const recentActivities = activities.filter(activity => {
+                // Always keep registration bonus
+                if (activity.type === 'registration_bonus') return true;
+                
+                const activityDate = new Date(activity.timestamp);
+                return activityDate >= cutoffDate;
+            });
+            
+            // Get user-specific activities from other pages if available
+            const bankActivities = JSON.parse(localStorage.getItem(`bankActivities_${userData.email}`) || '[]');
+            const cryptoActivities = JSON.parse(localStorage.getItem(`cryptoActivities_${userData.email}`) || '[]');
+            const investActivities = JSON.parse(localStorage.getItem(`investActivities_${userData.email}`) || '[]');
+            const stakeActivities = JSON.parse(localStorage.getItem(`stakeActivities_${userData.email}`) || '[]');
+            const miningActivities = JSON.parse(localStorage.getItem(`miningActivities_${userData.email}`) || '[]');
+            
+            // Combine all user-specific activities
+            const allActivities = [
+                ...recentActivities,
+                ...bankActivities,
+                ...cryptoActivities,
+                ...investActivities,
+                ...stakeActivities,
+                ...miningActivities
+            ];
+            
+            // Filter to show investment, withdrawal, deposit, staking, mining and earnings activities
+            let filteredActivities = allActivities.filter(activity => {
+                return activity.type === 'withdrawal_request' || 
+                       activity.type === 'form_submission' || 
+                       activity.type === 'investment_attempt' || 
+                       activity.type === 'investment_processing' || 
+                       activity.type === 'deposit' ||
+                       activity.type === 'deposit_processing' ||
+                       activity.type === 'staking' ||
+                       activity.type === 'btc_mined' ||
+                       activity.type === 'earnings' ||
+                       activity.type === 'registration_bonus';
+            });
+            
+            // If we don't have any activities other than registration bonus, generate some personalized dummy activities
+            if (filteredActivities.length <= 1) {
+                // Use user data to create personalized dummy activities
+                const dummyActivities = generatePersonalizedDummyActivities(userData);
+                
+                // Add dummy activities
+                filteredActivities = [...filteredActivities, ...dummyActivities];
+                
+                // Save these dummy activities to localStorage for persistence
+                activities = [...activities, ...dummyActivities];
+                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+            }
+            
+            // Sort activities by timestamp (newest first)
+            filteredActivities.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+            
+            // Clear the activity list
+            activityList.innerHTML = '';
+            
+            // Display first 4 activities (changed from 5 to 4 as requested)
+            const activitiesToShow = filteredActivities.slice(0, 4);
+            activitiesToShow.forEach(activity => {
+                const activityItem = createActivityItem(activity);
+                activityList.appendChild(activityItem);
+            });
+            
+            // Show/hide load more button
+            if (filteredActivities.length > 4) {
+                document.getElementById('activity-load-more').style.display = 'block';
+                document.getElementById('activity-load-more').onclick = () => {
+                    // Show all activities
+                    activityList.innerHTML = '';
+                    filteredActivities.forEach(activity => {
+                        const activityItem = createActivityItem(activity);
+                        activityList.appendChild(activityItem);
+                    });
+                    
+                    // Hide load more button
+                    document.getElementById('activity-load-more').style.display = 'none';
+                };
+            } else {
+                document.getElementById('activity-load-more').style.display = 'none';
+            }
+            
+            // If this is a forced refresh, sync with Baserow
+            if (forceRefresh) {
+                syncActivitiesWithBaserow(userData.email);
+            }
+            
+            // Return the filtered activities for use in charts
+            return filteredActivities;
+        }
+        
+        // Generate personalized dummy activities based on user data
+        function generatePersonalizedDummyActivities(userData) {
+            const dummyActivities = [];
+            const now = new Date();
+            
+            // Use user's financial data to create realistic activities
+            const depositAmount = parseFloat(userData.quantitative_account) || 100;
+            const miningAmount = parseFloat(userData.smart_account) || 25;
+            const investmentAmount = parseFloat(userData.yesterday_earnings) * 10 || 200;
+            
+            // Create deposit activity (1-2 days ago)
+            const depositDate = new Date(now);
+            depositDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 1);
+            dummyActivities.push({
+                type: 'deposit',
+                timestamp: depositDate.toISOString(),
+                details: {
+                    amount: depositAmount.toFixed(2),
+                    paymentMethod: Math.random() > 0.5 ? 'Bank Transfer' : 'Crypto',
+                    status: 'success'
+                },
+                status: 'success'
+            });
+            
+            // Create mining activity (2-3 days ago)
+            const miningDate = new Date(now);
+            miningDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 2);
+            dummyActivities.push({
+                type: 'btc_mined',
+                timestamp: miningDate.toISOString(),
+                details: {
+                    amount: miningAmount.toFixed(2),
+                    source: 'Mining Pool'
+                },
+                status: 'success'
+            });
+            
+            // Create investment activity (3-5 days ago)
+            const investmentDate = new Date(now);
+            investmentDate.setDate(now.getDate() - Math.floor(Math.random() * 3) - 3);
+            dummyActivities.push({
+                type: 'investment_attempt',
+                timestamp: investmentDate.toISOString(),
+                planTitle: Math.random() > 0.5 ? 'Gold Plan' : 'Silver Plan',
+                totalAmount: investmentAmount.toFixed(2),
+                success: true,
+                status: 'success'
+            });
+            
+            return dummyActivities;
+        }
+        
+        // Create an activity item element
+        function createActivityItem(activity) {
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            
+            // Format timestamp
+            const timestamp = new Date(activity.timestamp);
+            const formattedDate = timestamp.toLocaleDateString();
+            const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Determine activity title, details, and status
+            let title = 'Activity';
+            let details = '';
+            let status = '';
+            
+            // Process different activity types
+            switch (activity.type) {
+                case 'registration_bonus':
+                    title = 'Registration Bonus';
+                    details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                    status = '<div class="activity-status success">Success</div>';
+                    break;
+                    
+                case 'withdrawal_request':
+                case 'form_submission':
+                    title = 'Withdrawal Request';
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const method = activity.details.paymentMethod || '';
+                            details = `Amount: ${amount} USD via ${method}`;
+                            
+                            if (activity.details.status === 'success') {
+                                status = '<div class="activity-status success">Success</div>';
+                            } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                status = '<div class="activity-status failed">Failed</div>';
+                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                            } else {
+                                status = '<div class="activity-status pending">Pending</div>';
+                            }
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'deposit':
+                case 'deposit_processing':
+                    title = activity.type === 'deposit' ? 'Deposit' : 'Deposit Processing';
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const method = activity.details.paymentMethod || '';
+                            details = `Amount: ${amount} USD via ${method}`;
+                            
+                            if (activity.details.status === 'success') {
+                                status = '<div class="activity-status success">Success</div>';
+                            } else if (activity.details.status === 'rejected') {
+                                status = '<div class="activity-status failed">Failed</div>';
+                                details += `<br>Reason: ${activity.details.reason || 'Unknown'}`;
+                            } else {
+                                status = '<div class="activity-status pending">Pending</div>';
+                            }
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'investment_attempt':
+                    title = 'Investment Attempt';
+                    
+                    if (activity.planTitle) {
+                        const amount = activity.totalAmount || '0.00';
+                        details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                        
+                        if (activity.success) {
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            status = '<div class="activity-status failed">Failed</div>';
+                            if (activity.reason) {
+                                details += `<br>Reason: ${activity.reason}`;
+                            }
+                        }
+                    }
+                    break;
+                    
+                case 'investment_processing':
+                    title = 'Investment Processing';
+                    
+                    if (activity.planTitle) {
+                        details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                        status = '<div class="activity-status pending">Processing</div>';
+                    }
+                    break;
+                    
+                case 'staking':
+                    title = 'Staking';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            details = `Amount: ${amount} USD staked`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'btc_mined':
+                    title = 'BTC Mined';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            details = `Amount: ${amount} USD equivalent mined`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                case 'earnings':
+                    title = 'Earnings';
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            const amount = activity.details.amount || '0.00';
+                            const source = activity.details.source || 'Investment';
+                            details = `Amount: ${amount} USD from ${source}`;
+                            status = '<div class="activity-status success">Success</div>';
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+                    break;
+                    
+                default:
+                    title = activity.type ? activity.type.replace(/_/g, ' ') : 'Activity';
+                    title = title.charAt(0).toUpperCase() + title.slice(1);
+                    
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            details = JSON.stringify(activity.details);
+                        } else {
+                            details = activity.details;
+                        }
+                    }
+            }
+            
+            activityItem.innerHTML = `
+                <div class="activity-time">${formattedDate} ${formattedTime}</div>
+                <div class="activity-title">${title}</div>
+                <div class="activity-details">${details}</div>
+                ${status}
+            `;
+            
+            return activityItem;
+        }
+        
+        // Set up activity export
+        function setupActivityExport() {
+            document.getElementById('activity-export').addEventListener('click', function() {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
+                const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+                
+                // Filter to include investment, withdrawal, and deposit activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing' ||
+                           activity.type === 'deposit' ||
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'registration_bonus';
+                });
+                
+                if (filteredActivities.length === 0) {
+                    alert('No activities to export.');
+                    return;
+                }
+                
+                // Create CSV content
+                let csvContent = 'data:text/csv;charset=utf-8,';
+                csvContent += 'Date,Time,Type,Details,Status\n';
+                
+                filteredActivities.forEach(activity => {
+                    const timestamp = new Date(activity.timestamp);
+                    const date = timestamp.toLocaleDateString();
+                    const time = timestamp.toLocaleTimeString();
+                    
+                    let details = '';
+                    let status = '';
+                    
+                    // Process different activity types for export
+                    switch (activity.type) {
+                        case 'registration_bonus':
+                            details = activity.details || 'Registration bonus of $5 USD added to your wallet';
+                            status = 'Success';
+                            break;
+                            
+                        case 'withdrawal_request':
+                        case 'form_submission':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const method = activity.details.paymentMethod || '';
+                                    details = `Amount: ${amount} USD via ${method}`;
+                                    
+                                    if (activity.details.status === 'success') {
+                                        status = 'Success';
+                                    } else if (activity.details.status === 'rejected' || activity.details.status === 'investment_required') {
+                                        status = 'Failed';
+                                        details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
+                                    } else {
+                                        status = 'Pending';
+                                    }
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                            
+                        case 'deposit':
+                        case 'deposit_processing':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const method = activity.details.paymentMethod || '';
+                                    details = `Amount: ${amount} USD via ${method}`;
+                                    
+                                    if (activity.details.status === 'success') {
+                                        status = 'Success';
+                                    } else if (activity.details.status === 'rejected') {
+                                        status = 'Failed';
+                                        details += ` (Reason: ${activity.details.reason || 'Unknown'})`;
+                                    } else {
+                                        status = 'Pending';
+                                    }
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_attempt':
+                            if (activity.planTitle) {
+                                const amount = activity.totalAmount || '0.00';
+                                details = `Plan: ${activity.planTitle}, Amount: ${amount} USD`;
+                                
+                                if (activity.success) {
+                                    status = 'Success';
+                                } else {
+                                    status = 'Failed';
+                                    if (activity.reason) {
+                                        details += ` (Reason: ${activity.reason})`;
+                                    }
+                                }
+                            }
+                            break;
+                            
+                        case 'investment_processing':
+                            if (activity.planTitle) {
+                                details = `Plan: ${activity.planTitle}, Amount: ${activity.amount} USD`;
+                                status = 'Processing';
+                            }
+                            break;
+                            
+                        case 'staking':
+                        case 'btc_mined':
+                        case 'earnings':
+                            if (activity.details) {
+                                if (typeof activity.details === 'object') {
+                                    const amount = activity.details.amount || '0.00';
+                                    const source = activity.details.source || '';
+                                    details = `Amount: ${amount} USD`;
+                                    if (source) details += ` from ${source}`;
+                                    status = 'Success';
+                                } else {
+                                    details = activity.details;
+                                }
+                            }
+                            break;
+                    }
+                    
+                    // Escape quotes in details
+                    if (details) {
+                        details = details.replace(/"/g, '""');
+                    }
+                    
+                    csvContent += `${date},${time},${activity.type || ''},"${details}",${status}\n`;
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', `investment_activity_${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                
+                // Clean up
+                document.body.removeChild(link);
+            });
+        }
+        
+        // Clean up old activities (older than retention days)
+        function cleanupOldActivities() {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (!userData.email) return;
+            
+            const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
+            const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+            
+            // Filter activities to only keep those from the last X days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
+            
+            // Always keep the registration bonus activity
+            const registrationBonus = activities.find(activity => activity.type === 'registration_bonus');
+            
+            const recentActivities = activities.filter(activity => {
+                if (activity.type === 'registration_bonus') return true; // Always keep registration bonus
+                const activityDate = new Date(activity.timestamp);
+                return activityDate >= cutoffDate;
+            });
+            
+            // If registration bonus was filtered out but exists, add it back
+            if (registrationBonus && !recentActivities.some(a => a.type === 'registration_bonus')) {
+                recentActivities.unshift(registrationBonus);
+            }
+            
+            // Save filtered activities back to localStorage
+            if (recentActivities.length !== activities.length) {
+                localStorage.setItem(userSpecificKey, JSON.stringify(recentActivities));
+                console.log(`Cleaned up ${activities.length - recentActivities.length} old activities.`);
+            }
+        }
+        
+        // Sync activities with Baserow
+        async function syncActivitiesWithBaserow(userEmail) {
+            try {
+                if (!userEmail) {
+                    console.error('No user email found for syncing activities');
+                    return;
+                }
+                
+                // Get activities from localStorage
+                const userSpecificKey = `${USER_ACTIVITY_KEY}_${userEmail}`;
+                const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+                
+                // Filter to include investment, withdrawal, and deposit activities
+                const filteredActivities = activities.filter(activity => {
+                    return activity.type === 'withdrawal_request' || 
+                           activity.type === 'form_submission' || 
+                           activity.type === 'investment_attempt' || 
+                           activity.type === 'investment_processing' ||
+                           activity.type === 'deposit' ||
+                           activity.type === 'deposit_processing' ||
+                           activity.type === 'staking' ||
+                           activity.type === 'btc_mined' ||
+                           activity.type === 'earnings' ||
+                           activity.type === 'registration_bonus';
+                });
+                
+                if (filteredActivities.length === 0) {
+                    console.log('No activities to sync');
+                    return;
+                }
+                
+                console.log('Syncing activities with Baserow...');
+                
+                // Get field structure for activity table
+                const fieldsResponse = await fetch(`${BASEROW_API.baseUrl}/database/fields/table/${BASEROW_API.activityTableId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Token ${BASEROW_API.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const fieldsData = await fieldsResponse.json();
+                
+                // Create a mapping of field names to their IDs
+                const fieldMap = {};
+                fieldsData.forEach(field => {
+                    fieldMap[field.name] = field.id;
+                });
+                
+                console.log('Activity table field mapping:', fieldMap);
+                
+                // Check if required fields exist
+                const requiredFields = ['user_email', 'activity_type', 'activity_details', 'timestamp', 'status'];
+                const missingFields = requiredFields.filter(field => !fieldMap[field]);
+                
+                if (missingFields.length > 0) {
+                    console.error('Missing required fields in activity table:', missingFields);
+                    return;
+                }
+                
+                // Prepare activities for batch upload
+                const activitiesToSync = filteredActivities.slice(0, 20); // Limit to 20 most recent activities
+                
+                // Create rows for each activity
+                for (const activity of activitiesToSync) {
+                    const rowData = {};
+                    
+                    // Set user email
+                    rowData[`field_${fieldMap['user_email']}`] = userEmail;
+                    
+                    // Set activity type
+                    rowData[`field_${fieldMap['activity_type']}`] = activity.type || 'unknown';
+                    
+                    // Set activity details
+                    if (activity.details) {
+                        if (typeof activity.details === 'object') {
+                            rowData[`field_${fieldMap['activity_details']}`] = JSON.stringify(activity.details);
+                        } else {
+                            rowData[`field_${fieldMap['activity_details']}`] = activity.details;
+                        }
+                    } else {
+                        rowData[`field_${fieldMap['activity_details']}`] = '';
+                    }
+                    
+                    // Set timestamp
+                    rowData[`field_${fieldMap['timestamp']}`] = activity.timestamp || new Date().toISOString();
+                    
+                    // Set status
+                    let status = 'pending';
+                    if (activity.type === 'withdrawal_request' || activity.type === 'form_submission' || activity.type === 'deposit') {
+                        if (activity.details && activity.details.status) {
+                            status = activity.details.status;
+                        }
+                    } else if (activity.type === 'investment_attempt') {
+                        status = activity.success ? 'success' : 'failed';
+                    } else if (activity.type === 'investment_processing' || activity.type === 'deposit_processing') {
+                        status = 'processing';
+                    } else if (activity.type === 'registration_bonus' || activity.type === 'staking' || 
+                              activity.type === 'btc_mined' || activity.type === 'earnings') {
+                        status = 'success';
+                    }
+                    
+                    rowData[`field_${fieldMap['status']}`] = status;
+                    
+                    // Create row in Baserow
+                    try {
+                        const createResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Token ${BASEROW_API.token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(rowData)
+                        });
+                        
+                        if (!createResponse.ok) {
+                            console.error('Failed to create activity row:', await createResponse.text());
+                        }
+                    } catch (error) {
+                        console.error('Error creating activity row:', error);
+                    }
+                }
+                
+                console.log('Activity sync completed');
+            } catch (error) {
+                console.error('Error syncing activities with Baserow:', error);
+            }
+        }
+        
+        // Statistics and Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts when user data is loaded
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            if (userData.email) {
+                initializeCharts(userData);
+            }
+            
+            // Refresh stats button
+            document.getElementById('refresh-stats').addEventListener('click', function() {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (userData.email) {
+                    initializeCharts(userData, true);
+                }
+            });
+        });
+
+    // Initialize charts based on user data
+    function initializeCharts(userData, animate = true) {
+        // Get user activities for chart data
+        const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
+        const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+        
+        // Generate weekly chart data based on user data and activities
+        generateWeeklyChart(userData, animate, activities);
+        
+        // Generate monthly stats based on user data and activities
+        generateMonthlyStats(userData, animate, activities);
+    }
+
+// Generate weekly chart based on user activities
+function generateWeeklyChart(userData, animate = true, activities = []) {
+    const weeklyChart = document.getElementById('weekly-chart');
+    weeklyChart.innerHTML = '';
+    
+    // Create y-axis
+    const chartContainer = document.querySelector('.chart-container');
+    
+    // Remove existing y-axis if any
+    const existingYAxis = document.querySelector('.chart-y-axis');
+    if (existingYAxis) {
+        existingYAxis.remove();
+    }
+    
+    // Create new y-axis
+    const yAxis = document.createElement('div');
+    yAxis.className = 'chart-y-axis';
+    
+    // Find max value for scaling
+    let maxValue = 60; // Default max value
+    
+    // Add y-axis labels
+    const yAxisValues = ['60', '40', '20', '0'];
+    yAxisValues.forEach(value => {
+        const label = document.createElement('div');
+        label.textContent = value;
+        yAxis.appendChild(label);
+    });
+    
+    // Insert y-axis before the chart
+    chartContainer.insertBefore(yAxis, weeklyChart);
+    
+    // Get current date
+    const today = new Date();
+    
+    // Prepare data for the last 7 days
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(today.getDate() - i);
+        date.setHours(0, 0, 0, 0);
+        last7Days.push({
+            date: date,
+            day: (7 - i).toString().padStart(2, '0'),
+            investment: 0,
+            withdrawal: 0,
+            deposit: 0
+        });
+    }
+    
+    // Process activities to get data for each day
+    if (activities && activities.length > 0) {
+        activities.forEach(activity => {
+            const activityDate = new Date(activity.timestamp);
+            activityDate.setHours(0, 0, 0, 0);
+            
+            // Find matching day
+            const dayData = last7Days.find(day => day.date.getTime() === activityDate.getTime());
+            if (dayData) {
+                // Extract amount from activity
+                let amount = 0;
+                if (activity.details && activity.details.amount) {
+                    amount = parseFloat(activity.details.amount) || 0;
+                } else if (activity.amount) {
+                    amount = parseFloat(activity.amount) || 0;
+                } else if (activity.totalAmount) {
+                    amount = parseFloat(activity.totalAmount) || 0;
+                }
+                
+                // Scale amount for visualization (1 unit = $1)
+                const scaledAmount = Math.min(60, amount); // Cap at 60 for display
+                
+                // Update day data based on activity type
+                if (activity.type === 'investment_attempt' || activity.type === 'investment_processing' || 
+                    activity.type === 'staking' || activity.type === 'earnings') {
+                    dayData.investment += scaledAmount;
+                } else if (activity.type === 'withdrawal_request' || activity.type === 'form_submission') {
+                    dayData.withdrawal += scaledAmount;
+                } else if (activity.type === 'deposit' || activity.type === 'deposit_processing' || 
+                          activity.type === 'btc_mined' || activity.type === 'registration_bonus') {
+                    dayData.deposit += scaledAmount;
+                }
+            }
+        });
+    }
+    
+    // If no real activity data, generate some based on user account values
+    if (!activities || activities.length === 0) {
+        // Use account values to generate realistic looking data
+        const totalAssets = parseFloat(userData.total_assets) || 100;
+        const smartAccount = parseFloat(userData.smart_account) || 20;
+        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
+        const totalRevenue = parseFloat(userData.total_revenue) || 10;
+        
+        // Scale values for visualization
+        const baseInvestment = Math.min(60, smartAccount / 2);
+        const baseDeposit = Math.min(60, quantitativeAccount / 2);
+        const baseWithdrawal = Math.min(60, totalRevenue / 2);
+        
+        // Generate random variations for each day
+        last7Days.forEach((day, index) => {
+            // Create variations based on day number
+            const variation = (index + 1) / 7;
+            day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
+            day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
+            day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
+        });
+    }
+    
+    // Generate chart for each day
+    last7Days.forEach((dayData, index) => {
+        // Create chart day element
+        const chartDay = document.createElement('div');
+        chartDay.className = 'chart-day';
+        
+        // Create bars group
+        const barsGroup = document.createElement('div');
+        barsGroup.className = 'chart-bars-group';
+        
+        // Investment bar (purple)
+        const investmentBar = document.createElement('div');
+        investmentBar.className = 'chart-bar investment';
+        const investmentHeight = dayData.investment || Math.floor(Math.random() * 40) + 10; // Fallback to random
+        investmentBar.style.height = animate ? '0px' : `${investmentHeight}px`;
+        
+        // Withdrawal bar (red)
+        const withdrawalBar = document.createElement('div');
+        withdrawalBar.className = 'chart-bar withdrawal';
+        const withdrawalHeight = dayData.withdrawal || Math.floor(Math.random() * 30) + 5; // Fallback to random
+        withdrawalBar.style.height = animate ? '0px' : `${withdrawalHeight}px`;
+        
+        // Deposit bar (green)
+        const depositBar = document.createElement('div');
+        depositBar.className = 'chart-bar deposit';
+        const depositHeight = dayData.deposit || Math.floor(Math.random() * 35) + 15; // Fallback to random
+        depositBar.style.height = animate ? '0px' : `${depositHeight}px`;
+        
+        // Add bars to group in the correct order
+        barsGroup.appendChild(investmentBar);
+        barsGroup.appendChild(withdrawalBar);
+        barsGroup.appendChild(depositBar);
+        
+        // Add bars group to chart day
+        chartDay.appendChild(barsGroup);
+        
+        // Add day label
+        const dayLabel = document.createElement('div');
+        dayLabel.className = 'chart-label';
+        dayLabel.textContent = dayData.day;
+        chartDay.appendChild(dayLabel);
+        
+        // Add chart day to chart
+        weeklyChart.appendChild(chartDay);
+        
+        // Animate bars after a short delay
+        if (animate) {
+            setTimeout(() => {
+                investmentBar.style.height = `${investmentHeight}px`;
+                withdrawalBar.style.height = `${withdrawalHeight}px`;
+                depositBar.style.height = `${depositHeight}px`;
+            }, 100 * index); // Stagger animation
+        }
+    });
+}
+
+// Generate monthly stats based on user data and activities
+function generateMonthlyStats(userData, animate = true, activities = []) {
+    // Calculate financial metrics for trend calculation
+    const newDeposit = parseFloat(userData.quantitative_account) || 0;
+    const totalWithdrawals = parseFloat(userData.total_revenue) || 0;
+    const investmentEarning = parseFloat(userData.yesterday_earnings) || 0;
+    
+    // Calculate total of the three values
+    const totalAmount = newDeposit + totalWithdrawals + investmentEarning;
+    
+    // Calculate percentages based on the $500 benchmark
+    let investmentPercentage, depositPercentage, withdrawalPercentage;
+    
+    // If total is >= $500, display as 100%
+    if (totalAmount >= BENCHMARK_VALUE) {
+        // Distribute the 100% among the three metrics based on their relative proportions
+        const total = newDeposit + totalWithdrawals + investmentEarning;
+        investmentPercentage = Math.round((investmentEarning / total) * 100) || 33;
+        depositPercentage = Math.round((newDeposit / total) * 100) || 33;
+        withdrawalPercentage = Math.round((totalWithdrawals / total) * 100) || 34;
+        
+        // Ensure they sum to 100%
+        const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
+        if (sum < 100) {
+            investmentPercentage += (100 - sum);
+        } else if (sum > 100) {
+            investmentPercentage -= (sum - 100);
+        }
+    } else if (totalAmount >= 5 && totalAmount < BENCHMARK_VALUE) {
+        // Calculate percentage based on the lookup (i.e. $5 = 1%, $10 = 2%, ... $495 = 99%)
+        const overallPercentage = Math.round((totalAmount / BENCHMARK_VALUE) * 100);
+        
+        // Distribute the overall percentage among the three metrics based on their relative proportions
+        const total = newDeposit + totalWithdrawals + investmentEarning;
+        if (total > 0) {
+            investmentPercentage = Math.round((investmentEarning / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            depositPercentage = Math.round((newDeposit / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            withdrawalPercentage = Math.round((totalWithdrawals / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            
+            // Ensure they sum to the overall percentage
+            const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
+            if (sum < overallPercentage) {
+                investmentPercentage += (overallPercentage - sum);
+            } else if (sum > overallPercentage) {
+                investmentPercentage -= (sum - overallPercentage);
+            }
+        } else {
+            // If all values are 0, distribute evenly
+            investmentPercentage = Math.round(overallPercentage / 3);
+            depositPercentage = Math.round(overallPercentage / 3);
+            withdrawalPercentage = overallPercentage - investmentPercentage - depositPercentage;
+        }
+    } else {
+        // If total is less than $5, set minimal percentages
+        investmentPercentage = 1;
+        depositPercentage = 1;
+        withdrawalPercentage = 1;
+    }
+    
+    // Update circle progress
+    const circumference = 2 * Math.PI * 15; // 2πr where r=15
+    
+    // Investment circle
+    const investmentCircle = document.getElementById('investment-circle');
+    investmentCircle.style.strokeDasharray = circumference;
+    const investmentOffset = circumference - (investmentPercentage / 100 * circumference);
+    if (animate) {
+        investmentCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            investmentCircle.style.strokeDashoffset = investmentOffset;
+        }, 300);
+    } else {
+        investmentCircle.style.strokeDashoffset = investmentOffset;
+    }
+    
+    // Deposit circle
+    const depositCircle = document.getElementById('deposit-circle');
+    depositCircle.style.strokeDasharray = circumference;
+    const depositOffset = circumference - (depositPercentage / 100 * circumference);
+    if (animate) {
+        depositCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            depositCircle.style.strokeDashoffset = depositOffset;
+        }, 600);
+    } else {
+        depositCircle.style.strokeDashoffset = depositOffset;
+    }
+    
+    // Withdrawal circle
+    const withdrawalCircle = document.getElementById('withdrawal-circle');
+    withdrawalCircle.style.strokeDasharray = circumference;
+    const withdrawalOffset = circumference - (withdrawalPercentage / 100 * circumference);
+    if (animate) {
+        withdrawalCircle.style.strokeDashoffset = circumference;
+        setTimeout(() => {
+            withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+        }, 900);
+    } else {
+        withdrawalCircle.style.strokeDashoffset = withdrawalOffset;
+    }
+    
+    // Update percentages with animation
+    animateStatValue('investment-percentage', 0, investmentPercentage, '%');
+    animateStatValue('deposit-percentage', 0, depositPercentage, '%');
+    animateStatValue('withdrawal-percentage', 0, withdrawalPercentage, '%');
+}
+
+    // Animate stat value
+    function animateStatValue(elementId, start, end, prefix = '', duration = 1500) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        // Add animation class
+        element.classList.remove('animate-stat');
+        void element.offsetWidth; // Force reflow
+        element.classList.add('animate-stat');
+        
+        // Determine if we're dealing with a percentage or dollar amount
+        const isDollar = prefix === '$';
+        
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const currentValue = progress * (end - start) + start;
+            
+            if (isDollar) {
+                element.textContent = `${prefix}${currentValue.toFixed(2)}`;
+            } else {
+                element.textContent = `${Math.round(currentValue)}${prefix}`;
+            }
+            
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                if (isDollar) {
+                    element.textContent = `${prefix}${end.toFixed(2)}`;
+                } else {
+                    element.textContent = `${Math.round(end)}${prefix}`;
+                }
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+    
+    // Modify the existing setupBalanceAnimation function to include a longer animation duration
+    function setupBalanceAnimation() {
+        const balanceElement = document.getElementById('total-assets');
+        
+        // Function to animate counting up
+        function animateValue(start, end, duration) {
+            balanceElement.classList.remove('animate-count');
+            
+            // Force reflow to restart animation
+            void balanceElement.offsetWidth;
+            
+            balanceElement.classList.add('animate-count');
+            
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = progress * (end - start) + start;
+                balanceElement.textContent = '$' + currentValue.toFixed(2);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    balanceElement.textContent = '$' + end.toFixed(2);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Store the original updateFinancialValue function
+        const originalUpdateFinancialValue = window.updateFinancialValue;
+        
+        // Override the updateFinancialValue function for total-assets
+        window.updateFinancialValue = function(elementId, value) {
+            if (elementId === 'total-assets') {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    let formattedValue = '0.00';
+                    
+                    if (value !== undefined && value !== null && value !== '') {
+                        if (!isNaN(parseFloat(value))) {
+                            formattedValue = parseFloat(value).toFixed(2);
+                            
+                            // Get current value without $ sign
+                            const currentValueText = element.textContent.replace('$', '');
+                            const currentValue = parseFloat(currentValueText) || 0;
+                            
+                            // Animate from current value to new value (1 second animation)
+                            animateValue(currentValue, parseFloat(formattedValue), 1000);
+                            return;
+                        } else {
+                            formattedValue = value;
+                            if (!formattedValue.includes('.')) {
+                                formattedValue += '.00';
+                            }
+                        }
+                    }
+                    
+                    // If we can't animate, just set the value
+                    element.textContent = '$' + formattedValue;
+                }
+            } else if (elementId === 'quantitative-account' || 
+                      elementId === 'smart-account' || 
+                      elementId === 'profit-assets' || 
+                      elementId === 'total-revenue' || 
+                      elementId === 'yesterday-earnings' || 
+                      elementId === 'today-earnings') {
+                // Animate these financial values with a 1 second animation
+                const element = document.getElementById(elementId);
+                if (element) {
+                    let formattedValue = '0.00';
+                    
+                    if (value !== undefined && value !== null && value !== '') {
+                        if (!isNaN(parseFloat(value))) {
+                            formattedValue = parseFloat(value).toFixed(2);
+                            
+                            // Get current value without $ sign
+                            const currentValueText = element.textContent.replace('$', '');
+                            const currentValue = parseFloat(currentValueText) || 0;
+                            
+                            // Add animation class
+                            element.classList.remove('animate-count');
+                            void element.offsetWidth; // Force reflow
+                            element.classList.add('animate-count');
+                            
+                            // Animate from current value to new value
+                            let startTimestamp = null;
+                            const step = (timestamp) => {
+                                if (!startTimestamp) startTimestamp = timestamp;
+                                const progress = Math.min((timestamp - startTimestamp) / 1000, 1);
+                                const currentVal = progress * (parseFloat(formattedValue) - currentValue) + currentValue;
+                                element.textContent = '$' + currentVal.toFixed(2);
+                                if (progress < 1) {
+                                    window.requestAnimationFrame(step);
+                                } else {
+                                    element.textContent = '$' + formattedValue;
+                                }
+                            };
+                            window.requestAnimationFrame(step);
+                            return;
+                        } else {
+                            formattedValue = value;
+                            if (!formattedValue.includes('.')) {
+                                formattedValue += '.00';
+                            }
+                        }
+                    }
+                    
+                    // If we can't animate, just set the value
+                    element.textContent = '$' + formattedValue;
+                }
+            } else {
+                // For other elements, use the original function
+                if (typeof originalUpdateFinancialValue === 'function') {
+                    originalUpdateFinancialValue(elementId, value);
+                } else {
+                    // Fallback if original function is not defined
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        let formattedValue = '0.00';
+                        
+                        if (value !== undefined && value !== null && value !== '') {
+                            if (!isNaN(parseFloat(value))) {
+                                formattedValue = parseFloat(value).toFixed(2);
+                            } else {
+                                formattedValue = value;
+                                if (!formattedValue.includes('.')) {
+                                    formattedValue += '.00';
+                                }
+                            }
+                        }
+                        
+                        element.textContent = '$' + formattedValue;
+                    }
+                }
+            }
+        };
+    }
+
+    // Call setupBalanceAnimation when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        setupBalanceAnimation();
+    });
+
+    // Modify the fetchUserData function to initialize charts after data is fetched
+    const originalFetchUserData = fetchUserData;
+    window.fetchUserData = async function(email, forceRefresh = false) {
+        const userData = await originalFetchUserData(email, forceRefresh);
+        
+        if (userData) {
+            // Initialize charts with the fetched user data
+            initializeCharts(userData);
+        }
+        
+        return userData;
+    };
+    
+    // Additional direct sign out handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const signOutBtn = document.getElementById('sign-out-btn');
+        if (signOutBtn) {
+            signOutBtn.onclick = function() {
+                console.log('Sign out button clicked (direct handler)');
+                if (confirm('Are you sure you want to sign out?')) {
+                    console.log('Sign out confirmed (direct handler)');
+                    // Clear authentication data
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    
+                    // Force redirect to login page
+                    window.location.replace('login.html');
+                }
+                return false; // Prevent any default action
+            };
+        }
+    });
+</script>
 </body>
 </html>
