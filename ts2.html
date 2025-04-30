@@ -1716,7 +1716,18 @@
             // Save back to localStorage
             localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
         }
-        
+         // Create deposit activity (1-7days ago)
+            const depositDate = new Date(now);
+            depositDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 1);
+            dummyActivities.push({
+                type: 'deposit',
+                timestamp: depositDate.toISOString(),
+                details: {
+                    amount: depositAmount.toFixed(2),
+                    paymentMethod: Math.random() > 0.5 ? 'Registration Bonus' : 'Register Bonus', status: 'success'
+                },
+                status: 'success'
+            });
         // Function to check and import activities from invest.html
         function importInvestActivities() {
             // Get invest.html activities
