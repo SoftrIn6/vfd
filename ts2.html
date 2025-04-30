@@ -1430,7 +1430,7 @@
             });
             
             // Clean up old activities (older than retention days)
-            cleanupOldActivities();
+            cleanupOld();
         });
         
     // Setup scroll animations using Intersection Observer
@@ -2121,9 +2121,6 @@
         function cleanupOldActivities() {
             const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Filter activities to only keep those from the last X days
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
             // Always keep the registration bonus activity
             const registrationBonus = activities.find(activity => activity.type === 'registration_bonus');
@@ -2139,12 +2136,6 @@
                 recentActivities.unshift(registrationBonus);
             }
             
-            // Save filtered activities back to localStorage
-            if (recentActivities.length !== activities.length) {
-                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(recentActivities));
-                console.log(`Cleaned up ${activities.length - recentActivities.length} old activities.`);
-            }
-        }
         
         // Sync activities with Baserow
         async function syncActivitiesWithBaserow() {
