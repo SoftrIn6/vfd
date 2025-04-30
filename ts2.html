@@ -1606,8 +1606,7 @@
                         total_revenue: user[`field_${fieldMap['total_revenue']}`] || '0.00',
                         yesterday_earnings: user[`field_${fieldMap['yesterday_earnings']}`] || '0.00',
                         today_earnings: user[`field_${fieldMap['today_earnings']}`] || '0.00',
-                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00',
-                        registration_date: user[`field_${fieldMap['created_on']}`] || new Date().toISOString()
+                        commission_today: user[`field_${fieldMap['commission_today']}`] || '0.00'
                     };
                     
                     console.log('User data to store:', userDataToStore);
@@ -1696,24 +1695,17 @@
             }
         }
         
-        // Updated loadActivityHistory function to show personalized activities for each user
+        // Find the loadActivityHistory function and replace it with this updated version
+        // that ensures activities are always displayed, even if there are no real user activities
+
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            let activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Get user-specific activity key
-            const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
-            
-            // Get user activities from localStorage
-            let activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
-            
-            // Get registration date from user data or use current date as fallback
-            const registrationDate = userData.registration_date || new Date().toISOString();
-            
-            // Create registration bonus activity with the user's actual registration date
+            // Always ensure the registration bonus activity exists
             const registrationBonus = {
                 type: 'registration_bonus',
-                timestamp: registrationDate,
+                timestamp: new Date().toISOString(),
                 details: 'Registration bonus of $5 USD added to your wallet',
                 status: 'success'
             };
@@ -1724,8 +1716,8 @@
             // Add the registration bonus as the first activity
             activities.unshift(registrationBonus);
             
-            // Save updated activities to user-specific storage
-            localStorage.setItem(userSpecificKey, JSON.stringify(activities));
+            // Save updated activities
+            localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
             
             // Filter activities to only show those from the last X days
             const cutoffDate = new Date();
@@ -1739,14 +1731,14 @@
                 return activityDate >= cutoffDate;
             });
             
-            // Get user-specific activities from other pages if available
-            const bankActivities = JSON.parse(localStorage.getItem(`bankActivities_${userData.email}`) || '[]');
-            const cryptoActivities = JSON.parse(localStorage.getItem(`cryptoActivities_${userData.email}`) || '[]');
-            const investActivities = JSON.parse(localStorage.getItem(`investActivities_${userData.email}`) || '[]');
-            const stakeActivities = JSON.parse(localStorage.getItem(`stakeActivities_${userData.email}`) || '[]');
-            const miningActivities = JSON.parse(localStorage.getItem(`miningActivities_${userData.email}`) || '[]');
+            // Get activities from other pages if available
+            const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+            const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+            const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+            const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
+            const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
             
-            // Combine all user-specific activities
+            // Combine all activities
             const allActivities = [
                 ...recentActivities,
                 ...bankActivities,
@@ -1770,18 +1762,7 @@
                        activity.type === 'registration_bonus';
             });
             
-            // If we don't have any activities other than registration bonus, generate some personalized dummy activities
-            if (filteredActivities.length <= 1) {
-                // Use user data to create personalized dummy activities
-                const dummyActivities = generatePersonalizedDummyActivities(userData);
-                
-                // Add dummy activities
-                filteredActivities = [...filteredActivities, ...dummyActivities];
-                
-                // Save these dummy activities to localStorage for persistence
-                activities = [...activities, ...dummyActivities];
-                localStorage.setItem(userSpecificKey, JSON.stringify(activities));
-            }
+            
             
             // Sort activities by timestamp (newest first)
             filteredActivities.sort((a, b) => {
@@ -1818,210 +1799,12 @@
             
             // If this is a forced refresh, sync with Baserow
             if (forceRefresh) {
-                syncActivitiesWithBaserow(userData.email);
+                syncActivitiesWithBaserow();
             }
             
             // Return the filtered activities for use in charts
             return filteredActivities;
         }
-
-// Replace with this updated version:
-function loadActivityHistory(forceRefresh = false) {
-    const activityList = document.getElementById('activity-list');
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    
-    // Get user-specific activity key
-    const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
-    
-    // Get user activities from localStorage
-    let activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
-    
-    // Get registration date from user data or use current date as fallback
-    const registrationDate = userData.registration_date || new Date().toISOString();
-    
-    // Create registration bonus activity with the user's actual registration date
-    const registrationBonus = {
-        type: 'registration_bonus',
-        timestamp: registrationDate,
-        details: 'Registration bonus of $5 USD added to your wallet',
-        status: 'success'
-    };
-    
-    // Remove any existing registration bonus activities
-    activities = activities.filter(activity => activity.type !== 'registration_bonus');
-    
-    // Add the registration bonus as the first activity
-    activities.unshift(registrationBonus);
-    
-    // Save updated activities to user-specific storage
-    localStorage.setItem(userSpecificKey, JSON.stringify(activities));
-    
-    // Filter activities to only show those from the last X days
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
-    
-    const recentActivities = activities.filter(activity => {
-        // Always keep registration bonus
-        if (activity.type === 'registration_bonus') return true;
-        
-        const activityDate = new Date(activity.timestamp);
-        return activityDate >= cutoffDate;
-    });
-    
-    // Get user-specific activities from other pages if available
-    const bankActivities = JSON.parse(localStorage.getItem(`bankActivities_${userData.email}`) || '[]');
-    const cryptoActivities = JSON.parse(localStorage.getItem(`cryptoActivities_${userData.email}`) || '[]');
-    const investActivities = JSON.parse(localStorage.getItem(`investActivities_${userData.email}`) || '[]');
-    const stakeActivities = JSON.parse(localStorage.getItem(`stakeActivities_${userData.email}`) || '[]');
-    const miningActivities = JSON.parse(localStorage.getItem(`miningActivities_${userData.email}`) || '[]');
-    
-    // Combine all user-specific activities
-    const allActivities = [
-        ...recentActivities,
-        ...bankActivities,
-        ...cryptoActivities,
-        ...investActivities,
-        ...stakeActivities,
-        ...miningActivities
-    ];
-    
-    // Filter to show investment, withdrawal, deposit, staking, mining and earnings activities
-    let filteredActivities = allActivities.filter(activity => {
-        return activity.type === 'withdrawal_request' || 
-               activity.type === 'form_submission' || 
-               activity.type === 'investment_attempt' || 
-               activity.type === 'investment_processing' || 
-               activity.type === 'deposit' ||
-               activity.type === 'deposit_processing' ||
-               activity.type === 'staking' ||
-               activity.type === 'btc_mined' ||
-               activity.type === 'earnings' ||
-               activity.type === 'registration_bonus';
-    });
-    
-    // REMOVED: No longer generating dummy activities for users with few activities
-    // We now only show actual user activities plus the registration bonus
-    
-    // Sort activities by timestamp (newest first)
-    filteredActivities.sort((a, b) => {
-        return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-    
-    // Clear the activity list
-    activityList.innerHTML = '';
-    
-    // If no activities other than registration bonus, show a message
-    if (filteredActivities.length <= 1) {
-        const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'activity-empty';
-        emptyMessage.textContent = 'No recent activities found. Your registration bonus is shown above.';
-        activityList.appendChild(emptyMessage);
-    } else {
-        // Display first 4 activities
-        const activitiesToShow = filteredActivities.slice(0, 4);
-        activitiesToShow.forEach(activity => {
-            const activityItem = createActivityItem(activity);
-            activityList.appendChild(activityItem);
-        });
-        
-        // Show/hide load more button
-        if (filteredActivities.length > 4) {
-            document.getElementById('activity-load-more').style.display = 'block';
-            document.getElementById('activity-load-more').onclick = () => {
-                // Show all activities
-                activityList.innerHTML = '';
-                filteredActivities.forEach(activity => {
-                    const activityItem = createActivityItem(activity);
-                    activityList.appendChild(activityItem);
-                });
-                
-                // Hide load more button
-                document.getElementById('activity-load-more').style.display = 'none';
-            };
-        } else {
-            document.getElementById('activity-load-more').style.display = 'none';
-        }
-    }
-    
-    // If this is a forced refresh, sync with Baserow
-    if (forceRefresh) {
-        syncActivitiesWithBaserow(userData.email);
-    }
-    
-    // Return the filtered activities for use in charts
-    return filteredActivities;
-}
-
-// Remove or comment out the generatePersonalizedDummyActivities function since we no longer need it
-// Find this function:
-/* 
-// This function has been disabled to ensure users only see their actual activities
-function generatePersonalizedDummyActivities(userData) {
-    // Return empty array - no dummy activities
-    return [];
-}
-*/
-        
-        // Generate personalized dummy activities based on user data
-        function generatePersonalizedDummyActivities(userData) {
-            const dummyActivities = [];
-            const now = new Date();
-            
-            // Use user's financial data to create realistic activities
-            const depositAmount = parseFloat(userData.quantitative_account) || 100;
-            const miningAmount = parseFloat(userData.smart_account) || 25;
-            const investmentAmount = parseFloat(userData.yesterday_earnings) * 10 || 200;
-            
-            // Create deposit activity (1-2 days ago)
-            const depositDate = new Date(now);
-            depositDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 1);
-            dummyActivities.push({
-                type: 'deposit',
-                timestamp: depositDate.toISOString(),
-                details: {
-                    amount: depositAmount.toFixed(2),
-                    paymentMethod: Math.random() > 0.5 ? 'Bank Transfer' : 'Crypto',
-                    status: 'success'
-                },
-                status: 'success'
-            });
-            
-            // Create mining activity (2-3 days ago)
-            const miningDate = new Date(now);
-            miningDate.setDate(now.getDate() - Math.floor(Math.random() * 2) - 2);
-            dummyActivities.push({
-                type: 'btc_mined',
-                timestamp: miningDate.toISOString(),
-                details: {
-                    amount: miningAmount.toFixed(2),
-                    source: 'Mining Pool'
-                },
-                status: 'success'
-            });
-            
-            // Create investment activity (3-5 days ago)
-            const investmentDate = new Date(now);
-            investmentDate.setDate(now.getDate() - Math.floor(Math.random() * 3) - 3);
-            dummyActivities.push({
-                type: 'investment_attempt',
-                timestamp: investmentDate.toISOString(),
-                planTitle: Math.random() > 0.5 ? 'Gold Plan' : 'Silver Plan',
-                totalAmount: investmentAmount.toFixed(2),
-                success: true,
-                status: 'success'
-            });
-            
-            return dummyActivities;
-        }
-
-// Replace with a commented out version to preserve the code structure but disable functionality:
-/* 
-// This function has been disabled to ensure users only see their actual activities
-function generatePersonalizedDummyActivities(userData) {
-    // Return empty array - no dummy activities
-    return [];
-}
-*/
         
         // Create an activity item element
         function createActivityItem(activity) {
@@ -2187,9 +1970,7 @@ function generatePersonalizedDummyActivities(userData) {
         // Set up activity export
         function setupActivityExport() {
             document.getElementById('activity-export').addEventListener('click', function() {
-                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-                const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
-                const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
                 
                 // Filter to include investment, withdrawal, and deposit activities
                 const filteredActivities = activities.filter(activity => {
@@ -2338,11 +2119,7 @@ function generatePersonalizedDummyActivities(userData) {
         
         // Clean up old activities (older than retention days)
         function cleanupOldActivities() {
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            if (!userData.email) return;
-            
-            const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
-            const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+            const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
             // Filter activities to only keep those from the last X days
             const cutoffDate = new Date();
@@ -2364,22 +2141,22 @@ function generatePersonalizedDummyActivities(userData) {
             
             // Save filtered activities back to localStorage
             if (recentActivities.length !== activities.length) {
-                localStorage.setItem(userSpecificKey, JSON.stringify(recentActivities));
+                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(recentActivities));
                 console.log(`Cleaned up ${activities.length - recentActivities.length} old activities.`);
             }
         }
         
         // Sync activities with Baserow
-        async function syncActivitiesWithBaserow(userEmail) {
+        async function syncActivitiesWithBaserow() {
             try {
-                if (!userEmail) {
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                if (!userData.email) {
                     console.error('No user email found for syncing activities');
                     return;
                 }
                 
                 // Get activities from localStorage
-                const userSpecificKey = `${USER_ACTIVITY_KEY}_${userEmail}`;
-                const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+                const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
                 
                 // Filter to include investment, withdrawal, and deposit activities
                 const filteredActivities = activities.filter(activity => {
@@ -2438,7 +2215,7 @@ function generatePersonalizedDummyActivities(userData) {
                     const rowData = {};
                     
                     // Set user email
-                    rowData[`field_${fieldMap['user_email']}`] = userEmail;
+                    rowData[`field_${fieldMap['user_email']}`] = userData.email;
                     
                     // Set activity type
                     rowData[`field_${fieldMap['activity_type']}`] = activity.type || 'unknown';
@@ -2519,8 +2296,7 @@ function generatePersonalizedDummyActivities(userData) {
     // Initialize charts based on user data
     function initializeCharts(userData, animate = true) {
         // Get user activities for chart data
-        const userSpecificKey = `${USER_ACTIVITY_KEY}_${userData.email}`;
-        const activities = JSON.parse(localStorage.getItem(userSpecificKey) || '[]');
+        const activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
         
         // Generate weekly chart data based on user data and activities
         generateWeeklyChart(userData, animate, activities);
