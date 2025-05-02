@@ -1084,7 +1084,7 @@
                 </div>
                 <div class="promo-card">
                     <div class="promo-title">Stake Earnings</div>
-                    <div class="promo-subtitle" id="today-earnings">$0.00</div>
+                    <div class="promo-subtitle" id="commission-today">$0.00</div>
                     <div class="promo-illustration">
                         <i class="fas fa-chart-line" style="font-size: 60px;"></i>
                     </div>
@@ -1667,7 +1667,7 @@
             updateFinancialValue('profit-assets', userData.profit_assets);
             updateFinancialValue('total-revenue', userData.total_revenue);
             updateFinancialValue('yesterday-earnings', userData.yesterday_earnings);
-            updateFinancialValue('today-earnings', userData.today_earnings);
+            updateFinancialValue('commission-today', userData.commission_today);
         }
         
         // Helper function to update financial values
@@ -2429,28 +2429,35 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
         });
     }
     
-    // If no real activity data, generate some based on user account values
-    if (!activities || activities.length === 0) {
-        // Use account values to generate realistic looking data
-        const totalAssets = parseFloat(userData.total_assets) || 100;
-        const smartAccount = parseFloat(userData.smart_account) || 20;
-        const quantitativeAccount = parseFloat(userData.quantitative_account) || 30;
-        const totalRevenue = parseFloat(userData.total_revenue) || 10;
+    // If no real activity data, use user account values for the chart
+    // Use yesterday_earnings for investment (purple)
+    // Use quantitative_account for deposit (green)
+    // Use total_revenue for withdrawal (red)
+    const yesterdayEarnings = parseFloat(userData.yesterday_earnings) || 0;
+    const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
+    const totalRevenue = parseFloat(userData.total_revenue) || 0;
+    
+    // Scale values for visualization
+    const baseInvestment = Math.min(60, yesterdayEarnings);
+    const baseDeposit = Math.min(60, quantitativeAccount);
+    const baseWithdrawal = Math.min(60, totalRevenue);
+    
+    // Generate variations for each day
+    last7Days.forEach((day, index) => {
+        // Create variations based on day number
+        const variation = (index + 1) / 7;
         
-        // Scale values for visualization
-        const baseInvestment = Math.min(60, smartAccount / 2);
-        const baseDeposit = Math.min(60, quantitativeAccount / 2);
-        const baseWithdrawal = Math.min(60, totalRevenue / 2);
-        
-        // Generate random variations for each day
-        last7Days.forEach((day, index) => {
-            // Create variations based on day number
-            const variation = (index + 1) / 7;
+        // Only override if no real data
+        if (day.investment === 0) {
             day.investment = Math.max(5, Math.round(baseInvestment * (0.5 + variation)));
+        }
+        if (day.withdrawal === 0) {
             day.withdrawal = Math.max(5, Math.round(baseWithdrawal * (0.3 + variation)));
+        }
+        if (day.deposit === 0) {
             day.deposit = Math.max(5, Math.round(baseDeposit * (0.7 + variation)));
-        });
-    }
+        }
+    });
     
     // Generate chart for each day
     last7Days.forEach((dayData, index) => {
@@ -2510,24 +2517,28 @@ function generateWeeklyChart(userData, animate = true, activities = []) {
 
 // Generate monthly stats based on user data and activities
 function generateMonthlyStats(userData, animate = true, activities = []) {
-    // Calculate financial metrics for trend calculation
-    const newDeposit = parseFloat(userData.quantitative_account) || 0;
-    const totalWithdrawals = parseFloat(userData.total_revenue) || 0;
-    const investmentEarning = parseFloat(userData.yesterday_earnings) || 0;
+    // Use yesterday_earnings for investment (purple)
+    // Use quantitative_account for deposit (green)
+    // Use total_revenue for withdrawal (red)
+    const yesterdayEarnings = parseFloat(userData.yesterday_earnings) || 0;
+    const quantitativeAccount = parseFloat(userData.quantitative_account) || 0;
+    const totalRevenue = parseFloat(userData.total_revenue) || 0;
     
     // Calculate total of the three values
-    const totalAmount = newDeposit + totalWithdrawals + investmentEarning;
+    const totalAmount = yesterdayEarnings + quantitativeAccount + totalRevenue;
     
     // Calculate percentages based on the $500 benchmark
     let investmentPercentage, depositPercentage, withdrawalPercentage;
     
+    // If total is >= $500, display as   depositPercentage, withdrawalPercentage;
+    
     // If total is >= $500, display as 100%
     if (totalAmount >= BENCHMARK_VALUE) {
         // Distribute the 100% among the three metrics based on their relative proportions
-        const total = newDeposit + totalWithdrawals + investmentEarning;
-        investmentPercentage = Math.round((investmentEarning / total) * 100) || 33;
-        depositPercentage = Math.round((newDeposit / total) * 100) || 33;
-        withdrawalPercentage = Math.round((totalWithdrawals / total) * 100) || 34;
+        const total = yesterdayEarnings + quantitativeAccount + totalRevenue;
+        investmentPercentage = Math.round((yesterdayEarnings / total) * 100) || 33;
+        depositPercentage = Math.round((quantitativeAccount / total) * 100) || 33;
+        withdrawalPercentage = Math.round((totalRevenue / total) * 100) || 34;
         
         // Ensure they sum to 100%
         const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
@@ -2541,11 +2552,11 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
         const overallPercentage = Math.round((totalAmount / BENCHMARK_VALUE) * 100);
         
         // Distribute the overall percentage among the three metrics based on their relative proportions
-        const total = newDeposit + totalWithdrawals + investmentEarning;
+        const total = yesterdayEarnings + quantitativeAccount + totalRevenue;
         if (total > 0) {
-            investmentPercentage = Math.round((investmentEarning / total) * overallPercentage) || Math.round(overallPercentage / 3);
-            depositPercentage = Math.round((newDeposit / total) * overallPercentage) || Math.round(overallPercentage / 3);
-            withdrawalPercentage = Math.round((totalWithdrawals / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            investmentPercentage = Math.round((yesterdayEarnings / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            depositPercentage = Math.round((quantitativeAccount / total) * overallPercentage) || Math.round(overallPercentage / 3);
+            withdrawalPercentage = Math.round((totalRevenue / total) * overallPercentage) || Math.round(overallPercentage / 3);
             
             // Ensure they sum to the overall percentage
             const sum = investmentPercentage + depositPercentage + withdrawalPercentage;
@@ -2718,7 +2729,7 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
                       elementId === 'profit-assets' || 
                       elementId === 'total-revenue' || 
                       elementId === 'yesterday-earnings' || 
-                      elementId === 'today-earnings') {
+                      elementId === 'commission-today') {
                 // Animate these financial values with a 1 second animation
                 const element = document.getElementById(elementId);
                 if (element) {
