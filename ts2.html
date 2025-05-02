@@ -1700,12 +1700,9 @@
             const activityList = document.getElementById('activity-list');
             
             // Get activities from all sources
-            const userActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
-            const bankActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.page === 'bank-withdrawal');
-            const cryptoActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.page === 'crypto-withdrawal');
-            const investActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.type === 'investment_attempt' || activity.type === 'investment_processing');
+            let activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Create registration bonus activity
+            // Always ensure the registration bonus activity exists
             const registrationBonus = {
                 type: 'registration_bonus',
                 timestamp: new Date().toISOString(),
@@ -1713,18 +1710,23 @@
                 status: 'success'
             };
             
+            // Remove any existing registration bonus activities
+            activities = activities.filter(activity => activity.type !== 'registration_bonus');
+            
+            // Add the registration bonus as the first activity
+            activities.unshift(registrationBonus);
+            
+            // Get activities from other pages
+            const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
+            const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
+            const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
+            
             // Combine all activities
-            let allActivities = [
-                registrationBonus,
+            const allActivities = [
+                ...activities,
                 ...bankActivities,
                 ...cryptoActivities,
-                ...investActivities,
-                ...userActivities.filter(activity => 
-                    activity.type !== 'registration_bonus' && 
-                    !activity.timestamp.includes('5/1/2025 12:27 PM') && 
-                    !activity.timestamp.includes('4/30/2025 12:27 PM') && 
-                    !activity.timestamp.includes('4/29/2025 12:27 PM')
-                )
+                ...investActivities
             ];
             
             // Filter activities to only show those from the last X days
@@ -1778,8 +1780,6 @@
             }
             
             // If this is a forced refresh, sync with Baserow
-            if (forceRefresh) {
-                syncActivitiesWithBaserow  sync with Baserow
             if (forceRefresh) {
                 syncActivitiesWithBaserow();
             }
@@ -2473,8 +2473,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     
     // Calculate percentages based on the $500 benchmark
     let investmentPercentage, depositPercentage, withdrawalPercentage;
-    
-    // If total is >= $500, display as   depositPercentage, withdrawalPercentage;
     
     // If total is >= $500, display as 100%
     if (totalAmount >= BENCHMARK_VALUE) {
