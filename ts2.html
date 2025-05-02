@@ -1055,6 +1055,9 @@
                         <i class="fas fa-wallet" style="font-size: 60px;"></i>
                     </div>
                 </div>
+                  style="font-size: 60px;"></i>
+                    </div>
+                </div>
                 <div class="promo-card">
                     <div class="promo-title">BTC Mined</div>
                     <div class="promo-subtitle" id="smart-account">$0.00</div>
@@ -1762,44 +1765,11 @@
                        activity.type === 'registration_bonus';
             });
             
-            // If we don't have any activities other than registration bonus, add some dummy activities
+            // If we don't have any activities other than registration bonus, show only registration bonus
+            // Removed the dummy activities as requested
             if (filteredActivities.length <= 1) {
-                const dummyActivities = [
-                    {
-                        type: 'deposit',
-                        timestamp: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-                        details: {
-                            amount: '100.00',
-                            paymentMethod: 'Bank Transfer',
-                            status: 'success'
-                        },
-                        status: 'success'
-                    },
-                    {
-                        type: 'btc_mined',
-                        timestamp: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-                        details: {
-                            amount: '25.50',
-                            source: 'Mining Pool'
-                        },
-                        status: 'success'
-                    },
-                    {
-                        type: 'investment_attempt',
-                        timestamp: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
-                        planTitle: 'Gold Plan',
-                        totalAmount: '200.00',
-                        success: true,
-                        status: 'success'
-                    }
-                ];
-                
-                // Add dummy activities
-                filteredActivities = [...filteredActivities, ...dummyActivities];
-                
-                // Save these dummy activities to localStorage for persistence
-                activities = [...activities, ...dummyActivities];
-                localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
+                // No dummy activities added here - only showing registration bonus
+                console.log('No activities found other than registration bonus');
             }
             
             // Sort activities by timestamp (newest first)
@@ -2529,8 +2499,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     
     // Calculate percentages based on the $500 benchmark
     let investmentPercentage, depositPercentage, withdrawalPercentage;
-    
-    // If total is >= $500, display as   depositPercentage, withdrawalPercentage;
     
     // If total is >= $500, display as 100%
     if (totalAmount >= BENCHMARK_VALUE) {
