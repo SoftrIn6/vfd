@@ -1055,9 +1055,6 @@
                         <i class="fas fa-wallet" style="font-size: 60px;"></i>
                     </div>
                 </div>
-                  style="font-size: 60px;"></i>
-                    </div>
-                </div>
                 <div class="promo-card">
                     <div class="promo-title">BTC Mined</div>
                     <div class="promo-subtitle" id="smart-account">$0.00</div>
@@ -1756,6 +1753,8 @@
                 return activity.type === 'withdrawal_request' || 
                        activity.type === 'form_submission' || 
                        activity.type === 'investment_attempt' || 
+                       activity.type ===   || 
+                       activity.type === 'investment_attempt' || 
                        activity.type === 'investment_processing' || 
                        activity.type === 'deposit' ||
                        activity.type === 'deposit_processing' ||
@@ -1764,13 +1763,6 @@
                        activity.type === 'earnings' ||
                        activity.type === 'registration_bonus';
             });
-            
-            // If we don't have any activities other than registration bonus, show only registration bonus
-            // Removed the dummy activities as requested
-            if (filteredActivities.length <= 1) {
-                // No dummy activities added here - only showing registration bonus
-                console.log('No activities found other than registration bonus');
-            }
             
             // Sort activities by timestamp (newest first)
             filteredActivities.sort((a, b) => {
@@ -2518,6 +2510,8 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     } else if (totalAmount >= 5 && totalAmount < BENCHMARK_VALUE) {
         // Calculate percentage based on the lookup (i.e. $5 = 1%, $10 = 2%, ... $495 = 99%)
         const overallPercentage = Math.round((totalAmount / BENCHMARK_VALUE) * 100);
+        
+        // Distribute the overall percentage among the three metrics based on  * 100);
         
         // Distribute the overall percentage among the three metrics based on their relative proportions
         const total = yesterdayEarnings + quantitativeAccount + totalRevenue;
