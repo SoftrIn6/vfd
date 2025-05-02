@@ -1695,14 +1695,17 @@
             }
         }
         
-        // Find the loadActivityHistory function and replace it with this updated version
-        // that ensures activities are always displayed, even if there are no real user activities
-
+        // Modified loadActivityHistory function to show activities from other HTML files
         function loadActivityHistory(forceRefresh = false) {
             const activityList = document.getElementById('activity-list');
-            let activities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
             
-            // Always ensure the registration bonus activity exists
+            // Get activities from all sources
+            const userActivities = JSON.parse(localStorage.getItem(USER_ACTIVITY_KEY) || '[]');
+            const bankActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.page === 'bank-withdrawal');
+            const cryptoActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.page === 'crypto-withdrawal');
+            const investActivities = JSON.parse(localStorage.getItem('userActivityHistory') || '[]').filter(activity => activity.type === 'investment_attempt' || activity.type === 'investment_processing');
+            
+            // Create registration bonus activity
             const registrationBonus = {
                 type: 'registration_bonus',
                 timestamp: new Date().toISOString(),
@@ -1710,20 +1713,25 @@
                 status: 'success'
             };
             
-            // Remove any existing registration bonus activities
-            activities = activities.filter(activity => activity.type !== 'registration_bonus');
-            
-            // Add the registration bonus as the first activity
-            activities.unshift(registrationBonus);
-            
-            // Save updated activities
-            localStorage.setItem(USER_ACTIVITY_KEY, JSON.stringify(activities));
+            // Combine all activities
+            let allActivities = [
+                registrationBonus,
+                ...bankActivities,
+                ...cryptoActivities,
+                ...investActivities,
+                ...userActivities.filter(activity => 
+                    activity.type !== 'registration_bonus' && 
+                    !activity.timestamp.includes('5/1/2025 12:27 PM') && 
+                    !activity.timestamp.includes('4/30/2025 12:27 PM') && 
+                    !activity.timestamp.includes('4/29/2025 12:27 PM')
+                )
+            ];
             
             // Filter activities to only show those from the last X days
             const cutoffDate = new Date();
             cutoffDate.setDate(cutoffDate.getDate() - ACTIVITY_RETENTION_DAYS);
             
-            const recentActivities = activities.filter(activity => {
+            const recentActivities = allActivities.filter(activity => {
                 // Always keep registration bonus
                 if (activity.type === 'registration_bonus') return true;
                 
@@ -1731,61 +1739,33 @@
                 return activityDate >= cutoffDate;
             });
             
-            // Get activities from other pages if available
-            const bankActivities = JSON.parse(localStorage.getItem('bankActivities') || '[]');
-            const cryptoActivities = JSON.parse(localStorage.getItem('cryptoActivities') || '[]');
-            const investActivities = JSON.parse(localStorage.getItem('investActivities') || '[]');
-            const stakeActivities = JSON.parse(localStorage.getItem('stakeActivities') || '[]');
-            const miningActivities = JSON.parse(localStorage.getItem('miningActivities') || '[]');
-            
-            // Combine all activities
-            const allActivities = [
-                ...recentActivities,
-                ...bankActivities,
-                ...cryptoActivities,
-                ...investActivities,
-                ...stakeActivities,
-                ...miningActivities
-            ];
-            
-            // Filter to show investment, withdrawal, deposit, staking, mining and earnings activities
-            let filteredActivities = allActivities.filter(activity => {
-                return activity.type === 'withdrawal_request' || 
-                       activity.type === 'form_submission' || 
-                       activity.type === 'investment_attempt' || 
-                       activity.type ===   || 
-                       activity.type === 'investment_attempt' || 
-                       activity.type === 'investment_processing' || 
-                       activity.type === 'deposit' ||
-                       activity.type === 'deposit_processing' ||
-                       activity.type === 'staking' ||
-                       activity.type === 'btc_mined' ||
-                       activity.type === 'earnings' ||
-                       activity.type === 'registration_bonus';
-            });
-            
             // Sort activities by timestamp (newest first)
-            filteredActivities.sort((a, b) => {
+            recentActivities.sort((a, b) => {
                 return new Date(b.timestamp) - new Date(a.timestamp);
             });
             
             // Clear the activity list
             activityList.innerHTML = '';
             
-            // Display first 4 activities (changed from 5 to 4 as requested)
-            const activitiesToShow = filteredActivities.slice(0, 4);
+            if (recentActivities.length === 0) {
+                activityList.innerHTML = '<div class="activity-empty">No recent activities found.</div>';
+                return;
+            }
+            
+            // Display first 4 activities
+            const activitiesToShow = recentActivities.slice(0, 4);
             activitiesToShow.forEach(activity => {
                 const activityItem = createActivityItem(activity);
                 activityList.appendChild(activityItem);
             });
             
             // Show/hide load more button
-            if (filteredActivities.length > 4) {
+            if (recentActivities.length > 4) {
                 document.getElementById('activity-load-more').style.display = 'block';
                 document.getElementById('activity-load-more').onclick = () => {
                     // Show all activities
                     activityList.innerHTML = '';
-                    filteredActivities.forEach(activity => {
+                    recentActivities.forEach(activity => {
                         const activityItem = createActivityItem(activity);
                         activityList.appendChild(activityItem);
                     });
@@ -1799,11 +1779,13 @@
             
             // If this is a forced refresh, sync with Baserow
             if (forceRefresh) {
+                syncActivitiesWithBaserow  sync with Baserow
+            if (forceRefresh) {
                 syncActivitiesWithBaserow();
             }
             
             // Return the filtered activities for use in charts
-            return filteredActivities;
+            return recentActivities;
         }
         
         // Create an activity item element
@@ -2492,6 +2474,8 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     // Calculate percentages based on the $500 benchmark
     let investmentPercentage, depositPercentage, withdrawalPercentage;
     
+    // If total is >= $500, display as   depositPercentage, withdrawalPercentage;
+    
     // If total is >= $500, display as 100%
     if (totalAmount >= BENCHMARK_VALUE) {
         // Distribute the 100% among the three metrics based on their relative proportions
@@ -2510,8 +2494,6 @@ function generateMonthlyStats(userData, animate = true, activities = []) {
     } else if (totalAmount >= 5 && totalAmount < BENCHMARK_VALUE) {
         // Calculate percentage based on the lookup (i.e. $5 = 1%, $10 = 2%, ... $495 = 99%)
         const overallPercentage = Math.round((totalAmount / BENCHMARK_VALUE) * 100);
-        
-        // Distribute the overall percentage among the three metrics based on  * 100);
         
         // Distribute the overall percentage among the three metrics based on their relative proportions
         const total = yesterdayEarnings + quantitativeAccount + totalRevenue;
