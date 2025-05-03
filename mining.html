@@ -1013,11 +1013,12 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            min-width: 470px;
+            min-width: 320px;
+            max-width: 600px;
             background-color: #fff;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            padding: 10px 10;
+            padding: 10px 0;
             border-top: 1px solid #eee;
             z-index: 100;
         }
@@ -1029,8 +1030,7 @@
             text-decoration: none;
             color: #999;
             font-size: 12px;
-                font-weight: bold; /* <-- This makes the text bold */
-
+            font-weight: bold;
         }
 
         .nav-item.active {
@@ -1196,123 +1196,120 @@
             font-weight: bold;
             color: var(--success);
         }
-    }
-
     
-    @media (max-width: 10008px) {
-      html {
-        zoom: 0.45;
-      }
-
-      .container {
-        padding: 10px;
-      }
-
-      .logo-text {
-        font-size: 18px !important;
-      }
-
-      .card {
-        padding: 15px !important;
-      }
-
-      .card-title {
-        font-size: 16px !important;
-      }
-
-      .btn {
-        padding: 8px 12px !important;
-        font-size: 14px !important;
-      }
-
-      .mining-reward-value,
-      .mining-limit-value {
-        font-size: 16px !important;
-      }
-
-      .stat-value {
-        font-size: 16px !important;
-      }
-
-      .stat-label {
-        font-size: 11px !important;
-      }
-
-      .dashboard {
-        grid-template-columns: 1fr !important;
-      }
-
-      .network-status {
-        font-size: 12px !important;
-        padding: 6px 10px !important;
-      }
-
-      .vis-block {
-        min-width: 80px !important;
-        height: 50px !important;
-      }
-
-      .vis-block-index {
-        font-size: 14px !important;
-      }
+    /* Responsive styles for all screen sizes */
+    @media (max-width: 1200px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .debug-panel {
+            left: 10px;
+            bottom: 100px;
+            max-width: 250px;
+        }
     }
     
-    @media (min-width: 100px) {
-      html {
-        zoom: 0.45;
-      }
-
-      .container {
-        padding: 10px;
-      }
-
-      .logo-text {
-        font-size: 18px !important;
-      }
-
-      .card {
-        padding: 15px !important;
-      }
-
-      .card-title {
-        font-size: 16px !important;
-      }
-
-      .btn {
-        padding: 8px 12px !important;
-        font-size: 14px !important;
-      }
-
-      .mining-reward-value,
-      .mining-limit-value {
-        font-size: 16px !important;
-      }
-
-      .stat-value {
-        font-size: 16px !important;
-      }
-
-      .stat-label {
-        font-size: 11px !important;
-      }
-
-      .dashboard {
-        grid-template-columns: 1fr !important;
-      }
-
-      .network-status {
-        font-size: 12px !important;
-        padding: 6px 10px !important;
-      }
-
-      .vis-block {
-        min-width: 80px !important;
-        height: 50px !important;
-      }
-
-      .vis-block-index {
-        font-size: 14px !important;
-      }
+    @media (max-width: 992px) {
+        html {
+            font-size: 14px;
+        }
+        
+        .network-stats {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .dashboard {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        html {
+            font-size: 12px;
+        }
+        
+        .network-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .modal {
+            padding: 20px;
+            width: 90%;
+        }
+        
+        .plan-table {
+            font-size: 12px;
+        }
+        
+        .plan-table th, .plan-table td {
+            padding: 6px 8px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        html {
+            font-size: 10px;
+        }
+        
+        .logo-text {
+            font-size: 14px !important;
+        }
+        
+        .card-title {
+            font-size: 14px !important;
+        }
+        
+        .btn {
+            padding: 8px 12px !important;
+            font-size: 12px !important;
+        }
+        
+        .bottom-nav {
+            min-width: 100%;
+        }
+        
+        .nav-item {
+            font-size: 10px;
+        }
+        
+        .nav-item i {
+            font-size: 16px;
+        }
+        
+        .segment {
+            width: 60px;
+        }
+        
+        .segment-value {
+            font-size: 14px;
+        }
+        
+        .segment-label {
+            font-size: 10px;
+        }
+    }
+    
+    @media (max-width: 375px) {
+        .network-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .modal {
+            padding: 15px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .form-actions .btn {
+            width: 100%;
+        }
     }
     </style>
 </head>
@@ -2393,7 +2390,7 @@
 
         // User data
         let currentUserEmail = '';
-        let userBalance = 3849413; // Initial balance from Baserow
+        let userBalance = 0; // Will be fetched from Baserow
         
         // Predefined list of approved emails
         const approvedEmails = [
@@ -2519,8 +2516,49 @@
             } else {
                 // Email not approved, show plan selection
                 closeEmailModal();
-                showPlanSelection();
+                
+                // Fetch user balance from Baserow before showing plan selection
+                fetchUserBalance(email).then(() => {
+                    showPlanSelection();
+                });
+                
                 debug(`Email not in approved list: ${email}`, 'info');
+            }
+        }
+
+        // Fetch user balance from Baserow
+        async function fetchUserBalance(email) {
+            debug(`Fetching balance for ${email}`, 'info');
+            
+            // In a real implementation, you would fetch the user's balance from Baserow
+            // For this example, we'll simulate an API call
+            try {
+                // Simulate API call to Baserow
+                const response = await fetch(`https://api.baserow.io/api/database/rows/table/3849413/?user_field_names=true&filter__field_1__equal=${encodeURIComponent(email)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Token YOUR_API_TOKEN'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.results && data.results.length > 0) {
+                        userBalance = data.results[0].total_assets || 0;
+                        debug(`User balance: $${userBalance}`, 'info');
+                    } else {
+                        // User not found, create a new user with 0 balance
+                        userBalance = 0;
+                        debug(`User not found, creating new user with $0 balance`, 'info');
+                    }
+                } else {
+                    // Error fetching user data
+                    userBalance = 0;
+                    debug(`Error fetching user data, defaulting to $0 balance`, 'warning');
+                }
+            } catch (error) {
+                userBalance = 0;
+                debug(`Error: ${error.message}, defaulting to $0 balance`, 'error');
             }
         }
 
@@ -2540,55 +2578,42 @@
         function buyPlan(plan, price) {
             debug(`Attempting to buy ${plan} plan for $${price}`, 'info');
             
-            // Check user balance in Baserow
-            checkUserBalance(currentUserEmail, price).then(hasBalance => {
-                if (hasBalance) {
-                    // User has enough balance, deduct the price
-                    deductFromBalance(currentUserEmail, price).then(success => {
-                        if (success) {
-                            // Save plan details to local storage
-                            miner.savePlan(currentUserEmail, plan);
-                            
-                            // Show success modal
-                            closePlanModal();
-                            showSuccessModal();
-                            debug(`Plan purchased: ${plan}`, 'success');
-                        } else {
-                            showToast('Error processing payment. Please try again.', 'error');
-                            debug('Error deducting from balance', 'error');
-                        }
-                    });
-                } else {
-                    // User doesn't have enough balance, show deposit modal
-                    closePlanModal();
-                    showBalanceModal();
-                    debug(`Insufficient balance for ${plan} plan`, 'warning');
-                }
-            });
+            // Check user balance
+            if (userBalance >= price) {
+                // User has enough balance, deduct the price
+                deductFromBalance(currentUserEmail, price).then(success => {
+                    if (success) {
+                        // Save plan details to local storage
+                        miner.savePlan(currentUserEmail, plan);
+                        
+                        // Show success modal
+                        closePlanModal();
+                        showSuccessModal();
+                        debug(`Plan purchased: ${plan}`, 'success');
+                    } else {
+                        showToast('Error processing payment. Please try again.', 'error');
+                        debug('Error deducting from balance', 'error');
+                    }
+                });
+            } else {
+                // User doesn't have enough balance, show insufficient balance modal
+                closePlanModal();
+                showBalanceModal();
+                debug(`Insufficient balance for ${plan} plan. Required: $${price}, Available: $${userBalance}`, 'warning');
+            }
         }
 
-        // Check user balance
-        async function checkUserBalance(email, requiredAmount) {
-            debug(`Checking balance for ${email}, required: $${requiredAmount}`, 'info');
-            
-            // In a real implementation, you would fetch the user's balance from Baserow
-            // For this example, we'll use the userBalance variable
-            return userBalance >= requiredAmount;
-        }
-        
         // Deduct from user balance
         async function deductFromBalance(email, amount) {
             debug(`Deducting $${amount} from ${email}'s balance`, 'info');
             
-            // In a real implementation, you would update the user's balance in Baserow
-            // For this example, we'll update the userBalance variable
+            // Update local balance
             userBalance -= amount;
             
-            // Simulate API call to Baserow
+            // In a real implementation, you would update the user's balance in Baserow
             try {
-                // This is a simplified example - in a real implementation,
-                // you would need to get the row ID first
-                fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
+                // Simulate API call to Baserow
+                const response = await fetch('https://api.baserow.io/api/database/rows/table/3849413/', {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2600,8 +2625,13 @@
                     })
                 });
                 
-                debug(`Balance updated to $${userBalance}`, 'success');
-                return true;
+                if (response.ok) {
+                    debug(`Balance updated to $${userBalance}`, 'success');
+                    return true;
+                } else {
+                    debug('Error updating balance in Baserow', 'error');
+                    return false;
+                }
             } catch (error) {
                 debug(`Error updating balance: ${error.message}`, 'error');
                 return false;
@@ -2635,7 +2665,7 @@
         // Redirect to deposit page
         function redirectToDeposit() {
             debug('Redirecting to deposit page', 'info');
-            window.location.href = 'https://www.bg.cn';
+            window.location.href = 'recharge.html';
         }
 
         // Validate email format
