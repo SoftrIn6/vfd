@@ -86,7 +86,7 @@
          .crypto-icon {
             display: flex;
             justify-content: center;
-            margin: 20px 100px;;
+            margin: 20px 200px;;
         }
           .crypto-icon {
             width: 40px;
@@ -223,6 +223,13 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
         }
+         .warning-box {
+            border: 1px solid #ffa500;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
         /* Media Queries for Responsiveness */
         @media (max-width: 470px) {
@@ -276,6 +283,7 @@
                     <div class="account-title">Main Account</div>
                     <div class="account-desc">Deposit into this account for Crypto Investment and BTC mining</div>
                 </div>
+                
                 <div class="recharge-address-title">Recharge Address</div>
                 <div class="address-box" id="address-text">0x0c5D4f87d43aE8037c88D768C6481762e2544B8C</div>
                 <button class="copy-btn" onclick="copyAddress()">Copy</button>
