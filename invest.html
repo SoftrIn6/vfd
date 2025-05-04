@@ -572,6 +572,19 @@
             color: #ff3b30;
             font-size: 12px;
         }
+
+        /* Restriction message styles */
+        .restriction-message {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -598,6 +611,11 @@
                     <i class="fas fa-globe"></i> English
                 </div>
             </div>
+        </div>
+
+        <!-- Restriction Message -->
+        <div class="restriction-message" id="restriction-message">
+            You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
         </div>
 
         <!-- Tabs -->
@@ -681,6 +699,16 @@
         tableId: '488473'
     };
 
+    // List of restricted email addresses
+    const restrictedEmails = [
+        "Macxx@gmail.com",
+        "lushabra@hotmail.com",
+        "user3@example.com",
+        "restricted@domain.com",
+        "noreinstall@example.com"
+        // Add more restricted emails as needed
+    ];
+
     // Investment Plans Data - Updated with additional smaller plans
     const investmentPlans = [
         { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
@@ -723,6 +751,7 @@
     let currentQuantity = 1;
     let currentDuration = null;
     let currentUser = null;
+    let isUserRestricted = false;
 
     // Initialize the app when document is ready
     document.addEventListener('DOMContentLoaded', function() {
@@ -762,10 +791,24 @@
         try {
             currentUser = JSON.parse(userData);
             updateUserInfo();
+            checkIfUserIsRestricted();
             generatePlanCards();
         } catch (error) {
             console.error('Error parsing user data:', error);
             window.location.href = 'login.html';
+        }
+    }
+    
+    // Check if user's email is in the restricted list
+    function checkIfUserIsRestricted() {
+        if (currentUser && currentUser.email) {
+            const userEmail = currentUser.email.toLowerCase();
+            isUserRestricted = restrictedEmails.some(email => email.toLowerCase() === userEmail);
+            
+            // Show restriction message if user is restricted
+            if (isUserRestricted) {
+                document.getElementById('restriction-message').style.display = 'block';
+            }
         }
     }
     
@@ -837,8 +880,18 @@
             
             // Get user balance if available
             const userBalance = currentUser ? (parseFloat(currentUser.total_assets) || 0).toFixed(2) : '0.00';
+            
+            // Check if user is restricted and this is a profit reinvestment
+            let restrictionWarning = '';
+            if (isUserRestricted) {
+                restrictionWarning = `
+                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; margin-bottom: 15px; border-radius: 5px; font-weight: bold; text-align: center;">
+                    You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
+                </div>`;
+            }
         
             detailContent.innerHTML = `
+                ${restrictionWarning}
                 <div class="plan-detail-card">
                     <div class="plan-detail-title">${plan.title}</div>
                     
@@ -962,6 +1015,12 @@
 
             // Add invest button click handler
             document.getElementById('invest-btn').addEventListener('click', () => {
+                // If user is restricted, show warning message
+                if (isUserRestricted && plan.price < 100) {
+                    showModalResult(false, 'Investment Restricted', 'You v are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
+                    return;
+                }
+                
                 processInvestment();
             });
         }
