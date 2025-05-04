@@ -579,7 +579,7 @@
             border: 1px solid #ffeeba;
             color: #856404;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 5px;
             font-weight: bold;
             text-align: center;
@@ -613,15 +613,15 @@
             </div>
         </div>
 
+        <!-- Restriction Message -->
+        <div class="restriction-message" id="restriction-message">
+            You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
+        </div>
+
         <!-- Tabs -->
         <div class="tabs">
             <div class="tab active">Smart investment</div>
             <div class="tab">Invest Record</div>
-        </div>
-        
-        <!-- Restriction Message -->
-        <div class="restriction-message" id="restriction-message">
-            You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
         </div>
         
         <div class="investment-plans">
@@ -636,11 +636,6 @@
                 <i class="fas fa-arrow-left"></i>
             </div>
             <div class="header-title">Smart investment</div>
-        </div>
-
-        <!-- Restriction Message in Detail Page -->
-        <div class="restriction-message" id="restriction-message-detail">
-            You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
         </div>
 
         <div class="plan-detail-content">
@@ -704,6 +699,16 @@
         tableId: '488473'
     };
 
+    // List of restricted email addresses
+    const restrictedEmails = [
+        "Macxx@gmail.com",
+        "user2@example.com",
+        "user3@example.com",
+        "restricted@domain.com",
+        "noreinstall@example.com"
+        // Add more restricted emails as needed
+    ];
+
     // Investment Plans Data - Updated with additional smaller plans
     const investmentPlans = [
         { id: 1, title: "Investment Plan 1", price: 20, dailyRate: "180.00%", cycle: "12 Hrs - 7 Days" },
@@ -739,16 +744,6 @@
         { label: "13 days", value: 13, interestRate: 245 },
         { label: "14 days", value: 14, interestRate: 250 },
         { label: "15 days", value: 15, interestRate: 255 }
-    ];
-
-    // List of restricted email addresses
-    const restrictedEmails = [
-        "Macxx@gmail.com",
-        "restricted2@example.com",
-        "test@example.com",
-        "user@restricted.com",
-        "restricted@domain.com"
-        // Add more restricted emails as needed
     ];
 
     // Variables to store current investment selection
@@ -807,15 +802,12 @@
     // Check if user's email is in the restricted list
     function checkIfUserIsRestricted() {
         if (currentUser && currentUser.email) {
-            isUserRestricted = restrictedEmails.includes(currentUser.email.toLowerCase());
+            const userEmail = currentUser.email.toLowerCase();
+            isUserRestricted = restrictedEmails.some(email => email.toLowerCase() === userEmail);
             
             // Show restriction message if user is restricted
             if (isUserRestricted) {
                 document.getElementById('restriction-message').style.display = 'block';
-                document.getElementById('restriction-message-detail').style.display = 'block';
-            } else {
-                document.getElementById('restriction-message').style.display = 'none';
-                document.getElementById('restriction-message-detail').style.display = 'none';
             }
         }
     }
@@ -889,10 +881,17 @@
             // Get user balance if available
             const userBalance = currentUser ? (parseFloat(currentUser.total_assets) || 0).toFixed(2) : '0.00';
             
-            // Check if user is restricted for profit reinvestment
-            const isLevel2Restriction = isUserRestricted && totalInvestment < 100;
-            
+            // Check if user is restricted and this is a profit reinvestment
+            let restrictionWarning = '';
+            if (isUserRestricted) {
+                restrictionWarning = `
+                <div style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; margin-bottom: 15px; border-radius: 5px; font-weight: bold; text-align: center;">
+                    You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
+                </div>`;
+            }
+        
             detailContent.innerHTML = `
+                ${restrictionWarning}
                 <div class="plan-detail-card">
                     <div class="plan-detail-title">${plan.title}</div>
                     
@@ -937,7 +936,7 @@
                         <div class="detail-value-lg">${selectedInterestRate}%</div>
                     </div>
                     
-                    <button class="invest-btn" id="invest-btn" ${isLevel2Restriction ? 'disabled style="background-color: #ccc; cursor: not-allowed;"' : ''}>${totalInvestment.toFixed(2)} USD Invest</button>
+                    <button class="invest-btn" id="invest-btn">${totalInvestment.toFixed(2)} USD Invest</button>
                 </div>
                 
                 <div class="plan-detail-card">
@@ -1016,11 +1015,12 @@
 
             // Add invest button click handler
             document.getElementById('invest-btn').addEventListener('click', () => {
-                // If user is restricted and trying to invest less than $100, show warning
-                if (isUserRestricted && totalInvestment < 100) {
+                // If user is restricted, show warning message
+                if (isUserRestricted && plan.price < 100) {
                     showModalResult(false, 'Investment Restricted', 'You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
                     return;
                 }
+                
                 processInvestment();
             });
         }
