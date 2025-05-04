@@ -615,7 +615,7 @@
 
         <!-- Restriction Message -->
         <div class="restriction-message" id="restriction-message">
-            You vare not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.
+             Please reinvest a minimum of $100 to reach Level 2.
         </div>
 
         <!-- Tabs -->
@@ -1017,7 +1017,7 @@
             document.getElementById('invest-btn').addEventListener('click', () => {
                 // If user is restricted, show warning message
                 if (isUserRestricted && plan.price < 100) {
-                    showModalResult(false, 'Investment Restricted', 'You v are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
+                    showModalResult(false, 'Investment Restricted', 'You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
                     return;
                 }
                 
