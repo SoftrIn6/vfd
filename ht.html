@@ -702,7 +702,7 @@
     // List of restricted email addresses
     const restrictedEmails = [
         "Macxx@gmail.com",
-        "user2@example.com",
+        "lushabra@hotmail.com",
         "user3@example.com",
         "restricted@domain.com",
         "noreinstall@example.com"
@@ -1017,7 +1017,7 @@
             document.getElementById('invest-btn').addEventListener('click', () => {
                 // If user is restricted, show warning message
                 if (isUserRestricted && plan.price < 100) {
-                    showModalResult(false, 'Investment Restricted', 'You are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
+                    showModalResult(false, 'Investment Restricted', 'You v are not allowed to reinvest profit to reach Level 2. Please reinvest a minimum of $100 to reach Level 2.');
                     return;
                 }
                 
