@@ -2283,7 +2283,117 @@
                     }
                     
                     rowData[`field_${fieldMap['status']}`] = status;
-                    
+                    /**
+ * Import the below-defined packages into your code.
+ */
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec; 
+public class Maxelpay {
+    public static void main(String[] args) {
+       
+        try {
+           
+            /**
+            * Environment Configuration:
+            * - stg: Sandbox environment used for testing and   development.
+            * - prod: Live environment for production use.
+            */
+           
+            String env    = "prod"; 
+            /**
+            * Note: Please replace $api_key and $secret_key with your original API Key and API Secret respectively.
+            * Click here https://dashboard.maxelpay.com/developers to obtain these keys.
+            */ 
+            String apiKey   = "qjfainfArHoyHuEEtbGYC2Qhb4Nn9v7o";
+            String secret_key = "WivMWh9rOYz6TUZPl9PGs3qHsXnE4AW2";
+            String urlString = "https://api.maxelpay.com/v1/" + env + "/merchant/order/checkout";             URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();             // Set request method
+            connection.setRequestMethod("POST");
+            // Set headers
+            connection.setRequestProperty("api-key", apiKey);
+            connection.setRequestProperty("Content-Type", "application/json");
+            // Enable output and input streams
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+     
+            String orderID = "123456";
+            String amount = "100";
+            String currency = "USD";
+            String timestamp = "1717651675";
+            String userName = "John Doe";
+            String siteName = "Example Site";
+            String userEmail = "john@example.com";
+            String redirectUrl = "http://example.com/redirect";
+            String websiteUrl = "http://example.com/website";
+            String cancelUrl = "http://example.com/cancel";
+            String webhookUrl = "http://example.com/webhook";
+            StringBuilder jsonDataBuilder = new StringBuilder();
+           
+            jsonDataBuilder.append("{");
+                jsonDataBuilder.append(""orderID":"").append(orderID).append("",");
+                jsonDataBuilder.append(""amount":"").append(amount).append("",");
+                jsonDataBuilder.append(""currency":"").append(currency).append("",");
+                jsonDataBuilder.append(""timestamp":"").append(timestamp).append("",");
+                jsonDataBuilder.append(""userName":"").append(userName).append("",");
+                jsonDataBuilder.append(""siteName":"").append(siteName).append("",");
+                jsonDataBuilder.append(""userEmail":"").append(userEmail).append("",");
+                jsonDataBuilder.append(""redirectUrl":"").append(redirectUrl).append("",");
+                jsonDataBuilder.append(""websiteUrl":"").append(websiteUrl).append("",");
+                jsonDataBuilder.append(""cancelUrl":"").append(cancelUrl).append("",");
+                jsonDataBuilder.append(""webhookUrl":"").append(webhookUrl).append(""");
+            jsonDataBuilder.append("}");
+           
+            String jsonData = jsonDataBuilder.toString();
+            String encryptedData = encrypt(secret_key, jsonData);
+           
+            // Set request body
+            String requestBody = String.format("{"data": "%s"}", encryptedData);
+            DataOutputStream outputStream = new     DataOutputStream(connection.getOutputStream());
+            outputStream.writeBytes(requestBody);
+            outputStream.flush();
+            outputStream.close();
+ 	        int responseCode = connection.getResponseCode();             if (responseCode == HttpURLConnection.HTTP_OK) {                 BufferedReader in = new BufferedReader(new  InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+               
+                while ((inputLine = in.readLine()) != null) {                     response.append(inputLine);
+                }                       	in.close();
+                // Print response
+                System.out.println("Response: " + response.toString());             } else {                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                String inputLine;
+                StringBuffer errorResponse = new StringBuffer();
+               
+                while ((inputLine = errorReader.readLine()) != null) {
+                    errorResponse.append(inputLine);
+                }
+  				errorReader.close();
+                // Print error response
+                System.out.println("Error Response: " + errorResponse.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   
+    public static String encrypt(String secret_key, String data) throws Exception {         // Initialize IV from the first 16 bytes of the secret key
+        String iv = secret_key.substring(0, 16);
+        // Prepare the cipher for encryption
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        SecretKeySpec SecretKeySpec = new SecretKeySpec(secret_key.getBytes("UTF-8"), "AES");
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes("UTF-8"));
+        cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec, ivParameterSpec);
+        // Encrypt the data
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes("UTF-8"));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+}
                     // Create row in Baserow
                     try {
                         const createResponse = await fetch(`${BASEROW_API.baseUrl}/database/rows/table/${BASEROW_API.activityTableId}/`, {
